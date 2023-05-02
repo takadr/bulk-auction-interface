@@ -1,0 +1,38 @@
+{
+  "private": true,
+  "scripts": {
+    "build": "turbo run build",
+    "dev": "dotenv -- turbo run dev",
+    "lint": "turbo run lint",
+    "format": "prettier --write \"**/*.{ts,tsx,md}\""
+  },
+  "devDependencies": {
+    "autoprefixer": "^10.4.14",
+    "eslint": "^7.32.0",
+    "eslint-config-custom": "workspace:*",
+    "postcss": "^8.4.23",
+    "prettier": "^2.5.1",
+    "tailwindcss": "^3.3.2",
+    "turbo": "latest"
+  },
+  "packageManager": "pnpm@7.15.0",
+  "name": "bulk-auction-interface",
+  "dependencies": {
+    "@chakra-ui/icons": "^2.0.19",
+    "@chakra-ui/react": "^2.6.0",
+    "@chakra-ui/theme-tools": "^2.0.16",
+    "@emotion/react": "^11",
+    "@emotion/styled": "^11",
+    "abitype": "^0.8.1",
+    "dotenv-cli": "^7.2.1",
+    "ethers": "^5",
+    "formik": "^2.2.9",
+    "framer-motion": "^6",
+    "jotai": "^2.0.4",
+    "moment": "^2.29.4",
+    "react-icons": "^4.8.0",
+    "rsuite": "^5.33.0",
+    "use-debounce": "^9.0.4",
+    "wagmi": "^0.12.12"
+  }
+}

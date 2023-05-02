@@ -1,0 +1,7 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.rs-picker-menu {
+    z-index: 10000 !important;
+}
