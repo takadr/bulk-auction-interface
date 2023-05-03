@@ -35,7 +35,7 @@ import { Field, Form, Formik, useFormik, FieldProps } from 'formik';
 import { useProvider, useNetwork, useAccount, useContractRead, usePrepareContractWrite, useContractWrite, useWaitForTransaction, useContractEvent, erc20ABI } from 'wagmi';
 import { useDebounce } from 'use-debounce';
 import { BigNumber, constants, utils } from 'ethers';
-import moment from 'moment';
+import { format, formatDistance, formatRelative, differenceInSeconds, addSeconds } from 'date-fns';
 import { CustomProvider } from 'rsuite';
 import { DateRangePicker } from 'rsuite';
 import 'rsuite/dist/rsuite-no-reset.min.css';
@@ -363,14 +363,18 @@ export default function SaleFormModal({isOpen, onClose}: {isOpen: boolean, onClo
                                             formikProps.setFieldValue('startingAt', now + 60 * 60 * 24 * 7);
                                             formikProps.setFieldValue('eventDuration', 60 * 60 * 24 * 7);
                                         } else {
-                                            const start = moment(value[0]);
-                                            const end = moment(value[1])
-                                            const duration = end.diff(start) / 1000;
-                                            formikProps.setFieldValue('startingAt', start.toDate().getTime());
+                                            const start = value[0];
+                                            const end = value[1];
+                                            const duration = differenceInSeconds(end, start);
+                                            formikProps.setFieldValue('startingAt', start.getTime());
                                             formikProps.setFieldValue('eventDuration', duration);
                                         }
                                     }}
-                                    value={[new Date(formikProps.values.startingAt), moment(new Date(formikProps.values.startingAt)).add(formikProps.values.eventDuration, 's').toDate()]}
+                                    value={
+                                        [
+                                            new Date(formikProps.values.startingAt), 
+                                            addSeconds(new Date(formikProps.values.startingAt), formikProps.values.eventDuration)
+                                        ]}
                                     format="yyyy-MM-dd HH:mm:ss"
                                     defaultCalendarValue={[new Date('2022-02-01 00:00:00'), new Date('2022-05-01 23:59:59')]}
                                 />
