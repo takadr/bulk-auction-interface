@@ -68,8 +68,9 @@ export default function CalendarInCircle({
         />
 
         {unixStartDate * 1000 > Date.now() ? (
-          <chakra.div position={'absolute'} margin={'auto'} top={0} bottom={0} left={0} right={0} display={'flex'} flexDirection={'column'} justifyContent={'center'}>
-            {format(unixStartDate * 1000, 'yyyy年MM月dd日HH時mm分より開始！')}
+          <chakra.div textAlign={'center'} position={'absolute'} margin={'auto'} top={0} bottom={0} left={0} right={0} display={'flex'} flexDirection={'column'} justifyContent={'center'}>
+            <chakra.p >Starting at</chakra.p>
+            <chakra.p>{format(unixStartDate * 1000, 'yyyy/MM/dd HH:mm(z)')}</chakra.p>
           </chakra.div>
         ) : (
           <chakra.div position={'absolute'} margin={'auto'} top={0} bottom={0} left={0} right={0} display={'flex'} flexDirection={'column'} justifyContent={'center'}>

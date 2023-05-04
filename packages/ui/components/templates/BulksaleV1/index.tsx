@@ -1,64 +1,54 @@
 import { useState, useEffect } from 'react';
-import { Container, Heading, Flex, Box, Button, FormControl, FormLabel, FormErrorMessage, NumberInput, NumberInputField, NumberInputStepper, NumberIncrementStepper, NumberDecrementStepper, Tooltip, chakra, useInterval} from '@chakra-ui/react';
+import { Container, Heading, Flex, Box, Button, FormControl, FormLabel, FormErrorMessage, NumberInput, NumberInputField, NumberInputStepper, NumberIncrementStepper, NumberDecrementStepper, Tooltip, chakra, useInterval, useToast} from '@chakra-ui/react';
 import { QuestionIcon } from '@chakra-ui/icons';
 import { useFormik } from 'formik';
+import { useProvider, useNetwork, useAccount, useContractRead, usePrepareContractWrite, useContractWrite, useWaitForTransaction, useContractEvent, usePrepareSendTransaction, useSendTransaction, useToken, erc20ABI } from 'wagmi';
 import { format, formatDistance, formatRelative, subDays } from 'date-fns';
+import { BigNumber, utils } from 'ethers';
 import CalendarInCircle from './CalendarInCircle';
 import PersonalStatistics from './PersonalStatistics';
 import StatisticsInCircle from './StatisticsInCircle';
+import bulksaleV1ABI from '../../../constants/abis/BulksaleV1.json';
+import useBulksaleV1 from '../../../hooks/useBulksaleV1';
 
 interface BulksaleV1Params {
-    title?: string;
+    // title?: string;
+    address: `0x${string}`
     contractAddress: `0x${string}`;
-    unixStartDate: number;
-    unixEndDate: number;
-    totalDistributeAmount: bigint;
-    minimalProvideAmount: bigint;
-    lockDuration: number;
-    expirationDuration: number;
-    ownerAddress: `0x${string}`;
-    tokenAddress: `0x${string}`;
+    // unixStartDate: number;
+    // unixEndDate: number;
+    // totalDistributeAmount: bigint;
+    // minimalProvideAmount: bigint;
+    // lockDuration: number;
+    // expirationDuration: number;
+    // ownerAddress: `0x${string}`;
+    // tokenAddress: `0x${string}`;
 }
 
-// Static statuses
-// uint public startingAt;
-// uint public closingAt;
-// uint public totalDistributeAmount;
-// uint public minimalProvideAmount;
-// uint public lockDuration;
-// uint public expirationDuration;
-// address public owner;
-// uint public feeRatePerMil;
-// IERC20 public erc20onsale;
-
-// Dynamic statuses
-// 1. Global
-//   - totalProvided
-// 2. Current user specific
-//   - provided
-//   - isClaimed
-
-// const mockParams: BulksaleV1Params = {
-//     title: 'Test',
-//     unixStartDate: new Date('2021-07-09T21:00:00Z').getTime() / 1000, // unixTime
-//     unixEndDate: new Date('2021-07-15 06:00').getTime() / 1000, // unixTime
-//     totalDistributeAmount: BigInt(3600000000000),
-// }
-
-export default function BulksaleV1(props: any) {
+export default function BulksaleV1(props: BulksaleV1Params) {
+    const toast = useToast({position: 'top-right', isClosable: true,});
     const now = Date.now();
+    const {
+        startingAt,
+        closingAt,
+        totalDistributeAmount,
+        minimalProvideAmount,
+        totalProvided,
+        provided,
+        token: distributedToken
+    } = useBulksaleV1(props.contractAddress, props.address);
     // Static status
-    const [startingAt, setStartingAt] = useState<number>(0);
-    const [closingAt, setClosingAt] = useState<number>(0);
-    const [totalDistributeAmount, setTotalDistributeAmount] = useState<bigint>(BigInt(0));
-    const [distributedTokenSymbol, setDistributedTokenSymbol] = useState<string>('');
-    const [distributedTokenDecimal, setDistributedTokenDecimal] = useState<number>(0);
-    const [minimalProvideAmount, setMinimalProvideAmount] = useState<bigint>(BigInt(0));
+    // const [startingAt, setStartingAt] = useState<number>(0);
+    // const [closingAt, setClosingAt] = useState<number>(0);
+    // const [totalDistributeAmount, setTotalDistributeAmount] = useState<bigint>(BigInt(0));
+    // const [minimalProvideAmount, setMinimalProvideAmount] = useState<bigint>(BigInt(0));
+    // const [distributedTokenSymbol, setDistributedTokenSymbol] = useState<string>('');
+    // const [distributedTokenDecimal, setDistributedTokenDecimal] = useState<number>(0);
     const [providedTokenSymbol, setProvidedTokenSymbol] = useState<string>('');
     const [providedTokenDecimal, setProvidedTokenDecimal] = useState<number>(0);
     // Dynamic status
-    const [totalProvided, setTotalProvided] = useState<bigint>(BigInt(0));
-    const [provided, setProvided] = useState<bigint>(BigInt(0));
+    // const [totalProvided, setTotalProvided] = useState<bigint>(BigInt(0));
+    // const [provided, setProvided] = useState<bigint>(BigInt(0));
     const [isClaimed, setIsClaimed] = useState<boolean>(false);
     const [started, setStarted] = useState<boolean>(startingAt <= now);
     const [ended, setEnded] = useState<boolean>(closingAt < now);
@@ -68,26 +58,23 @@ export default function BulksaleV1(props: any) {
     // Local status
     const [fiatSymbol, setFiatSymbol] = useState<string>('usd');
     const [fiatRate, setFiatRate] = useState<number>(1.0);
+    
+    // TODO Subgraphからまとめて読み込む
 
     useEffect(() => {
         // TODO Retrieve contract data from Subgraph
-        setStartingAt(new Date('2023-05-02T21:00:00Z').getTime());
-        setClosingAt(new Date('2023-05-16T21:00:00Z').getTime());
-        setTotalDistributeAmount(BigInt('21000000000000'));
-        setDistributedTokenSymbol('TST');
-        setDistributedTokenDecimal(8);
-        setMinimalProvideAmount(BigInt('10000000000000000'))
+        // setStartingAt(new Date('2023-05-02T21:00:00Z').getTime());
+        // setClosingAt(new Date('2023-05-16T21:00:00Z').getTime());
+        // setTotalDistributeAmount(BigInt('21000000000000'));
+        // setMinimalProvideAmount(BigInt('10000000000000000'))
+        // setDistributedTokenSymbol('TST');
+        // setDistributedTokenDecimal(8);
         setProvidedTokenSymbol('ETH');
         setProvidedTokenDecimal(18);
-        // - totalDistributeAmount
-        // - minimalProvideAmount
-        // (- providedTokenSymbol)
 
         // TODO Retrieve metadata
         setInterimGoalAmount(BigInt('300000000000000000000'));
         setFinalGoalAmount(BigInt('500000000000000000000'));
-        // interimGoalAmount
-        // finalGoalAmount
     }, []);
     useInterval(() => {
         // TODO
@@ -99,26 +86,74 @@ export default function BulksaleV1(props: any) {
 
         // TODO Get fiat rate
         // fiatRate
-        setTotalProvided(BigInt('150000000000000000000'));
-        setProvided(BigInt('2400000000000000000'));
+        // setTotalProvided(BigInt('150000000000000000000'));
+        // setProvided(BigInt('2400000000000000000'));
         setIsClaimed(false);
         setStarted(startingAt <= new Date().getTime());
         setEnded(closingAt < new Date().getTime());
 
         setFiatRate(1908);
     }, 1000);
-    const handleSubmit = () => {
 
+    const handleSubmit = async (values: {[key: string]: number}) => {
+        // console.log(utils.parseEther(values.amount.toString()));
+        // console.log(sendTransactionAsync);
+        const result = await sendTransactionAsync?.()
     };
+
     const validate = () => {
-
+        // TODO
     };
+    
     const formikProps = useFormik({
         enableReinitialize: true,
         initialValues: { amount: 0 },
         onSubmit: handleSubmit,
         validate
     });
+
+    const { config, isError } = usePrepareSendTransaction({
+        request: {
+            to: props.contractAddress,
+            value: formikProps.values.amount ? utils.parseEther(formikProps.values.amount.toString()) : undefined,
+        },
+    });
+
+    const { data, sendTransactionAsync } = useSendTransaction({
+        ...config,
+        onError(e: Error) {
+            toast({
+                description: e.message,
+                status: 'error',
+                duration: 5000,
+            })
+        },
+        onSuccess(data) {
+            toast({
+                description: `Transaction sent! ${data?.hash}`,
+                status: 'success',
+                duration: 5000,
+            })
+        },
+    })
+ 
+    const { isLoading, isSuccess } = useWaitForTransaction({
+        hash: data?.hash,
+        onError(e: Error) {
+            toast({
+                description: e.message,
+                status: 'error',
+                duration: 5000,
+            })
+        },
+        onSuccess(data) {
+            toast({
+                description: `Transaction confirmed!`,
+                status: 'success',
+                duration: 5000,
+            })
+        },
+    })
 
     return (
         <>
@@ -133,7 +168,7 @@ export default function BulksaleV1(props: any) {
                         providedTokenDecimal={providedTokenDecimal}
                         fiatSymbol={fiatSymbol}
                         fiatRate={fiatRate}
-                        contractAddress={"0x9eB51285EF530F700d4a9D179DA75cb971Df6Fe7"}
+                        contractAddress={props.contractAddress}
                         started={started}
                         w={{base: 'full', md: '50%'}}
                      />
@@ -160,7 +195,7 @@ export default function BulksaleV1(props: any) {
                                     </NumberInputStepper>
                                 </NumberInput>
                                 <chakra.div px={2}>{providedTokenSymbol}</chakra.div>
-                                <Button type='submit' variant='solid' colorScheme={'green'}>
+                                <Button isLoading={isLoading} isDisabled={!sendTransactionAsync} type='submit' variant='solid' colorScheme={'green'}>
                                     Donate
                                 </Button>
                             </Flex>
@@ -174,8 +209,8 @@ export default function BulksaleV1(props: any) {
                         myTotalProvided={provided}
                         totalProvided={totalProvided}
                         totalDistributeAmount={totalDistributeAmount}
-                        distributedTokenSymbol={distributedTokenSymbol}
-                        distributedTokenDecimal={distributedTokenDecimal}
+                        distributedTokenSymbol={distributedToken ? distributedToken.symbol : ''}
+                        distributedTokenDecimal={distributedToken ? distributedToken.decimals : 0}
                         providedTokenSymbol={providedTokenSymbol}
                         providedTokenDecimal={providedTokenDecimal}
                         isEnding={ended}

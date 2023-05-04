@@ -34,8 +34,8 @@ export default function PersonalStatistics({
     // TODO Format price
     const inputValueInBigInt = inputValue ? BigInt(inputValue) * BigInt(10**providedTokenDecimal) : BigInt(0);
     const expectedAmount = tokenAmountFormat(BigInt(Math.round(getExpectedAmount(myTotalProvided, inputValueInBigInt, totalProvided, totalDistributeAmount))), distributedTokenDecimal, 2);
-    const sumOfProvidedAmount = myTotalProvided + inputValueInBigInt;
-    const fixedProvidedAmount = myTotalProvided;
+    const sumOfProvidedAmount = tokenAmountFormat(myTotalProvided + inputValueInBigInt, providedTokenDecimal, 2);
+    const fixedProvidedAmount = tokenAmountFormat(myTotalProvided, providedTokenDecimal, 2);
     const inputtingProvidedAmount = inputValue;
 
     if(isLoading) {
@@ -53,7 +53,7 @@ export default function PersonalStatistics({
                   {distributedTokenSymbol.toUpperCase()}
                   </>
               </span>
-              {expectedAmount == '0' && (
+              {parseFloat(expectedAmount) === 0 && (
                   <p>
                   Your contribution is too small so that it is shown as 0
                   </p>
@@ -66,7 +66,7 @@ export default function PersonalStatistics({
                   Total donation:
                   <span style={{ fontWeight: 'bold', marginLeft: '10px' }}>
                       <>
-                      {active ? tokenAmountFormat(sumOfProvidedAmount, providedTokenDecimal, 2) : '????'}{' '}
+                      {active ? sumOfProvidedAmount : '????'}{' '}
                       {providedTokenSymbol.toUpperCase()}
                       </>
                   </span>{' '}
@@ -82,7 +82,7 @@ export default function PersonalStatistics({
                       )
                   </>
                   )}
-                  {sumOfProvidedAmount.toString() == '0' && (
+                  {parseFloat(sumOfProvidedAmount) === 0 && (
                   <p>
                       Your contribution is too small so that it is shown as 0
                   </p>
@@ -100,7 +100,7 @@ export default function PersonalStatistics({
                       {providedTokenSymbol.toUpperCase()}
                       </>
                   </span>
-                  {fixedProvidedAmount && (
+                  {parseFloat(fixedProvidedAmount) === 0 && (
                       <p>
                       Your contribution is too small so that it is shown as 0
                       </p>

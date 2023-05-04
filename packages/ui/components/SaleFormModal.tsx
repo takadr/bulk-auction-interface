@@ -68,7 +68,7 @@ export default function SaleFormModal({isOpen, onClose}: {isOpen: boolean, onClo
 
     const emptySale: Sale = {
         token: null,
-        startingAt: now + (60 * 60 * 24 * 7),
+        startingAt: now + (60 * 60 * 24 * 7 * 1000),
         eventDuration: 60 * 60 * 24 * 7,
         lockDuration: 60 * 60 * 24 * 7,
         expirationDuration: 60 * 60 * 24 * 30,
@@ -195,7 +195,8 @@ export default function SaleFormModal({isOpen, onClose}: {isOpen: boolean, onClo
         try {
             return utils.hexlify(abi.encode(
                 ['address', 'uint', 'uint', 'uint', 'uint', 'uint', 'uint', 'address', 'uint'],
-                Object.values(sale)
+                [sale.token, Math.round(sale.startingAt / 1000), sale.eventDuration, sale.lockDuration, sale.expirationDuration, sale.totalDistributeAmount, sale.minimalProvideAmount, sale.owner, sale.feeRatePerMil]
+                // Object.values(sale)
             )) as `0x${string}`
         } catch(e: any) {
             return '0x00';
@@ -422,7 +423,7 @@ export default function SaleFormModal({isOpen, onClose}: {isOpen: boolean, onClo
                                     <Tooltip hasArrow label={'TODO explanation'}><QuestionIcon mb={1} ml={1} /></Tooltip>
                                 </FormLabel>
                                 <Flex alignItems={'center'}>
-                                    <NumberInput flex="1" name="totalDistributeAmount" value={formikProps.values.totalDistributeAmount} min={14} max={90} onBlur={formikProps.handleBlur} onChange={(_: string, val: number) =>
+                                    <NumberInput flex="1" name="totalDistributeAmount" value={formikProps.values.totalDistributeAmount} min={1} max={Number.MAX_SAFE_INTEGER} onBlur={formikProps.handleBlur} onChange={(_: string, val: number) =>
                                         formikProps.setFieldValue('totalDistributeAmount', val)
                                     }>
                                         <NumberInputField/>
