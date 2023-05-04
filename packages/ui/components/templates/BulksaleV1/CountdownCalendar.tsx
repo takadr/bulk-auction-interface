@@ -1,44 +1,8 @@
-// import { format } from 'date-fns';
-
-// import styled from 'styled-components';
-// import useInterval from '../../../hooks/useInterval';
+import { format } from 'date-fns';
 import { useState } from 'react';
 import { Circle } from 'rc-progress';
-import { chakra, Spinner, Toast, Link } from "@chakra-ui/react";
-import { useInterval } from '@chakra-ui/react';
+import { chakra, Spinner, Toast, Link, useInterval } from "@chakra-ui/react";
 import { getExpectedAmount, getTargetPercetage, getFiatConversionAmount, getEtherscanLink } from "../../../utils";
-
-// const CountdownPanel = styled.div`
-//   background: white;
-//   display: inline-block;
-//   margin: 10px;
-//   min-width: 100px;
-//   padding: 20px 0;
-//   text-align: center;
-
-//   .countdown-value {
-//     color: black;
-//     font-size: 2rem;
-//     margin-bottom: 10px;
-//   }
-//   .countdown-unit {
-//     color: black;
-//     text-transform: capitalize;
-//   }
-
-//   @media (max-width: 600px) {
-//     min-width: 50px;
-//   }
-// `;
-
-// const Statement = styled.p`
-//   font-size: 1.5rem;
-//   font-weight: bold;
-
-//   @media (max-width: 600px) {
-//     font-size: 1rem;
-//   }
-// `;
 
 type Props = {
   unixEndDate: number;
@@ -66,29 +30,31 @@ export default function CountdownCalendar({ unixEndDate }: Props) {
   }, 500);
 
   return (
-    <div>
-      <chakra.div>
-        {unixEndDate * 1000}
+    <chakra.div>
+      <chakra.div textAlign={'center'}>
+        Until {format(unixEndDate * 1000, 'yyyy/MM/dd HH:mm(z)')}
       </chakra.div>
 
-      <chakra.div>
-        <div>{countdown.days}</div>
-        <div>DAYS</div>
-      </chakra.div>
-      
-      <chakra.div>
-        <div>{countdown.hours}</div>
-        <div>HOURS</div>
-      </chakra.div>
+      <chakra.div display={'flex'} alignItems={'center'} justifyContent={'center'}>
+        <chakra.div w={'25%'} textAlign={'center'}>
+          <chakra.div fontSize={'2xl'}>{countdown.days}</chakra.div>
+          <chakra.div fontSize={'sm'}>DAYS</chakra.div>
+        </chakra.div>
+        
+        <chakra.div w={'25%'} textAlign={'center'}>
+          <chakra.div fontSize={'2xl'}>{countdown.hours}</chakra.div>
+          <chakra.div fontSize={'sm'}>HOURS</chakra.div>
+        </chakra.div>
 
-      <chakra.div>
-        <div>{countdown.mins}</div>
-        <div>MINS</div>
-      </chakra.div>
+        <chakra.div w={'25%'} textAlign={'center'}>
+          <chakra.div fontSize={'2xl'}>{countdown.mins}</chakra.div>
+          <chakra.div fontSize={'sm'}>MINS</chakra.div>
+        </chakra.div>
 
-      <chakra.div>
-        <div>{countdown.secs}</div>
-        <div>SECS</div>
+        <chakra.div w={'25%'} textAlign={'center'}>
+          <chakra.div fontSize={'2xl'}>{countdown.secs}</chakra.div>
+          <chakra.div fontSize={'sm'}>SECS</chakra.div>
+        </chakra.div>
       </chakra.div>
 
       {unixEndDate * 1000 < Date.now() && (
@@ -96,7 +62,7 @@ export default function CountdownCalendar({ unixEndDate }: Props) {
             終了しました🎉
         </chakra.div>
       )}
-    </div>
+    </chakra.div>
   );
 }
 

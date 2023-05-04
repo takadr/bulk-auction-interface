@@ -17,4 +17,4 @@ type SaleTxType = {
 export const sessionsAtom = atom<SessionType>({});
 export const saleTxAtom = atom<SaleTxType>({txs: []});
 export const saleClonesAtom = atom<`0x${string}`[]>([]);
-export const waitingTransactionAtom = atom<`0x${string}` | null>(null);
+export const waitingTransactionAtom = atom<`0x${string}`>('0x');

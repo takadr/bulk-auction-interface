@@ -34,7 +34,7 @@ export default function Web() {
   const [waitingTransaction, setWaitingTransaction] = useAtom(waitingTransactionAtom);
   const { isLoading } = useWaitForTransaction({
     // chainId: chain?.id,
-    hash: waitingTransaction,
+    hash: waitingTransaction as `0x${string}`,
     // wait: writeFn.data?.wait
     onSuccess(data) {
       console.log('Success!', data)
@@ -51,7 +51,7 @@ export default function Web() {
   const token = process.env.NEXT_PUBLIC_TOKEN_ADDRESS;
   // const token = "0x7169D38820dfd117C3FA1f22a697dBA58d90BA06"; // USDT
   const factory = process.env.NEXT_PUBLIC_FACTORY_ADDRESS;
-  const { prepareFn, writeFn, waitFn } = useApprove(token, address, factory);
+  const { prepareFn, writeFn, waitFn } = useApprove(token as `0x${string}`, address, factory as `0x${string}`);
 
   if(!isConnected) {
     return (
@@ -91,7 +91,7 @@ export default function Web() {
             {
               
               saleClones.map((address) => {
-                return <Link href={`/${address}`}>{address}</Link>
+                return <Link key={address} href={`/${address}`}>{address}</Link>
               })
               
             }

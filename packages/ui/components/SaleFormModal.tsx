@@ -42,9 +42,7 @@ import 'rsuite/dist/rsuite-no-reset.min.css';
 import useApprove from '../hooks/useApprove';
 import useTokenBasicInfo from '../hooks/useTokenBasicInfo';
 import { useAtom } from 'jotai';
-import { saleTxAtom } from '../store';
-import { saleClonesAtom } from '../store';
-import { waitingTransactionAtom } from '../store';
+import { saleTxAtom, saleClonesAtom, waitingTransactionAtom } from '../store';
 
 const now = new Date().getTime();
 

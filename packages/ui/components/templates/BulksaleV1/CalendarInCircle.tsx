@@ -1,7 +1,7 @@
 import { format } from 'date-fns';
 import { Circle } from 'rc-progress';
 // import styled from 'styled-components';
-import { chakra } from '@chakra-ui/react';
+import { chakra, BoxProps } from '@chakra-ui/react';
 import CountdownCalendar from './CountdownCalendar';
 
 // const RightCirclePosition = styled.div`
@@ -49,7 +49,8 @@ type Props = {
 export default function CalendarInCircle({
   unixStartDate,
   unixEndDate,
-}: Props) {
+  ...boxProps
+}: Props & BoxProps) {
   function getRestTermPercetage() {
     const now = Math.floor(Date.now() / 1000);
     const duration = unixEndDate - unixStartDate;
@@ -58,22 +59,24 @@ export default function CalendarInCircle({
   }
 
   return (
-    <chakra.div>
-      <Circle
-        percent={getRestTermPercetage()}
-        strokeWidth={4}
-        strokeColor="#D3D3D3"
-      />
+    <chakra.div {...boxProps}>
+      <chakra.div position={'relative'}>
+        <Circle
+          percent={getRestTermPercetage()}
+          strokeWidth={4}
+          strokeColor="#D3D3D3"
+        />
 
-      {unixStartDate * 1000 > Date.now() ? (
-        <chakra.div>
-          {format(unixStartDate * 1000, 'yyyy年MM月dd日HH時mm分より開始！')}
-        </chakra.div>
-      ) : (
-        <chakra.div>
-          <CountdownCalendar unixEndDate={unixEndDate}></CountdownCalendar>
-        </chakra.div>
-      )}
+        {unixStartDate * 1000 > Date.now() ? (
+          <chakra.div position={'absolute'} margin={'auto'} top={0} bottom={0} left={0} right={0} display={'flex'} flexDirection={'column'} justifyContent={'center'}>
+            {format(unixStartDate * 1000, 'yyyy年MM月dd日HH時mm分より開始！')}
+          </chakra.div>
+        ) : (
+          <chakra.div position={'absolute'} margin={'auto'} top={0} bottom={0} left={0} right={0} display={'flex'} flexDirection={'column'} justifyContent={'center'}>
+            <CountdownCalendar unixEndDate={unixEndDate}></CountdownCalendar>
+          </chakra.div>
+        )}
+      </chakra.div>
     </chakra.div>
   );
 }

@@ -63,8 +63,7 @@ export const Header: FC = (props: any) => {
                     <HStack>
                         { ensName && <Avatar
                         size={'sm'}
-                        src={ensAvatar}
-                        alt="ENS Avatar"
+                        src={ensAvatar ? ensAvatar : ''}
                         /> }
                         <VStack
                         display={{ base: 'none', md: 'flex' }}
@@ -79,7 +78,7 @@ export const Header: FC = (props: any) => {
                     </HStack>
                 </MenuButton>
                 <MenuList zIndex={101}>
-                    <MenuItem onClick={disconnect}>Disconnect</MenuItem>
+                    <MenuItem onClick={() => disconnect()}>Disconnect</MenuItem>
                     <Divider />
                     <HStack px={4} pt={2}>
                         <MoonIcon color={colorMode === 'light' ? 'gray' : 'white'} />

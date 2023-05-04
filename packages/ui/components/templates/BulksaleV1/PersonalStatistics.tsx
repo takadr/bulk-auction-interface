@@ -1,4 +1,4 @@
-import { chakra, Spinner } from "@chakra-ui/react";
+import { chakra, Spinner, BoxProps } from "@chakra-ui/react";
 import { getExpectedAmount } from "../../../utils";
 
 interface Props {
@@ -20,7 +20,8 @@ export default function PersonalStatistics({
     providedTokenSymbol,
     isEnding,
     isClaimed,
-  }: Props) {
+    ...boxProps,
+  }: Props & BoxProps) {
     // const { active } = useWeb3React();
     const active = true; //TODO
     // FIXME: replace mock
@@ -37,7 +38,7 @@ export default function PersonalStatistics({
     }
   
     return (
-      <chakra.div>
+      <chakra.div {...boxProps}>
           <>
             <div>
                 <>

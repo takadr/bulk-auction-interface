@@ -38,14 +38,14 @@ interface BulksaleV1Params {
 //   - provided
 //   - isClaimed
 
-const mockParams: BulksaleV1Params = {
-    title: 'Test',
-    unixStartDate: new Date('2021-07-09T21:00:00Z').getTime() / 1000, // unixTime
-    unixEndDate: new Date('2021-07-15 06:00').getTime() / 1000, // unixTime
-    totalDistributeAmount: BigInt(3600000000000),
-}
+// const mockParams: BulksaleV1Params = {
+//     title: 'Test',
+//     unixStartDate: new Date('2021-07-09T21:00:00Z').getTime() / 1000, // unixTime
+//     unixEndDate: new Date('2021-07-15 06:00').getTime() / 1000, // unixTime
+//     totalDistributeAmount: BigInt(3600000000000),
+// }
 
-export default function BulksaleV1(props: BulksaleV1Params) {
+export default function BulksaleV1(props: any) {
     const now = Date.now();
     // Static status
     const [startingAt, setStartingAt] = useState<number>(0);
@@ -117,7 +117,7 @@ export default function BulksaleV1(props: BulksaleV1Params) {
     return (
         <>
             <Container>
-                <Heading>{props.title}</Heading>
+                <Heading>Test</Heading>
                 <Flex>
                     <StatisticsInCircle
                         totalProvided={totalProvided}
@@ -126,12 +126,14 @@ export default function BulksaleV1(props: BulksaleV1Params) {
                         providedTokenSymbol={providedTokenSymbol}
                         fiatSymbol={fiatSymbol}
                         fiatRate={fiatRate}
-                        contractAddress={props.contractAddress}
+                        contractAddress={"0x9eB51285EF530F700d4a9D179DA75cb971Df6Fe7"}
                         started={started}
+                        w={{base: 'full', md: '50%'}}
                      />
                     <CalendarInCircle
-                        unixStartDate={props.unixStartDate}
-                        unixEndDate={props.unixEndDate}
+                        unixStartDate={startingAt / 1000}
+                        unixEndDate={closingAt / 1000}
+                        w={{base: 'full', md: '50%'}}
                     />
                 </Flex>
                 <Box>

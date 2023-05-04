@@ -1,5 +1,5 @@
 import { Circle } from 'rc-progress';
-import { chakra, Spinner, Toast, Link } from "@chakra-ui/react";
+import { chakra, Spinner, Toast, Link, BoxProps } from "@chakra-ui/react";
 import { getExpectedAmount, getTargetPercetage, getFiatConversionAmount, getEtherscanLink } from "../../../utils";
 
 type Props = {
@@ -57,7 +57,8 @@ export default function StatisticsInCircle({
   fiatRate,
   contractAddress,
   started,
-}: Props) {
+  ...boxProps
+}: Props & BoxProps) {
   // const { chainId } = useActiveWeb3React();
   // const isDifferentialNetwork = !(targetedChainId === chainId);
   // TODO
@@ -66,7 +67,7 @@ export default function StatisticsInCircle({
   const targetedChain = 'sepolia';
 
   return (
-    <chakra.div>
+    <chakra.div {...boxProps}>
       <Link href={getEtherscanLink(chain, contractAddress, 'address')}>
         <Circle
           percent={getTargetPercetage(totalProvided, finalGoalAmount)}
@@ -84,15 +85,12 @@ export default function StatisticsInCircle({
           >
             Total Provided
           </h3>
-          <div
-            style={{
-              fontSize: '3rem',
-              lineHeight: '3.5rem',
-            }}
-          >
-            {started && !isDifferentialNetwork ? totalProvided : '????'}{' '}
-            {providedTokenSymbol.toUpperCase()}
-          </div>
+          <chakra.div>
+            <>
+              {started && !isDifferentialNetwork ? totalProvided : '????'}{' '}
+              {providedTokenSymbol.toUpperCase()}
+            </>
+          </chakra.div>
           <span
             style={{
               fontSize: '2rem',
