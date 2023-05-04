@@ -51,8 +51,11 @@ export default function BulksaleV1(props: any) {
     const [startingAt, setStartingAt] = useState<number>(0);
     const [closingAt, setClosingAt] = useState<number>(0);
     const [totalDistributeAmount, setTotalDistributeAmount] = useState<bigint>(BigInt(0));
+    const [distributedTokenSymbol, setDistributedTokenSymbol] = useState<string>('');
+    const [distributedTokenDecimal, setDistributedTokenDecimal] = useState<number>(0);
     const [minimalProvideAmount, setMinimalProvideAmount] = useState<bigint>(BigInt(0));
     const [providedTokenSymbol, setProvidedTokenSymbol] = useState<string>('');
+    const [providedTokenDecimal, setProvidedTokenDecimal] = useState<number>(0);
     // Dynamic status
     const [totalProvided, setTotalProvided] = useState<bigint>(BigInt(0));
     const [provided, setProvided] = useState<bigint>(BigInt(0));
@@ -71,8 +74,11 @@ export default function BulksaleV1(props: any) {
         setStartingAt(new Date('2023-05-02T21:00:00Z').getTime());
         setClosingAt(new Date('2023-05-16T21:00:00Z').getTime());
         setTotalDistributeAmount(BigInt('21000000000000'));
+        setDistributedTokenSymbol('TST');
+        setDistributedTokenDecimal(8);
         setMinimalProvideAmount(BigInt('10000000000000000'))
         setProvidedTokenSymbol('ETH');
+        setProvidedTokenDecimal(18);
         // - totalDistributeAmount
         // - minimalProvideAmount
         // (- providedTokenSymbol)
@@ -99,7 +105,7 @@ export default function BulksaleV1(props: any) {
         setStarted(startingAt <= new Date().getTime());
         setEnded(closingAt < new Date().getTime());
 
-        setFiatRate(1.0);
+        setFiatRate(1908);
     }, 1000);
     const handleSubmit = () => {
 
@@ -118,12 +124,13 @@ export default function BulksaleV1(props: any) {
         <>
             <Container>
                 <Heading>Test</Heading>
-                <Flex>
+                <Flex flexDirection={{base: 'column', md: 'row'}}>
                     <StatisticsInCircle
                         totalProvided={totalProvided}
                         interimGoalAmount={interimGoalAmount}
                         finalGoalAmount={finalGoalAmount}
                         providedTokenSymbol={providedTokenSymbol}
+                        providedTokenDecimal={providedTokenDecimal}
                         fiatSymbol={fiatSymbol}
                         fiatRate={fiatRate}
                         contractAddress={"0x9eB51285EF530F700d4a9D179DA75cb971Df6Fe7"}
@@ -143,8 +150,8 @@ export default function BulksaleV1(props: any) {
                                 <Tooltip hasArrow label={'TODO explanation'}><QuestionIcon mb={1} ml={1} /></Tooltip>
                             </FormLabel>
                             <Flex alignItems={'center'}>
-                                <NumberInput flex="1" name="amount" value={formikProps.values.amount} min={1} max={90} onBlur={formikProps.handleBlur} onChange={(_: string, val: number) =>
-                                    formikProps.setFieldValue('amount', val)
+                                <NumberInput flex="1" name="amount" value={formikProps.values.amount} min={1} step={1} max={90} onBlur={formikProps.handleBlur} onChange={(_: string, val: number) =>
+                                    formikProps.setFieldValue('amount', val ? val : 0)
                                 }>
                                     <NumberInputField/>
                                     <NumberInputStepper>
@@ -161,9 +168,20 @@ export default function BulksaleV1(props: any) {
                         </FormControl>
                     </form>
                 </Box>
-                <Box >
-                    TODO: Personal statistics
-                </Box>
+                { started && <Box>
+                    <PersonalStatistics
+                        inputValue={formikProps.values.amount}
+                        myTotalProvided={provided}
+                        totalProvided={totalProvided}
+                        totalDistributeAmount={totalDistributeAmount}
+                        distributedTokenSymbol={distributedTokenSymbol}
+                        distributedTokenDecimal={distributedTokenDecimal}
+                        providedTokenSymbol={providedTokenSymbol}
+                        providedTokenDecimal={providedTokenDecimal}
+                        isEnding={ended}
+                        isClaimed={isClaimed}
+                    />
+                </Box> }
             </Container>
         </>
     );

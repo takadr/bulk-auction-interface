@@ -1,12 +1,13 @@
 import { Circle } from 'rc-progress';
-import { chakra, Spinner, Toast, Link, BoxProps } from "@chakra-ui/react";
-import { getExpectedAmount, getTargetPercetage, getFiatConversionAmount, getEtherscanLink } from "../../../utils";
+import { chakra, Spinner, Toast, Link, Heading, BoxProps } from "@chakra-ui/react";
+import { getExpectedAmount, getTargetPercetage, getFiatConversionAmount, tokenAmountFormat, getEtherscanLink } from "../../../utils";
 
 type Props = {
   totalProvided: bigint;
   interimGoalAmount: bigint;
   finalGoalAmount: bigint;
   providedTokenSymbol: string;
+  providedTokenDecimal: number;
   fiatSymbol: string;
   fiatRate: number;
   contractAddress: string;
@@ -53,6 +54,7 @@ export default function StatisticsInCircle({
   interimGoalAmount,
   finalGoalAmount,
   providedTokenSymbol,
+  providedTokenDecimal,
   fiatSymbol,
   fiatRate,
   contractAddress,
@@ -68,67 +70,52 @@ export default function StatisticsInCircle({
 
   return (
     <chakra.div {...boxProps}>
-      <Link href={getEtherscanLink(chain, contractAddress, 'address')}>
-        <Circle
-          percent={getTargetPercetage(totalProvided, finalGoalAmount)}
-          strokeWidth={4}
-          strokeColor="#D3D3D3"
-        />
-        {/* <StarPosition>
-          <StarTwoTone />
-        </StarPosition> */}
-        <chakra.div>
-          <h3
-            style={{
-              fontSize: '2rem',
-            }}
-          >
-            Total Provided
-          </h3>
-          <chakra.div>
-            <>
-              {started && !isDifferentialNetwork ? totalProvided : '????'}{' '}
-              {providedTokenSymbol.toUpperCase()}
-            </>
-          </chakra.div>
-          <span
-            style={{
-              fontSize: '2rem',
-            }}
-          >
-            { // TODO
-            }
-            ¥
-            {started && !isDifferentialNetwork
-              ? '' +
-                getFiatConversionAmount(parseInt(totalProvided.toString()), fiatRate)
-              : '????'}
-          </span>
-          <div
-            style={{
-              textAlign: 'center',
-              fontSize: '1rem',
-              marginTop: '10px',
-            }}
-          >
-            {!!interimGoalAmount && !isDifferentialNetwork ? (
+      <chakra.div position={'relative'}>
+        <Link href={getEtherscanLink(chain, contractAddress, 'address')}>
+          <Circle
+            percent={getTargetPercetage(totalProvided, finalGoalAmount)}
+            strokeWidth={4}
+            strokeColor="#D3D3D3"
+          />
+          {/* <StarPosition>
+            <StarTwoTone />
+          </StarPosition> */}
+          <chakra.div textAlign={'center'} position={'absolute'} margin={'auto'} top={0} bottom={0} left={0} right={0} display={'flex'} flexDirection={'column'} justifyContent={'center'}>
+            <Heading as={'h3'}>
+              Total Provided
+            </Heading>
+            <chakra.div>
               <>
-                目標 {interimGoalAmount}
-                {providedTokenSymbol.toUpperCase()} {' 以上'}
-                {totalProvided >= interimGoalAmount ? 'を達成しました🎉' : ''}
+                {started && !isDifferentialNetwork ? tokenAmountFormat(totalProvided, providedTokenDecimal, 2) : '????'}{' '}
+                {providedTokenSymbol.toUpperCase()}
               </>
-            ) : (
-              <p
-                style={{
-                  color: 'black',
-                }}
-              >
-                {targetedChain}に接続してください。
-              </p>
-            )}
-          </div>
-        </chakra.div>
-      </Link>
+            </chakra.div>
+            <span>
+              {
+                // TODO Fiat symbol ($, ¥)
+                '$'
+              }
+              {started && !isDifferentialNetwork
+                ? '' +
+                  getFiatConversionAmount(Number(tokenAmountFormat(totalProvided, providedTokenDecimal, 2)), fiatRate)
+                : '????'}
+            </span>
+            <div>
+              {!!interimGoalAmount && !isDifferentialNetwork ? (
+                <>
+                  GOAL {tokenAmountFormat(interimGoalAmount, 18, 2)}
+                  {providedTokenSymbol.toUpperCase()}
+                  {totalProvided >= interimGoalAmount ? 'Achieved🎉' : ''}
+                </>
+              ) : (
+                <p>
+                  Please connect to {targetedChain}
+                </p>
+              )}
+            </div>
+          </chakra.div>
+        </Link>
+      </chakra.div>
     </chakra.div>
   );
 }

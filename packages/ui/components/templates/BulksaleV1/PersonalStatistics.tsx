@@ -1,13 +1,15 @@
 import { chakra, Spinner, BoxProps } from "@chakra-ui/react";
-import { getExpectedAmount } from "../../../utils";
+import { getExpectedAmount, tokenAmountFormat } from "../../../utils";
 
 interface Props {
-    inputValue: bigint;
+    inputValue: number;
     myTotalProvided: bigint;
     totalProvided: bigint;
     totalDistributeAmount: bigint;
     distributedTokenSymbol: string;
+    distributedTokenDecimal: number;
     providedTokenSymbol: string;
+    providedTokenDecimal: number;
     isEnding: boolean;
     isClaimed: boolean;
 }
@@ -17,10 +19,12 @@ export default function PersonalStatistics({
     totalProvided,
     totalDistributeAmount,
     distributedTokenSymbol,
+    distributedTokenDecimal,
     providedTokenSymbol,
+    providedTokenDecimal,
     isEnding,
     isClaimed,
-    ...boxProps,
+    ...boxProps
   }: Props & BoxProps) {
     // const { active } = useWeb3React();
     const active = true; //TODO
@@ -28,8 +32,9 @@ export default function PersonalStatistics({
     const isLoading = false;
   
     // TODO Format price
-    const expectedAmount = getExpectedAmount(myTotalProvided, inputValue, totalProvided, totalDistributeAmount);
-    const sumOfProvidedAmount = myTotalProvided + inputValue;
+    const inputValueInBigInt = inputValue ? BigInt(inputValue) * BigInt(10**providedTokenDecimal) : BigInt(0);
+    const expectedAmount = tokenAmountFormat(BigInt(Math.round(getExpectedAmount(myTotalProvided, inputValueInBigInt, totalProvided, totalDistributeAmount))), distributedTokenDecimal, 2);
+    const sumOfProvidedAmount = myTotalProvided + inputValueInBigInt;
     const fixedProvidedAmount = myTotalProvided;
     const inputtingProvidedAmount = inputValue;
 
@@ -39,73 +44,72 @@ export default function PersonalStatistics({
   
     return (
       <chakra.div {...boxProps}>
-          <>
+        <>
+          <div>
+              <>
+              {!isClaimed ? 'Estimated amount you will receive' : 'Amount you receive'}:{' '}
+              <span style={{ fontWeight: 'bold', marginLeft: '10px' }}><>
+                  {active ? expectedAmount : '????'}{' '}
+                  {distributedTokenSymbol.toUpperCase()}
+                  </>
+              </span>
+              {expectedAmount == '0' && (
+                  <p>
+                  Your contribution is too small so that it is shown as 0
+                  </p>
+              )}
+            </>
+          </div>
+          {!isEnding ? (
             <div>
-                <>
-                {!isClaimed ? '獲得予定数' : '獲得数'}:{' '}
-                <span style={{ fontWeight: 'bold', marginLeft: '10px' }}><>
-                    {active ? expectedAmount : '????'}{' '}
-                    {distributedTokenSymbol.toUpperCase()}
-                    </>
-                </span>
-                {expectedAmount && (
-                    <p>
-                    少なすぎて0になっています
-                    </p>
-                )}
+              <>
+                  Total donation:
+                  <span style={{ fontWeight: 'bold', marginLeft: '10px' }}>
+                      <>
+                      {active ? tokenAmountFormat(sumOfProvidedAmount, providedTokenDecimal, 2) : '????'}{' '}
+                      {providedTokenSymbol.toUpperCase()}
+                      </>
+                  </span>{' '}
+                  {active && (
+                  <>
+                      (New donation: 
+                      <span style={{ fontWeight: 'bold', marginLeft: '10px' }}>
+                          <>
+                          {inputtingProvidedAmount}{' '}
+                          {providedTokenSymbol.toUpperCase()}
+                          </>
+                      </span>
+                      )
+                  </>
+                  )}
+                  {sumOfProvidedAmount.toString() == '0' && (
+                  <p>
+                      Your contribution is too small so that it is shown as 0
+                  </p>
+                  )}
               </>
             </div>
-            {!isEnding ? (
+          ) : (
+            !isClaimed && (
               <div>
-                <>
-                    寄付合計:
-                    <span style={{ fontWeight: 'bold', marginLeft: '10px' }}>
-                        <>
-                        {active ? sumOfProvidedAmount : '????'}{' '}
-                        {providedTokenSymbol.toUpperCase()}
-                        </>
-                    </span>{' '}
-                    {active && (
-                    <>
-                        (入力中
-                        <span style={{ fontWeight: 'bold', marginLeft: '10px' }}>
-                            <>
-                            {inputtingProvidedAmount}{' '}
-                            {providedTokenSymbol.toUpperCase()}
-                            </>
-                        </span>
-                        )
-                    </>
-                    )}
-                    {sumOfProvidedAmount && (
-                    <p>
-                        少なすぎて0になっています
-                    </p>
-                    )}
+                  <>
+                  Your contribution
+                  <span style={{ fontWeight: 'bold', marginLeft: '10px' }}>
+                      <>
+                      {active ? fixedProvidedAmount : '????'}{' '}
+                      {providedTokenSymbol.toUpperCase()}
+                      </>
+                  </span>
+                  {fixedProvidedAmount && (
+                      <p>
+                      Your contribution is too small so that it is shown as 0
+                      </p>
+                  )}
                 </>
               </div>
-            ) : (
-              !isClaimed && (
-                <div>
-                    <>
-                    寄付
-                    <span style={{ fontWeight: 'bold', marginLeft: '10px' }}>
-                        <>
-                        {active ? fixedProvidedAmount : '????'}{' '}
-                        {providedTokenSymbol.toUpperCase()}
-                        </>
-                    </span>
-                    {fixedProvidedAmount && (
-                        <p>
-                        少なすぎて0になっています
-                        </p>
-                    )}
-                  </>
-                </div>
-              )
-            )}
-          </>
-        )
+            )
+          )}
+        </>
       </chakra.div>
     );
   };
