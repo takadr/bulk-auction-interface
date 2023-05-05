@@ -81,7 +81,7 @@ export default function Web() {
             <ul>{
               
               saleClones.map((address) => {
-                return <li key={address}><Link href={`/${address}`}>{address}</Link></li>
+                return <li key={address}><Link href={`/${address}`} target={'_blank'}>{address}</Link></li>
               })
               
             }</ul>

@@ -526,7 +526,7 @@ export default function SaleFormModal({isOpen, onClose}: {isOpen: boolean, onClo
                                     isLoading={writeFn.isLoading}
                                     isDisabled={!writeFn.writeAsync}
                                 >
-                                    Deploy Token Contract
+                                    Deploy Sale Contract
                                 </Button> :
                                 <Button mt={8} 
                                     w={'full'} 
