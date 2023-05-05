@@ -1,11 +1,12 @@
 import { chakra, Spinner, BoxProps } from "@chakra-ui/react";
 import { getExpectedAmount, tokenAmountFormat } from "../../../utils";
+import Big, { add, multiply } from "../../../utils/bignumber";
 
 interface Props {
     inputValue: number;
-    myTotalProvided: bigint;
-    totalProvided: bigint;
-    totalDistributeAmount: bigint;
+    myTotalProvided: Big;
+    totalProvided: Big;
+    totalDistributeAmount: Big;
     distributedTokenSymbol: string;
     distributedTokenDecimal: number;
     providedTokenSymbol: string;
@@ -32,11 +33,11 @@ export default function PersonalStatistics({
     const isLoading = false;
   
     // TODO Format price
-    const inputValueInBigInt = inputValue ? BigInt(inputValue) * BigInt(10**providedTokenDecimal) : BigInt(0);
-    const expectedAmount = tokenAmountFormat(BigInt(Math.round(getExpectedAmount(myTotalProvided, inputValueInBigInt, totalProvided, totalDistributeAmount))), distributedTokenDecimal, 2);
-    const sumOfProvidedAmount = tokenAmountFormat(myTotalProvided + inputValueInBigInt, providedTokenDecimal, 2);
+    const inputValueInBig = multiply(Big(inputValue), Big(10**providedTokenDecimal));
+    const expectedAmount = tokenAmountFormat(getExpectedAmount(myTotalProvided, inputValueInBig, totalProvided, totalDistributeAmount), distributedTokenDecimal, 2);
+    const sumOfProvidedAmount = tokenAmountFormat(add(myTotalProvided, inputValueInBig), providedTokenDecimal, 2);
     const fixedProvidedAmount = tokenAmountFormat(myTotalProvided, providedTokenDecimal, 2);
-    const inputtingProvidedAmount = inputValue;
+    const inputtingValueInFormat = tokenAmountFormat(inputValueInBig, distributedTokenDecimal, 2);
 
     if(isLoading) {
         return <Spinner />
@@ -75,7 +76,7 @@ export default function PersonalStatistics({
                       (New donation: 
                       <span style={{ fontWeight: 'bold', marginLeft: '10px' }}>
                           <>
-                          {inputtingProvidedAmount}{' '}
+                          {inputtingValueInFormat}{' '}
                           {providedTokenSymbol.toUpperCase()}
                           </>
                       </span>

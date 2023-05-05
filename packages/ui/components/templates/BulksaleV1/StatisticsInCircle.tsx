@@ -1,11 +1,12 @@
 import { Circle } from 'rc-progress';
+import Big from '../../../utils/bignumber';
 import { chakra, Spinner, Toast, Link, Heading, BoxProps } from "@chakra-ui/react";
 import { getExpectedAmount, getTargetPercetage, getFiatConversionAmount, tokenAmountFormat, getEtherscanLink } from "../../../utils";
 
 type Props = {
-  totalProvided: bigint;
-  interimGoalAmount: bigint;
-  finalGoalAmount: bigint;
+  totalProvided: Big;
+  interimGoalAmount: Big;
+  finalGoalAmount: Big;
   providedTokenSymbol: string;
   providedTokenDecimal: number;
   fiatSymbol: string;
@@ -105,7 +106,7 @@ export default function StatisticsInCircle({
                 <>
                   GOAL {tokenAmountFormat(interimGoalAmount, 18, 2)}
                   {providedTokenSymbol.toUpperCase()}
-                  {totalProvided >= interimGoalAmount ? 'Achieved🎉' : ''}
+                  {totalProvided.gte(interimGoalAmount) ? 'Achieved🎉' : ''}
                 </>
               ) : (
                 <p>

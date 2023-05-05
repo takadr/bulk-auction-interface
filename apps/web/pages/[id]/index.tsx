@@ -8,6 +8,8 @@ export default function SalePage() {
     const router = useRouter();
     const { id } = router.query;
 
+    // TODO Get template address from contractAddress
+    // Switch template by using template address
     return (
         <BulksaleV1
             title={`Contract: ${id}`}

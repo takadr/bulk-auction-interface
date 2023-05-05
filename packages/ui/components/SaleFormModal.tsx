@@ -43,6 +43,8 @@ import useApprove from '../hooks/useApprove';
 import useTokenBasicInfo from '../hooks/useTokenBasicInfo';
 import { useAtom } from 'jotai';
 import { saleTxAtom, saleClonesAtom, waitingTransactionAtom } from '../store';
+import Big, { multiply } from '../utils/bignumber';
+
 
 const now = new Date().getTime();
 
@@ -193,9 +195,20 @@ export default function SaleFormModal({isOpen, onClose}: {isOpen: boolean, onClo
 
     const getBytesParams = (sale: Sale): `0x${string}` => {
         try {
+            // console.log(multiply(sale.totalDistributeAmount, 10**tokenData.decimals!).toNumber())
             return utils.hexlify(abi.encode(
                 ['address', 'uint', 'uint', 'uint', 'uint', 'uint', 'uint', 'address', 'uint'],
-                [sale.token, Math.round(sale.startingAt / 1000), sale.eventDuration, sale.lockDuration, sale.expirationDuration, sale.totalDistributeAmount, sale.minimalProvideAmount, sale.owner, sale.feeRatePerMil]
+                [
+                    sale.token,
+                    Math.round(sale.startingAt / 1000),
+                    sale.eventDuration,
+                    sale.lockDuration,
+                    sale.expirationDuration,
+                    multiply(sale.totalDistributeAmount, tokenData.decimals ? Big(10).pow(tokenData.decimals) : 0).toString(),
+                    multiply(sale.minimalProvideAmount, Big(10).pow(18)).toString(), // ETH
+                    sale.owner,
+                    sale.feeRatePerMil
+                ]
                 // Object.values(sale)
             )) as `0x${string}`
         } catch(e: any) {
@@ -220,6 +233,8 @@ export default function SaleFormModal({isOpen, onClose}: {isOpen: boolean, onClo
     // })
     const abi = new utils.AbiCoder();
 
+    // console.log(debouncedSale.totalDistributeAmount)
+    // console.log(multiply(debouncedSale.totalDistributeAmount, tokenData.decimals ? Big(10).pow(tokenData.decimals) : 0).toString());
     const prepareFn = usePrepareContractWrite({
         address: process.env.NEXT_PUBLIC_FACTORY_ADDRESS as `0x${string}`, //factory
         abi: factoryABI,
@@ -227,7 +242,7 @@ export default function SaleFormModal({isOpen, onClose}: {isOpen: boolean, onClo
         args: [
             "BulksaleV1.0.sol",
             debouncedSale.token,
-            1000000,
+            multiply(debouncedSale.totalDistributeAmount, tokenData.decimals ? Big(10).pow(tokenData.decimals) : 0).toString(),
             getBytesParams(debouncedSale),
         ],
     })
@@ -423,7 +438,7 @@ export default function SaleFormModal({isOpen, onClose}: {isOpen: boolean, onClo
                                     <Tooltip hasArrow label={'TODO explanation'}><QuestionIcon mb={1} ml={1} /></Tooltip>
                                 </FormLabel>
                                 <Flex alignItems={'center'}>
-                                    <NumberInput flex="1" name="totalDistributeAmount" value={formikProps.values.totalDistributeAmount} min={1} max={Number.MAX_SAFE_INTEGER} onBlur={formikProps.handleBlur} onChange={(_: string, val: number) =>
+                                    <NumberInput flex="1" name="totalDistributeAmount" value={formikProps.values.totalDistributeAmount} precision={2} min={0.01} step={0.01} max={Number.MAX_SAFE_INTEGER} onBlur={formikProps.handleBlur} onChange={(_: string, val: number) =>
                                         formikProps.setFieldValue('totalDistributeAmount', val)
                                     }>
                                         <NumberInputField/>
@@ -442,7 +457,7 @@ export default function SaleFormModal({isOpen, onClose}: {isOpen: boolean, onClo
                                     <Tooltip hasArrow label={'TODO explanation'}><QuestionIcon mb={1} ml={1} /></Tooltip>
                                 </FormLabel>
                                 <Flex alignItems={'center'}>
-                                    <NumberInput flex="1" name="minimalProvideAmount" value={formikProps.values.minimalProvideAmount} precision={2} min={0} max={10000000} onBlur={formikProps.handleBlur} onChange={(_: string, val: number) =>
+                                    <NumberInput flex="1" name="minimalProvideAmount" value={formikProps.values.minimalProvideAmount} step={0.01} precision={2} min={0} max={10000000} onBlur={formikProps.handleBlur} onChange={(_: string, val: number) =>
                                         formikProps.setFieldValue('minimalProvideAmount', val)
                                     }>
                                         <NumberInputField/>
@@ -502,6 +517,7 @@ export default function SaleFormModal({isOpen, onClose}: {isOpen: boolean, onClo
                                     variant="solid" 
                                     colorScheme='green'
                                     isLoading={writeFn.isLoading}
+                                    isDisabled={!writeFn.writeAsync}
                                 >
                                     Deploy Token Contract
                                 </Button> :
@@ -511,6 +527,7 @@ export default function SaleFormModal({isOpen, onClose}: {isOpen: boolean, onClo
                                     colorScheme='blue'
                                     onClick={approvals.writeFn.write}
                                     isLoading={approvals.writeFn.isLoading}
+                                    isDisabled={!approvals.writeFn.write}
                                 >
                                     Approve token
                                 </Button>

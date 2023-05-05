@@ -1,9 +1,10 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { Container, Heading, Flex, Box, Button, FormControl, FormLabel, FormErrorMessage, NumberInput, NumberInputField, NumberInputStepper, NumberIncrementStepper, NumberDecrementStepper, Tooltip, chakra, useInterval, useToast} from '@chakra-ui/react';
 import { QuestionIcon } from '@chakra-ui/icons';
 import { useFormik } from 'formik';
 import { useProvider, useNetwork, useAccount, useContractRead, usePrepareContractWrite, useContractWrite, useWaitForTransaction, useContractEvent, usePrepareSendTransaction, useSendTransaction, useToken, erc20ABI } from 'wagmi';
 import { format, formatDistance, formatRelative, subDays } from 'date-fns';
+import Big from '../../../utils/bignumber';
 import { BigNumber, utils } from 'ethers';
 import CalendarInCircle from './CalendarInCircle';
 import PersonalStatistics from './PersonalStatistics';
@@ -58,6 +59,10 @@ export default function BulksaleV1(props: BulksaleV1Params) {
     // Local status
     const [fiatSymbol, setFiatSymbol] = useState<string>('usd');
     const [fiatRate, setFiatRate] = useState<number>(1.0);
+
+    // Only for test
+    const [, updateState] = useState<any>();
+    const forceUpdate = useCallback(() => updateState({}), []);
     
     // TODO Subgraphからまとめて読み込む
 
@@ -152,6 +157,8 @@ export default function BulksaleV1(props: BulksaleV1Params) {
                 status: 'success',
                 duration: 5000,
             })
+            // TODO Update contract statuses
+            setTimeout(forceUpdate, 1000);
         },
     })
 
@@ -161,9 +168,9 @@ export default function BulksaleV1(props: BulksaleV1Params) {
                 <Heading>Test</Heading>
                 <Flex flexDirection={{base: 'column', md: 'row'}}>
                     <StatisticsInCircle
-                        totalProvided={totalProvided}
-                        interimGoalAmount={interimGoalAmount}
-                        finalGoalAmount={finalGoalAmount}
+                        totalProvided={Big(totalProvided.toString())}
+                        interimGoalAmount={Big(interimGoalAmount.toString())}
+                        finalGoalAmount={Big(finalGoalAmount.toString())}
                         providedTokenSymbol={providedTokenSymbol}
                         providedTokenDecimal={providedTokenDecimal}
                         fiatSymbol={fiatSymbol}
@@ -185,7 +192,10 @@ export default function BulksaleV1(props: BulksaleV1Params) {
                                 <Tooltip hasArrow label={'TODO explanation'}><QuestionIcon mb={1} ml={1} /></Tooltip>
                             </FormLabel>
                             <Flex alignItems={'center'}>
-                                <NumberInput flex="1" name="amount" value={formikProps.values.amount} min={1} step={1} max={90} onBlur={formikProps.handleBlur} onChange={(_: string, val: number) =>
+                                {
+                                    //TODO Set max as account balance
+                                }
+                                <NumberInput flex="1" name="amount" value={formikProps.values.amount} min={0.01} step={0.01} max={100} onBlur={formikProps.handleBlur} onChange={(_: string, val: number) =>
                                     formikProps.setFieldValue('amount', val ? val : 0)
                                 }>
                                     <NumberInputField/>
@@ -206,9 +216,9 @@ export default function BulksaleV1(props: BulksaleV1Params) {
                 { started && <Box>
                     <PersonalStatistics
                         inputValue={formikProps.values.amount}
-                        myTotalProvided={provided}
-                        totalProvided={totalProvided}
-                        totalDistributeAmount={totalDistributeAmount}
+                        myTotalProvided={Big(provided.toString())}
+                        totalProvided={Big(totalProvided.toString())}
+                        totalDistributeAmount={Big(totalDistributeAmount.toString())}
                         distributedTokenSymbol={distributedToken ? distributedToken.symbol : ''}
                         distributedTokenDecimal={distributedToken ? distributedToken.decimals : 0}
                         providedTokenSymbol={providedTokenSymbol}
