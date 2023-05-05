@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
-import { Container, Heading, Flex, Box, Button, FormControl, FormLabel, FormErrorMessage, NumberInput, NumberInputField, NumberInputStepper, NumberIncrementStepper, NumberDecrementStepper, Tooltip, chakra, useInterval, useToast} from '@chakra-ui/react';
+import { Container, Heading, Flex, Box, Button, FormControl, FormLabel, FormErrorMessage, NumberInput, NumberInputField, NumberInputStepper, NumberIncrementStepper, NumberDecrementStepper, Tooltip, Stack, Divider, chakra, useInterval, useToast} from '@chakra-ui/react';
 import { QuestionIcon } from '@chakra-ui/icons';
 import { useFormik } from 'formik';
 import { useProvider, useNetwork, useAccount, useContractRead, usePrepareContractWrite, useContractWrite, useWaitForTransaction, useContractEvent, usePrepareSendTransaction, useSendTransaction, useToken, erc20ABI } from 'wagmi';
@@ -11,6 +11,10 @@ import PersonalStatistics from './PersonalStatistics';
 import StatisticsInCircle from './StatisticsInCircle';
 import bulksaleV1ABI from '../../../constants/abis/BulksaleV1.json';
 import useBulksaleV1 from '../../../hooks/useBulksaleV1';
+import useClaim from '../../../hooks/useClaim';
+import useWithdrawERC20Onsale from '../../../hooks/useWithdrawERC20Onsale';
+import useWithdrawProvidedETH from '../../../hooks/useWithdrawProvidedETH';
+import useWithdrawUnclaimedERC20OnSale from '../../../hooks/useWithdrawUnclaimedERC20OnSale';
 
 interface BulksaleV1Params {
     // title?: string;
@@ -36,7 +40,8 @@ export default function BulksaleV1(props: BulksaleV1Params) {
         minimalProvideAmount,
         totalProvided,
         provided,
-        token: distributedToken
+        token: distributedToken,
+        owner
     } = useBulksaleV1(props.contractAddress, props.address);
     // Static status
     // const [startingAt, setStartingAt] = useState<number>(0);
@@ -160,12 +165,17 @@ export default function BulksaleV1(props: BulksaleV1Params) {
             // TODO Update contract statuses
             setTimeout(forceUpdate, 1000);
         },
-    })
+    });
+
+    const {prepareFn: claimPrepareFn, writeFn: claimWriteFn, waitFn: claimWaitFn} = useClaim(props.contractAddress, props.address);
+    const {prepareFn: withdrawERC20PrepareFn, writeFn: withdrawERC20WriteFn, waitFn: withdrawERC20WaitFn} = useWithdrawERC20Onsale(props.contractAddress);
+    const {prepareFn: withdrawETHPrepareFn, writeFn: withdrawETHWriteFn, waitFn: withdrawETHWaitFn} = useWithdrawProvidedETH(props.contractAddress);
+    const {prepareFn: withdrawUnclaimedERC20PrepareFn, writeFn: withdrawUnclaimedERC20WriteFn, waitFn: withdrawUnclaimedERC20WaitFn} = useWithdrawUnclaimedERC20OnSale(props.contractAddress);
 
     return (
         <>
-            <Container>
-                <Heading>Test</Heading>
+            <Container maxW={'container.md'} py={8}>
+                <Heading textAlign={'center'} my={8}>Test Bulksale</Heading>
                 <Flex flexDirection={{base: 'column', md: 'row'}}>
                     <StatisticsInCircle
                         totalProvided={Big(totalProvided.toString())}
@@ -185,7 +195,7 @@ export default function BulksaleV1(props: BulksaleV1Params) {
                         w={{base: 'full', md: '50%'}}
                     />
                 </Flex>
-                <Box>
+                { started && !ended && <Box>
                     <form onSubmit={formikProps.handleSubmit}>
                         <FormControl flex={1} mt={4} isInvalid={!!formikProps.errors.amount && !!formikProps.touched.amount}>
                             <FormLabel alignItems={'baseline'}>Donation amount
@@ -195,8 +205,8 @@ export default function BulksaleV1(props: BulksaleV1Params) {
                                 {
                                     //TODO Set max as account balance
                                 }
-                                <NumberInput flex="1" name="amount" value={formikProps.values.amount} min={0.01} step={0.01} max={100} onBlur={formikProps.handleBlur} onChange={(_: string, val: number) =>
-                                    formikProps.setFieldValue('amount', val ? val : 0)
+                                <NumberInput isDisabled={!started} flex="1" name="amount" value={formikProps.values.amount} min={0.01} step={0.01} max={100} onBlur={formikProps.handleBlur} onChange={(strVal: string, val: number) =>
+                                    formikProps.setFieldValue('amount', strVal ? strVal : 0)
                                 }>
                                     <NumberInputField/>
                                     <NumberInputStepper>
@@ -205,14 +215,29 @@ export default function BulksaleV1(props: BulksaleV1Params) {
                                     </NumberInputStepper>
                                 </NumberInput>
                                 <chakra.div px={2}>{providedTokenSymbol}</chakra.div>
-                                <Button isLoading={isLoading} isDisabled={!sendTransactionAsync} type='submit' variant='solid' colorScheme={'green'}>
+                                <Button isLoading={isLoading} isDisabled={!sendTransactionAsync || !started} type='submit' variant='solid' colorScheme={'green'}>
                                     Donate
                                 </Button>
                             </Flex>
                             <FormErrorMessage>{formikProps.errors.amount}</FormErrorMessage>
                         </FormControl>
                     </form>
-                </Box>
+                </Box> }
+                
+                { ended && 
+                    <chakra.div>
+                        <Button
+                            variant={'solid'}
+                            isDisabled={isClaimed || !claimWriteFn.writeAsync}
+                            onClick={async() => {
+                                await claimWriteFn.writeAsync();
+                            }}
+                        >
+                            { isClaimed ? 'Claimed' : 'Claim' }
+                        </Button>
+                    </chakra.div>
+                }
+
                 { started && <Box>
                     <PersonalStatistics
                         inputValue={formikProps.values.amount}
@@ -227,6 +252,51 @@ export default function BulksaleV1(props: BulksaleV1Params) {
                         isClaimed={isClaimed}
                     />
                 </Box> }
+
+                {
+                    owner === props.address && <Stack spacing={4} py={8}>
+                        <Divider />
+                        <Heading textAlign={'center'}>Owner Menu</Heading>
+                        <chakra.div textAlign={'center'}>
+                            <Button
+                                variant={'solid'}
+                                isDisabled={!withdrawERC20WriteFn.writeAsync}
+                                onClick={async() => {
+                                    await claimWriteFn.writeAsync();
+                                }}
+                            >
+                                Withdraw Token 
+                                <Tooltip hasArrow label={'Finished, but the privided token is not enough. (Failed sale)'}><QuestionIcon mb={1} ml={1} /></Tooltip>
+                            </Button>
+                        </chakra.div>
+
+                        <chakra.div textAlign={'center'}>
+                            <Button
+                                variant={'solid'}
+                                isDisabled={!withdrawETHWriteFn.writeAsync}
+                                onClick={async() => {
+                                    await withdrawETHWriteFn.writeAsync();
+                                }}
+                            >
+                                Withdraw ETH 
+                                <Tooltip hasArrow label={'Finished, and enough Ether provided.'}><QuestionIcon mb={1} ml={1} /></Tooltip>
+                            </Button>
+                        </chakra.div>
+
+                        <chakra.div textAlign={'center'}>
+                            <Button
+                                variant={'solid'}
+                                isDisabled={!withdrawUnclaimedERC20WriteFn.writeAsync}
+                                onClick={async() => {
+                                    await withdrawUnclaimedERC20WriteFn.writeAsync();
+                                }}
+                            >
+                                Withdraw Unclaimed Token 
+                                <Tooltip hasArrow label={'Finished, passed lock duration, and still there\'re unsold ERC-20.'}><QuestionIcon mb={1} ml={1} /></Tooltip>
+                            </Button>
+                        </chakra.div>
+                    </Stack>
+                }
             </Container>
         </>
     );

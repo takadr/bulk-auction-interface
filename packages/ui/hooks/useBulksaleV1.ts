@@ -39,6 +39,13 @@ export default function useBulksaleV1(contractAddress: `0x${string}`, address: `
         staleTime: 1000,
         cacheTime: 1000,
     });
+    const {data: owner} = useContractRead({
+        address: contractAddress,
+        abi: bulksaleV1ABI,
+        functionName: 'owner',
+        staleTime: 1000,
+        cacheTime: 1000,
+    });
     const {data: tokenAddress} = useContractRead({
         address: contractAddress,
         abi: bulksaleV1ABI,
@@ -55,6 +62,7 @@ export default function useBulksaleV1(contractAddress: `0x${string}`, address: `
         minimalProvideAmount: minimalProvideAmount ? BigInt(String(minimalProvideAmount)) : BigInt(0) ,
         totalProvided: totalProvided ? BigInt(String(totalProvided)) : BigInt(0),
         provided: provided ? BigInt(String(provided)) : BigInt(0),
-        token
+        token,
+        owner
     }
 }

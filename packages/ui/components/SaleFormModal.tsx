@@ -29,15 +29,14 @@ import {
     SliderThumb,
     SliderMark,
 } from '@chakra-ui/react'
-import { Button, useToast, Flex, Tooltip, chakra } from '@chakra-ui/react';
+import { Button, useToast, Flex, Tooltip, chakra, useColorMode } from '@chakra-ui/react';
 import { QuestionIcon } from '@chakra-ui/icons';
 import { Field, Form, Formik, useFormik, FieldProps } from 'formik';
 import { useProvider, useNetwork, useAccount, useContractRead, usePrepareContractWrite, useContractWrite, useWaitForTransaction, useContractEvent, erc20ABI } from 'wagmi';
 import { useDebounce } from 'use-debounce';
 import { BigNumber, constants, utils } from 'ethers';
 import { format, formatDistance, formatRelative, differenceInSeconds, addSeconds } from 'date-fns';
-import { CustomProvider } from 'rsuite';
-import { DateRangePicker } from 'rsuite';
+import { CustomProvider, DateRangePicker } from 'rsuite';
 import 'rsuite/dist/rsuite-no-reset.min.css';
 import useApprove from '../hooks/useApprove';
 import useTokenBasicInfo from '../hooks/useTokenBasicInfo';
@@ -67,6 +66,7 @@ export default function SaleFormModal({isOpen, onClose}: {isOpen: boolean, onClo
     const [saleTxs, setSaleTxs] = useAtom(saleTxAtom);
     const [saleClones, setSaleClones] = useAtom(saleClonesAtom);
     const [waitingTransaction, setWaitingTransaction] = useAtom(waitingTransactionAtom);
+    const { colorMode, setColorMode, toggleColorMode } = useColorMode();
 
     const emptySale: Sale = {
         token: null,
@@ -75,7 +75,7 @@ export default function SaleFormModal({isOpen, onClose}: {isOpen: boolean, onClo
         lockDuration: 60 * 60 * 24 * 7,
         expirationDuration: 60 * 60 * 24 * 30,
         totalDistributeAmount: 1,
-        minimalProvideAmount: 1,
+        minimalProvideAmount: 0.01,
         owner: address!,//'0x09c208Bee9B7Bbb4f630B086a73A1a90E8E881A5',//TODO
         feeRatePerMil: 1
     }
@@ -335,7 +335,7 @@ export default function SaleFormModal({isOpen, onClose}: {isOpen: boolean, onClo
     })
 
     return (
-        <CustomProvider theme={'dark'}>
+        <CustomProvider theme={colorMode}>
         <Modal
         isOpen={isOpen}
         onClose={handleClose}
@@ -368,6 +368,7 @@ export default function SaleFormModal({isOpen, onClose}: {isOpen: boolean, onClo
                                     <Tooltip hasArrow label={'TODO explanation'}><QuestionIcon mb={1} ml={1} /></Tooltip>
                                 </FormLabel>
                                 <DateRangePicker
+                                    // className={colorMode === 'light' ? 'rs-theme-high-contrast' : 'rs-theme-dark'}
                                     onBlur={(value: any) => {
                                         // TODO
                                         console.log(value)
@@ -434,12 +435,17 @@ export default function SaleFormModal({isOpen, onClose}: {isOpen: boolean, onClo
                             </FormControl>
 
                             <FormControl mt={4} isInvalid={!!formikProps.errors.totalDistributeAmount && !!formikProps.touched.totalDistributeAmount}>
-                                <FormLabel alignItems={'baseline'}>Total distribute amount
-                                    <Tooltip hasArrow label={'TODO explanation'}><QuestionIcon mb={1} ml={1} /></Tooltip>
-                                </FormLabel>
+                                <Flex justifyContent={'space-between'}>
+                                    <FormLabel alignItems={'baseline'}>Total distribute amount
+                                        <Tooltip hasArrow label={'TODO explanation'}><QuestionIcon mb={1} ml={1} /></Tooltip>
+                                    </FormLabel>
+                                    <chakra.p>(Your balance: xxx{} {tokenData.symbol})</chakra.p>
+                                </Flex>
+                                
                                 <Flex alignItems={'center'}>
-                                    <NumberInput flex="1" name="totalDistributeAmount" value={formikProps.values.totalDistributeAmount} precision={2} min={0.01} step={0.01} max={Number.MAX_SAFE_INTEGER} onBlur={formikProps.handleBlur} onChange={(_: string, val: number) =>
-                                        formikProps.setFieldValue('totalDistributeAmount', val)
+                                    <NumberInput flex="1" name="totalDistributeAmount" value={formikProps.values.totalDistributeAmount} precision={2} min={0.01} step={0.01} max={Number.MAX_SAFE_INTEGER} onBlur={formikProps.handleBlur} onChange={(strVal: string, val: number) =>
+                                        // formikProps.setFieldValue('totalDistributeAmount', val)
+                                        formikProps.setFieldValue('totalDistributeAmount', strVal ? strVal : 0)
                                     }>
                                         <NumberInputField/>
                                         <NumberInputStepper>
@@ -457,8 +463,9 @@ export default function SaleFormModal({isOpen, onClose}: {isOpen: boolean, onClo
                                     <Tooltip hasArrow label={'TODO explanation'}><QuestionIcon mb={1} ml={1} /></Tooltip>
                                 </FormLabel>
                                 <Flex alignItems={'center'}>
-                                    <NumberInput flex="1" name="minimalProvideAmount" value={formikProps.values.minimalProvideAmount} step={0.01} precision={2} min={0} max={10000000} onBlur={formikProps.handleBlur} onChange={(_: string, val: number) =>
-                                        formikProps.setFieldValue('minimalProvideAmount', val)
+                                    <NumberInput flex="1" name="minimalProvideAmount" value={formikProps.values.minimalProvideAmount} step={0.01} precision={2} min={0} max={10000000} onBlur={formikProps.handleBlur} onChange={(strVal: string, val: number) =>
+                                        // formikProps.setFieldValue('minimalProvideAmount', val)
+                                        formikProps.setFieldValue('minimalProvideAmount', strVal ? strVal : 0)
                                     }>
                                         <NumberInputField/>
                                         <NumberInputStepper>

@@ -29,12 +29,16 @@ import { FC, useState, useContext } from 'react';
 import { MoonIcon, HamburgerIcon, SunIcon, ChevronDownIcon, ChevronRightIcon } from '@chakra-ui/icons';
 import { useAccount, useEnsAvatar, useEnsName, useDisconnect, useNetwork, useSwitchNetwork } from 'wagmi';
 import { sepolia } from 'wagmi/chains';
-import { FiUser } from "react-icons/fi";
-// import { CurrentUserContext } from '../contexts/CurrentUser';
+import ProvidersList from './ProvidersList';
 
-export const Header: FC = (props: any) => {
+type HeaderProps = {
+    title?: string;
+};
+
+export const Header: FC<HeaderProps> = ({title}: {title?: string}) => {
     const { colorMode, setColorMode, toggleColorMode } = useColorMode();
     const { isOpen, onOpen, onClose } = useDisclosure();
+    const providersListDisclosure = useDisclosure();
     const toast = useToast({position: 'top-right', isClosable: true,})
     // const { current_user, mutate, error } = useContext<any>(CurrentUserContext);
     const { address, isConnected, connector } = useAccount();
@@ -46,9 +50,10 @@ export const Header: FC = (props: any) => {
     const nologinMenu = () => {
         return (
             <>
-                <Button variant={'primary'} size='sm' display={{base: 'none', md: 'block'}}>
+                <Button onClick={providersListDisclosure.onOpen} variant={'outline'} size='sm'>
                     Connect wallet
                 </Button>
+                <ProvidersList isOpen={providersListDisclosure.isOpen} onClose={providersListDisclosure.onClose} />
             </>
         )
     }
@@ -82,7 +87,7 @@ export const Header: FC = (props: any) => {
                     <Divider />
                     <HStack px={4} pt={2}>
                         <MoonIcon color={colorMode === 'light' ? 'gray' : 'white'} />
-                        <Switch defaultChecked={colorMode === 'light'} onChange={(e: any) => e.target.checked ? setColorMode('light') : setColorMode('dark')} />
+                        <Switch defaultChecked={colorMode !== 'light'} onChange={(e: any) => e.target.checked ? setColorMode('light') : setColorMode('dark')} />
                         <SunIcon color={colorMode === 'light' ? 'gray' : 'white'} />
                     </HStack>
                 </MenuList>
@@ -96,19 +101,21 @@ export const Header: FC = (props: any) => {
             <Container maxW="container.2xl" px={{base: 2, md: 4}}>
                 <Flex as="header" py="4" justifyContent="space-between" alignItems="center">
                     <Box>
-                        { props.toggleSidenav &&
-                        <IconButton mr={2} display={{base: 'inline-block', md: 'none'}} aria-label="button" variant={'ghost'} icon={<HamburgerIcon />} onClick={props.toggleSidenav} />
-                        }
-                        { !props.hideLogo && 
-                        <Link href="/">
+                        <Link href="/" textDecoration={'none'} _hover={{textDecoration: 'none'}}>
                             <Heading as='h1' fontSize="xl">
-                                DFGC Bulksale Maker
+                                <Text
+                                    bgGradient='linear(to-l, #7928CA, #FF0080)'
+                                    bgClip='text'
+                                    fontSize='xl'
+                                    fontWeight='extrabold'
+                                    >
+                                    { title ? title : 'DFGC Bulksale Maker (仮)' }
+                                </Text>
                             </Heading>
                         </Link>
-                        }
                     </Box>
                     <HStack>
-                        { true ? loginMenu() : nologinMenu() }
+                        { isConnected ? loginMenu() : nologinMenu() }
                     </HStack>
                 </Flex>
             </Container>

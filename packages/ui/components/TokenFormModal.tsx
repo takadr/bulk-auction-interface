@@ -165,6 +165,11 @@ export default function TokenFormModal({isOpen, onClose}: {isOpen: boolean, onCl
             console.log('Success!', data)
             // TODO
             // Modify tx status to confirmed in the store
+            toast({
+                description: `Transaction confirmed! ${data.transactionHash}`,
+                status: 'success',
+                duration: 5000,
+            })
         }
     })
 

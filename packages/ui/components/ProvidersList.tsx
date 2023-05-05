@@ -1,5 +1,5 @@
 import { useConnect } from 'wagmi';
-import { Button } from '@chakra-ui/react';
+import { Button, Stack } from '@chakra-ui/react';
 import {
   Modal,
   ModalOverlay,
@@ -24,16 +24,17 @@ export default function ProvidersList({isOpen, onClose}: {isOpen: boolean, onClo
             <ModalHeader>Connect Wallet</ModalHeader>
             <ModalCloseButton />
             <ModalBody pb={6}>
-              <div>
+              <Stack spacing={4}>
                 {connectors.map((connector) => (
                   <Button
                     disabled={!connector.ready}
                     key={connector.id}
+                    w={'full'}
                     onClick={() => { 
                       connect({ connector }); onClose() 
                     }}
                   >
-                    {connector.name}
+                    🦊 {connector.name}
                     {!connector.ready && ' (unsupported)'}
                     {isLoading &&
                       connector.id === pendingConnector?.id &&
@@ -42,7 +43,7 @@ export default function ProvidersList({isOpen, onClose}: {isOpen: boolean, onClo
                 ))}
           
                 {error && <div>{error.message}</div>}
-              </div>
+              </Stack>
             </ModalBody>
         </ModalContent>
     </Modal>

@@ -72,7 +72,7 @@ export default function StatisticsInCircle({
   return (
     <chakra.div {...boxProps}>
       <chakra.div position={'relative'}>
-        <Link href={getEtherscanLink(chain, contractAddress, 'address')}>
+        <Link href={getEtherscanLink(chain, contractAddress, 'address')} target={'_blank'}>
           <Circle
             percent={getTargetPercetage(totalProvided, finalGoalAmount)}
             strokeWidth={4}
@@ -82,12 +82,12 @@ export default function StatisticsInCircle({
             <StarTwoTone />
           </StarPosition> */}
           <chakra.div textAlign={'center'} position={'absolute'} margin={'auto'} top={0} bottom={0} left={0} right={0} display={'flex'} flexDirection={'column'} justifyContent={'center'}>
-            <Heading as={'h3'}>
+            <Heading as={'h3'} fontSize={'lg'}>
               Total Provided
             </Heading>
             <chakra.div>
               <>
-                {started && !isDifferentialNetwork ? tokenAmountFormat(totalProvided, providedTokenDecimal, 2) : '????'}{' '}
+                <chakra.span fontSize={'2xl'}>{started && !isDifferentialNetwork ? tokenAmountFormat(totalProvided, providedTokenDecimal, 2) : '????'}{' '}</chakra.span>
                 {providedTokenSymbol.toUpperCase()}
               </>
             </chakra.div>

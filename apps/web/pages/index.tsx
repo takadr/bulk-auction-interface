@@ -1,5 +1,5 @@
 // import { Button } from "ui";
-import { Box, Button, Link, Spinner, Stack, chakra, useColorMode } from '@chakra-ui/react';
+import { Box, Button, Link, Spinner, Stack, Container, Flex, Alert, AlertIcon, chakra, useColorMode } from '@chakra-ui/react';
 import {
   usePrepareContractWrite,
   useContractWrite,
@@ -8,13 +8,6 @@ import {
   createClient,
 } from 'wagmi';
 import { useAccount, useConnect, useDisconnect, useNetwork, useSwitchNetwork } from 'wagmi';
-import { sepolia } from 'wagmi/chains';
-import { InjectedConnector } from 'wagmi/connectors/injected';
-import { getDefaultProvider, BigNumber, utils } from 'ethers';
-import BulksaleV1ABI from 'ui/constants/abis/BulksaleV1.json';
-import Factory from 'ui/constants/abis/BulksaleV1.json';
-import useApprove from 'ui/hooks/useApprove';
-import { connected } from 'process';
 import ProvidersList from 'ui/components/ProvidersList';
 import TokenFormModal from 'ui/components/TokenFormModal';
 import SaleFormModal from 'ui/components/SaleFormModal';
@@ -24,6 +17,7 @@ import { useAtom } from 'jotai';
 import { saleClonesAtom, saleTxAtom, waitingTransactionAtom } from 'ui/store';
 
 export default function Web() {
+  const { chain } = useNetwork();
   const { address, isConnected, connector } = useAccount();
   const { disconnect } = useDisconnect();
   const providersListDisclosure = useDisclosure();
@@ -51,50 +45,46 @@ export default function Web() {
   const token = process.env.NEXT_PUBLIC_TOKEN_ADDRESS;
   // const token = "0x7169D38820dfd117C3FA1f22a697dBA58d90BA06"; // USDT
   const factory = process.env.NEXT_PUBLIC_FACTORY_ADDRESS;
-  const { prepareFn, writeFn, waitFn } = useApprove(token as `0x${string}`, address, factory as `0x${string}`);
 
   if(!isConnected) {
     return (
       <>
-        <Button onClick={providersListDisclosure.onOpen}>Connect wallet</Button>
-        <ProvidersList isOpen={providersListDisclosure.isOpen} onClose={providersListDisclosure.onClose} />
+        <Header />
+        <Container textAlign={'center'}>
+          <Flex minH={'50VH'} justifyContent={'center'} alignItems={'center'}>
+            <Button onClick={providersListDisclosure.onOpen} variant={'solid'} size={'lg'} colorScheme={'green'}>Connect wallet</Button>
+          </Flex>
+          <ProvidersList isOpen={providersListDisclosure.isOpen} onClose={providersListDisclosure.onClose} />
+        </Container>
       </>
     )
-  } else if(!prepareFn || !prepareFn.isSuccess) {
-    return <div>Preparing...</div>
   }
 
   return (
     <>
       <Header />
+      {
+          chain && chain.unsupported && 
+          <chakra.div px={8}>
+              <Alert status='warning' mb={4}>
+                  <AlertIcon /> Please connect to Sepolia
+              </Alert>
+          </chakra.div>
+      }
       <div className="flex py-20 flex-col items-center justify-center">
-        {/* <div>
-          {prepareFn.isSuccess &&
-            <Button
-              onClick={writeFn?.write}
-              disabled={writeFn.isLoading || prepareFn.isError}
-            >
-              Approve
-            </Button>
-          }
-          {writeFn.isLoading && <p>Loading...</p>}
-          {writeFn.isSuccess && <p>Tx submitted!</p>}
-          {waitFn.isSuccess && <p>Approved!</p>}
-        </div> */}
-
         <main className="flex w-full flex-1 flex-col items-center justify-center px-20 text-center">
           <Stack spacing={4}>
             <Box>
               <p>
                 TODO: Fetch existing sales contracts from Subgraph...
               </p>
-            {
+            <ul>{
               
               saleClones.map((address) => {
-                return <Link key={address} href={`/${address}`}>{address}</Link>
+                return <li key={address}><Link href={`/${address}`}>{address}</Link></li>
               })
               
-            }
+            }</ul>
             </Box>
             {
               isLoading &&
