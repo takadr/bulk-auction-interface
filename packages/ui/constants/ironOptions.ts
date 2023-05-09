@@ -3,8 +3,8 @@ import { IronSessionOptions } from 'iron-session';
 // TODO Reveiw settings. Extract this to config file
 // https://github.com/vvo/iron-session#ironoptions
 const ironOptions: IronSessionOptions = {
-    cookieName: 'DFGC_siwe',
-    password: "complex_password_at_least_32_characters_long",
+    cookieName: process.env.IRON_SESSION_COOKIE_NAME!,
+    password: process.env.IRON_SESSION_PASSWORD!,
     cookieOptions: {
         secure: process.env.NODE_ENV === 'production',
     },
