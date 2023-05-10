@@ -22,13 +22,6 @@ import {
     NumberIncrementStepper,
     NumberDecrementStepper,
 } from '@chakra-ui/react';
-import {
-    Slider,
-    SliderTrack,
-    SliderFilledTrack,
-    SliderThumb,
-    SliderMark,
-} from '@chakra-ui/react'
 import { Button, useToast, Flex, Tooltip, chakra, useColorMode } from '@chakra-ui/react';
 import { QuestionIcon } from '@chakra-ui/icons';
 import { Field, Form, Formik, useFormik, FieldProps } from 'formik';
@@ -43,10 +36,9 @@ import useTokenBasicInfo from '../hooks/useTokenBasicInfo';
 import { useAtom } from 'jotai';
 import { saleTxAtom, saleClonesAtom, waitingTransactionAtom } from '../store';
 import Big, { multiply } from '../utils/bignumber';
-
+import FactoryABI from '../constants/abis/Factory.json';
 
 const now = new Date().getTime();
-
 export default function SaleFormModal({isOpen, onClose}: {isOpen: boolean, onClose: () => void}) {
     interface Sale {
         token: `0x${string}` | null;
@@ -59,7 +51,7 @@ export default function SaleFormModal({isOpen, onClose}: {isOpen: boolean, onClo
         owner?: `0x${string}`;
         feeRatePerMil: number;
     }
-    // const now = new Date().getTime();
+
     const { chain } = useNetwork();
     const { address } = useAccount();
     const toast = useToast({position: 'top-right', isClosable: true,});
@@ -90,42 +82,6 @@ export default function SaleFormModal({isOpen, onClose}: {isOpen: boolean, onClo
     // const feeRatePerMil = 10;
 
     const MAX_LENGTH = 20; // TODO
-    const factoryABI = [
-        {
-          name: 'deploy',
-          type: 'function',
-          stateMutability: 'nonpayable',
-          inputs: [
-            {
-              "internalType": "string",
-              "name": "templateName",
-              "type": "string"
-            },
-            {
-              "internalType": "address",
-              "name": "tokenAddr",
-              "type": "address"
-            },
-            {
-              "internalType": "uint256",
-              "name": "sellingAmount",
-              "type": "uint256"
-            },
-            {
-              "internalType": "bytes",
-              "name": "abiArgs",
-              "type": "bytes"
-            }
-          ],
-          outputs: [
-            {
-              "internalType": "address",
-              "name": "deployedAddr",
-              "type": "address"
-            }
-          ],
-        },
-    ];
    
     const validate = (values: Sale) => {
         const errors: any = {};
@@ -237,7 +193,7 @@ export default function SaleFormModal({isOpen, onClose}: {isOpen: boolean, onClo
     // console.log(multiply(debouncedSale.totalDistributeAmount, tokenData.decimals ? Big(10).pow(tokenData.decimals) : 0).toString());
     const prepareFn = usePrepareContractWrite({
         address: process.env.NEXT_PUBLIC_FACTORY_ADDRESS as `0x${string}`, //factory
-        abi: factoryABI,
+        abi: FactoryABI,
         functionName: 'deploy',
         args: [
             "BulksaleV1.0.sol",
@@ -282,39 +238,7 @@ export default function SaleFormModal({isOpen, onClose}: {isOpen: boolean, onClo
 
     useContractEvent({
         address: process.env.NEXT_PUBLIC_FACTORY_ADDRESS as `0x${string}`,
-        abi: [
-            {
-                "anonymous": false,
-                "inputs": [
-                  {
-                    "indexed": true,
-                    "internalType": "address",
-                    "name": "sender",
-                    "type": "address"
-                  },
-                  {
-                    "indexed": true,
-                    "internalType": "string",
-                    "name": "templateName",
-                    "type": "string"
-                  },
-                  {
-                    "indexed": true,
-                    "internalType": "address",
-                    "name": "deployedAddr",
-                    "type": "address"
-                  },
-                  {
-                    "indexed": false,
-                    "internalType": "bytes",
-                    "name": "abiArgs",
-                    "type": "bytes"
-                  }
-                ],
-                "name": "Deployed",
-                "type": "event"
-              },
-        ],
+        abi: FactoryABI,
         eventName: 'Deployed',
         listener(sender, templateName, deployedAddr, abiArgs) {
             // console.log(sender, templateName, deployedAddr, abiArgs);
@@ -476,44 +400,6 @@ export default function SaleFormModal({isOpen, onClose}: {isOpen: boolean, onClo
                                     <chakra.div px={2}>ETH</chakra.div>
                                 </Flex>
                                 <FormErrorMessage>{formikProps.errors.minimalProvideAmount}</FormErrorMessage>
-                            </FormControl>
-
-                            <FormControl mt={4} isInvalid={!!formikProps.errors.feeRatePerMil && !!formikProps.touched.feeRatePerMil}>
-                                <FormLabel alignItems={'baseline'}>feeRatePerMil
-                                    <Tooltip hasArrow label={'TODO explanation'}><QuestionIcon mb={1} ml={1} /></Tooltip>
-                                </FormLabel>
-                                <Slider mt={'4'} name="feeRatePerMil" value={formikProps.values.feeRatePerMil} defaultValue={1} min={1} max={100} step={1} onBlur={formikProps.handleBlur} onChange={(val: number) =>
-                                    formikProps.setFieldValue('feeRatePerMil', val)
-                                }>
-                                    <SliderMark value={25}>
-                                        25%
-                                    </SliderMark>
-                                    <SliderMark value={50}>
-                                        50%
-                                    </SliderMark>
-                                    <SliderMark value={75}>
-                                        75%
-                                    </SliderMark>
-                                    <SliderMark
-                                        value={formikProps.values.feeRatePerMil}
-                                        textAlign='center'
-                                        bg='blue.500'
-                                        color='white'
-                                        mt='-7'
-                                        ml='-4'
-                                        w='12'
-                                        borderRadius={6}
-                                        fontSize={'sm'}
-                                        >
-                                        {formikProps.values.feeRatePerMil}%
-                                    </SliderMark>
-                                    <SliderTrack>
-                                        {/* <Box position='relative' right={10} /> */}
-                                        <SliderFilledTrack />
-                                    </SliderTrack>
-                                    <SliderThumb boxSize={4} />
-                                </Slider>
-                                <FormErrorMessage>{formikProps.errors.feeRatePerMil}</FormErrorMessage>
                             </FormControl>
 
                             {
