@@ -1,5 +1,5 @@
 import { useContractRead, useToken, erc20ABI } from "wagmi";
-import bulksaleV1ABI from '../constants/abis/BulksaleV1.json';
+import bulksaleV1ABI from '../../constants/abis/BulksaleV1.json';
 
 // TODO Retrieve from Subgraph or useContractReads
 // https://wagmi.sh/react/hooks/useContractReads

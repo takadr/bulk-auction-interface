@@ -10,7 +10,7 @@ import CalendarInCircle from './CalendarInCircle';
 import PersonalStatistics from './PersonalStatistics';
 import StatisticsInCircle from './StatisticsInCircle';
 import bulksaleV1ABI from '../../../constants/abis/BulksaleV1.json';
-import useBulksaleV1 from '../../../hooks/useBulksaleV1';
+import useBulksaleV1 from '../../../hooks/BulksaleV1/useBulksaleV1';
 import useClaim from '../../../hooks/useClaim';
 import useWithdrawERC20Onsale from '../../../hooks/useWithdrawERC20Onsale';
 import useWithdrawProvidedETH from '../../../hooks/useWithdrawProvidedETH';
