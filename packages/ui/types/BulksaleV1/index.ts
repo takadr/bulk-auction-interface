@@ -9,3 +9,16 @@ export type Sale = {
     owner?: `0x${string}`;
     feeRatePerMil: number;
 }
+
+export type MetaData = {
+    id?: string;
+    title: string;
+    description: string;
+    terms: string;
+    projectURL: string;
+    logoURL: string;
+    otherURLs: string[];
+    interimGoalAmount: number;
+    finalGoalAmount: number;
+    createdAt?: number;
+}

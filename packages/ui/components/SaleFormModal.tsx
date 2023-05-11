@@ -17,6 +17,7 @@ import FactoryABI from '../constants/abis/Factory.json';
 import { Steps } from './Steps';
 import BulksaleV1Form from './templates/BulksaleV1/ContractForm';
 import useBulksaleV1Form from '../hooks/BulksaleV1/useBulksaleV1Form';
+import MetaDataForm from './templates/BulksaleV1/MetaDataForm';
 
 export default function SaleFormModal({isOpen, onClose}: {isOpen: boolean, onClose: () => void}) {
     const { address } = useAccount();
@@ -26,12 +27,14 @@ export default function SaleFormModal({isOpen, onClose}: {isOpen: boolean, onClo
     const [waitingTransaction, setWaitingTransaction] = useAtom(waitingTransactionAtom);
     const { colorMode, setColorMode, toggleColorMode } = useColorMode();
     const [step, setStep] = useState<1|2>(1);
+    const [contractAddress, setContractAddress] = useState<`0x${string}`|undefined>(undefined);
 
     // TODO pass template name to the abstracted hook of this one so that we get template specific information
     const { formikProps, approvals, prepareFn, writeFn, tokenData } = useBulksaleV1Form({
         address: address as `0x${string}`,
         onSubmit: (result) => {
             setWaitingTransaction(result.hash);
+            setStep(2);
             handleClose();
             toast({
                 description: `Transaction sent! ${result.hash}`,
@@ -70,6 +73,7 @@ export default function SaleFormModal({isOpen, onClose}: {isOpen: boolean, onClo
                 // setSaleClones(Object.assign(saleClones, {addresses: newAddresses}));
                 const newAddresses = [...saleClones, deployedAddr];
                 setSaleClones(newAddresses);
+                setContractAddress(deployedAddr);
                 // console.log(newAddresses)
             }
         },
@@ -86,7 +90,7 @@ export default function SaleFormModal({isOpen, onClose}: {isOpen: boolean, onClo
             isOpen={isOpen}
             onClose={handleClose}
             closeOnOverlayClick={false}
-            size={'lg'}
+            size={step === 1 ? 'lg' : '4xl'}
         >
             <ModalOverlay />
             <ModalContent>
@@ -96,22 +100,22 @@ export default function SaleFormModal({isOpen, onClose}: {isOpen: boolean, onClo
                     {/* {approvals.readFn.data && console.log(approvals.readFn.data.toString())} */}
                     {/* {approvals.readFn && approvals.readFn.data} */}
                     {/* { console.log(saleTxs) } */}
-                    <div>
-                        <chakra.div>
-                        <Steps pb={6} stepParams={stepParams} currentStep={step} />
-                        </chakra.div>
-                        {
-                            // TODO
-                            // Switch form by the selected auction template
-                        }
-                        <BulksaleV1Form 
+                    <Steps pb={6} px={10} stepParams={stepParams} currentStep={step} />
+                    {
+                        // TODO
+                        // Switch form by the selected auction template
+                    }
+                    {
+                        step === 1 ? <BulksaleV1Form 
                             formikProps={formikProps} 
                             address={address as `0x${string}`}
                             approvals={approvals}
                             writeFn={writeFn}
                             tokenData={tokenData}
-                        />
-                    </div>
+                        /> :
+                        <MetaDataForm contractId={contractAddress} />
+                    }
+                    
                 </ModalBody>
             </ModalContent>
         </Modal>

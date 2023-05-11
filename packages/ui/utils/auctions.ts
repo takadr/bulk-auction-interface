@@ -1,5 +1,5 @@
 import { DynamoDBClient, GetItemCommand, PutItemCommand, ScanCommand } from '@aws-sdk/client-dynamodb';
-import { Auction } from '../types';
+import { MetaData } from '../types/BulksaleV1';
 
 const dbClient = new DynamoDBClient({
   region: process.env.AWS_REGION as string,
@@ -15,7 +15,7 @@ const dynamoDBItemsToAuction = (item: any) => {
     title: item.Title.S,
     createdAt: item.CreatedAt.N
     // TODO
-  } as Auction;
+  } as MetaData;
 }
 
 export async function scanAuctions(lastEvaluatedKeyId?: string, lastEvaluatedKeyCreatedAt?: string): Promise<Auction[] | undefined> {
@@ -31,7 +31,7 @@ export async function scanAuctions(lastEvaluatedKeyId?: string, lastEvaluatedKey
   return output.Items?.map(dynamoDBItemsToAuction)
 }
 
-export async function fetchAuction(auctionId: string): Promise<Auction | undefined> {
+export async function fetchAuction(auctionId: string): Promise<MetaData | undefined> {
   const command = new GetItemCommand({
     TableName: 'Auctions',
     Key: { AuctionId: { S: auctionId } },
@@ -42,9 +42,18 @@ export async function fetchAuction(auctionId: string): Promise<Auction | undefin
   return dynamoDBItemsToAuction(item);
 }
 
-export async function addAuction(auction: Auction): Promise<Auction | undefined> {
+export async function addAuction(auction: MetaData): Promise<MetaData | undefined> {
   const item = {
-    Title: {S: auction.title}
+    AuctionId: {S: auction.id as string},
+    Title: {S: auction.title},
+    Description: {S: auction.description},
+    Terms: {S: auction.terms},
+    ProjectURL: {S: auction.projectURL},
+    LogoURL: {S: auction.logoURL},
+    // otherURLs: {S: auction.otherURLs},
+    InterimGoalAmount: {N: auction.interimGoalAmount.toString()},
+    FinalGoalAmount: {N: auction.finalGoalAmount.toString()},
+    CreatedAt: {N: new Date().getTime().toString()},
   };
   const command = new PutItemCommand({
     TableName: 'Auctions',

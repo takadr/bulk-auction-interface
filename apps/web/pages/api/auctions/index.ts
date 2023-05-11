@@ -1,5 +1,5 @@
 import { NextApiRequest, NextApiResponse } from 'next';
-import { scanAuctions } from 'ui/utils/auctions';
+import { scanAuctions, addAuction } from 'ui/utils/auctions';
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     const { method } = req
@@ -14,8 +14,19 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
             res.status(500).end(_error.message);
         }
         break
+        case 'POST':
+        try {
+            const auction = req.body;
+            console.log(auction)
+            const result = await addAuction(auction);
+            res.json({ result })
+        } catch (_error) {
+            console.log(_error.message)
+            res.status(500).end(_error.message);
+        }
+        break
         default:
-        res.setHeader('Allow', ['POST'])
+        res.setHeader('Allow', ['GET', 'POST'])
         res.status(405).end(`Method ${method} Not Allowed`)
     }
 }
