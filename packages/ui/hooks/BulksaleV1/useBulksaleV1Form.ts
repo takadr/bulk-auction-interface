@@ -7,6 +7,7 @@ import useTokenBasicInfo from '../useTokenBasicInfo';
 import { Sale } from '../../types/BulksaleV1';
 import Big, { multiply } from '../../utils/bignumber';
 import FactoryABI from '../../constants/abis/Factory.json';
+import 'rsuite/dist/rsuite-no-reset.min.css';
 
 const now = new Date().getTime();
 export default function useBulksaleV1Form({address, onSubmit, onSubmitError}: {
