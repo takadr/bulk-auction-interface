@@ -18,6 +18,7 @@ import { Steps } from './Steps';
 import BulksaleV1Form from './templates/BulksaleV1/ContractForm';
 import useBulksaleV1Form from '../hooks/BulksaleV1/useBulksaleV1Form';
 import MetaDataForm from './templates/BulksaleV1/MetaDataForm';
+import useBulksaleV1MetaForm from '../hooks/BulksaleV1/useBulksaleV1MetaForm';
 
 export default function SaleFormModal({isOpen, onClose}: {isOpen: boolean, onClose: () => void}) {
     const { address } = useAccount();
@@ -30,12 +31,11 @@ export default function SaleFormModal({isOpen, onClose}: {isOpen: boolean, onClo
     const [contractAddress, setContractAddress] = useState<`0x${string}`|undefined>(undefined);
 
     // TODO pass template name to the abstracted hook of this one so that we get template specific information
-    const { formikProps, approvals, prepareFn, writeFn, tokenData } = useBulksaleV1Form({
+    const { formikProps, approvals, prepareFn, writeFn, waitFn, tokenData } = useBulksaleV1Form({
         address: address as `0x${string}`,
-        onSubmit: (result) => {
+        onSubmitSuccess: (result) => {
             setWaitingTransaction(result.hash);
             setStep(2);
-            handleClose();
             toast({
                 description: `Transaction sent! ${result.hash}`,
                 status: 'success',
@@ -48,13 +48,48 @@ export default function SaleFormModal({isOpen, onClose}: {isOpen: boolean, onClo
                 status: 'error',
                 duration: 5000,
             })
+        },
+        onWaitForTransactionSuccess: (result: any) => {
+            toast({
+                description: `Transaction confirmed!`,
+                status: 'success',
+                duration: 5000,
+            })
+        },
+        onWaitForTransactionError: (e: Error) => {
+            toast({
+                description: e.message,
+                status: 'error',
+                duration: 5000,
+            })
         }
     });
 
     const handleClose = () => {
         formikProps.resetForm();
+        metaFormikProps.resetForm();
         onClose();
+        setStep(1);
     }
+
+    const { formikProps: metaFormikProps } = useBulksaleV1MetaForm({
+        contractId: contractAddress,
+        onSubmitSuccess: (response) => {
+            handleClose();
+            toast({
+                description: `Auction information successfully saved!`,
+                status: 'success',
+                duration: 5000,
+            })
+        },
+        onSubmitError: (e: any) => {
+            toast({
+                description: e.message,
+                status: 'error',
+                duration: 5000,
+            })
+        },
+    });
 
     useContractEvent({
         address: process.env.NEXT_PUBLIC_FACTORY_ADDRESS as `0x${string}`,
@@ -113,7 +148,7 @@ export default function SaleFormModal({isOpen, onClose}: {isOpen: boolean, onClo
                             writeFn={writeFn}
                             tokenData={tokenData}
                         /> :
-                        <MetaDataForm contractId={contractAddress} />
+                        <MetaDataForm formikProps={metaFormikProps} waitFn={waitFn} onSkip={handleClose} />
                     }
                     
                 </ModalBody>

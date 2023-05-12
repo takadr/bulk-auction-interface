@@ -1,7 +1,5 @@
 import { 
     chakra,
-    useToast, 
-    useColorMode, 
     Button,
     Flex, 
     Tooltip, 
@@ -10,66 +8,45 @@ import {
     FormControl,
     FormLabel,
     FormErrorMessage,
-    FormHelperText,
     NumberInput,
     NumberInputField,
     NumberInputStepper,
     NumberIncrementStepper,
     NumberDecrementStepper,
-    HStack
+    HStack,
+    Spinner
 } from '@chakra-ui/react';
 import { QuestionIcon } from '@chakra-ui/icons';
-import { useFormik } from 'formik';
+import { FormikProps } from 'formik';
+import { useWaitForTransaction } from 'wagmi';
 import { MetaData } from '../../../types/BulksaleV1/index';
 
-export default function MetaDataForm({contractId}: {contractId: `0x${string}` | undefined}) {
-    const initMetaData: MetaData = {
-        title: '',
-        description: '',
-        terms: '',
-        projectURL: '',
-        logoURL: '',
-        otherURLs: [],
-        interimGoalAmount: NaN,
-        finalGoalAmount: NaN
-    };
-
-    const handleSubmit = async (auctionData: MetaData) => {
-        console.log(Object.assign(auctionData, {id: contractId}))
-        try {
-            const result = await fetch('/api/auctions', {
-                // credentials: 'include',
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(Object.assign(auctionData, {id: contractId}))
-            })
-            // const result = await addAuction(auctionData)
-            console.log(result)
-        } catch(e: any) {
-            console.log(e)
-        }
-    };
-
-    const validate = () => {
-        const errors: any = {};
-        // TODO
-        return errors;
-    };
-
-    const formikProps = useFormik({
-        // enableReinitialize: true,
-        initialValues: initMetaData,
-        onSubmit: handleSubmit,
-        validate
-    });
-
+export default function MetaDataForm({formikProps, waitFn, onSkip}: {formikProps: FormikProps<MetaData>, waitFn?: ReturnType<typeof useWaitForTransaction>, onSkip?: () => void}) {
     return <div>
         <form onSubmit={formikProps.handleSubmit}>
             <HStack spacing={8} alignItems={'start'}>
                 <chakra.div w={'50%'}>
-                    <FormControl isInvalid={!!formikProps.errors.title && !!formikProps.touched.title}>
+                    <FormControl isInvalid={!!formikProps.errors.id && !!formikProps.touched.id}>
+                        <FormLabel htmlFor='id' alignItems={'baseline'}>Auction Contract Address
+                            <Tooltip hasArrow label={'TODO explanation'}><QuestionIcon mb={1} ml={1} /></Tooltip>
+                        </FormLabel>
+                        <HStack>
+                            <Input 
+                                isReadOnly={!!waitFn} 
+                                isDisabled={!!waitFn} 
+                                fontSize={'sm'} 
+                                id="id"
+                                name="id"
+                                onBlur={formikProps.handleBlur}
+                                onChange={formikProps.handleChange}
+                                value={formikProps.values.id}
+                                placeholder={waitFn && waitFn.isLoading ? 'Waiting for the transaction to be confirmed...' :'e.g.) 0x0123456789012345678901234567890123456789'} />
+                            { waitFn && waitFn.isLoading && <Spinner  /> }
+                        </HStack>
+                        <FormErrorMessage>{formikProps.errors.id}</FormErrorMessage>
+                    </FormControl>
+
+                    <FormControl mt={4} isInvalid={!!formikProps.errors.title && !!formikProps.touched.title}>
                         <FormLabel htmlFor='title' alignItems={'baseline'}>Title
                             <Tooltip hasArrow label={'TODO explanation'}><QuestionIcon mb={1} ml={1} /></Tooltip>
                         </FormLabel>
@@ -169,17 +146,27 @@ export default function MetaDataForm({contractId}: {contractId: `0x${string}` | 
                 </chakra.div>
             </HStack>
 
-            <Button mt={8} 
-                w={'full'} 
-                variant="solid" 
-                colorScheme='blue'
-                type='submit'
-                // onClick={}
-                // isLoading={}
-                // isDisabled={}
-            >
-                Save Bulksale Information
-            </Button>
+            <HStack mt={8} alignItems={'center'}>
+                <Button
+                    flex={2} 
+                    variant="solid" 
+                    colorScheme='blue'
+                    type='submit'
+                    isLoading={formikProps.isSubmitting}
+                    // isDisabled={!formikProps.isValid}
+                >
+                    Save Bulksale Information
+                </Button>
+                <Button 
+                    flex={1}
+                    variant="outline" 
+                    colorScheme='blue'
+                    onClick={onSkip}
+                    isDisabled={formikProps.isSubmitting}
+                >
+                    Skip (You can input this later)
+                </Button>
+            </HStack>
             
         </form>
     </div>

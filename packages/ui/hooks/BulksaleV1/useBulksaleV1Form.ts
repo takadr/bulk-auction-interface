@@ -1,4 +1,4 @@
-import { usePrepareContractWrite, useContractWrite } from 'wagmi';
+import { usePrepareContractWrite, useContractWrite, useWaitForTransaction } from 'wagmi';
 import { useDebounce } from 'use-debounce';
 import { utils } from 'ethers';
 import { useFormik, FormikProps } from 'formik';
@@ -10,16 +10,29 @@ import FactoryABI from '../../constants/abis/Factory.json';
 import 'rsuite/dist/rsuite-no-reset.min.css';
 
 const now = new Date().getTime();
-export default function useBulksaleV1Form({address, onSubmit, onSubmitError}: {
+export default function useBulksaleV1Form({
+    address, 
+    onSubmitSuccess, 
+    onSubmitError,
+    onContractWriteSuccess,
+    onContractWriteError,
+    onWaitForTransactionSuccess,
+    onWaitForTransactionError,
+}: {
     address: `0x${string}`,
-    onSubmit?: (result: any) => void, // TODO use SendTransactionResult
-    onSubmitError?: (e: any) => void
+    onSubmitSuccess?: (result: any) => void, // TODO use SendTransactionResult
+    onSubmitError?: (e: any) => void,
+    onContractWriteSuccess?: (result: any) => void,
+    onContractWriteError?: (e: any) => void,
+    onWaitForTransactionSuccess?: (result: any) => void,
+    onWaitForTransactionError?: (e: any) => void,
 }): 
 {
     formikProps: FormikProps<Sale>,
     approvals: ReturnType<typeof useApprove>,
     prepareFn: any,
     writeFn: ReturnType<typeof useContractWrite>,
+    waitFn: ReturnType<typeof useWaitForTransaction>,
     tokenData: {
         name: string | undefined,
         symbol: string | undefined,
@@ -69,22 +82,10 @@ export default function useBulksaleV1Form({address, onSubmit, onSubmitError}: {
         }
         try {
             const result = await writeFn.writeAsync();
-            onSubmit && onSubmit(result);
-            // setWaitingTransaction(result.hash);
-            // handleClose();
-            // toast({
-            //     description: `Transaction sent! ${result.hash}`,
-            //     status: 'success',
-            //     duration: 5000,
-            // })
+            onSubmitSuccess && onSubmitSuccess(result);
+            // result.hash
         } catch(e: any) {
             onSubmitError && onSubmitError(e);
-            // TODO
-            // toast({
-            //     description: e.message,
-            //     status: 'error',
-            //     duration: 5000,
-            // })
         }
     }
 
@@ -141,42 +142,42 @@ export default function useBulksaleV1Form({address, onSubmit, onSubmitError}: {
     
     const writeFn = useContractWrite({
         ...prepareFn.config,
-        onError(e: Error) {
-            // TODO
-            console.log('!!!Error!!!!!!', e.message)
-        },
         onSuccess(data) {
             // console.log('Submitted!', data)
             // setWaitingTransaction(waitFn);
             // console.log(waitingTransaction)
-            // TODO
-            // Modify tx status in the store
-        }
+            onContractWriteSuccess && onContractWriteSuccess(data);
+        },
+        onError(e: Error) {
+            console.log(e.message)
+            onContractWriteError && onContractWriteError(e)
+        },
     })
     // TODO 
     // Add tx hash with status loading to the store
 
-    // const waitFn = useWaitForTransaction({
-    //     chainId: chain?.id,
-    //     hash: writeFn.data?.hash,
-    //     // wait: writeFn.data?.wait
-    //     onSuccess(data) {
-    //         // console.log('Success!', data)
-    //         // TODO
-    //         // Modify tx status to confirmed in the store
-    //         const newTxs = [...saleTxs.txs, data];
-    //         setSaleTxs(Object.assign(saleTxs, {txs: newTxs}));
-    //     },
-    //     onError(e: Error) {
-    //         console.log('Error!!!!!!', e.message)
-    //     }
-    // })
+    const waitFn = useWaitForTransaction({
+        hash: writeFn.data?.hash,
+        onSuccess(data) {
+            console.log('Transaction Confirmed!', data)
+            onWaitForTransactionSuccess && onWaitForTransactionSuccess(data);
+            // TODO
+            // Modify tx status to confirmed in the store
+            // const newTxs = [...saleTxs.txs, data];
+            // setSaleTxs(Object.assign(saleTxs, {txs: newTxs}));
+        },
+        onError(e: Error) {
+            console.log(e.message)
+            onWaitForTransactionError && onWaitForTransactionError(e);
+        }
+    })
 
     return {
         formikProps,
         approvals,
         prepareFn,
         writeFn,
+        waitFn,
         tokenData,
     }
 }
