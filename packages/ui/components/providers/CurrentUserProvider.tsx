@@ -3,12 +3,12 @@ import { KeyedMutator } from 'swr';
 import { User } from '../../types';
 import { useCurrentUser } from '../../hooks/Auth/useCurrentUser';
 
-type currentUserContextType ={
-    currentUser: User | undefined;
-    mutate: KeyedMutator<User>;
-    error: Error | undefined;
+export type CurrentUserContextType ={
+    currentUser?: User | undefined;
+    mutate?: KeyedMutator<User|undefined>;
+    error?: Error | undefined;
 }
-export const CurrentUserContext = createContext<currentUserContextType|undefined>(undefined);
+export const CurrentUserContext = createContext<CurrentUserContextType>({});
 export const CurrentUserProvider = (props: any) => {
     const { data, mutate, error } = useCurrentUser();
 

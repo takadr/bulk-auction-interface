@@ -24,7 +24,7 @@ export default function SalePage() {
                     </Alert>
                 </chakra.div>
             }
-            {currentUser.address}
+
             <Container maxW="container.lg" py={16}>
                 <Heading>Active Sales (TODO Filtering)</Heading>
                 <Stack mt={4} spacing={8}>

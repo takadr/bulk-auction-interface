@@ -1,15 +1,16 @@
 import { useState, useEffect } from 'react';
 import { useAccount, useNetwork, useSignMessage } from 'wagmi';
 import { SiweMessage } from 'siwe';
-import { Button } from '@chakra-ui/react';
+import { Button, ButtonProps } from '@chakra-ui/react';
 
 export default function SignInButton({
     onSuccess,
     onError,
+    ...buttonProps
   }: {
     onSuccess: (args: { address: string }) => void
     onError: (args: { error: Error }) => void
-  }) {
+  } & ButtonProps) {
     const [state, setState] = useState<{
       loading?: boolean
       nonce?: string
@@ -76,7 +77,7 @@ export default function SignInButton({
     }
    
     return (
-      <Button variant={'solid'} colorScheme={'green'} isDisabled={!state.nonce || state.loading} onClick={signIn}>
+      <Button {...buttonProps} variant={'solid'} colorScheme={'green'} isDisabled={!state.nonce || state.loading} onClick={signIn}>
         Sign-In with Ethereum
       </Button>
     )

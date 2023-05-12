@@ -1,13 +1,11 @@
+import Router from 'next/router';
 import {
     Tag,
-    TagLabel,
-    IconButton,
     Box,
     Flex,
     Container,
     Heading,
     useColorMode,
-    useColorModeValue,
     Button,
     HStack,
     Avatar,
@@ -30,6 +28,8 @@ import { MoonIcon, HamburgerIcon, SunIcon, ChevronDownIcon, ChevronRightIcon } f
 import { useAccount, useEnsAvatar, useEnsName, useDisconnect, useNetwork, useSwitchNetwork } from 'wagmi';
 import { sepolia } from 'wagmi/chains';
 import ProvidersList from './ProvidersList';
+import { CurrentUserContext } from './providers/CurrentUserProvider';
+import SignInButton from './SignInButton';
 
 type HeaderProps = {
     title?: string;
@@ -40,14 +40,19 @@ export const Header: FC<HeaderProps> = ({title}: {title?: string}) => {
     const { isOpen, onOpen, onClose } = useDisclosure();
     const providersListDisclosure = useDisclosure();
     const toast = useToast({position: 'top-right', isClosable: true,})
-    // const { current_user, mutate, error } = useContext<any>(CurrentUserContext);
+    const { currentUser, mutate } = useContext(CurrentUserContext);
     const { address, isConnected, connector } = useAccount();
-    const { data: ensAvatar } = useEnsAvatar({ address });
-    const { data: ensName } = useEnsName({ address });
+    const { data: ensAvatar } = useEnsAvatar({ address: currentUser ? currentUser.address : address });
+    const { data: ensName } = useEnsName({ address: currentUser ? currentUser.address : address });
     const { chain } = useNetwork();
     const { disconnect } = useDisconnect();
 
-    const nologinMenu = () => {
+    const getDisplayAddress = () => {
+        const _address = currentUser ? currentUser.address : address;
+        return `${_address?.slice(0, 5)}...${_address?.slice(-4)}`;
+    }
+
+    const noConnectedMenu = () => {
         return (
             <>
                 <Button onClick={providersListDisclosure.onOpen} variant={'outline'} size='sm'>
@@ -58,7 +63,7 @@ export const Header: FC<HeaderProps> = ({title}: {title?: string}) => {
         )
     }
 
-    const loginMenu = () => {
+    const connectedMenu = () => {
         return (
             <>
             <Menu>
@@ -76,14 +81,18 @@ export const Header: FC<HeaderProps> = ({title}: {title?: string}) => {
                         spacing="1px"
                         ml="2">
                             <Text fontSize="sm">
-                                {ensName ? `${ensName} (${address?.slice(0, 5)}...${address?.slice(-4)})` : `${address?.slice(0, 5)}...${address?.slice(-4)}` }
+                                { currentUser ? 'Signed in as ' : '' }
+                                {ensName ? `${ensName} (${getDisplayAddress()})` : `${getDisplayAddress()}` }
                             </Text>
                         </VStack>
                         <ChevronDownIcon />
                     </HStack>
                 </MenuButton>
                 <MenuList zIndex={101}>
-                    <MenuItem onClick={() => disconnect()}>Disconnect</MenuItem>
+                    {
+                        currentUser ? <MenuItem onClick={async() => { await fetch('/api/logout'); mutate && mutate(); disconnect(); }}>Sign out and Disconnect</MenuItem>
+                        : <MenuItem onClick={() => disconnect()}>Disconnect</MenuItem>
+                    }
                     <Divider />
                     <HStack px={4} pt={2}>
                         <MoonIcon color={colorMode === 'light' ? 'gray' : 'white'} />
@@ -100,7 +109,7 @@ export const Header: FC<HeaderProps> = ({title}: {title?: string}) => {
         <Box px={{base: 0, md: 4}}>
             <Container maxW="container.2xl" px={{base: 2, md: 4}}>
                 <Flex as="header" py="4" justifyContent="space-between" alignItems="center">
-                    <Box>
+                    <HStack>
                         <Link href="/" textDecoration={'none'} _hover={{textDecoration: 'none'}}>
                             <Heading as='h1' fontSize="xl">
                                 <Text
@@ -113,9 +122,21 @@ export const Header: FC<HeaderProps> = ({title}: {title?: string}) => {
                                 </Text>
                             </Heading>
                         </Link>
-                    </Box>
+                    </HStack>
                     <HStack>
-                        { isConnected ? loginMenu() : nologinMenu() }
+                        {
+                            isConnected && !currentUser && <SignInButton
+                                size={'sm'}
+                                onSuccess={() => { mutate && mutate() }}
+                                onError={() => {}}
+                            />
+                        }
+                        {
+                            isConnected && currentUser && <Button variant="ghost" size={'sm'} onClick={() => Router.push('/dashboard')}>
+                                Dashboard
+                            </Button>
+                        }
+                        { isConnected ? connectedMenu() : noConnectedMenu() }
                     </HStack>
                 </Flex>
             </Container>
