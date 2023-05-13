@@ -13,6 +13,12 @@ const dynamoDBItemsToAuction = (item: any) => {
   return {
     id: item.AuctionId.S,
     title: item.Title.S,
+    description: item.Description.S,
+    terms: item.Terms.S,
+    projectURL: item.ProjectURL.S,
+    logoURL: item.LogoURL.S,
+    interimGoalAmount: item.InterimGoalAmount.N,
+    finalGoalAmount: item.FinalGoalAmount.N,
     createdAt: item.CreatedAt.N
     // TODO
   } as MetaData;

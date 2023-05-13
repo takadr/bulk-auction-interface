@@ -67,44 +67,6 @@ export default function BulksaleV1Form({formikProps, address, approvals, writeFn
                     <FormErrorMessage>{formikProps.errors.startingAt}</FormErrorMessage>
                 </FormControl>
 
-                <FormControl mt={4} isInvalid={!!formikProps.errors.lockDuration && !!formikProps.touched.lockDuration}>
-                    <FormLabel alignItems={'baseline'}>Lock duration
-                        <Tooltip hasArrow label={'TODO explanation'}><QuestionIcon mb={1} ml={1} /></Tooltip>
-                    </FormLabel>
-                    <Flex alignItems={'center'}>
-                        <NumberInput flex="1" name="lockDuration" value={formikProps.values.lockDuration / (60*60*24)} min={1} max={90} onBlur={formikProps.handleBlur} onChange={(_: string, val: number) =>
-                            formikProps.setFieldValue('lockDuration', val*60*60*24)
-                        }>
-                            <NumberInputField/>
-                            <NumberInputStepper>
-                                <NumberIncrementStepper />
-                                <NumberDecrementStepper />
-                            </NumberInputStepper>
-                        </NumberInput>
-                        <chakra.div px={2}>Days</chakra.div>
-                    </Flex>
-                    <FormErrorMessage>{formikProps.errors.lockDuration}</FormErrorMessage>
-                </FormControl>
-
-                <FormControl mt={4} isInvalid={!!formikProps.errors.expirationDuration && !!formikProps.touched.expirationDuration}>
-                    <FormLabel alignItems={'baseline'}>Expiration duration
-                        <Tooltip hasArrow label={'TODO explanation'}><QuestionIcon mb={1} ml={1} /></Tooltip>
-                    </FormLabel>
-                    <Flex alignItems={'center'}>
-                        <NumberInput flex="1" name="expirationDuration" value={formikProps.values.expirationDuration / (60*60*24)} min={30} max={365} onBlur={formikProps.handleBlur} onChange={(_: string, val: number) =>
-                            formikProps.setFieldValue('expirationDuration', val*60*60*24)
-                        }>
-                            <NumberInputField/>
-                            <NumberInputStepper>
-                                <NumberIncrementStepper />
-                                <NumberDecrementStepper />
-                            </NumberInputStepper>
-                        </NumberInput>
-                        <chakra.div px={2}>Days</chakra.div>
-                    </Flex>
-                    <FormErrorMessage>{formikProps.errors.expirationDuration}</FormErrorMessage>
-                </FormControl>
-
                 <FormControl mt={4} isInvalid={!!formikProps.errors.totalDistributeAmount && !!formikProps.touched.totalDistributeAmount}>
                     <Flex justifyContent={'space-between'}>
                         <FormLabel alignItems={'baseline'}>Total distribute amount
