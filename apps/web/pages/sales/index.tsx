@@ -1,30 +1,18 @@
 import { useContext } from 'react';
 import Router, { useRouter } from 'next/router';
 import { useAccount, useNetwork } from 'wagmi';
-import { chakra, Container, Link, Alert, AlertIcon, Heading, Card, CardBody, CardFooter, Progress, Text, Image, Stack } from '@chakra-ui/react';
-import { Header } from 'ui/components/Header';
+import { chakra, Container, Link, Heading, Card, CardBody, CardFooter, Progress, Text, Image, Stack } from '@chakra-ui/react';
 import { useSWRAuctions } from 'ui/hooks/useAuctions';
 import { MetaData } from 'ui/types/BulksaleV1';
 import { CurrentUserContext } from 'ui/components/providers/CurrentUserProvider';
+import Layout from 'ui/components/layouts/layout';
 
 export default function SalePage() {
     const { currentUser, mutate } = useContext(CurrentUserContext);
-    const { chain } = useNetwork();
-    const { address, isConnected, connector } = useAccount();
     const { auctions, isLast, error, loadMoreAuctions } = useSWRAuctions({})
   
     return (
-        <>
-            <Header title={'Test Bulksale'} />
-            {
-                chain && chain.unsupported && 
-                <chakra.div px={8}>
-                    <Alert status='warning' mb={4}>
-                        <AlertIcon /> Please connect to Sepolia
-                    </Alert>
-                </chakra.div>
-            }
-
+        <Layout>
             <Container maxW="container.lg" py={16}>
                 <Heading>Active Sales (TODO Filtering)</Heading>
                 <Stack mt={4} spacing={8}>
@@ -34,7 +22,7 @@ export default function SalePage() {
                     <Card
                         direction={{ base: 'column', sm: 'row' }}
                         overflow='hidden'
-                        variant='outline'
+                        // variant='outline'
                         >
                             <Image
                             objectFit='cover'
@@ -62,7 +50,6 @@ export default function SalePage() {
                 }
                 </Stack>
             </Container>
-            
-        </>
+        </Layout>
     )
 }
