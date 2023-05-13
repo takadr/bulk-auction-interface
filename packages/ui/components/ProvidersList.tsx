@@ -1,4 +1,4 @@
-import { useConnect } from 'wagmi';
+import { useConnect, useDisconnect } from 'wagmi';
 import { Button, Stack } from '@chakra-ui/react';
 import {
   Modal,
@@ -11,7 +11,16 @@ import {
  
 export default function ProvidersList({isOpen, onClose}: {isOpen: boolean, onClose: () => void}) {
   const { connect, connectors, error, isLoading, pendingConnector } =
-    useConnect()
+    useConnect({
+      onSuccess: () => {
+        onClose();
+      },
+      onError: (error: Error) => {
+        disconnect();
+        onClose();
+      }
+    });
+  const { disconnect } = useDisconnect();
  
   return (
     <Modal
@@ -31,7 +40,7 @@ export default function ProvidersList({isOpen, onClose}: {isOpen: boolean, onClo
                     key={connector.id}
                     w={'full'}
                     onClick={() => { 
-                      connect({ connector }); onClose() 
+                      connect({ connector });
                     }}
                   >
                     🦊 {connector.name}

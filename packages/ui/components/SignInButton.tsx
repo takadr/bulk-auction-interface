@@ -1,7 +1,16 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useAccount, useNetwork, useSignMessage } from 'wagmi';
 import { SiweMessage } from 'siwe';
-import { Button, ButtonProps } from '@chakra-ui/react';
+import { Button, ButtonProps, useDisclosure } from '@chakra-ui/react';
+import ProvidersList from './ProvidersList';
+
+function usePrevious(value: any) {
+  const ref = useRef(null);
+  useEffect(() => {
+    ref.current = value;
+  });
+  return ref.current;
+}
 
 export default function SignInButton({
     onSuccess,
@@ -15,7 +24,8 @@ export default function SignInButton({
       loading?: boolean
       nonce?: string
     }>({})
-   
+    const providersListDisclosure = useDisclosure();
+    const [continueSignIn, setContinueSignIn] = useState(false);
     const fetchNonce = async () => {
       try {
         const nonceRes = await fetch('/api/nonce')
@@ -25,6 +35,15 @@ export default function SignInButton({
         setState((x) => ({ ...x, error: error as Error }))
       }
     }
+    const { address, isConnected } = useAccount({
+      onConnect: async ({address, connector}) => {
+        console.log('On Connect', address, connector)
+        // setTimeout(() => signIn(address), 100);
+        // await signIn(address);
+      }
+    })
+    const { chain } = useNetwork()
+    const { signMessageAsync } = useSignMessage()
    
     // Pre-fetch random nonce when button is rendered
     // to ensure deep linking works for WalletConnect
@@ -32,21 +51,25 @@ export default function SignInButton({
     useEffect(() => {
       fetchNonce()
     }, [])
-   
-    const { address } = useAccount()
-    const { chain } = useNetwork()
-    const { signMessageAsync } = useSignMessage()
+
+    useEffect(() => {
+      !prevIsConnected && isConnected && continueSignIn && signIn()
+    }, [isConnected])
+    const prevIsConnected = usePrevious(isConnected);
    
     const signIn = async () => {
       try {
         const chainId = chain?.id
-        if (!address || !chainId) return
+        if (!address || !chainId) {
+          setContinueSignIn(true);
+          return providersListDisclosure.onOpen();
+        }
    
         setState((x) => ({ ...x, loading: true }))
         // Create SIWE message with pre-fetched nonce and sign with wallet
         const message = new SiweMessage({
           domain: window.location.host,
-          address,
+          address: address,
           statement: 'Sign in with Ethereum',
           uri: window.location.origin,
           version: '1',
@@ -68,7 +91,7 @@ export default function SignInButton({
         if (!verifyRes.ok) throw new Error('Error verifying message')
    
         setState((x) => ({ ...x, loading: false }))
-        onSuccess({ address })
+        onSuccess({ address: address as `0x${string}` })
       } catch (error) {
         setState((x) => ({ ...x, loading: false, nonce: undefined }))
         onError({ error: error as Error })
@@ -77,8 +100,12 @@ export default function SignInButton({
     }
    
     return (
-      <Button {...buttonProps} variant={'solid'} colorScheme={'green'} isDisabled={!state.nonce || state.loading} onClick={signIn}>
-        Sign-In with Ethereum
-      </Button>
+      <>
+        <Button {...buttonProps} variant={'solid'} colorScheme={'green'} isLoading={state.loading} isDisabled={!state.nonce} onClick={signIn}>
+          Sign-In with Ethereum
+        </Button>
+        { !isConnected && <ProvidersList isOpen={providersListDisclosure.isOpen} onClose={() => { setContinueSignIn(false); providersListDisclosure.onClose}} /> }
+      </>
+      
     )
   }

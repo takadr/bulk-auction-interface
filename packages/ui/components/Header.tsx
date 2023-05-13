@@ -1,5 +1,6 @@
 import Router from 'next/router';
 import {
+    chakra,
     Tag,
     Box,
     Flex,
@@ -67,39 +68,41 @@ export const Header: FC<HeaderProps> = ({title}: {title?: string}) => {
         return (
             <>
             <Menu>
-                <Tag>{connector?.name}</Tag>
-                <Tag>{chain?.name}</Tag>
-                <MenuButton>
-                    <HStack>
-                        { ensName && <Avatar
-                        size={'sm'}
-                        src={ensAvatar ? ensAvatar : ''}
-                        /> }
-                        <VStack
-                        display={{ base: 'none', md: 'flex' }}
-                        alignItems="flex-start"
-                        spacing="1px"
-                        ml="2">
-                            <Text fontSize="sm">
-                                { currentUser ? 'Signed in as ' : '' }
-                                {ensName ? `${ensName} (${getDisplayAddress()})` : `${getDisplayAddress()}` }
-                            </Text>
-                        </VStack>
-                        <ChevronDownIcon />
-                    </HStack>
-                </MenuButton>
-                <MenuList zIndex={101}>
-                    {
-                        currentUser ? <MenuItem onClick={async() => { await fetch('/api/logout'); mutate && mutate(); disconnect(); }}>Sign out and Disconnect</MenuItem>
-                        : <MenuItem onClick={() => disconnect()}>Disconnect</MenuItem>
-                    }
-                    <Divider />
-                    <HStack px={4} pt={2}>
-                        <MoonIcon color={colorMode === 'light' ? 'gray' : 'white'} />
-                        <Switch defaultChecked={colorMode !== 'light'} onChange={(e: any) => e.target.checked ? setColorMode('light') : setColorMode('dark')} />
-                        <SunIcon color={colorMode === 'light' ? 'gray' : 'white'} />
-                    </HStack>
-                </MenuList>
+                <HStack spacing={1}>
+                    <Tag size={'sm'}>{connector?.name}</Tag>
+                    <Tag size={'sm'}>{chain?.name}</Tag>
+                    <MenuButton>
+                        <HStack>
+                            { ensName && <Avatar
+                            size={'sm'}
+                            src={ensAvatar ? ensAvatar : ''}
+                            /> }
+                            <VStack
+                            display={{ base: 'none', md: 'flex' }}
+                            alignItems="flex-start"
+                            spacing="1px"
+                            ml="2">
+                                <Text fontSize="sm">
+                                    { currentUser ? 'Signed in as ' : '' }
+                                    {ensName ? `${ensName} (${getDisplayAddress()})` : `${getDisplayAddress()}` }
+                                </Text>
+                            </VStack>
+                            <ChevronDownIcon />
+                        </HStack>
+                    </MenuButton>
+                    <MenuList zIndex={101}>
+                        {
+                            currentUser ? <MenuItem onClick={async() => { await fetch('/api/logout'); mutate && mutate(); disconnect(); }}>Sign out and Disconnect</MenuItem>
+                            : <MenuItem onClick={() => disconnect()}>Disconnect</MenuItem>
+                        }
+                        <Divider />
+                        <HStack px={4} pt={2}>
+                            <MoonIcon color={colorMode === 'light' ? 'gray' : 'white'} />
+                            <Switch defaultChecked={colorMode !== 'light'} onChange={(e: any) => e.target.checked ? setColorMode('light') : setColorMode('dark')} />
+                            <SunIcon color={colorMode === 'light' ? 'gray' : 'white'} />
+                        </HStack>
+                    </MenuList>
+                </HStack>
             </Menu>
             </>
         )
@@ -123,18 +126,21 @@ export const Header: FC<HeaderProps> = ({title}: {title?: string}) => {
                             </Heading>
                         </Link>
                     </HStack>
-                    <HStack>
+                    <HStack spacing={4}>
                         {
-                            isConnected && !currentUser && <SignInButton
+                            isConnected && currentUser && <Button variant="ghost" size={'md'} onClick={() => Router.push('/dashboard')}>
+                                Dashboard
+                            </Button>
+                        }
+                        <Button variant="ghost" size={'md'} onClick={() => Router.push('/sales')}>
+                            Sales
+                        </Button>
+                        {
+                            !currentUser && <SignInButton
                                 size={'sm'}
                                 onSuccess={() => { mutate && mutate() }}
                                 onError={() => {}}
                             />
-                        }
-                        {
-                            isConnected && currentUser && <Button variant="ghost" size={'sm'} onClick={() => Router.push('/dashboard')}>
-                                Dashboard
-                            </Button>
                         }
                         { isConnected ? connectedMenu() : noConnectedMenu() }
                     </HStack>
