@@ -47,9 +47,11 @@ export default function useBulksaleV1MetaForm({contractId, onSubmitSuccess, onSu
         }
     };
 
-    const validate = () => {
+    const validate = (auctionData: MetaData) => {
         const errors: any = {};
-        // TODO
+        if(!auctionData.id) {
+            errors.id = 'Contract address is required';
+        }
         return errors;
     };
 

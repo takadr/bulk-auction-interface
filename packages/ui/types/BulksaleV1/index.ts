@@ -20,5 +20,8 @@ export type MetaData = {
     otherURLs: string[];
     interimGoalAmount: number;
     finalGoalAmount: number;
+    tokenName?: string;
+    tokenSymbol?: string;
+    tokenDecimals?: number;
     createdAt?: number;
 }

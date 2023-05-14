@@ -155,9 +155,9 @@ export default function MetaDataForm({formikProps, waitFn, onSkip}: {formikProps
                     colorScheme='blue'
                     type='submit'
                     isLoading={formikProps.isSubmitting}
-                    // isDisabled={!formikProps.isValid}
+                    isDisabled={!formikProps.isValid}
                 >
-                    Save Bulksale Information
+                    { waitFn && waitFn.isLoading ? 'Please wait for the transaction to be confirmed' : 'Save Bulksale Information' }
                 </Button>
                 { onSkip && <Button 
                     flex={1}

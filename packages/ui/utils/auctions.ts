@@ -56,6 +56,9 @@ export async function addAuction(auction: MetaData): Promise<MetaData | undefine
     // otherURLs: {S: auction.otherURLs},
     InterimGoalAmount: {N: auction.interimGoalAmount.toString()},
     FinalGoalAmount: {N: auction.finalGoalAmount.toString()},
+    TokenName: {S: auction.tokenName ? auction.tokenName : ''},
+    TokenSymbol: {S: auction.tokenSymbol ? auction.tokenSymbol : ''},
+    TokenDecimals: {N: auction.tokenDecimals ? auction.tokenDecimals.toString() : '0'},
   };
   const command = new PutItemCommand({
     TableName: process.env.AWS_DYNAMO_TABLE_NAME,
@@ -69,7 +72,7 @@ export async function updateAuction(auction: MetaData): Promise<MetaData | undef
   const command = new UpdateItemCommand({
     TableName: process.env.AWS_DYNAMO_TABLE_NAME,
     Key: { AuctionId : { S: auction.id as string } },
-    UpdateExpression: 'set Title = :Title, Description=:Description, Terms = :Terms, ProjectURL = :ProjectURL, LogoURL = :LogoURL, InterimGoalAmount = :InterimGoalAmount, FinalGoalAmount = :FinalGoalAmount',
+    UpdateExpression: 'set Title = :Title, Description=:Description, Terms = :Terms, ProjectURL = :ProjectURL, LogoURL = :LogoURL, InterimGoalAmount = :InterimGoalAmount, FinalGoalAmount = :FinalGoalAmount, TokenName = :TokenName, TokenSymbol = :TokenSymbol, TokenDecimals = :TokenDecimals',
     ExpressionAttributeValues: {
       ':Title': {S: auction.title as string},
       ':Description': {S: auction.description},
@@ -78,6 +81,9 @@ export async function updateAuction(auction: MetaData): Promise<MetaData | undef
       ':LogoURL': {S: auction.logoURL},
       ':InterimGoalAmount':  {N: auction.interimGoalAmount.toString()},
       ':FinalGoalAmount': {N: auction.finalGoalAmount.toString()},
+      ':TokenName': {S: auction.tokenName ? auction.tokenName : ''},
+      ':TokenSymbol': {S: auction.tokenSymbol ? auction.tokenSymbol : ''},
+      ':TokenDecimals': {N: auction.tokenDecimals ? auction.tokenDecimals.toString() : '0'},
     },
   })
   const output = await dbClient.send(command)
