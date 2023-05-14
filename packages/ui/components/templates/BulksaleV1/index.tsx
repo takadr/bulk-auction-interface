@@ -15,6 +15,7 @@ import useClaim from '../../../hooks/useClaim';
 import useWithdrawERC20Onsale from '../../../hooks/useWithdrawERC20Onsale';
 import useWithdrawProvidedETH from '../../../hooks/useWithdrawProvidedETH';
 import useWithdrawUnclaimedERC20OnSale from '../../../hooks/useWithdrawUnclaimedERC20OnSale';
+import useRate from '../../../hooks/useRate';
 
 interface BulksaleV1Params {
     // title?: string;
@@ -63,11 +64,12 @@ export default function BulksaleV1(props: BulksaleV1Params) {
     const [finalGoalAmount, setFinalGoalAmount] = useState<bigint>(BigInt(0));
     // Local status
     const [fiatSymbol, setFiatSymbol] = useState<string>('usd');
-    const [fiatRate, setFiatRate] = useState<number>(1.0);
 
     // Only for test
     const [, updateState] = useState<any>();
     const forceUpdate = useCallback(() => updateState({}), []);
+    const {data: rateDate, mutate: updateRate, error: rateError} = useRate('ethereum', 'usd');
+    // console.log('ethUsdRate: ', rateDate && rateDate.usd ? rateDate.usd : "?")
     
     // TODO Subgraphからまとめて読み込む
 
@@ -87,23 +89,13 @@ export default function BulksaleV1(props: BulksaleV1Params) {
         setFinalGoalAmount(BigInt('500000000000000000000'));
     }, []);
     useInterval(() => {
-        // TODO
-        // - totalProvided
-        // - provided
-        // - isClaimed
-        // - started
-        // - ended
-
-        // TODO Get fiat rate
-        // fiatRate
-        // setTotalProvided(BigInt('150000000000000000000'));
-        // setProvided(BigInt('2400000000000000000'));
         setIsClaimed(false);
         setStarted(startingAt <= new Date().getTime());
         setEnded(closingAt < new Date().getTime());
-
-        setFiatRate(1908);
     }, 1000);
+    useInterval(() => {
+        updateRate();
+    }, 10000);
 
     const handleSubmit = async (values: {[key: string]: number}) => {
         // console.log(utils.parseEther(values.amount.toString()));
@@ -184,7 +176,7 @@ export default function BulksaleV1(props: BulksaleV1Params) {
                         providedTokenSymbol={providedTokenSymbol}
                         providedTokenDecimal={providedTokenDecimal}
                         fiatSymbol={fiatSymbol}
-                        fiatRate={fiatRate}
+                        fiatRate={rateDate && rateDate.usd ? rateDate.usd : 0}
                         contractAddress={props.contractAddress}
                         started={started}
                         w={{base: 'full', md: '50%'}}
