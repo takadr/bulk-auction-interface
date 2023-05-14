@@ -36,7 +36,7 @@ export default function DashboardPage() {
     
     return (
         <Layout>
-            <Container maxW="container.lg" py={16}>
+            <Container maxW="container.xl" py={16}>
                 <Heading size={'lg'}>Dashboard</Heading>
                 <Tabs mt={8}>
                     <TabList>

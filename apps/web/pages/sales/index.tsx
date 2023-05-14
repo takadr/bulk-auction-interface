@@ -14,7 +14,7 @@ export default function SalePage() {
   
     return (
         <Layout>
-            <Container maxW="container.lg" py={16}>
+            <Container maxW="container.xl" py={16}>
                 <Heading>Active Sales (TODO Filtering)</Heading>
                 <Stack mt={4} spacing={8}>
                 {
