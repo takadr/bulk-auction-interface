@@ -16,7 +16,7 @@ import useWithdrawERC20Onsale from '../../../hooks/useWithdrawERC20Onsale';
 import useWithdrawProvidedETH from '../../../hooks/useWithdrawProvidedETH';
 import useWithdrawUnclaimedERC20OnSale from '../../../hooks/useWithdrawUnclaimedERC20OnSale';
 import useRate from '../../../hooks/useRate';
-import useSWRAuction from 'ui/hooks/useAuction';
+import useSWRAuction from '../../../hooks/useAuction';
 
 interface BulksaleV1Params {
     // title?: string;
