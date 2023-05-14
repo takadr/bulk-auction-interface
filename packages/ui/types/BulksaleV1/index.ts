@@ -23,5 +23,6 @@ export type MetaData = {
     tokenName?: string;
     tokenSymbol?: string;
     tokenDecimals?: number;
+    templateName?: string;
     createdAt?: number;
 }

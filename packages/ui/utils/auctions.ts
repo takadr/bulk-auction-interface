@@ -19,6 +19,10 @@ const dynamoDBItemsToAuction = (item: any) => {
     logoURL: item.LogoURL.S,
     interimGoalAmount: item.InterimGoalAmount.N,
     finalGoalAmount: item.FinalGoalAmount.N,
+    tokenName: item.TokenName.S,
+    tokenSymbol: item.TokenSymbol.S,
+    tokenDecimals: item.TokenDecimals.N,
+    templateName: item.TemplateName.S
   } as MetaData;
 }
 
@@ -59,6 +63,7 @@ export async function addAuction(auction: MetaData): Promise<MetaData | undefine
     TokenName: {S: auction.tokenName ? auction.tokenName : ''},
     TokenSymbol: {S: auction.tokenSymbol ? auction.tokenSymbol : ''},
     TokenDecimals: {N: auction.tokenDecimals ? auction.tokenDecimals.toString() : '0'},
+    TemplateName: {S: 'BulksaleV1'},
   };
   const command = new PutItemCommand({
     TableName: process.env.AWS_DYNAMO_TABLE_NAME,
@@ -72,7 +77,7 @@ export async function updateAuction(auction: MetaData): Promise<MetaData | undef
   const command = new UpdateItemCommand({
     TableName: process.env.AWS_DYNAMO_TABLE_NAME,
     Key: { AuctionId : { S: auction.id as string } },
-    UpdateExpression: 'set Title = :Title, Description=:Description, Terms = :Terms, ProjectURL = :ProjectURL, LogoURL = :LogoURL, InterimGoalAmount = :InterimGoalAmount, FinalGoalAmount = :FinalGoalAmount, TokenName = :TokenName, TokenSymbol = :TokenSymbol, TokenDecimals = :TokenDecimals',
+    UpdateExpression: 'set Title = :Title, Description=:Description, Terms = :Terms, ProjectURL = :ProjectURL, LogoURL = :LogoURL, InterimGoalAmount = :InterimGoalAmount, FinalGoalAmount = :FinalGoalAmount, TokenName = :TokenName, TokenSymbol = :TokenSymbol, TokenDecimals = :TokenDecimals, TemplateName = :TemplateName',
     ExpressionAttributeValues: {
       ':Title': {S: auction.title as string},
       ':Description': {S: auction.description},
@@ -84,6 +89,7 @@ export async function updateAuction(auction: MetaData): Promise<MetaData | undef
       ':TokenName': {S: auction.tokenName ? auction.tokenName : ''},
       ':TokenSymbol': {S: auction.tokenSymbol ? auction.tokenSymbol : ''},
       ':TokenDecimals': {N: auction.tokenDecimals ? auction.tokenDecimals.toString() : '0'},
+      ':TemplateName': {S: 'BulksaleV1'}
     },
   })
   const output = await dbClient.send(command)

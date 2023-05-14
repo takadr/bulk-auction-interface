@@ -16,6 +16,7 @@ import useWithdrawERC20Onsale from '../../../hooks/useWithdrawERC20Onsale';
 import useWithdrawProvidedETH from '../../../hooks/useWithdrawProvidedETH';
 import useWithdrawUnclaimedERC20OnSale from '../../../hooks/useWithdrawUnclaimedERC20OnSale';
 import useRate from '../../../hooks/useRate';
+import useSWRAuction from 'ui/hooks/useAuction';
 
 interface BulksaleV1Params {
     // title?: string;
@@ -32,6 +33,7 @@ interface BulksaleV1Params {
 }
 
 export default function BulksaleV1(props: BulksaleV1Params) {
+    const { data: metaData, mutate, error } = useSWRAuction(props.contractAddress as string);
     const toast = useToast({position: 'top-right', isClosable: true,});
     const now = Date.now();
     const {
