@@ -1,4 +1,4 @@
-import { DynamoDBClient, GetItemCommand, PutItemCommand, ScanCommand } from '@aws-sdk/client-dynamodb';
+import { DynamoDBClient, GetItemCommand, PutItemCommand, UpdateItemCommand, ScanCommand } from '@aws-sdk/client-dynamodb';
 import { MetaData } from '../types/BulksaleV1';
 
 const dbClient = new DynamoDBClient({
@@ -19,18 +19,15 @@ const dynamoDBItemsToAuction = (item: any) => {
     logoURL: item.LogoURL.S,
     interimGoalAmount: item.InterimGoalAmount.N,
     finalGoalAmount: item.FinalGoalAmount.N,
-    createdAt: item.CreatedAt.N
-    // TODO
   } as MetaData;
 }
 
 export async function scanAuctions(lastEvaluatedKeyId?: string, lastEvaluatedKeyCreatedAt?: string): Promise<Auction[] | undefined> {
   const command = new ScanCommand({
-    TableName: 'Auctions',
+    TableName: process.env.AWS_DYNAMO_TABLE_NAME,
     Limit: 10,
     ExclusiveStartKey: lastEvaluatedKeyId && lastEvaluatedKeyCreatedAt ? {
       AuctionId: { S: lastEvaluatedKeyId },
-      CreatedAt: { N: lastEvaluatedKeyCreatedAt }
     } : undefined
   })
   const output = await dbClient.send(command)
@@ -39,7 +36,7 @@ export async function scanAuctions(lastEvaluatedKeyId?: string, lastEvaluatedKey
 
 export async function fetchAuction(auctionId: string): Promise<MetaData | undefined> {
   const command = new GetItemCommand({
-    TableName: 'Auctions',
+    TableName: process.env.AWS_DYNAMO_TABLE_NAME,
     Key: { AuctionId: { S: auctionId } },
   })
   const output = await dbClient.send(command)
@@ -59,12 +56,30 @@ export async function addAuction(auction: MetaData): Promise<MetaData | undefine
     // otherURLs: {S: auction.otherURLs},
     InterimGoalAmount: {N: auction.interimGoalAmount.toString()},
     FinalGoalAmount: {N: auction.finalGoalAmount.toString()},
-    CreatedAt: {N: new Date().getTime().toString()},
   };
   const command = new PutItemCommand({
-    TableName: 'Auctions',
+    TableName: process.env.AWS_DYNAMO_TABLE_NAME,
     Item: item
   })
   const output = await dbClient.send(command)
-  return dynamoDBItemsToAuction(item);
+  return auction;
+}
+
+export async function updateAuction(auction: MetaData): Promise<MetaData | undefined> {
+  const command = new UpdateItemCommand({
+    TableName: process.env.AWS_DYNAMO_TABLE_NAME,
+    Key: { AuctionId : { S: auction.id as string } },
+    UpdateExpression: 'set Title = :Title, Description=:Description, Terms = :Terms, ProjectURL = :ProjectURL, LogoURL = :LogoURL, InterimGoalAmount = :InterimGoalAmount, FinalGoalAmount = :FinalGoalAmount',
+    ExpressionAttributeValues: {
+      ':Title': {S: auction.title as string},
+      ':Description': {S: auction.description},
+      ':Terms': {S: auction.terms},
+      ':ProjectURL': {S: auction.projectURL},
+      ':LogoURL': {S: auction.logoURL},
+      ':InterimGoalAmount':  {N: auction.interimGoalAmount.toString()},
+      ':FinalGoalAmount': {N: auction.finalGoalAmount.toString()},
+    },
+  })
+  const output = await dbClient.send(command)
+  return auction;
 }

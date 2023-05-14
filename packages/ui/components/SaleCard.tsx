@@ -1,12 +1,14 @@
 import { useEffect } from 'react';
-import { chakra, Box, Divider, Badge, Tag, Heading, Card, CardBody, CardFooter, Progress, Text, Image, Stack, Link, Flex } from '@chakra-ui/react';
+import { chakra, Box, Divider, Badge, Tag, Heading, Card, CardBody, CardFooter, Progress, Text, Image, Stack, Link, Flex, useDisclosure, Button } from '@chakra-ui/react';
+import { EditIcon } from '@chakra-ui/icons';
 import { useContractEvent, useContractRead } from 'wagmi';
 import Big from '../utils/bignumber';
 import { MetaData } from '../types/BulksaleV1';
 import bulksaleV1ABI from '../constants/abis/BulksaleV1.json';
-import useBulksaleV1 from '../hooks/BulksaleV1/useBulksaleV1';
+import SaleMetaFormModal from './SaleMetaFormModal';
 
-export default function SaleCard({ auction }: { auction: MetaData }){
+export default function SaleCard({ auction, editable=false }: { auction: MetaData, editable?: boolean }){
+    const { onOpen, isOpen, onClose } = useDisclosure();
     const {data: totalProvided, refetch} = useContractRead({
         address: auction.id as `0x${string}`,
         abi: bulksaleV1ABI,
@@ -23,8 +25,7 @@ export default function SaleCard({ auction }: { auction: MetaData }){
         },
     });
 
-    return <Link href={`/sales/${auction.id}`} _hover={{textDecoration: 'none'}}>
-    <Card
+    return <Card
         direction={{ base: 'column', sm: 'row' }}
         overflow='hidden'
         // variant='outline'
@@ -40,7 +41,10 @@ export default function SaleCard({ auction }: { auction: MetaData }){
                 <CardBody>
                     <Flex>
                         <chakra.div flex={2}>
-                            <Heading size='lg'>{auction.title}</Heading>
+                            <Heading size='lg'>
+                                <Link href={`/sales/${auction.id}`}>{auction.title}</Link>
+                                { editable && <Button size={'sm'} ml={2} onClick={onOpen}><EditIcon mr={1} /> Edit</Button> }
+                            </Heading>
                             <Text py='2'>
                             {auction.description}
                             </Text>
@@ -71,6 +75,8 @@ export default function SaleCard({ auction }: { auction: MetaData }){
                     </Flex>
                 </CardFooter>
             </Stack>
+            {
+                editable && isOpen && <SaleMetaFormModal isOpen={isOpen} onClose={onClose} existingContractAddress={auction.id as `0x${string}`} saleMetaData={auction} />
+            }
         </Card>
-        </Link>
 }

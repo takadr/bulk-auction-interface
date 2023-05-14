@@ -54,7 +54,7 @@ export default function DashboardPage() {
                             <Stack mt={4} spacing={8}>
                                 {
                                     auctions.map((auction: MetaData) => {
-                                        return <SaleCard auction={auction} />
+                                        return <SaleCard auction={auction} editable />
                                     })
                                 }
                                 </Stack>

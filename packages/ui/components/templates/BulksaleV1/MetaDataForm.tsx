@@ -32,8 +32,10 @@ export default function MetaDataForm({formikProps, waitFn, onSkip}: {formikProps
                         </FormLabel>
                         <HStack>
                             <Input 
-                                isReadOnly={!!waitFn} 
-                                isDisabled={!!waitFn} 
+                                // isReadOnly={!!waitFn} 
+                                // isDisabled={!!waitFn}
+                                isReadOnly={true} 
+                                isDisabled={true}
                                 fontSize={'sm'} 
                                 id="id"
                                 name="id"
@@ -157,7 +159,7 @@ export default function MetaDataForm({formikProps, waitFn, onSkip}: {formikProps
                 >
                     Save Bulksale Information
                 </Button>
-                <Button 
+                { onSkip && <Button 
                     flex={1}
                     variant="outline" 
                     colorScheme='blue'
@@ -165,7 +167,7 @@ export default function MetaDataForm({formikProps, waitFn, onSkip}: {formikProps
                     isDisabled={formikProps.isSubmitting}
                 >
                     Skip (You can input this later)
-                </Button>
+                </Button> }
             </HStack>
             
         </form>

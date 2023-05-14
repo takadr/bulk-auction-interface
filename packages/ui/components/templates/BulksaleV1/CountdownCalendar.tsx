@@ -59,7 +59,7 @@ export default function CountdownCalendar({ unixEndDate }: Props) {
 
       {unixEndDate * 1000 < Date.now() && (
         <chakra.div>
-            終了しました🎉
+            Finished🎉
         </chakra.div>
       )}
     </chakra.div>

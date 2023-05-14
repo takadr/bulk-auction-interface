@@ -15,41 +15,6 @@ type Props = {
   started: boolean;
 };
 
-// const LeftCirclePosition = styled.div`
-//   position: relative;
-//   min-width: 500px;
-
-//   @media (max-width: 600px) {
-//     width: 100%;
-//     min-width: 0;
-//   }
-// `;
-
-// const InnerPosition = styled.span`
-//   display: inline-block;
-//   position: absolute;
-//   top: 150px;
-//   left: 0;
-//   font-size: 2rem;
-//   text-align: center;
-//   width: 100%;
-//   z-index: 100;
-
-//   @media (max-width: 600px) {
-//     top: 20%;
-//     left: 0;
-//   }
-// `;
-
-// const StarPosition = styled.span`
-//   display: inline-block;
-//   position: absolute;
-//   top: 58%;
-//   right: 1%;
-//   font-size: 2.5rem;
-//   z-index: 100;
-// `;
-
 export default function StatisticsInCircle({
   totalProvided,
   interimGoalAmount,
@@ -76,7 +41,7 @@ export default function StatisticsInCircle({
           <Circle
             percent={getTargetPercetage(totalProvided, finalGoalAmount)}
             strokeWidth={4}
-            strokeColor="#D3D3D3"
+            strokeColor={'#48BB78'}
           />
           {/* <StarPosition>
             <StarTwoTone />

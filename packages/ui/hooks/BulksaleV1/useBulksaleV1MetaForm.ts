@@ -2,10 +2,11 @@ import { useEffect } from 'react';
 import { useFormik, FormikProps } from 'formik';
 import { MetaData } from '../../types/BulksaleV1';
 
-export default function useBulksaleV1MetaForm({contractId, onSubmitSuccess, onSubmitError}: {
+export default function useBulksaleV1MetaForm({contractId, onSubmitSuccess, onSubmitError, saleMetaData}: {
     contractId?: `0x${string}`,
     onSubmitSuccess?: (result: Response) => void,
     onSubmitError?: (e: any) => void,
+    saleMetaData?: MetaData,
 }): 
 {
     formikProps: FormikProps<MetaData>
@@ -28,20 +29,20 @@ export default function useBulksaleV1MetaForm({contractId, onSubmitSuccess, onSu
 
 
     const handleSubmit = async (auctionData: MetaData) => {
-        console.log(Object.assign(auctionData, {id: auctionData.id}))
+        // console.log(Object.assign(auctionData, {id: auctionData.id}))
         try {
             const result = await fetch('/api/auctions', {
-                // credentials: 'include',
-                method: 'POST',
+                credentials: 'same-origin',
+                method: saleMetaData ? 'PUT' : 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify(auctionData),
                 // body: JSON.stringify(Object.assign(auctionData, {id: contractId}))
             })
+            if(!result.ok) throw new Error(result.statusText);
             onSubmitSuccess && onSubmitSuccess(result)
         } catch(e: any) {
-            console.log(e)
             onSubmitError && onSubmitError(e);
         }
     };
@@ -54,7 +55,7 @@ export default function useBulksaleV1MetaForm({contractId, onSubmitSuccess, onSu
 
     const formikProps = useFormik({
         enableReinitialize: true,
-        initialValues: initMetaData,
+        initialValues: saleMetaData ? saleMetaData : initMetaData,
         onSubmit: handleSubmit,
         validate
     });
