@@ -1,0 +1,27 @@
+type Sale @entity {
+  # Contract address
+  id: ID!
+  # Sale template name (e.g. BulksaleV1)
+  templateName: Bytes!
+  # Deployer(Owner) address
+  owner: String! 
+  # token address
+  token: String! 
+  # Sale start timestamp
+  startingAt: BigInt!
+  # Sale end timestamp
+  closingAt: BigInt!
+  # Total amount of distribution for during the sale
+  distributeAmount: BigInt!
+  # Minimum amount of ETH (in Wei) for the success of the sale
+  minimalProvideAmount: BigInt!
+  # The total ETH amount of bidding that the sale raised (in Wei)
+  totalProvided: BigInt!
+}
+
+type Template @entity {
+  # Contract address
+  id: ID!
+  templateName: Bytes!
+  addedAt: BigInt!
+}
