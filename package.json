@@ -18,6 +18,7 @@
   "packageManager": "pnpm@7.15.0",
   "name": "bulk-auction-interface",
   "dependencies": {
+    "@apollo/client": "^3.7.14",
     "@aws-sdk/client-dynamodb": "^3.329.0",
     "@chakra-ui/icons": "^2.0.19",
     "@chakra-ui/react": "^2.6.0",
