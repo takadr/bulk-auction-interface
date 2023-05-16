@@ -1,4 +1,5 @@
 export type Sale = {
+    id?: string;
     token: `0x${string}` | null;
     owner?: `0x${string}`;
     distributeAmount: number;
@@ -8,6 +9,7 @@ export type Sale = {
     lockDuration?: number; //In sec
     expirationDuration?: number; //In sec
     feeRatePerMil?: number;
+    totalProvided: number;
 }
 
 export type MetaData = {

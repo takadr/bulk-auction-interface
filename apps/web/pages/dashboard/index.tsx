@@ -7,9 +7,11 @@ import Layout from 'ui/components/layouts/layout';
 import { CurrentUserContext } from 'ui/components/providers/CurrentUserProvider';
 import TokenFormModal from 'ui/components/TokenFormModal';
 import SaleFormModal from 'ui/components/SaleFormModal';
+import { useQuery, useApolloClient } from "@apollo/client";
 import { useSWRAuctions } from 'ui/hooks/useAuctions';
-import { MetaData } from 'ui/types/BulksaleV1';
+import { MetaData, Sale } from 'ui/types/BulksaleV1';
 import SaleCard from 'ui/components/SaleCard';
+import { LIST_SALE_QUERY, GET_SALE_QUERY }  from 'ui/apollo/query';
 
 export default function DashboardPage() {
     const { chain } = useNetwork();
@@ -18,6 +20,7 @@ export default function DashboardPage() {
     const tokenFormModalDisclosure = useDisclosure();
     const saleFormModalDisclosure = useDisclosure();
     // TODO Get currentUser's sales and tokens
+    const { data, loading, error: test } = useQuery(LIST_SALE_QUERY);
     const { auctions, isLast, error, loadMoreAuctions } = useSWRAuctions({})
 
     if(typeof currentUser === 'undefined') {
@@ -53,8 +56,8 @@ export default function DashboardPage() {
                             <SaleFormModal isOpen={saleFormModalDisclosure.isOpen} onClose={saleFormModalDisclosure.onClose} />
                             <Stack mt={4} spacing={8}>
                                 {
-                                    auctions.map((auction: MetaData) => {
-                                        return <SaleCard auction={auction} editable />
+                                    !data ? <Spinner /> : data.sales.map((sale: Sale) => {
+                                        return <SaleCard sale={sale} editable />
                                     })
                                 }
                                 </Stack>

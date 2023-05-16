@@ -1,4 +1,4 @@
-import { DynamoDBClient, GetItemCommand, PutItemCommand, UpdateItemCommand, ScanCommand } from '@aws-sdk/client-dynamodb';
+import { DynamoDBClient, GetItemCommand, BatchGetItemCommand, PutItemCommand, UpdateItemCommand, ScanCommand } from '@aws-sdk/client-dynamodb';
 import { MetaData } from '../types/BulksaleV1';
 
 const dbClient = new DynamoDBClient({
@@ -49,6 +49,20 @@ export async function fetchAuction(auctionId: string): Promise<MetaData | undefi
   return dynamoDBItemsToAuction(item);
 }
 
+export async function batchFetchAuction(auctionIds: string[]): Promise<MetaData[]> {
+  const tableName = process.env.AWS_DYNAMO_TABLE_NAME as string
+  const command = new BatchGetItemCommand({
+    RequestItems: {
+      [tableName]: {
+        Keys: auctionIds.map( id => { return { AuctionId: { S: id } }})
+      }
+    }
+  })
+  const output = await dbClient.send(command)
+  if (output.Responses == undefined) return []
+  return output.Responses[tableName].map((item: any) => dynamoDBItemsToAuction(item));
+}
+
 export async function addAuction(auction: MetaData): Promise<MetaData | undefined> {
   const item = {
     AuctionId: {S: auction.id as string},
@@ -63,7 +77,7 @@ export async function addAuction(auction: MetaData): Promise<MetaData | undefine
     TokenName: {S: auction.tokenName ? auction.tokenName : ''},
     TokenSymbol: {S: auction.tokenSymbol ? auction.tokenSymbol : ''},
     TokenDecimals: {N: auction.tokenDecimals ? auction.tokenDecimals.toString() : '0'},
-    TemplateName: {S: 'BulksaleV1'},
+    TemplateName: {S: '0x53616c6554656d706c6174655631000000000000000000000000000000000000'},
   };
   const command = new PutItemCommand({
     TableName: process.env.AWS_DYNAMO_TABLE_NAME,
@@ -89,7 +103,7 @@ export async function updateAuction(auction: MetaData): Promise<MetaData | undef
       ':TokenName': {S: auction.tokenName ? auction.tokenName : ''},
       ':TokenSymbol': {S: auction.tokenSymbol ? auction.tokenSymbol : ''},
       ':TokenDecimals': {N: auction.tokenDecimals ? auction.tokenDecimals.toString() : '0'},
-      ':TemplateName': {S: 'BulksaleV1'}
+      ':TemplateName': {S: '0x53616c6554656d706c6174655631000000000000000000000000000000000000'}
     },
   })
   const output = await dbClient.send(command)

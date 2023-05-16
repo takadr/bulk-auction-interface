@@ -95,19 +95,15 @@ export default function SaleFormModal({isOpen, onClose}: {isOpen: boolean, onClo
         address: process.env.NEXT_PUBLIC_FACTORY_ADDRESS as `0x${string}`,
         abi: FactoryABI,
         eventName: 'Deployed',
-        listener(sender, templateName, deployedAddr, abiArgs) {
-            // console.log(sender, templateName, deployedAddr, abiArgs);
-            // console.log(abi.decode(
-            //     ['address', 'uint', 'uint', 'uint', 'uint', 'uint', 'uint', 'address', 'uint'],
-            //     abiArgs.slice(2)  // プレフィックス"0x"を除外する
-            // ));
+        listener(templateName, deployedAddr, tokenAddr, owner) {
+            console.log(owner, templateName, deployedAddr);
             const template: any = templateName;
             
-            if(sender === address && template.hash === '0xee943a048e102ac70fe5e1cf4071b2723f6bb09fa7eb038b7c33122da4684e7e') {
+            if(owner === address) {
                 // const newAddresses = [...saleClones.addresses, deployedAddr];
                 // setSaleClones(Object.assign(saleClones, {addresses: newAddresses}));
-                const newAddresses = [...saleClones, deployedAddr];
-                setSaleClones(newAddresses);
+                // const newAddresses = [...saleClones, deployedAddr];
+                // setSaleClones(newAddresses);
                 setContractAddress(deployedAddr);
                 // console.log(newAddresses)
             }
