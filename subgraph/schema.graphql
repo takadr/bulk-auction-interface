@@ -6,7 +6,13 @@ type Sale @entity {
   # Deployer(Owner) address
   owner: String! 
   # token address
-  token: String! 
+  token: String!
+  # token name
+  tokenName: String! 
+  # token symbol
+  tokenSymbol: String! 
+  # token decimals
+  tokenDecimals: BigInt! 
   # Sale start timestamp
   startingAt: BigInt!
   # Sale end timestamp

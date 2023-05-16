@@ -4,14 +4,16 @@ import {
   test,
   clearStore,
   beforeAll,
-  afterAll
+  afterAll,
+  createMockedFunction
 } from "matchstick-as/assembly/index"
-import { Bytes, Address, BigInt } from "@graphprotocol/graph-ts"
+import { Bytes, Address, BigInt, ethereum } from "@graphprotocol/graph-ts"
 import { handleDeployed, handleTemplateAdded, handleTemplateDeleted } from "../src/factory-v-1"
 import { createDeployedEvent, createTemplateAddedEvent, createTemplateDeletedEvent } from "./factory-v-1-utils"
 
 // Tests structure (matchstick-as >=0.5.0)
 // https://thegraph.com/docs/en/developer/matchstick/#tests-structure-0-5-0
+const USDT_ADDRESS = "0x7169D38820dfd117C3FA1f22a697dBA58d90BA06"
 
 describe("Describe Deployed event", () => {
   beforeAll(() => {
@@ -19,9 +21,7 @@ describe("Describe Deployed event", () => {
     let deployedAddr = Address.fromString(
       "0x0000000000000000000000000000000000000001"
     )
-    let tokenAddr = Address.fromString(
-      "0x0000000000000000000000000000000000000002"
-    )
+    let tokenAddr = Address.fromString(USDT_ADDRESS)
     let owner = Address.fromString("0x0000000000000000000000000000000000000003")
     let distributeAmount = BigInt.fromI32(234)
     let startingAt = BigInt.fromI32(234)
@@ -37,6 +37,20 @@ describe("Describe Deployed event", () => {
       eventDuration,
       minimalProvideAmount
     )
+
+    // Mock function calls
+    createMockedFunction(tokenAddr, 'name', 'name():(string)')
+    .withArgs([])
+    .returns([ethereum.Value.fromString('Test Tether USD')])
+
+    createMockedFunction(tokenAddr, 'symbol', 'symbol():(string)')
+    .withArgs([])
+    .returns([ethereum.Value.fromString('USDT')])
+
+    createMockedFunction(tokenAddr, 'decimals', 'decimals():(uint8)')
+    .withArgs([])
+    .returns([ethereum.Value.fromUnsignedBigInt(BigInt.fromI32(18))])
+
     handleDeployed(newDeployedEvent)
   })
 
@@ -56,7 +70,7 @@ describe("Describe Deployed event", () => {
       "Sale",
       "0x0000000000000000000000000000000000000001",
       "token",
-      "0x0000000000000000000000000000000000000002"
+      Address.fromString(USDT_ADDRESS).toHex()
     )
     assert.fieldEquals(
       "Sale",
@@ -93,6 +107,24 @@ describe("Describe Deployed event", () => {
       "0x0000000000000000000000000000000000000001",
       "totalProvided",
       "0"
+    )
+    assert.fieldEquals(
+      "Sale",
+      "0x0000000000000000000000000000000000000001",
+      "tokenName",
+      "Test Tether USD"
+    )
+    assert.fieldEquals(
+      "Sale",
+      "0x0000000000000000000000000000000000000001",
+      "tokenSymbol",
+      "USDT"
+    )
+    assert.fieldEquals(
+      "Sale",
+      "0x0000000000000000000000000000000000000001",
+      "tokenDecimals",
+      "18"
     )
   })
 })

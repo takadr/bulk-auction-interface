@@ -19,6 +19,8 @@ dataSources:
       abis:
         - name: FactoryV1
           file: ./abis/FactoryV1.json
+        - name: ERC20
+          file: ./abis/ERC20.json
       eventHandlers:
         - event: Deployed(bytes32,address,address,address,uint256,uint256,uint256,uint256)
           handler: handleDeployed

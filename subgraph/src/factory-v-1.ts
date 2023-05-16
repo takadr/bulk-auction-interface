@@ -9,12 +9,16 @@ import {
   Template,
 } from "../generated/schema"
 import { SaleTemplateV1 } from '../generated/templates'
+import { fetchTokenName, fetchTokenSymbol, fetchTokenDecimals } from './utils/token'
 
 export function handleDeployed(event: DeployedEvent): void {
   const sale = new Sale(event.params.deployedAddr.toHex())
   sale.templateName = event.params.templateName
   sale.owner = event.params.owner.toHex()
   sale.token = event.params.tokenAddr.toHex()
+  sale.tokenSymbol = fetchTokenSymbol(event.params.tokenAddr)
+  sale.tokenName = fetchTokenName(event.params.tokenAddr)
+  sale.tokenDecimals = fetchTokenDecimals(event.params.tokenAddr)
   sale.startingAt = event.params.startingAt
   sale.closingAt = event.params.startingAt.plus(event.params.eventDuration)
   sale.distributeAmount = event.params.distributeAmount
