@@ -4,21 +4,21 @@ import { EditIcon } from '@chakra-ui/icons';
 import { useContractEvent, useContractRead } from 'wagmi';
 import Big from '../utils/bignumber';
 import { MetaData } from '../types/BulksaleV1';
-import bulksaleV1ABI from '../constants/abis/BulksaleV1.json';
+import SaleTemplateV1ABI from '../constants/abis/SaleTemplateV1.json';
 import SaleMetaFormModal from './SaleMetaFormModal';
 
 export default function SaleCard({ auction, editable=false }: { auction: MetaData, editable?: boolean }){
     const { onOpen, isOpen, onClose } = useDisclosure();
     const {data: totalProvided, refetch} = useContractRead({
         address: auction.id as `0x${string}`,
-        abi: bulksaleV1ABI,
+        abi: SaleTemplateV1ABI,
         functionName: 'totalProvided',
         staleTime: 1000,
         cacheTime: 1000,
     });
     useContractEvent({
         address: auction.id as `0x${string}`,
-        abi: bulksaleV1ABI,
+        abi: SaleTemplateV1ABI,
         eventName: 'Received',
         listener() {
             refetch();

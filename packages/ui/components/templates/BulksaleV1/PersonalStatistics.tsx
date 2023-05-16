@@ -6,7 +6,7 @@ interface Props {
     inputValue: number;
     myTotalProvided: Big;
     totalProvided: Big;
-    totalDistributeAmount: Big;
+    distributeAmount: Big;
     distributedTokenSymbol: string;
     distributedTokenDecimal: number;
     providedTokenSymbol: string;
@@ -18,7 +18,7 @@ export default function PersonalStatistics({
     inputValue,
     myTotalProvided,
     totalProvided,
-    totalDistributeAmount,
+    distributeAmount,
     distributedTokenSymbol,
     distributedTokenDecimal,
     providedTokenSymbol,
@@ -34,7 +34,7 @@ export default function PersonalStatistics({
   
     // TODO Format price
     const inputValueInBig = multiply(Big(inputValue), Big(10**providedTokenDecimal));
-    const expectedAmount = tokenAmountFormat(getExpectedAmount(myTotalProvided, inputValueInBig, totalProvided, totalDistributeAmount), distributedTokenDecimal, 2);
+    const expectedAmount = tokenAmountFormat(getExpectedAmount(myTotalProvided, inputValueInBig, totalProvided, distributeAmount), distributedTokenDecimal, 2);
     const sumOfProvidedAmount = tokenAmountFormat(add(myTotalProvided, inputValueInBig), providedTokenDecimal, 2);
     const fixedProvidedAmount = tokenAmountFormat(myTotalProvided, providedTokenDecimal, 2);
     const inputtingValueInFormat = tokenAmountFormat(inputValueInBig, distributedTokenDecimal, 2);

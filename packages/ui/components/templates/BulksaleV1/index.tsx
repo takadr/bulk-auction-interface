@@ -9,7 +9,6 @@ import { BigNumber, utils } from 'ethers';
 import CalendarInCircle from './CalendarInCircle';
 import PersonalStatistics from './PersonalStatistics';
 import StatisticsInCircle from './StatisticsInCircle';
-import bulksaleV1ABI from '../../../constants/abis/BulksaleV1.json';
 import useBulksaleV1 from '../../../hooks/BulksaleV1/useBulksaleV1';
 import useClaim from '../../../hooks/useClaim';
 import useWithdrawERC20Onsale from '../../../hooks/useWithdrawERC20Onsale';
@@ -39,7 +38,7 @@ export default function BulksaleV1(props: BulksaleV1Params) {
     const {
         startingAt,
         closingAt,
-        totalDistributeAmount,
+        distributeAmount,
         minimalProvideAmount,
         totalProvided,
         provided,
@@ -237,7 +236,7 @@ export default function BulksaleV1(props: BulksaleV1Params) {
                         inputValue={formikProps.values.amount}
                         myTotalProvided={Big(provided.toString())}
                         totalProvided={Big(totalProvided.toString())}
-                        totalDistributeAmount={Big(totalDistributeAmount.toString())}
+                        distributeAmount={Big(distributeAmount.toString())}
                         distributedTokenSymbol={distributedToken ? distributedToken.symbol : ''}
                         distributedTokenDecimal={distributedToken ? distributedToken.decimals : 0}
                         providedTokenSymbol={providedTokenSymbol}

@@ -1,13 +1,13 @@
 export type Sale = {
     token: `0x${string}` | null;
+    owner?: `0x${string}`;
+    distributeAmount: number;
     startingAt: number; //Timestamp
     eventDuration: number; //In sec
-    lockDuration: number; //In sec
-    expirationDuration: number; //In sec
-    totalDistributeAmount: number;
     minimalProvideAmount: number;
-    owner?: `0x${string}`;
-    feeRatePerMil: number;
+    lockDuration?: number; //In sec
+    expirationDuration?: number; //In sec
+    feeRatePerMil?: number;
 }
 
 export type MetaData = {

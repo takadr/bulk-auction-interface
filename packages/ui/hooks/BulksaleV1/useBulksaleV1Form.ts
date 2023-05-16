@@ -45,7 +45,7 @@ export default function useBulksaleV1Form({
         eventDuration: 60 * 60 * 24 * 7,
         lockDuration: 60 * 60 * 24 * 7,
         expirationDuration: 60 * 60 * 24 * 30,
-        totalDistributeAmount: 1,
+        distributeAmount: 1,
         minimalProvideAmount: 0.01,
         owner: address, //TODO
         feeRatePerMil: 1
@@ -105,38 +105,19 @@ export default function useBulksaleV1Form({
     //     functionName: 'allowance',
     //     args: [address as `0x${string}`, process.env.NEXT_PUBLIC_FACTORY_ADDRESS as `0x${string}`],
     // })
-    const abi = new utils.AbiCoder();
-
-    const getBytesParams = (sale: Sale): `0x${string}` => {
-        try {
-            return utils.hexlify(abi.encode(
-                ['address', 'uint', 'uint', 'uint', 'uint', 'uint', 'uint', 'address', 'uint'],
-                [
-                    sale.token,
-                    Math.round(sale.startingAt / 1000),
-                    sale.eventDuration,
-                    sale.lockDuration,
-                    sale.expirationDuration,
-                    multiply(sale.totalDistributeAmount, tokenData.decimals ? Big(10).pow(tokenData.decimals) : 0).toString(),
-                    multiply(sale.minimalProvideAmount, Big(10).pow(18)).toString(), // ETH
-                    sale.owner,
-                    sale.feeRatePerMil
-                ]
-            )) as `0x${string}`
-        } catch(e: any) {
-            return '0x00';
-        }
-    }
 
     const prepareFn = usePrepareContractWrite({
         address: process.env.NEXT_PUBLIC_FACTORY_ADDRESS as `0x${string}`, //factory
         abi: FactoryABI,
-        functionName: 'deploy',
+        functionName: 'deploySaleClone',
         args: [
-            "BulksaleV1.0.sol",
+            "0x53616c6554656d706c6174655631000000000000000000000000000000000000",
             debouncedSale.token,
-            multiply(debouncedSale.totalDistributeAmount, tokenData.decimals ? Big(10).pow(tokenData.decimals) : 0).toString(),
-            getBytesParams(debouncedSale),
+            debouncedSale.owner,
+            multiply(debouncedSale.distributeAmount, tokenData.decimals ? Big(10).pow(tokenData.decimals) : 0).toString(),
+            Math.round(debouncedSale.startingAt / 1000),
+            debouncedSale.eventDuration,
+            multiply(debouncedSale.minimalProvideAmount, Big(10).pow(18)).toString(), // ETH
         ],
     })
     

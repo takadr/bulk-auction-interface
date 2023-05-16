@@ -3,7 +3,7 @@ import { BigNumberValueType, add, divide, multiply } from './bignumber';
 // TODO Consider using BigDecimal or libraries
 // https://stackoverflow.com/questions/54409854/how-to-divide-two-native-javascript-bigints-and-get-a-decimal-result
 // https://stackoverflow.com/questions/16742578/bigdecimal-in-javascript/66939244#66939244
-export const getExpectedAmount = (myTotalDonations: BigNumberValueType, inputtingValue: BigNumberValueType, totalProvided: BigNumberValueType, totalDistributeAmount: BigNumberValueType) => {
+export const getExpectedAmount = (myTotalDonations: BigNumberValueType, inputtingValue: BigNumberValueType, totalProvided: BigNumberValueType, distributeAmount: BigNumberValueType) => {
     // console.log(myTotalDonations, inputtingValue, totalProvided, totalDistributeAmount)
     const donations = add(myTotalDonations, inputtingValue);
     const totalDonations = add(totalProvided, inputtingValue);
@@ -11,7 +11,7 @@ export const getExpectedAmount = (myTotalDonations: BigNumberValueType, inputtin
         return 0;
     }
     // console.log(Number(donations), Number(totalDonations), Number(totalDistributeAmount))
-    return multiply(divide(donations, totalDonations), totalDistributeAmount);
+    return multiply(divide(donations, totalDonations), distributeAmount);
     // return (Number(donations) / Number(totalDonations)) * Number(totalDistributeAmount);
 }
 export const getTargetPercetage = (totalProvided: BigNumberValueType, finalGoalAmount: BigNumberValueType): number => {

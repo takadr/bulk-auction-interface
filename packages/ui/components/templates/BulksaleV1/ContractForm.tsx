@@ -67,7 +67,7 @@ export default function BulksaleV1Form({formikProps, address, approvals, writeFn
                     <FormErrorMessage>{formikProps.errors.startingAt}</FormErrorMessage>
                 </FormControl>
 
-                <FormControl mt={4} isInvalid={!!formikProps.errors.totalDistributeAmount && !!formikProps.touched.totalDistributeAmount}>
+                <FormControl mt={4} isInvalid={!!formikProps.errors.distributeAmount && !!formikProps.touched.distributeAmount}>
                     <Flex justifyContent={'space-between'}>
                         <FormLabel alignItems={'baseline'}>Total distribute amount
                             <Tooltip hasArrow label={'TODO explanation'}><QuestionIcon mb={1} ml={1} /></Tooltip>
@@ -76,8 +76,8 @@ export default function BulksaleV1Form({formikProps, address, approvals, writeFn
                     </Flex>
                     
                     <Flex alignItems={'center'}>
-                        <NumberInput flex="1" name="totalDistributeAmount" value={formikProps.values.totalDistributeAmount} precision={2} min={0.01} step={0.01} max={Number.MAX_SAFE_INTEGER} onBlur={formikProps.handleBlur} onChange={(strVal: string, val: number) =>
-                            formikProps.setFieldValue('totalDistributeAmount', strVal ? strVal : 0)
+                        <NumberInput flex="1" name="distributeAmount" value={formikProps.values.distributeAmount} precision={2} min={0.01} step={0.01} max={Number.MAX_SAFE_INTEGER} onBlur={formikProps.handleBlur} onChange={(strVal: string, val: number) =>
+                            formikProps.setFieldValue('distributeAmount', strVal ? strVal : 0)
                         }>
                             <NumberInputField/>
                             <NumberInputStepper>
@@ -87,7 +87,7 @@ export default function BulksaleV1Form({formikProps, address, approvals, writeFn
                         </NumberInput>
                         <chakra.div px={2} minW={'3rem'}>{tokenData.symbol}</chakra.div>
                     </Flex>
-                    <FormErrorMessage>{formikProps.errors.totalDistributeAmount}</FormErrorMessage>
+                    <FormErrorMessage>{formikProps.errors.distributeAmount}</FormErrorMessage>
                 </FormControl>
 
                 <FormControl mt={4} isInvalid={!!formikProps.errors.minimalProvideAmount && !!formikProps.touched.minimalProvideAmount}>

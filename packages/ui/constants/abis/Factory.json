@@ -1,41 +1,54 @@
 [
   {
-    "inputs": [
-      {
-        "internalType": "address",
-        "name": "initialOwner",
-        "type": "address"
-      }
-    ],
-    "stateMutability": "nonpayable",
-    "type": "constructor"
-  },
-  {
     "anonymous": false,
     "inputs": [
       {
-        "indexed": true,
-        "internalType": "address",
-        "name": "sender",
-        "type": "address"
-      },
-      {
-        "indexed": true,
-        "internalType": "string",
+        "indexed": false,
+        "internalType": "bytes32",
         "name": "templateName",
-        "type": "string"
+        "type": "bytes32"
       },
       {
-        "indexed": true,
+        "indexed": false,
         "internalType": "address",
         "name": "deployedAddr",
         "type": "address"
       },
       {
         "indexed": false,
-        "internalType": "bytes",
-        "name": "abiArgs",
-        "type": "bytes"
+        "internalType": "address",
+        "name": "tokenAddr",
+        "type": "address"
+      },
+      {
+        "indexed": false,
+        "internalType": "address",
+        "name": "owner",
+        "type": "address"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "distributeAmount",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "startingAt",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "eventDuration",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "minimalProvideAmount",
+        "type": "uint256"
       }
     ],
     "name": "Deployed",
@@ -47,17 +60,17 @@
       {
         "indexed": true,
         "internalType": "address",
-        "name": "oldGoverner",
+        "name": "previousOwner",
         "type": "address"
       },
       {
         "indexed": true,
         "internalType": "address",
-        "name": "newGoverner",
+        "name": "newOwner",
         "type": "address"
       }
     ],
-    "name": "GovernanceChanged",
+    "name": "OwnershipTransferred",
     "type": "event"
   },
   {
@@ -65,45 +78,14 @@
     "inputs": [
       {
         "indexed": true,
-        "internalType": "address",
-        "name": "sender",
-        "type": "address"
-      },
-      {
-        "indexed": false,
-        "internalType": "uint256",
-        "name": "fee",
-        "type": "uint256"
-      },
-      {
-        "indexed": false,
-        "internalType": "uint256",
-        "name": "treasury",
-        "type": "uint256"
-      }
-    ],
-    "name": "Received",
-    "type": "event"
-  },
-  {
-    "anonymous": false,
-    "inputs": [
-      {
-        "indexed": true,
-        "internalType": "string",
+        "internalType": "bytes32",
         "name": "templateName",
-        "type": "string"
+        "type": "bytes32"
       },
       {
         "indexed": true,
         "internalType": "address",
         "name": "templateAddr",
-        "type": "address"
-      },
-      {
-        "indexed": true,
-        "internalType": "address",
-        "name": "governer",
         "type": "address"
       }
     ],
@@ -115,30 +97,18 @@
     "inputs": [
       {
         "indexed": true,
-        "internalType": "address",
-        "name": "sender",
-        "type": "address"
-      },
-      {
-        "indexed": true,
-        "internalType": "string",
+        "internalType": "bytes32",
         "name": "templateName",
-        "type": "string"
+        "type": "bytes32"
       },
       {
         "indexed": true,
         "internalType": "address",
-        "name": "deployedAddr",
+        "name": "templateAddr",
         "type": "address"
-      },
-      {
-        "indexed": false,
-        "internalType": "bytes",
-        "name": "abiArgs",
-        "type": "bytes"
       }
     ],
-    "name": "TokenCloneDeployed",
+    "name": "TemplateDeleted",
     "type": "event"
   },
   {
@@ -147,13 +117,7 @@
       {
         "indexed": true,
         "internalType": "address",
-        "name": "sender",
-        "type": "address"
-      },
-      {
-        "indexed": false,
-        "internalType": "address",
-        "name": "governance",
+        "name": "receiver",
         "type": "address"
       },
       {
@@ -161,23 +125,17 @@
         "internalType": "uint256",
         "name": "amount",
         "type": "uint256"
-      },
-      {
-        "indexed": false,
-        "internalType": "uint256",
-        "name": "treasuryAfter",
-        "type": "uint256"
       }
     ],
-    "name": "Withdrawn",
+    "name": "WithdrawnEther",
     "type": "event"
   },
   {
     "inputs": [
       {
-        "internalType": "string",
+        "internalType": "bytes32",
         "name": "templateName",
-        "type": "string"
+        "type": "bytes32"
       },
       {
         "internalType": "address",
@@ -193,9 +151,9 @@
   {
     "inputs": [
       {
-        "internalType": "string",
+        "internalType": "bytes32",
         "name": "templateName",
-        "type": "string"
+        "type": "bytes32"
       },
       {
         "internalType": "address",
@@ -203,41 +161,32 @@
         "type": "address"
       },
       {
+        "internalType": "address",
+        "name": "owner",
+        "type": "address"
+      },
+      {
         "internalType": "uint256",
-        "name": "sellingAmount",
+        "name": "distributeAmount",
         "type": "uint256"
       },
       {
-        "internalType": "bytes",
-        "name": "abiArgs",
-        "type": "bytes"
-      }
-    ],
-    "name": "deploy",
-    "outputs": [
-      {
-        "internalType": "address",
-        "name": "deployedAddr",
-        "type": "address"
-      }
-    ],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "string",
-        "name": "templateName",
-        "type": "string"
+        "internalType": "uint256",
+        "name": "startingAt",
+        "type": "uint256"
       },
       {
-        "internalType": "bytes",
-        "name": "abiArgs",
-        "type": "bytes"
+        "internalType": "uint256",
+        "name": "eventDuration",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "minimalProvideAmount",
+        "type": "uint256"
       }
     ],
-    "name": "deployTokenClone",
+    "name": "deploySaleClone",
     "outputs": [
       {
         "internalType": "address",
@@ -250,7 +199,7 @@
   },
   {
     "inputs": [],
-    "name": "governance",
+    "name": "owner",
     "outputs": [
       {
         "internalType": "address",
@@ -264,12 +213,19 @@
   {
     "inputs": [
       {
-        "internalType": "address",
-        "name": "newGoverner",
-        "type": "address"
+        "internalType": "bytes32",
+        "name": "templateName",
+        "type": "bytes32"
       }
     ],
-    "name": "setGovernance",
+    "name": "removeTemplate",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "renounceOwnership",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"
@@ -277,9 +233,9 @@
   {
     "inputs": [
       {
-        "internalType": "string",
+        "internalType": "bytes32",
         "name": "",
-        "type": "string"
+        "type": "bytes32"
       }
     ],
     "name": "templates",
@@ -297,16 +253,24 @@
     "inputs": [
       {
         "internalType": "address",
-        "name": "to",
+        "name": "newOwner",
         "type": "address"
-      },
-      {
-        "internalType": "uint256",
-        "name": "amount",
-        "type": "uint256"
       }
     ],
-    "name": "withdraw",
+    "name": "transferOwnership",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "to",
+        "type": "address"
+      }
+    ],
+    "name": "withdrawEther",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"
