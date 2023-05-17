@@ -11,7 +11,8 @@ import {
     NumberInputField,
     NumberInputStepper,
     NumberIncrementStepper,
-    NumberDecrementStepper
+    NumberDecrementStepper,
+    Link
 } from '@chakra-ui/react';
 import { QuestionIcon } from '@chakra-ui/icons';
 import { CustomProvider, DateRangePicker } from 'rsuite';
@@ -33,6 +34,10 @@ export default function BulksaleV1Form({formikProps, address, approvals, writeFn
                     }} value={formikProps.values.token ? formikProps.values.token : ''} placeholder='e.g.) 0x0123456789012345678901234567890123456789' />
                     <FormErrorMessage>{formikProps.errors.token}</FormErrorMessage>
                 </FormControl>
+
+                <chakra.p color={'gray.400'} fontSize={'sm'} mt={1}>
+                    Don't have token yet? <Link color={'gray.300'} href="https://www.smartcontracts.tools/token-generator/ethereum/" target="_blank">ETHEREUM Token Generator</Link>
+                </chakra.p>
     
                 <FormControl mt={4} isInvalid={!!formikProps.errors.startingAt && !!formikProps.touched.startingAt}>
                     <FormLabel alignItems={'baseline'}>Start date - End date

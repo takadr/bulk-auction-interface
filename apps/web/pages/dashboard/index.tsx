@@ -17,9 +17,7 @@ export default function DashboardPage() {
     const { address, isConnected, connector } = useAccount();
     const { currentUser, mutate } = useContext(CurrentUserContext);
     const saleFormModalDisclosure = useDisclosure();
-    // TODO Get currentUser's sales and tokens
     const { data, loading, error: test, refetch } = useQuery(LIST_MY_SALE_QUERY, {variables: { id: address} });
-    // const { auctions, isLast, error, loadMoreAuctions } = useSWRAuctions({})
     const [now, setNow] = useState<number>(Math.floor(Date.now() / 1000));
 
     useInterval(() => {
@@ -62,7 +60,7 @@ export default function DashboardPage() {
                                         return <SaleCard sale={sale} now={now} editable />
                                     })
                                 }
-                                </Stack>
+                            </Stack>
                         </TabPanel>
                     </TabPanels>
                 </Tabs>

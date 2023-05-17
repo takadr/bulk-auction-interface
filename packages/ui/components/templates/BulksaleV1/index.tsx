@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback } from 'react';
-import { Container, Heading, Image, Flex, Box, Button, FormControl, FormLabel, FormErrorMessage, NumberInput, NumberInputField, NumberInputStepper, NumberIncrementStepper, NumberDecrementStepper, Tooltip, Stack, Divider, chakra, useInterval, useToast, Link, HStack} from '@chakra-ui/react';
-import { QuestionIcon } from '@chakra-ui/icons';
+import { Container, Heading, Image, Flex, Box, Button, FormControl, FormLabel, FormErrorMessage, NumberInput, NumberInputField, NumberInputStepper, NumberIncrementStepper, NumberDecrementStepper, Tooltip, Stack, Divider, chakra, useInterval, useToast, Link, HStack, Tag} from '@chakra-ui/react';
+import { ExternalLinkIcon, QuestionIcon } from '@chakra-ui/icons';
 import { useFormik } from 'formik';
 import { useProvider, useNetwork, useAccount, useContractRead, usePrepareContractWrite, useContractWrite, useWaitForTransaction, useContractEvent, usePrepareSendTransaction, useSendTransaction, useToken, erc20ABI } from 'wagmi';
 import { format, formatDistance, formatRelative, subDays } from 'date-fns';
@@ -26,7 +26,6 @@ interface BulksaleV1Params {
 
 export default function BulksaleV1({sale, metaData, address, contractAddress}: BulksaleV1Params) {
     const toast = useToast({position: 'top-right', isClosable: true,});
-    const now = Date.now();
     const { provided } = useBulksaleV1(contractAddress, address);
     
     const providedTokenSymbol = 'ETH';
@@ -38,11 +37,7 @@ export default function BulksaleV1({sale, metaData, address, contractAddress}: B
 
     const [fiatSymbol, setFiatSymbol] = useState<string>('usd');
 
-    // Only for test
-    const [, updateState] = useState<any>();
-    const forceUpdate = useCallback(() => updateState({}), []);
     const {data: rateDate, mutate: updateRate, error: rateError} = useRate('ethereum', 'usd');
-    // console.log('ethUsdRate: ', rateDate && rateDate.usd ? rateDate.usd : "?")
 
     useInterval(() => {
         setIsClaimed(false);
@@ -111,7 +106,7 @@ export default function BulksaleV1({sale, metaData, address, contractAddress}: B
                 duration: 5000,
             })
             // TODO Update contract statuses
-            setTimeout(forceUpdate, 1000);
+            // setTimeout(forceUpdate, 1000);
         },
     });
 
@@ -137,8 +132,7 @@ export default function BulksaleV1({sale, metaData, address, contractAddress}: B
                         <Heading textAlign={'center'}>{metaData.title}</Heading>
                         <chakra.p mt={2} fontSize={'lg'}>{metaData.description}</chakra.p>
                         <HStack mt={4} spacing={4}>
-                            <Link fontSize={'sm'} href={metaData.projectURL} target={'_blank'}>Project URL</Link>
-                            <Link fontSize={'sm'} href={metaData.projectURL} target={'_blank'}>Project URL</Link>
+                            <Tag><Link fontSize={'sm'} href={metaData.projectURL} target={'_blank'}>Project URL <ExternalLinkIcon /></Link></Tag>
                         </HStack>
                     </Box>
                 </Flex>

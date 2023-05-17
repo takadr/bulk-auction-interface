@@ -17,9 +17,9 @@ export default function SaleCard({ sale, editable=false, now }: { sale: Sale, ed
     const { data, mutate, error } = useSWRAuction(sale.id as string);
     const [countdown, setCountdown] = useState({
         days: '0',
-        hours: '0',
-        mins: '0',
-        secs: '0',
+        hours: '00',
+        mins: '00',
+        secs: '00',
     });
     useEffect(() => {
         let currentStage = stage

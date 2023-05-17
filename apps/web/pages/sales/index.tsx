@@ -1,16 +1,22 @@
-import { useContext } from 'react';
+import { useContext, useState } from 'react';
 import Router, { useRouter } from 'next/router';
 import { useAccount, useNetwork } from 'wagmi';
-import { chakra, Container, Link, Heading, Card, CardBody, CardFooter, Progress, Text, Image, Stack, Flex, Tag } from '@chakra-ui/react';
-import { useSWRAuctions } from 'ui/hooks/useAuctions';
-import { MetaData } from 'ui/types/BulksaleV1';
+import { chakra, Spinner, Container, Link, Heading, Card, CardBody, CardFooter, Progress, Text, Image, Stack, Flex, Tag, useInterval } from '@chakra-ui/react';
+import { useQuery } from "@apollo/client";
+import { MetaData, Sale } from 'ui/types/BulksaleV1';
 import { CurrentUserContext } from 'ui/components/providers/CurrentUserProvider';
 import Layout from 'ui/components/layouts/layout';
 import SaleCard from 'ui/components/SaleCard';
+import { LIST_SALE_QUERY, GET_SALE_QUERY }  from 'ui/apollo/query';
 
 export default function SalePage() {
     const { currentUser, mutate } = useContext(CurrentUserContext);
-    const { auctions, isLast, error, loadMoreAuctions } = useSWRAuctions({});
+    const { data, loading, error } = useQuery(LIST_SALE_QUERY);
+    const [now, setNow] = useState<number>(Math.floor(Date.now() / 1000));
+
+    useInterval(() => {
+        setNow(Math.floor(Date.now() / 1000))
+    }, 500);
   
     return (
         <Layout>
@@ -18,8 +24,8 @@ export default function SalePage() {
                 <Heading>Active Sales (TODO Filtering)</Heading>
                 <Stack mt={4} spacing={8}>
                 {
-                    auctions.map((auction: MetaData) => {
-                    return <SaleCard auction={auction} />
+                    loading ? <Spinner /> : data.sales.map((sale: Sale) => {
+                        return <SaleCard sale={sale} now={now} />
                     })
                 }
                 </Stack>

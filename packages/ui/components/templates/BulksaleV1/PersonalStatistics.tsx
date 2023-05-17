@@ -64,7 +64,7 @@ export default function PersonalStatistics({
           {!isEnding ? (
             <div>
               <>
-                  Total donation:
+                  Your total contribution:
                   <span style={{ fontWeight: 'bold', marginLeft: '10px' }}>
                       <>
                       {active ? sumOfProvidedAmount : '????'}{' '}
@@ -73,7 +73,7 @@ export default function PersonalStatistics({
                   </span>{' '}
                   {active && (
                   <>
-                      (New donation: 
+                      (New contribution: 
                       <span style={{ fontWeight: 'bold', marginLeft: '10px' }}>
                           <>
                           {inputtingValueInFormat}{' '}

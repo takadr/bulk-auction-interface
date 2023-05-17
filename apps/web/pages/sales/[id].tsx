@@ -26,7 +26,6 @@ export default function SalePage() {
     return (
         <Layout>
             <BulksaleV1
-                // title={`Contract: ${id}`}
                 sale={saleData.sale}
                 metaData={metaData.metaData}
                 contractAddress={id as `0x${string}`}
