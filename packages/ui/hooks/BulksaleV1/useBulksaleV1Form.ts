@@ -4,7 +4,7 @@ import { utils } from 'ethers';
 import { useFormik, FormikProps } from 'formik';
 import useApprove from '../useApprove';
 import useTokenBasicInfo from '../useTokenBasicInfo';
-import { Sale } from '../../types/BulksaleV1';
+import { SaleForm } from '../../types/BulksaleV1';
 import Big, { multiply } from '../../utils/bignumber';
 import FactoryABI from '../../constants/abis/Factory.json';
 import 'rsuite/dist/rsuite-no-reset.min.css';
@@ -28,7 +28,7 @@ export default function useBulksaleV1Form({
     onWaitForTransactionError?: (e: any) => void,
 }): 
 {
-    formikProps: FormikProps<Sale>,
+    formikProps: FormikProps<SaleForm>,
     approvals: ReturnType<typeof useApprove>,
     prepareFn: any,
     writeFn: ReturnType<typeof useContractWrite>,
@@ -39,19 +39,16 @@ export default function useBulksaleV1Form({
         decimals: number | undefined,
     },
 } {
-    const emptySale: Sale = {
+    const emptySale: SaleForm = {
         token: null,
         startingAt: now + (60 * 60 * 24 * 7 * 1000),
         eventDuration: 60 * 60 * 24 * 7,
-        lockDuration: 60 * 60 * 24 * 7,
-        expirationDuration: 60 * 60 * 24 * 30,
         distributeAmount: 1,
         minimalProvideAmount: 0.01,
-        owner: address, //TODO
-        feeRatePerMil: 1
+        owner: address,
     }
 
-    const validate = (values: Sale) => {
+    const validate = (values: SaleForm) => {
         const errors: any = {};
         // TODO
         // if (!values.name) {
@@ -75,7 +72,7 @@ export default function useBulksaleV1Form({
         return errors;
     };
 
-    const handleSubmit = async (token: Sale) => {
+    const handleSubmit = async (sale: SaleForm) => {
         if(!writeFn || !writeFn.writeAsync) {
             // TODO Error
             return;
@@ -89,7 +86,7 @@ export default function useBulksaleV1Form({
         }
     }
 
-    const formikProps = useFormik<Sale>({
+    const formikProps = useFormik<SaleForm>({
         enableReinitialize: true,
         initialValues: Object.assign({}, emptySale),
         onSubmit: handleSubmit,
@@ -111,7 +108,7 @@ export default function useBulksaleV1Form({
         abi: FactoryABI,
         functionName: 'deploySaleClone',
         args: [
-            "0x53616c6554656d706c6174655631000000000000000000000000000000000000",
+            "0x53616c6554656d706c6174655631000000000000000000000000000000000000", // ethers.utils.formatBytes32String
             debouncedSale.token,
             debouncedSale.owner,
             multiply(debouncedSale.distributeAmount, tokenData.decimals ? Big(10).pow(tokenData.decimals) : 0).toString(),

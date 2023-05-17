@@ -17,7 +17,6 @@ const useSWRAuction = (id: string): SWRResponse<{metaData: MetaData, constants: 
             }
         }
     })
-    console.log(LOCK_DURATION['0x53616c6554656d706c6174655631000000000000000000000000000000000000'])
     return useSWR<{metaData: MetaData, constants: Constants}|undefined, Error>(`/api/auctions/${id}`, fetcher);
 }
 

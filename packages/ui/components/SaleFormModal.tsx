@@ -20,7 +20,7 @@ import useBulksaleV1Form from '../hooks/BulksaleV1/useBulksaleV1Form';
 import MetaDataForm from './templates/BulksaleV1/MetaDataForm';
 import useBulksaleV1MetaForm from '../hooks/BulksaleV1/useBulksaleV1MetaForm';
 
-export default function SaleFormModal({isOpen, onClose}: {isOpen: boolean, onClose: () => void}) {
+export default function SaleFormModal({isOpen, onClose, onSubmitSuccess}: {isOpen: boolean, onClose: () => void, onSubmitSuccess?: () => void}) {
     const { address } = useAccount();
     const toast = useToast({position: 'top-right', isClosable: true,});
     const [saleTxs, setSaleTxs] = useAtom(saleTxAtom);
@@ -36,6 +36,7 @@ export default function SaleFormModal({isOpen, onClose}: {isOpen: boolean, onClo
         onSubmitSuccess: (result) => {
             setWaitingTransaction(result.hash);
             setStep(2);
+            onSubmitSuccess && onSubmitSuccess();
             toast({
                 description: `Transaction sent! ${result.hash}`,
                 status: 'success',
@@ -76,6 +77,7 @@ export default function SaleFormModal({isOpen, onClose}: {isOpen: boolean, onClo
         contractId: contractAddress,
         onSubmitSuccess: (response) => {
             handleClose();
+            onSubmitSuccess && onSubmitSuccess();
             toast({
                 description: `Auction information successfully saved!`,
                 status: 'success',

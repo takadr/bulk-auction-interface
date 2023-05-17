@@ -17,9 +17,9 @@ import { QuestionIcon } from '@chakra-ui/icons';
 import { CustomProvider, DateRangePicker } from 'rsuite';
 import { FormikProps } from 'formik';
 import { differenceInSeconds, addSeconds } from 'date-fns';
-import { Sale } from '../../../types/BulksaleV1';
+import { SaleForm } from '../../../types/BulksaleV1';
 
-export default function BulksaleV1Form({formikProps, address, approvals, writeFn, tokenData}: {formikProps: FormikProps<Sale>, address: `0x${string}`, approvals: any, writeFn: any, tokenData: any}) {
+export default function BulksaleV1Form({formikProps, address, approvals, writeFn, tokenData}: {formikProps: FormikProps<SaleForm>, address: `0x${string}`, approvals: any, writeFn: any, tokenData: any}) {
     return (
         <div>
             <form onSubmit={formikProps.handleSubmit}>

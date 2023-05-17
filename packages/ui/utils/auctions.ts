@@ -65,7 +65,7 @@ export async function batchFetchAuction(auctionIds: string[]): Promise<MetaData[
 
 export async function addAuction(auction: MetaData): Promise<MetaData | undefined> {
   const item = {
-    AuctionId: {S: auction.id as string},
+    AuctionId: {S: (auction.id as string).toLowerCase()},
     Title: {S: auction.title},
     Description: {S: auction.description},
     Terms: {S: auction.terms},
@@ -90,7 +90,7 @@ export async function addAuction(auction: MetaData): Promise<MetaData | undefine
 export async function updateAuction(auction: MetaData): Promise<MetaData | undefined> {
   const command = new UpdateItemCommand({
     TableName: process.env.AWS_DYNAMO_TABLE_NAME,
-    Key: { AuctionId : { S: auction.id as string } },
+    Key: { AuctionId : { S: (auction.id as string).toLowerCase() } },
     UpdateExpression: 'set Title = :Title, Description=:Description, Terms = :Terms, ProjectURL = :ProjectURL, LogoURL = :LogoURL, InterimGoalAmount = :InterimGoalAmount, FinalGoalAmount = :FinalGoalAmount, TokenName = :TokenName, TokenSymbol = :TokenSymbol, TokenDecimals = :TokenDecimals, TemplateName = :TemplateName',
     ExpressionAttributeValues: {
       ':Title': {S: auction.title as string},

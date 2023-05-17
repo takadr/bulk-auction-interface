@@ -134,7 +134,7 @@ export default function SaleCard({ sale, editable=false, now }: { sale: Sale, ed
                 </CardFooter>
             </Stack>
             {
-                editable && isOpen && <SaleMetaFormModal isOpen={isOpen} onClose={onClose} existingContractAddress={sale.id as `0x${string}`} saleMetaData={data?.metaData} mutate={mutate} />
+                editable && isOpen && <SaleMetaFormModal isOpen={isOpen} onClose={onClose} existingContractAddress={sale.id as `0x${string}`} saleMetaData={data?.metaData} onSubmitSuccess={mutate} />
             }
         </Card>
 }

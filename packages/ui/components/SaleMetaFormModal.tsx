@@ -14,7 +14,7 @@ import MetaDataForm from './templates/BulksaleV1/MetaDataForm';
 import useBulksaleV1MetaForm from '../hooks/BulksaleV1/useBulksaleV1MetaForm';
 import { MetaData } from '../types/BulksaleV1';
 
-export default function SaleMetaFormModal({isOpen, onClose, existingContractAddress, saleMetaData, mutate}: {isOpen: boolean, onClose: () => void, onSuccess?: () => void, existingContractAddress?: `0x${string}`, saleMetaData?: MetaData, mutate?: () => void}) {
+export default function SaleMetaFormModal({isOpen, onClose, existingContractAddress, saleMetaData, onSubmitSuccess}: {isOpen: boolean, onClose: () => void, onSuccess?: () => void, existingContractAddress?: `0x${string}`, saleMetaData?: MetaData, onSubmitSuccess?: () => void}) {
     const { address } = useAccount();
     const toast = useToast({position: 'top-right', isClosable: true,});
     const { colorMode, setColorMode, toggleColorMode } = useColorMode();
@@ -29,7 +29,7 @@ export default function SaleMetaFormModal({isOpen, onClose, existingContractAddr
         contractId: contractAddress,
         saleMetaData,
         onSubmitSuccess: (response) => {
-            mutate && mutate();
+            onSubmitSuccess && onSubmitSuccess();
             handleClose();
             toast({
                 description: `Auction information successfully saved!`,

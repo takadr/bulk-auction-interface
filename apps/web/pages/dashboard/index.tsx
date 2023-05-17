@@ -18,8 +18,8 @@ export default function DashboardPage() {
     const { currentUser, mutate } = useContext(CurrentUserContext);
     const saleFormModalDisclosure = useDisclosure();
     // TODO Get currentUser's sales and tokens
-    const { data, loading, error: test } = useQuery(LIST_MY_SALE_QUERY, {variables: { id: address} });
-    const { auctions, isLast, error, loadMoreAuctions } = useSWRAuctions({})
+    const { data, loading, error: test, refetch } = useQuery(LIST_MY_SALE_QUERY, {variables: { id: address} });
+    // const { auctions, isLast, error, loadMoreAuctions } = useSWRAuctions({})
     const [now, setNow] = useState<number>(Math.floor(Date.now() / 1000));
 
     useInterval(() => {
@@ -55,10 +55,10 @@ export default function DashboardPage() {
                                 {/* <Heading size={'md'}>Your sales(TODO)</Heading> */}
                                 <Button onClick={saleFormModalDisclosure.onOpen}><AddIcon fontSize={'sm'} mr={2} />Create new sale</Button>
                             </chakra.div>
-                            <SaleFormModal isOpen={saleFormModalDisclosure.isOpen} onClose={saleFormModalDisclosure.onClose} />
+                            <SaleFormModal isOpen={saleFormModalDisclosure.isOpen} onClose={saleFormModalDisclosure.onClose} onSubmitSuccess={refetch} />
                             <Stack mt={4} spacing={8}>
                                 {
-                                    !data ? <Spinner /> : data.sales.map((sale: Sale) => {
+                                    loading ? <Spinner /> : data.sales.map((sale: Sale) => {
                                         return <SaleCard sale={sale} now={now} editable />
                                     })
                                 }

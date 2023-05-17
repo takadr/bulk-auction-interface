@@ -15,6 +15,15 @@ export type Sale = {
     totalProvided: number;
 }
 
+export type SaleForm = {
+    token: `0x${string}` | null;
+    owner: `0x${string}`;
+    distributeAmount: number;
+    startingAt: number; //Timestamp
+    eventDuration: number; //Timestamp
+    minimalProvideAmount: number;
+}
+
 export type MetaData = {
     id?: string;
     title: string;
