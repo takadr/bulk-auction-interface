@@ -39,3 +39,30 @@ export const getEtherscanLink = (
 ): string => {
     return `https://${chain === 'mainnet' ? '' : `${chain}.`}etherscan.io/${type}/${hash}`;
 }
+
+type Countdown = { days: string; hours: string; mins: string; secs: string };
+
+export const getCountdown = (duration: number): Countdown => {
+    let restSec = duration;
+    const countdown: Countdown = {
+        days: '00',
+        hours: '00',
+        mins: '00',
+        secs: '00',
+    };
+    if (restSec >= 86400) {
+      countdown.days = Math.floor(restSec / 86400).toString();
+      restSec = restSec % 86400;
+    }
+    if (restSec >= 3600) {
+      countdown.hours = Math.floor(restSec / 3600).toString().padStart(2, '0');
+      restSec = restSec % 3600;
+    }
+    if (restSec >= 60) {
+      countdown.mins = Math.floor(restSec / 60).toString().padStart(2, '0');
+      restSec = restSec % 60;
+    }
+    countdown.secs = restSec > 0 ? restSec.toString().padStart(2, '0') : '00';
+  
+    return countdown;
+  }
