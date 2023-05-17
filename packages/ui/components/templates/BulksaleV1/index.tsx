@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
-import { Container, Heading, Flex, Box, Button, FormControl, FormLabel, FormErrorMessage, NumberInput, NumberInputField, NumberInputStepper, NumberIncrementStepper, NumberDecrementStepper, Tooltip, Stack, Divider, chakra, useInterval, useToast} from '@chakra-ui/react';
+import { Container, Heading, Image, Flex, Box, Button, FormControl, FormLabel, FormErrorMessage, NumberInput, NumberInputField, NumberInputStepper, NumberIncrementStepper, NumberDecrementStepper, Tooltip, Stack, Divider, chakra, useInterval, useToast, Link, HStack} from '@chakra-ui/react';
 import { QuestionIcon } from '@chakra-ui/icons';
 import { useFormik } from 'formik';
 import { useProvider, useNetwork, useAccount, useContractRead, usePrepareContractWrite, useContractWrite, useWaitForTransaction, useContractEvent, usePrepareSendTransaction, useSendTransaction, useToken, erc20ABI } from 'wagmi';
@@ -15,55 +15,27 @@ import useWithdrawERC20Onsale from '../../../hooks/useWithdrawERC20Onsale';
 import useWithdrawProvidedETH from '../../../hooks/useWithdrawProvidedETH';
 import useWithdrawUnclaimedERC20OnSale from '../../../hooks/useWithdrawUnclaimedERC20OnSale';
 import useRate from '../../../hooks/useRate';
-import useSWRAuction from '../../../hooks/useAuction';
+import { Sale, MetaData } from '../../../types/BulksaleV1';
 
 interface BulksaleV1Params {
-    // title?: string;
+    sale: Sale,
+    metaData: MetaData,
     address: `0x${string}`
     contractAddress: `0x${string}`;
-    // unixStartDate: number;
-    // unixEndDate: number;
-    // totalDistributeAmount: bigint;
-    // minimalProvideAmount: bigint;
-    // lockDuration: number;
-    // expirationDuration: number;
-    // ownerAddress: `0x${string}`;
-    // tokenAddress: `0x${string}`;
 }
 
-export default function BulksaleV1(props: BulksaleV1Params) {
-    const { data: metaData, mutate, error } = useSWRAuction(props.contractAddress as string);
+export default function BulksaleV1({sale, metaData, address, contractAddress}: BulksaleV1Params) {
     const toast = useToast({position: 'top-right', isClosable: true,});
     const now = Date.now();
-    const {
-        startingAt,
-        closingAt,
-        distributeAmount,
-        minimalProvideAmount,
-        totalProvided,
-        provided,
-        token: distributedToken,
-        owner
-    } = useBulksaleV1(props.contractAddress, props.address);
-    // Static status
-    // const [startingAt, setStartingAt] = useState<number>(0);
-    // const [closingAt, setClosingAt] = useState<number>(0);
-    // const [totalDistributeAmount, setTotalDistributeAmount] = useState<bigint>(BigInt(0));
-    // const [minimalProvideAmount, setMinimalProvideAmount] = useState<bigint>(BigInt(0));
-    // const [distributedTokenSymbol, setDistributedTokenSymbol] = useState<string>('');
-    // const [distributedTokenDecimal, setDistributedTokenDecimal] = useState<number>(0);
-    const [providedTokenSymbol, setProvidedTokenSymbol] = useState<string>('');
-    const [providedTokenDecimal, setProvidedTokenDecimal] = useState<number>(0);
-    // Dynamic status
-    // const [totalProvided, setTotalProvided] = useState<bigint>(BigInt(0));
-    // const [provided, setProvided] = useState<bigint>(BigInt(0));
+    const { provided } = useBulksaleV1(contractAddress, address);
+    
+    const providedTokenSymbol = 'ETH';
+    const providedTokenDecimal = 18;
+
     const [isClaimed, setIsClaimed] = useState<boolean>(false);
-    const [started, setStarted] = useState<boolean>(startingAt <= now);
-    const [ended, setEnded] = useState<boolean>(closingAt < now);
-    // Meta data
-    const [interimGoalAmount, setInterimGoalAmount] = useState<bigint>(BigInt(0));
-    const [finalGoalAmount, setFinalGoalAmount] = useState<bigint>(BigInt(0));
-    // Local status
+    const [started, setStarted] = useState<boolean>(false);
+    const [ended, setEnded] = useState<boolean>(false);
+
     const [fiatSymbol, setFiatSymbol] = useState<string>('usd');
 
     // Only for test
@@ -71,28 +43,11 @@ export default function BulksaleV1(props: BulksaleV1Params) {
     const forceUpdate = useCallback(() => updateState({}), []);
     const {data: rateDate, mutate: updateRate, error: rateError} = useRate('ethereum', 'usd');
     // console.log('ethUsdRate: ', rateDate && rateDate.usd ? rateDate.usd : "?")
-    
-    // TODO Subgraphからまとめて読み込む
 
-    useEffect(() => {
-        // TODO Retrieve contract data from Subgraph
-        // setStartingAt(new Date('2023-05-02T21:00:00Z').getTime());
-        // setClosingAt(new Date('2023-05-16T21:00:00Z').getTime());
-        // setTotalDistributeAmount(BigInt('21000000000000'));
-        // setMinimalProvideAmount(BigInt('10000000000000000'))
-        // setDistributedTokenSymbol('TST');
-        // setDistributedTokenDecimal(8);
-        setProvidedTokenSymbol('ETH');
-        setProvidedTokenDecimal(18);
-
-        // TODO Retrieve metadata
-        setInterimGoalAmount(BigInt('300000000000000000000'));
-        setFinalGoalAmount(BigInt('500000000000000000000'));
-    }, []);
     useInterval(() => {
         setIsClaimed(false);
-        setStarted(startingAt <= new Date().getTime());
-        setEnded(closingAt < new Date().getTime());
+        setStarted(sale.startingAt * 1000 <= new Date().getTime());
+        setEnded(sale.closingAt * 1000 < new Date().getTime());
     }, 1000);
     useInterval(() => {
         updateRate();
@@ -117,7 +72,7 @@ export default function BulksaleV1(props: BulksaleV1Params) {
 
     const { config, isError } = usePrepareSendTransaction({
         request: {
-            to: props.contractAddress,
+            to: contractAddress,
             value: formikProps.values.amount ? utils.parseEther(formikProps.values.amount.toString()) : undefined,
         },
     });
@@ -160,34 +115,58 @@ export default function BulksaleV1(props: BulksaleV1Params) {
         },
     });
 
-    const {prepareFn: claimPrepareFn, writeFn: claimWriteFn, waitFn: claimWaitFn} = useClaim(props.contractAddress, props.address);
-    const {prepareFn: withdrawERC20PrepareFn, writeFn: withdrawERC20WriteFn, waitFn: withdrawERC20WaitFn} = useWithdrawERC20Onsale(props.contractAddress);
-    const {prepareFn: withdrawETHPrepareFn, writeFn: withdrawETHWriteFn, waitFn: withdrawETHWaitFn} = useWithdrawProvidedETH(props.contractAddress);
-    const {prepareFn: withdrawUnclaimedERC20PrepareFn, writeFn: withdrawUnclaimedERC20WriteFn, waitFn: withdrawUnclaimedERC20WaitFn} = useWithdrawUnclaimedERC20OnSale(props.contractAddress);
+    const {prepareFn: claimPrepareFn, writeFn: claimWriteFn, waitFn: claimWaitFn} = useClaim(contractAddress, address);
+    const {prepareFn: withdrawERC20PrepareFn, writeFn: withdrawERC20WriteFn, waitFn: withdrawERC20WaitFn} = useWithdrawERC20Onsale(contractAddress);
+    const {prepareFn: withdrawETHPrepareFn, writeFn: withdrawETHWriteFn, waitFn: withdrawETHWaitFn} = useWithdrawProvidedETH(contractAddress);
+    const {prepareFn: withdrawUnclaimedERC20PrepareFn, writeFn: withdrawUnclaimedERC20WriteFn, waitFn: withdrawUnclaimedERC20WaitFn} = useWithdrawUnclaimedERC20OnSale(contractAddress);
 
     return (
         <>
-            <Container maxW={'container.md'} py={8}>
-                <Heading textAlign={'center'} my={8}>Test Bulksale</Heading>
-                <Flex flexDirection={{base: 'column', md: 'row'}}>
+            <Container maxW={'container.md'} py={16}>
+                <Flex>
+                    <Image
+                    borderRadius={'100%'}
+                    objectFit='cover'
+                    w={'150px'}
+                    h={'150px'}
+                    // maxW={{ base: '100%', sm: '200px' }}
+                    src={metaData.logoURL ? metaData.logoURL : 'https://dummyimage.com/200x200/bbb/fff.png&text=No+Image'}
+                    alt={metaData.title}
+                    />
+                    <Box px={8}>
+                        <Heading textAlign={'center'}>{metaData.title}</Heading>
+                        <chakra.p mt={2} fontSize={'lg'}>{metaData.description}</chakra.p>
+                        <HStack mt={4} spacing={4}>
+                            <Link fontSize={'sm'} href={metaData.projectURL} target={'_blank'}>Project URL</Link>
+                            <Link fontSize={'sm'} href={metaData.projectURL} target={'_blank'}>Project URL</Link>
+                        </HStack>
+                    </Box>
+                </Flex>
+                <Flex mt={8} flexDirection={{base: 'column', md: 'row'}}>
                     <StatisticsInCircle
-                        totalProvided={Big(totalProvided.toString())}
-                        interimGoalAmount={Big(interimGoalAmount.toString())}
-                        finalGoalAmount={Big(finalGoalAmount.toString())}
+                        totalProvided={Big(sale.totalProvided.toString())}
+                        interimGoalAmount={Big((metaData.interimGoalAmount * 10**18).toString())}
+                        finalGoalAmount={Big((metaData.finalGoalAmount * 10**18).toString())}
                         providedTokenSymbol={providedTokenSymbol}
                         providedTokenDecimal={providedTokenDecimal}
                         fiatSymbol={fiatSymbol}
                         fiatRate={rateDate && rateDate.usd ? rateDate.usd : 0}
-                        contractAddress={props.contractAddress}
+                        contractAddress={contractAddress}
                         started={started}
                         w={{base: 'full', md: '50%'}}
                      />
                     <CalendarInCircle
-                        unixStartDate={startingAt / 1000}
-                        unixEndDate={closingAt / 1000}
+                        unixStartDate={sale.startingAt}
+                        unixEndDate={sale.closingAt}
                         w={{base: 'full', md: '50%'}}
                     />
                 </Flex>
+
+                <Box mt={4} py={16}>
+                    <Heading size={'lg'} textAlign={'center'}>Disclaimers, Terms and Conditions</Heading>
+                    {metaData.terms}
+                </Box>
+
                 { started && !ended && <Box>
                     <form onSubmit={formikProps.handleSubmit}>
                         <FormControl flex={1} mt={4} isInvalid={!!formikProps.errors.amount && !!formikProps.touched.amount}>
@@ -235,10 +214,10 @@ export default function BulksaleV1(props: BulksaleV1Params) {
                     <PersonalStatistics
                         inputValue={formikProps.values.amount}
                         myTotalProvided={Big(provided.toString())}
-                        totalProvided={Big(totalProvided.toString())}
-                        distributeAmount={Big(distributeAmount.toString())}
-                        distributedTokenSymbol={distributedToken ? distributedToken.symbol : ''}
-                        distributedTokenDecimal={distributedToken ? distributedToken.decimals : 0}
+                        totalProvided={Big(sale.totalProvided.toString())}
+                        distributeAmount={Big(sale.distributeAmount.toString())}
+                        distributedTokenSymbol={sale.tokenSymbol ? sale.tokenSymbol : ''}
+                        distributedTokenDecimal={sale.tokenDecimals ? sale.tokenDecimals : 0}
                         providedTokenSymbol={providedTokenSymbol}
                         providedTokenDecimal={providedTokenDecimal}
                         isEnding={ended}
@@ -247,7 +226,7 @@ export default function BulksaleV1(props: BulksaleV1Params) {
                 </Box> }
 
                 {
-                    owner === props.address && <Stack spacing={4} py={8}>
+                    sale.owner === address && <Stack spacing={4} py={8}>
                         <Divider />
                         <Heading textAlign={'center'}>Owner Menu</Heading>
                         <chakra.div textAlign={'center'}>

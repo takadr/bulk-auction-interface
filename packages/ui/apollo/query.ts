@@ -40,7 +40,7 @@ export const LIST_MY_SALE_QUERY = gql`
 
 export const GET_SALE_QUERY = gql`
   query GetSale($id: ID!) {
-    sales(id: $id) {
+    sale(id: $id) {
       id
       templateName
       owner
