@@ -13,7 +13,7 @@ import { useSWRSales } from 'ui/hooks/useSales';
 export default function SalePage() {
     const { currentUser, mutate } = useContext(CurrentUserContext);
     // const { data, loading, error, } = useQuery(LIST_SALE_QUERY, { variables: {skip: 0, first: 1}});
-    const { sales, isLast, isLoading, error, loadMoreSales } = useSWRSales({});
+    const { sales, isLast, isLoading, isValidating, error, loadMoreSales } = useSWRSales({});
     const [now, setNow] = useState<number>(Math.floor(Date.now() / 1000));
 
     useInterval(() => {
@@ -31,7 +31,7 @@ export default function SalePage() {
                     })
                 }
                 {
-                    !isLast && <Button onClick={loadMoreSales}>Load more sale</Button>
+                    !isLast && <Button isLoading={isLoading || isValidating} onClick={loadMoreSales}>Load more sale</Button>
                 }
                 </Stack>
             </Container>

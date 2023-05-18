@@ -10,6 +10,7 @@ interface SWRSaleStore {
   isLast: boolean
   error?: Error
   isLoading: boolean,
+  isValidating: boolean,
   fetcher: (args: [number]) => Promise<Sale[]>
   loadMoreSales: () => void
 }
@@ -37,7 +38,7 @@ export const useSWRSales = (config: SWRConfiguration): SWRSaleStore => {
     });
   }
 
-  const { data: saleList, error, size, setSize, isLoading } = useSWRInfinite<Sale[], Error>(
+  const { data: saleList, error, size, setSize, isLoading, isValidating } = useSWRInfinite<Sale[], Error>(
     getKey,
     fetcher, 
     config
@@ -55,6 +56,7 @@ export const useSWRSales = (config: SWRConfiguration): SWRSaleStore => {
     isLast,
     error,
     isLoading,
+    isValidating,
     fetcher,
     loadMoreSales
   }
