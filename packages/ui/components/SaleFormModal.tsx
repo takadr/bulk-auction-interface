@@ -27,7 +27,7 @@ export default function SaleFormModal({isOpen, onClose, onSubmitSuccess}: {isOpe
     const [step, setStep] = useState<1|2>(1);
     const [contractAddress, setContractAddress] = useState<`0x${string}`|undefined>(undefined);
 
-    const { formikProps, approvals, prepareFn, writeFn, waitFn, tokenData } = useBulksaleV1Form({
+    const { formikProps, approvals, prepareFn, writeFn, waitFn, tokenData, balance } = useBulksaleV1Form({
         address: address as `0x${string}`,
         onSubmitSuccess: (result) => {
             setWaitingTransaction(result.hash);
@@ -89,12 +89,12 @@ export default function SaleFormModal({isOpen, onClose, onSubmitSuccess}: {isOpe
         },
     });
 
-    useContractEvent({
+    useContractEvent<[]>({
         address: process.env.NEXT_PUBLIC_FACTORY_ADDRESS as `0x${string}`,
         abi: FactoryABI,
         eventName: 'Deployed',
         listener(templateName, deployedAddr, tokenAddr, owner) {
-            if(owner === address && tokenAddr === formikProps.values.token) {
+            if((owner as string).toLowerCase() === (address as string).toLowerCase() && (tokenAddr as string).toLowerCase() === (formikProps.values.token as string).toLowerCase()) {
                 setContractAddress(deployedAddr as `0x${string}`);
             }
         },
@@ -126,6 +126,7 @@ export default function SaleFormModal({isOpen, onClose, onSubmitSuccess}: {isOpe
                             approvals={approvals}
                             writeFn={writeFn}
                             tokenData={tokenData}
+                            balance={balance}
                         /> :
                         <MetaDataForm formikProps={metaFormikProps} waitFn={waitFn} onSkip={handleClose} />
                     }

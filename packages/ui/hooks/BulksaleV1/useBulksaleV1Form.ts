@@ -1,4 +1,4 @@
-import { usePrepareContractWrite, useContractWrite, useWaitForTransaction } from 'wagmi';
+import { usePrepareContractWrite, useContractWrite, useWaitForTransaction, useBalance, erc20ABI, useContractRead } from 'wagmi';
 import { useDebounce } from 'use-debounce';
 import { useFormik, FormikProps } from 'formik';
 import useApprove from '../useApprove';
@@ -8,6 +8,7 @@ import Big, { multiply } from '../../utils/bignumber';
 import FactoryABI from '../../constants/abis/Factory.json';
 import { SALE_TEMPLATE_V1_NAME } from '../../constants';
 import 'rsuite/dist/rsuite-no-reset.min.css';
+import { BigNumber } from 'ethers';
 
 const now = new Date().getTime();
 export default function useBulksaleV1Form({
@@ -38,6 +39,7 @@ export default function useBulksaleV1Form({
         symbol: string | undefined,
         decimals: number | undefined,
     },
+    balance: BigNumber | undefined
 } {
     const emptySale: SaleForm = {
         token: null,
@@ -90,6 +92,13 @@ export default function useBulksaleV1Form({
 
     const [debouncedSale] = useDebounce(formikProps.values, 500);
     const approvals = useApprove(debouncedSale.token, address as `0x${string}`, process.env.NEXT_PUBLIC_FACTORY_ADDRESS as `0x${string}`);
+    const { data: balance } = useContractRead( {
+        address: debouncedSale.token as `0x${string}`,
+        abi: erc20ABI,
+        functionName: 'balanceOf',
+        args: [address],
+        watch: true
+    })
     const tokenData = useTokenBasicInfo(debouncedSale.token);
     const prepareFn = usePrepareContractWrite({
         address: process.env.NEXT_PUBLIC_FACTORY_ADDRESS as `0x${string}`, //factory
@@ -135,5 +144,6 @@ export default function useBulksaleV1Form({
         writeFn,
         waitFn,
         tokenData,
+        balance
     }
 }

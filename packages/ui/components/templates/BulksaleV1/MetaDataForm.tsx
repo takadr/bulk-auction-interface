@@ -27,7 +27,7 @@ export default function MetaDataForm({formikProps, waitFn, onSkip}: {formikProps
             <HStack spacing={8} alignItems={'start'}>
                 <chakra.div w={'50%'}>
                     <FormControl isInvalid={!!formikProps.errors.id && !!formikProps.touched.id}>
-                        <FormLabel htmlFor='id' alignItems={'baseline'}>Auction Contract Address
+                        <FormLabel htmlFor='id' alignItems={'baseline'}>Sale Contract Address
                             <Tooltip hasArrow label={'TODO explanation'}><QuestionIcon mb={1} ml={1} /></Tooltip>
                         </FormLabel>
                         <HStack>

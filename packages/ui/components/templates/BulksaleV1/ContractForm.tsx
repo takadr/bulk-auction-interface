@@ -19,8 +19,11 @@ import { CustomProvider, DateRangePicker } from 'rsuite';
 import { FormikProps } from 'formik';
 import { differenceInSeconds, addSeconds } from 'date-fns';
 import { SaleForm } from '../../../types/BulksaleV1';
+import { BigNumber } from 'ethers';
+import { tokenAmountFormat } from '../../../utils';
+import Big from '../../../utils/bignumber';
 
-export default function BulksaleV1Form({formikProps, address, approvals, writeFn, tokenData}: {formikProps: FormikProps<SaleForm>, address: `0x${string}`, approvals: any, writeFn: any, tokenData: any}) {
+export default function BulksaleV1Form({formikProps, address, approvals, writeFn, tokenData, balance}: {formikProps: FormikProps<SaleForm>, address: `0x${string}`, approvals: any, writeFn: any, tokenData: any, balance?: BigNumber | undefined}) {
     return (
         <div>
             <form onSubmit={formikProps.handleSubmit}>
@@ -30,7 +33,6 @@ export default function BulksaleV1Form({formikProps, address, approvals, writeFn
                     </FormLabel>
                     <Input id="token" name="token" onBlur={formikProps.handleBlur} onChange={(event: React.ChangeEvent<any>) => {
                         formikProps.handleChange(event);
-                        // TODO Check if token exists and approved
                     }} value={formikProps.values.token ? formikProps.values.token : ''} placeholder='e.g.) 0x0123456789012345678901234567890123456789' />
                     <FormErrorMessage>{formikProps.errors.token}</FormErrorMessage>
                 </FormControl>
@@ -50,16 +52,11 @@ export default function BulksaleV1Form({formikProps, address, approvals, writeFn
                             console.log(value)
                         }}
                         onChange={(value: any) => {
-                            if(value === null) {
-                                formikProps.setFieldValue('startingAt', now + 60 * 60 * 24 * 7);
-                                formikProps.setFieldValue('eventDuration', 60 * 60 * 24 * 7);
-                            } else {
-                                const start = value[0];
-                                const end = value[1];
-                                const duration = differenceInSeconds(end, start);
-                                formikProps.setFieldValue('startingAt', start.getTime());
-                                formikProps.setFieldValue('eventDuration', duration);
-                            }
+                            const start = value[0];
+                            const end = value[1];
+                            const duration = differenceInSeconds(end, start);
+                            formikProps.setFieldValue('startingAt', start.getTime());
+                            formikProps.setFieldValue('eventDuration', duration);
                         }}
                         value={
                             [
@@ -77,7 +74,6 @@ export default function BulksaleV1Form({formikProps, address, approvals, writeFn
                         <FormLabel alignItems={'baseline'}>Total distribute amount
                             <Tooltip hasArrow label={'TODO explanation'}><QuestionIcon mb={1} ml={1} /></Tooltip>
                         </FormLabel>
-                        <chakra.p>(Your balance: xxx{} {tokenData.symbol})</chakra.p>
                     </Flex>
                     
                     <Flex alignItems={'center'}>
@@ -92,6 +88,7 @@ export default function BulksaleV1Form({formikProps, address, approvals, writeFn
                         </NumberInput>
                         <chakra.div px={2} minW={'3rem'}>{tokenData.symbol}</chakra.div>
                     </Flex>
+                    <chakra.p color={'gray.400'} fontSize={'sm'}>Balance: {balance ? tokenAmountFormat(Big(balance.toString()), tokenData.decimals, 2) : '-'} {tokenData.symbol}</chakra.p>
                     <FormErrorMessage>{formikProps.errors.distributeAmount}</FormErrorMessage>
                 </FormControl>
 
