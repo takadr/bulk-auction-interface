@@ -32,6 +32,7 @@ export default function BulksaleV1Form({formikProps, address, approvals, writeFn
                         <Tooltip hasArrow label={'TODO explanation'}><QuestionIcon mb={1} ml={1} /></Tooltip>
                     </FormLabel>
                     <Input id="token" name="token" onBlur={formikProps.handleBlur} onChange={(event: React.ChangeEvent<any>) => {
+                        formikProps.setFieldTouched('distributeAmount');
                         formikProps.handleChange(event);
                     }} value={formikProps.values.token ? formikProps.values.token : ''} placeholder='e.g.) 0x0123456789012345678901234567890123456789' />
                     <FormErrorMessage>{formikProps.errors.token}</FormErrorMessage>
@@ -40,33 +41,54 @@ export default function BulksaleV1Form({formikProps, address, approvals, writeFn
                 <chakra.p color={'gray.400'} fontSize={'sm'} mt={1}>
                     Don't have token yet? <Link color={'gray.300'} href="https://www.smartcontracts.tools/token-generator/ethereum/" target="_blank">ETHEREUM Token Generator <ExternalLinkIcon /></Link>
                 </chakra.p>
-    
-                <FormControl mt={4} isInvalid={!!formikProps.errors.startingAt && !!formikProps.touched.startingAt}>
+
+                <FormControl mt={4} isInvalid={(!!formikProps.errors.startingAt && !!formikProps.touched.startingAt) || (!!formikProps.errors.eventDuration && !!formikProps.touched.eventDuration)}>
                     <FormLabel alignItems={'baseline'}>Start date - End date
                         <Tooltip hasArrow label={'TODO explanation'}><QuestionIcon mb={1} ml={1} /></Tooltip>
                     </FormLabel>
                     <DateRangePicker
                         // className={colorMode === 'light' ? 'rs-theme-high-contrast' : 'rs-theme-dark'}
+                        onEnter={() => {
+                            formikProps.setTouched({startingAt: true, eventDuration: true});
+                            setTimeout(formikProps.validateForm, 200)
+                        }}
                         onBlur={(value: any) => {
-                            // TODO
-                            console.log(value)
+                            setTimeout(formikProps.validateForm, 200)
                         }}
                         onChange={(value: any) => {
+                            if(!value) return
                             const start = value[0];
                             const end = value[1];
+                            if(!start || !end) return
                             const duration = differenceInSeconds(end, start);
                             formikProps.setFieldValue('startingAt', start.getTime());
                             formikProps.setFieldValue('eventDuration', duration);
+                            setTimeout(formikProps.validateForm, 200)
                         }}
-                        value={
-                            [
-                                new Date(formikProps.values.startingAt), 
-                                addSeconds(new Date(formikProps.values.startingAt), formikProps.values.eventDuration)
-                            ]}
+                        onOk={
+                            (value: any) => {
+                                if(!value) return
+                                const start = value[0];
+                                const end = value[1];
+                                if(!start || !end) return
+                                const duration = differenceInSeconds(end, start);
+                                formikProps.setFieldValue('startingAt', start.getTime());
+                                formikProps.setFieldValue('eventDuration', duration);
+                                setTimeout(formikProps.validateForm, 200)
+                            }
+                        }
+                        // value={
+                        //     [
+                        //         new Date(formikProps.values.startingAt), 
+                        //         addSeconds(new Date(formikProps.values.startingAt), formikProps.values.eventDuration)
+                        //     ]}
                         format="yyyy-MM-dd HH:mm:ss"
-                        defaultCalendarValue={[new Date('2022-02-01 00:00:00'), new Date('2022-05-01 23:59:59')]}
+                        cleanable={false}
+                        defaultValue={[new Date(formikProps.values.startingAt), new Date(formikProps.values.startingAt + formikProps.values.eventDuration*1000)]}
                     />
                     <FormErrorMessage>{formikProps.errors.startingAt}</FormErrorMessage>
+                    <FormErrorMessage>{formikProps.errors.eventDuration}</FormErrorMessage>
+                    {/* {new Date(formikProps.values.startingAt).toLocaleDateString()} - {addSeconds(new Date(formikProps.values.startingAt), formikProps.values.eventDuration).toLocaleDateString()} */}
                 </FormControl>
 
                 <FormControl mt={4} isInvalid={!!formikProps.errors.distributeAmount && !!formikProps.touched.distributeAmount}>
@@ -86,9 +108,9 @@ export default function BulksaleV1Form({formikProps, address, approvals, writeFn
                                 <NumberDecrementStepper />
                             </NumberInputStepper>
                         </NumberInput>
-                        <chakra.div px={2} minW={'3rem'}>{tokenData.symbol}</chakra.div>
+                        <chakra.div px={2} minW={'3rem'}>{tokenData?.symbol}</chakra.div>
                     </Flex>
-                    <chakra.p color={'gray.400'} fontSize={'sm'}>Balance: {balance ? tokenAmountFormat(Big(balance.toString()), tokenData.decimals, 2) : '-'} {tokenData.symbol}</chakra.p>
+                    <chakra.p color={'gray.400'} fontSize={'sm'}>Balance: {balance && tokenData ? tokenAmountFormat(Big(balance.toString()), tokenData?.decimals, 2) : '-'} {tokenData?.symbol}</chakra.p>
                     <FormErrorMessage>{formikProps.errors.distributeAmount}</FormErrorMessage>
                 </FormControl>
 
@@ -112,14 +134,14 @@ export default function BulksaleV1Form({formikProps, address, approvals, writeFn
                     <FormErrorMessage>{formikProps.errors.minimalProvideAmount}</FormErrorMessage>
                 </FormControl>
                 {
-                    approvals.allowance && approvals.allowance >= formikProps.values.distributeAmount * (10 ** tokenData.decimals) ?
+                    approvals.allowance && approvals.allowance >= formikProps.values.distributeAmount * (10 ** tokenData?.decimals) ?
                     <Button mt={8} 
                         type="submit" 
                         w={'full'} 
                         variant="solid" 
                         colorScheme='green'
                         isLoading={writeFn.isLoading}
-                        isDisabled={!writeFn.writeAsync}
+                        isDisabled={!writeFn.writeAsync || !formikProps.isValid}
                     >
                         Deploy Sale Contract
                     </Button> :
@@ -129,7 +151,7 @@ export default function BulksaleV1Form({formikProps, address, approvals, writeFn
                         colorScheme='blue'
                         onClick={approvals.writeFn.write}
                         isLoading={approvals.writeFn.isLoading || approvals.waitFn.isLoading}
-                        isDisabled={!approvals.writeFn.write}
+                        isDisabled={!approvals.writeFn.write || !formikProps.isValid}
                     >
                         Approve token
                     </Button>

@@ -85,7 +85,7 @@ export default function SaleCard({ sale, editable=false, now }: { sale: Sale, ed
                     <Flex>
                         <chakra.div flex={2}>
                             <Heading size='lg'>
-                                <Link href={`/sales/${sale.id}`}>{data?.metaData?.title}</Link>
+                                <Link href={`/sales/${sale.id}`}>{data?.metaData?.title ? data?.metaData?.title : 'Unnamed Sale'}</Link>
                                 { editable && <Button size={'sm'} ml={2} onClick={onOpen}><EditIcon mr={1} /> Edit</Button> }
                             </Heading>
                             <Text py='2'>

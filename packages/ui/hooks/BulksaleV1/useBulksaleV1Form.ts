@@ -1,8 +1,7 @@
-import { usePrepareContractWrite, useContractWrite, useWaitForTransaction, useBalance, erc20ABI, useContractRead } from 'wagmi';
+import { usePrepareContractWrite, useContractWrite, useWaitForTransaction, erc20ABI, useContractRead, useToken } from 'wagmi';
 import { useDebounce } from 'use-debounce';
 import { useFormik, FormikProps } from 'formik';
 import useApprove from '../useApprove';
-import useTokenBasicInfo from '../useTokenBasicInfo';
 import { SaleForm } from '../../types/BulksaleV1';
 import Big, { multiply } from '../../utils/bignumber';
 import FactoryABI from '../../constants/abis/Factory.json';
@@ -34,11 +33,7 @@ export default function useBulksaleV1Form({
     prepareFn: any,
     writeFn: ReturnType<typeof useContractWrite>,
     waitFn: ReturnType<typeof useWaitForTransaction>,
-    tokenData: {
-        name: string | undefined,
-        symbol: string | undefined,
-        decimals: number | undefined,
-    },
+    tokenData: any,
     balance: BigNumber | undefined
 } {
     const emptySale: SaleForm = {
@@ -46,30 +41,34 @@ export default function useBulksaleV1Form({
         startingAt: now + (60 * 60 * 24 * 7 * 1000),
         eventDuration: 60 * 60 * 24 * 7,
         distributeAmount: 1,
-        minimalProvideAmount: 0.01,
+        minimalProvideAmount: 10,
         owner: address,
     }
 
     const validate = (values: SaleForm) => {
         const errors: any = {};
-        // TODO
-        // if (!values.name) {
-        //     errors.name = 'Name is required';
-        // } else if (values.name.length > MAX_LENGTH) {
-        //     errors.name = `Name must be shorter than ${MAX_LENGTH}`;
-        // }
 
-        // if (!values.symbol) {
-        //     errors.symbol = 'Symbol is required';
-        // } else if (values.symbol.length > MAX_LENGTH) {
-        //     errors.symbol = `Symbol must be shorter than ${MAX_LENGTH}`;
-        // }
+        if (!values.token) {
+            errors.token = 'Token is required';
+        } else if (!tokenData && tokenFetched) {
+            errors.token = `Invalid token address`;
+        }
 
-        // if (!values.initialSupply) {
-        //     errors.initialSupply = 'Initial supply is required';
-        // } else if (values.initialSupply) {
-        //     errors.initialSupply = `Initial supply must be shorter than ${MAX_LENGTH}`;
-        // }
+        if(values.startingAt <= new Date().getTime()) {
+            errors.startingAt = `Start date must be in the future`;
+        }
+
+        if(values.eventDuration < 60 * 60 * 24) {
+            errors.eventDuration = `Sale duration must be more than or equal to 1 day`;
+        }
+
+        if(values.eventDuration > 60 * 60 * 24 * 30) {
+            errors.eventDuration = `Sale duration must be less than or equal to 30 days`;
+        }
+
+        if(balance && tokenData && Big(balance.toString()).lt(Big(formikProps.values.distributeAmount).pow(tokenData.decimals))) {
+            errors.distributeAmount = `You need to have enough balance for distribution`;
+        }
       
         return errors;
     };
@@ -99,7 +98,7 @@ export default function useBulksaleV1Form({
         args: [address],
         watch: true
     })
-    const tokenData = useTokenBasicInfo(debouncedSale.token);
+    const { data: tokenData, isLoading: tokenLoading, isFetched: tokenFetched } = useToken({ address: debouncedSale.token as `0x${string}`});
     const prepareFn = usePrepareContractWrite({
         address: process.env.NEXT_PUBLIC_FACTORY_ADDRESS as `0x${string}`, //factory
         abi: FactoryABI,
@@ -108,7 +107,7 @@ export default function useBulksaleV1Form({
             SALE_TEMPLATE_V1_NAME,
             debouncedSale.token,
             debouncedSale.owner,
-            multiply(debouncedSale.distributeAmount, tokenData.decimals ? Big(10).pow(tokenData.decimals) : 0).toString(),
+            multiply(debouncedSale.distributeAmount, tokenData?.decimals ? Big(10).pow(tokenData.decimals) : 0).toString(),
             Math.round(debouncedSale.startingAt / 1000),
             debouncedSale.eventDuration,
             multiply(debouncedSale.minimalProvideAmount, Big(10).pow(18)).toString(), // ETH
