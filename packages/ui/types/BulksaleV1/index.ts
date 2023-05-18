@@ -26,14 +26,14 @@ export type SaleForm = {
 
 export type MetaData = {
     id?: string;
-    title: string;
-    description: string;
-    terms: string;
-    projectURL: string;
-    logoURL: string;
-    otherURLs: string[];
-    interimGoalAmount: number;
-    finalGoalAmount: number;
+    title?: string;
+    description?: string;
+    terms?: string;
+    projectURL?: string;
+    logoURL?: string;
+    otherURL?: string;
+    interimGoalAmount?: number;
+    finalGoalAmount?: number;
     tokenName?: string;
     tokenSymbol?: string;
     tokenDecimals?: number;

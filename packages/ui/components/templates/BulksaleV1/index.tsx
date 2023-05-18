@@ -16,6 +16,7 @@ import useWithdrawProvidedETH from '../../../hooks/useWithdrawProvidedETH';
 import useWithdrawUnclaimedERC20OnSale from '../../../hooks/useWithdrawUnclaimedERC20OnSale';
 import useRate from '../../../hooks/useRate';
 import { Sale, MetaData } from '../../../types/BulksaleV1';
+import ExternalLinkTag from '../../ExternalLinkTag';
 
 interface BulksaleV1Params {
     sale: Sale,
@@ -118,7 +119,7 @@ export default function BulksaleV1({sale, metaData, address, contractAddress}: B
     return (
         <>
             <Container maxW={'container.md'} py={16}>
-                <Flex>
+                <Flex alignItems={'center'} minH={'150px'}>
                     <Image
                     borderRadius={'100%'}
                     objectFit='cover'
@@ -129,13 +130,15 @@ export default function BulksaleV1({sale, metaData, address, contractAddress}: B
                     alt={metaData.title}
                     />
                     <Box px={8}>
-                        <Heading textAlign={'center'}>{metaData.title}</Heading>
-                        <chakra.p mt={2} fontSize={'lg'}>{metaData.description}</chakra.p>
+                        <Heading>{metaData.title ? metaData.title : 'Unnamed Sale'}</Heading>
                         <HStack mt={4} spacing={4}>
-                            <Tag><Link fontSize={'sm'} href={metaData.projectURL} target={'_blank'}>Project URL <ExternalLinkIcon /></Link></Tag>
+                            { metaData.projectURL && <ExternalLinkTag url={metaData.projectURL} /> }
+                            { metaData.otherURL && <ExternalLinkTag url={metaData.otherURL} /> }
                         </HStack>
                     </Box>
                 </Flex>
+                <chakra.p mt={2} fontSize={'lg'}>{metaData.description}</chakra.p>
+                
                 <Flex mt={8} flexDirection={{base: 'column', md: 'row'}}>
                     <StatisticsInCircle
                         totalProvided={Big(sale.totalProvided.toString())}
@@ -156,10 +159,10 @@ export default function BulksaleV1({sale, metaData, address, contractAddress}: B
                     />
                 </Flex>
 
-                <Box mt={4} py={16}>
+                { metaData.terms && <Box mt={4} py={16}>
                     <Heading size={'lg'} textAlign={'center'}>Disclaimers, Terms and Conditions</Heading>
-                    {metaData.terms}
-                </Box>
+                    <chakra.p mt={2}>{metaData.terms}</chakra.p>
+                </Box> }
 
                 { started && !ended && <Box>
                     <form onSubmit={formikProps.handleSubmit}>

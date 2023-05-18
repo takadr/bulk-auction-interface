@@ -7,7 +7,7 @@ import { MetaData, Sale } from '../types/BulksaleV1';
 import useSWRAuction from '../hooks/useAuction';
 import SaleTemplateV1ABI from '../constants/abis/SaleTemplateV1.json';
 import SaleMetaFormModal from './SaleMetaFormModal';
-import { tokenAmountFormat, getCountdown } from '../utils';
+import { tokenAmountFormat, getCountdown, ellipsisText } from '../utils';
 
 export default function SaleCard({ sale, editable=false, now }: { sale: Sale, editable?: boolean, now: number }){
     // TODO use enum
@@ -74,8 +74,11 @@ export default function SaleCard({ sale, editable=false, now }: { sale: Sale, ed
         overflow='hidden'
         >
             <Image
-            objectFit='contain'
-            maxW={{ base: '100%', sm: '200px' }}
+            objectFit='cover'
+            w={{ base: '100%', sm: '260px' }}
+            h={{ base: '100%', sm: '260px' }}
+            p={6}
+            maxW={{ base: '100%', sm: '260px' }}
             src={data?.metaData?.logoURL ? data?.metaData?.logoURL : 'https://dummyimage.com/200x200/bbb/fff.png&text=No+Image'}
             alt={data?.metaData?.title}
             />
@@ -83,13 +86,13 @@ export default function SaleCard({ sale, editable=false, now }: { sale: Sale, ed
             <Stack w={'full'}>
                 <CardBody>
                     <Flex>
-                        <chakra.div flex={2}>
+                        <chakra.div flex={2} pr={4}>
                             <Heading size='lg'>
                                 <Link href={`/sales/${sale.id}`}>{data?.metaData?.title ? data?.metaData?.title : 'Unnamed Sale'}</Link>
                                 { editable && <Button size={'sm'} ml={2} onClick={onOpen}><EditIcon mr={1} /> Edit</Button> }
                             </Heading>
                             <Text py='2'>
-                            {data?.metaData?.description}
+                            {data?.metaData?.description && ellipsisText(data?.metaData?.description, 200)}
                             </Text>
                             
                         </chakra.div>
@@ -109,10 +112,7 @@ export default function SaleCard({ sale, editable=false, now }: { sale: Sale, ed
                             </Flex>
                         </chakra.div>
                     </Flex>
-                </CardBody>
-            
-                <CardFooter>
-                    <Flex alignItems={'center'} justifyContent={'center'}>
+                    <Flex alignItems={'center'}>
                         {
                             stage === '0' && <>
                                 <Tag><Box boxSize='1em' bg='gray.500' borderRadius={'100%'} /> <Text ml={1}>Not started</Text></Tag>
@@ -131,7 +131,11 @@ export default function SaleCard({ sale, editable=false, now }: { sale: Sale, ed
                             </>
                         }
                     </Flex>
-                </CardFooter>
+                </CardBody>
+            
+                {/* <CardFooter>
+                    
+                </CardFooter> */}
             </Stack>
             {
                 editable && isOpen && <SaleMetaFormModal isOpen={isOpen} onClose={onClose} existingContractAddress={sale.id as `0x${string}`} saleMetaData={data?.metaData} onSubmitSuccess={mutate} />

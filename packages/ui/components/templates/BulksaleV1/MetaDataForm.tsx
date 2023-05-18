@@ -20,6 +20,7 @@ import { QuestionIcon } from '@chakra-ui/icons';
 import { FormikProps } from 'formik';
 import { useWaitForTransaction } from 'wagmi';
 import { MetaData } from '../../../types/BulksaleV1/index';
+import { SAMPLE_DISCLAIMERS } from '../../../constants';
 
 export default function MetaDataForm({formikProps, waitFn, onSkip}: {formikProps: FormikProps<MetaData>, waitFn?: ReturnType<typeof useWaitForTransaction>, onSkip?: () => void}) {
     return <div>
@@ -52,7 +53,7 @@ export default function MetaDataForm({formikProps, waitFn, onSkip}: {formikProps
                         <FormLabel htmlFor='title' alignItems={'baseline'}>Title
                             <Tooltip hasArrow label={'TODO explanation'}><QuestionIcon mb={1} ml={1} /></Tooltip>
                         </FormLabel>
-                        <Input id="title" name="title" onBlur={formikProps.handleBlur} onChange={formikProps.handleChange} value={formikProps.values.title} placeholder='e.g.) DFGC Donation Event' />
+                        <Input id="title" name="title" maxLength={100} onBlur={formikProps.handleBlur} onChange={formikProps.handleChange} value={formikProps.values.title} placeholder='e.g.) DFGC Donation Event' />
                         <FormErrorMessage>{formikProps.errors.title}</FormErrorMessage>
                     </FormControl>
 
@@ -61,7 +62,7 @@ export default function MetaDataForm({formikProps, waitFn, onSkip}: {formikProps
                             <Tooltip hasArrow label={'TODO explanation'}><QuestionIcon mb={1} ml={1} /></Tooltip>
                         </FormLabel>
                         <Flex alignItems={'center'}>
-                            <Textarea id="description" name="description" onBlur={formikProps.handleBlur} onChange={formikProps.handleChange} value={formikProps.values.description} placeholder='Explain your event'>
+                            <Textarea id="description" name="description" maxLength={1000} onBlur={formikProps.handleBlur} onChange={formikProps.handleChange} value={formikProps.values.description} placeholder='Explain your event'>
 
                             </Textarea>
                         </Flex>
@@ -72,10 +73,10 @@ export default function MetaDataForm({formikProps, waitFn, onSkip}: {formikProps
                         <FormLabel alignItems={'baseline'}>Disclaimers, Terms and Conditions
                             <Tooltip hasArrow label={'TODO explanation'}><QuestionIcon mb={1} ml={1} /></Tooltip>
                         </FormLabel>
-                        <Textarea id="terms" name="terms" onBlur={formikProps.handleBlur} onChange={formikProps.handleChange} value={formikProps.values.terms} placeholder=''>
+                        <Textarea id="terms" name="terms" maxLength={1000} onBlur={formikProps.handleBlur} onChange={formikProps.handleChange} value={formikProps.values.terms} placeholder=''>
 
                         </Textarea>
-                        <Button size={'xs'} onClick={() => { alert('TODO') }}>Show examples</Button>
+                        <Button colorScheme={'blue'} size={'xs'} mt={1} onClick={() => formikProps.setFieldValue('terms', SAMPLE_DISCLAIMERS)}>Use sample disclaimer text</Button>
                         <FormErrorMessage>{formikProps.errors.description}</FormErrorMessage>
                     </FormControl>
 
@@ -99,7 +100,7 @@ export default function MetaDataForm({formikProps, waitFn, onSkip}: {formikProps
                     </FormControl>
 
                     <FormControl mt={4} isInvalid={!!formikProps.errors.finalGoalAmount && !!formikProps.touched.finalGoalAmount}>
-                        <FormLabel alignItems={'baseline'}>Interim Goal Amount
+                        <FormLabel alignItems={'baseline'}>Final Goal Amount
                             <Tooltip hasArrow label={'TODO explanation'}><QuestionIcon mb={1} ml={1} /></Tooltip>
                         </FormLabel>
                         <Flex alignItems={'center'}>
@@ -135,15 +136,12 @@ export default function MetaDataForm({formikProps, waitFn, onSkip}: {formikProps
                         <FormErrorMessage>{formikProps.errors.logoURL}</FormErrorMessage>
                     </FormControl>
 
-                    {
-                        // TODO otherURLs
-                    }
-                    <FormControl mt={4} isInvalid={!!formikProps.errors.logoURL && !!formikProps.touched.logoURL}>
-                        <FormLabel htmlFor='logoURL' alignItems={'baseline'}>Project Logo URL
+                    <FormControl mt={4} isInvalid={!!formikProps.errors.otherURL && !!formikProps.touched.otherURL}>
+                        <FormLabel htmlFor='otherURL' alignItems={'baseline'}>Other URL
                             <Tooltip hasArrow label={'TODO explanation'}><QuestionIcon mb={1} ml={1} /></Tooltip>
                         </FormLabel>
-                        <Input id="logoURL" name="logoURL" onBlur={formikProps.handleBlur} onChange={formikProps.handleChange} value={formikProps.values.logoURL} placeholder='e.g.) https://xxx.xyz/logo.png' />
-                        <FormErrorMessage>{formikProps.errors.logoURL}</FormErrorMessage>
+                        <Input id="otherURL" name="otherURL" onBlur={formikProps.handleBlur} onChange={formikProps.handleChange} value={formikProps.values.otherURL} placeholder='e.g.) https://twitter.com/xxx' />
+                        <FormErrorMessage>{formikProps.errors.otherURL}</FormErrorMessage>
                     </FormControl>
                 </chakra.div>
             </HStack>

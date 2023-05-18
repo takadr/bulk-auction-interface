@@ -66,3 +66,13 @@ export const getCountdown = (duration: number): Countdown => {
   
     return countdown;
   }
+
+  export const getDomainFromURL = (url: string) => {
+    return new URL(url).hostname;  
+  }
+
+  export const ellipsisText = (text: string, maxLength: number, ellipsis="..."): string => {
+    return text.length >= maxLength
+    ? text.slice(0, maxLength - ellipsis.length) + ellipsis
+    : text
+  }
