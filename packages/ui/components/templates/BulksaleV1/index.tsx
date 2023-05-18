@@ -2,7 +2,7 @@ import { useState, useEffect, useCallback } from 'react';
 import { Container, Heading, Image, Flex, Box, Button, FormControl, FormLabel, FormErrorMessage, NumberInput, NumberInputField, NumberInputStepper, NumberIncrementStepper, NumberDecrementStepper, Tooltip, Stack, Divider, chakra, useInterval, useToast, Link, HStack, Tag} from '@chakra-ui/react';
 import { ExternalLinkIcon, QuestionIcon } from '@chakra-ui/icons';
 import { useFormik } from 'formik';
-import { useProvider, useNetwork, useAccount, useContractRead, usePrepareContractWrite, useContractWrite, useWaitForTransaction, useContractEvent, usePrepareSendTransaction, useSendTransaction, useToken, erc20ABI } from 'wagmi';
+import { useProvider, useNetwork, useAccount, useContractRead, usePrepareContractWrite, useContractWrite, useWaitForTransaction, useContractEvent, usePrepareSendTransaction, useSendTransaction, useToken, erc20ABI, useBalance } from 'wagmi';
 import { format, formatDistance, formatRelative, subDays } from 'date-fns';
 import Big from '../../../utils/bignumber';
 import { BigNumber, utils } from 'ethers';
@@ -28,6 +28,7 @@ interface BulksaleV1Params {
 export default function BulksaleV1({sale, metaData, address, contractAddress}: BulksaleV1Params) {
     const toast = useToast({position: 'top-right', isClosable: true,});
     const { provided } = useBulksaleV1(contractAddress, address);
+    const { data: balanceData } = useBalance({address});
     
     const providedTokenSymbol = 'ETH';
     const providedTokenDecimal = 18;
@@ -142,8 +143,8 @@ export default function BulksaleV1({sale, metaData, address, contractAddress}: B
                 <Flex mt={8} flexDirection={{base: 'column', md: 'row'}}>
                     <StatisticsInCircle
                         totalProvided={Big(sale.totalProvided.toString())}
-                        interimGoalAmount={Big((metaData.interimGoalAmount * 10**18).toString())}
-                        finalGoalAmount={Big((metaData.finalGoalAmount * 10**18).toString())}
+                        interimGoalAmount={Big(metaData.interimGoalAmount ? metaData.interimGoalAmount : 0).mul(Big(10).pow(providedTokenDecimal))}
+                        finalGoalAmount={Big(metaData.finalGoalAmount ? metaData.finalGoalAmount : 0).mul(Big(10).pow(providedTokenDecimal))}
                         providedTokenSymbol={providedTokenSymbol}
                         providedTokenDecimal={providedTokenDecimal}
                         fiatSymbol={fiatSymbol}
@@ -174,7 +175,7 @@ export default function BulksaleV1({sale, metaData, address, contractAddress}: B
                                 {
                                     //TODO Set max as account balance
                                 }
-                                <NumberInput isDisabled={!started} flex="1" name="amount" value={formikProps.values.amount} min={0.01} step={0.01} max={100} onBlur={formikProps.handleBlur} onChange={(strVal: string, val: number) =>
+                                <NumberInput isDisabled={!started} flex="1" name="amount" value={formikProps.values.amount} min={0.01} step={0.01} max={balanceData ? Number(balanceData.formatted) : 100} onBlur={formikProps.handleBlur} onChange={(strVal: string, val: number) =>
                                     formikProps.setFieldValue('amount', strVal ? strVal : 0)
                                 }>
                                     <NumberInputField/>
@@ -191,6 +192,11 @@ export default function BulksaleV1({sale, metaData, address, contractAddress}: B
                             <FormErrorMessage>{formikProps.errors.amount}</FormErrorMessage>
                         </FormControl>
                     </form>
+                    <chakra.p mt={2} color={'gray.400'} fontSize={'sm'} textAlign='right'>
+                        Balance: {
+                            balanceData ? Number(balanceData.formatted).toFixed(2) : '-'
+                        } ETH
+                    </chakra.p>
                 </Box> }
                 
                 { ended && 
@@ -207,7 +213,7 @@ export default function BulksaleV1({sale, metaData, address, contractAddress}: B
                     </chakra.div>
                 }
 
-                { started && <Box>
+                { started && <Box mt={1}>
                     <PersonalStatistics
                         inputValue={formikProps.values.amount}
                         myTotalProvided={Big(provided.toString())}

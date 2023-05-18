@@ -64,7 +64,7 @@ export default function CalendarInCircle({
         <Circle
           percent={getRestTermPercetage()}
           strokeWidth={4}
-          strokeColor="#D3D3D3"
+          strokeColor={'#48BB78'}
         />
 
         {unixStartDate * 1000 > Date.now() ? (

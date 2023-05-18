@@ -1,4 +1,4 @@
-import { chakra, Spinner, BoxProps } from "@chakra-ui/react";
+import { chakra, Spinner, Text, Box, Heading, BoxProps, Card, CardBody, CardHeader, Stack, StackDivider, Flex } from "@chakra-ui/react";
 import { getExpectedAmount, tokenAmountFormat } from "../../../utils";
 import Big, { add, multiply } from "../../../utils/bignumber";
 
@@ -42,11 +42,11 @@ export default function PersonalStatistics({
     if(isLoading) {
         return <Spinner />
     }
-  
-    return (
-      <chakra.div {...boxProps}>
-        <>
-          <div>
+
+    return <Card {...boxProps}>    
+      <CardBody>
+        <Stack divider={<StackDivider />} spacing='4'>
+          <Flex justifyContent={'space-between'}>
               <>
               {!isClaimed ? 'Estimated amount you will receive' : 'Amount you receive'}:{' '}
               <span style={{ fontWeight: 'bold', marginLeft: '10px' }}><>
@@ -60,36 +60,38 @@ export default function PersonalStatistics({
                   </p>
               )}
             </>
-          </div>
+          </Flex>
           {!isEnding ? (
-            <div>
-              <>
-                  Your total contribution:
-                  <span style={{ fontWeight: 'bold', marginLeft: '10px' }}>
-                      <>
-                      {active ? sumOfProvidedAmount : '????'}{' '}
-                      {providedTokenSymbol.toUpperCase()}
-                      </>
-                  </span>{' '}
-                  {active && (
-                  <>
-                      (New contribution: 
-                      <span style={{ fontWeight: 'bold', marginLeft: '10px' }}>
-                          <>
-                          {inputtingValueInFormat}{' '}
-                          {providedTokenSymbol.toUpperCase()}
-                          </>
-                      </span>
-                      )
-                  </>
-                  )}
-                  {parseFloat(sumOfProvidedAmount) === 0 && (
-                  <p>
-                      Your contribution is too small so that it is shown as 0
-                  </p>
-                  )}
-              </>
-            </div>
+            <Flex justifyContent={'space-between'}>
+              <div>
+                Your total contribution:
+              </div>
+              <div>
+                <span style={{ fontWeight: 'bold', marginLeft: '10px' }}>
+                    <>
+                    {active ? sumOfProvidedAmount : '????'}{' '}
+                    {providedTokenSymbol.toUpperCase()}
+                    </>
+                </span>{' '}
+                {active && (
+                <>
+                    (New contribution: 
+                    <span style={{ fontWeight: 'bold', marginLeft: '10px' }}>
+                        <>
+                        {inputtingValueInFormat}{' '}
+                        {providedTokenSymbol.toUpperCase()}
+                        </>
+                    </span>
+                    )
+                </>
+                )}
+                {parseFloat(sumOfProvidedAmount) === 0 && (
+                <p>
+                    Your contribution is too small so that it is shown as 0
+                </p>
+                )}
+              </div>
+            </Flex>
           ) : (
             !isClaimed && (
               <div>
@@ -110,7 +112,7 @@ export default function PersonalStatistics({
               </div>
             )
           )}
-        </>
-      </chakra.div>
-    );
+        </Stack>
+      </CardBody>
+    </Card>
   };
