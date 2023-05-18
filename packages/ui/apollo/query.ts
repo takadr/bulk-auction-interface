@@ -1,8 +1,8 @@
 import { gql } from '@apollo/client';
 
 export const LIST_SALE_QUERY = gql`
-  {
-    sales(orderBy: startingAt) {
+  query ListSales($skip: Int! = 0, $first: Int! = 10){
+    sales(orderBy: startingAt, skip: $skip, first: $first) {
       id
       templateName
       owner
