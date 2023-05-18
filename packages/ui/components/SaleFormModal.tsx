@@ -9,10 +9,9 @@ import {
 } from '@chakra-ui/react';
 import { Button, useToast, Flex, chakra, useColorMode } from '@chakra-ui/react';
 import { useAccount, useContractEvent } from 'wagmi';
-import { useDebounce } from 'use-debounce';
 import { CustomProvider } from 'rsuite';
 import { useAtom } from 'jotai';
-import { saleTxAtom, saleClonesAtom, waitingTransactionAtom } from '../store';
+import { waitingTransactionAtom } from '../store';
 import FactoryABI from '../constants/abis/Factory.json';
 import { Steps } from './Steps';
 import BulksaleV1Form from './templates/BulksaleV1/ContractForm';
@@ -23,14 +22,11 @@ import useBulksaleV1MetaForm from '../hooks/BulksaleV1/useBulksaleV1MetaForm';
 export default function SaleFormModal({isOpen, onClose, onSubmitSuccess}: {isOpen: boolean, onClose: () => void, onSubmitSuccess?: () => void}) {
     const { address } = useAccount();
     const toast = useToast({position: 'top-right', isClosable: true,});
-    const [saleTxs, setSaleTxs] = useAtom(saleTxAtom);
-    const [saleClones, setSaleClones] = useAtom(saleClonesAtom);
     const [waitingTransaction, setWaitingTransaction] = useAtom(waitingTransactionAtom);
     const { colorMode, setColorMode, toggleColorMode } = useColorMode();
     const [step, setStep] = useState<1|2>(1);
     const [contractAddress, setContractAddress] = useState<`0x${string}`|undefined>(undefined);
 
-    // TODO pass template name to the abstracted hook of this one so that we get template specific information
     const { formikProps, approvals, prepareFn, writeFn, waitFn, tokenData } = useBulksaleV1Form({
         address: address as `0x${string}`,
         onSubmitSuccess: (result) => {
@@ -98,16 +94,8 @@ export default function SaleFormModal({isOpen, onClose, onSubmitSuccess}: {isOpe
         abi: FactoryABI,
         eventName: 'Deployed',
         listener(templateName, deployedAddr, tokenAddr, owner) {
-            console.log(owner, templateName, deployedAddr);
-            const template: any = templateName;
-            
-            if(owner === address) {
-                // const newAddresses = [...saleClones.addresses, deployedAddr];
-                // setSaleClones(Object.assign(saleClones, {addresses: newAddresses}));
-                // const newAddresses = [...saleClones, deployedAddr];
-                // setSaleClones(newAddresses);
-                setContractAddress(deployedAddr);
-                // console.log(newAddresses)
+            if(owner === address && tokenAddr === formikProps.values.token) {
+                setContractAddress(deployedAddr as `0x${string}`);
             }
         },
     })
@@ -130,14 +118,7 @@ export default function SaleFormModal({isOpen, onClose, onSubmitSuccess}: {isOpe
                 <ModalHeader>Create new sale</ModalHeader>
                 <ModalCloseButton />
                 <ModalBody pb={6}>
-                    {/* {approvals.readFn.data && console.log(approvals.readFn.data.toString())} */}
-                    {/* {approvals.readFn && approvals.readFn.data} */}
-                    {/* { console.log(saleTxs) } */}
                     <Steps pb={6} px={10} stepParams={stepParams} currentStep={step} />
-                    {
-                        // TODO
-                        // Switch form by the selected auction template
-                    }
                     {
                         step === 1 ? <BulksaleV1Form 
                             formikProps={formikProps} 

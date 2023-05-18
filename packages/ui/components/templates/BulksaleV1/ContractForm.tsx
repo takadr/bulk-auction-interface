@@ -14,7 +14,7 @@ import {
     NumberDecrementStepper,
     Link
 } from '@chakra-ui/react';
-import { QuestionIcon } from '@chakra-ui/icons';
+import { ExternalLinkIcon, QuestionIcon } from '@chakra-ui/icons';
 import { CustomProvider, DateRangePicker } from 'rsuite';
 import { FormikProps } from 'formik';
 import { differenceInSeconds, addSeconds } from 'date-fns';
@@ -36,7 +36,7 @@ export default function BulksaleV1Form({formikProps, address, approvals, writeFn
                 </FormControl>
 
                 <chakra.p color={'gray.400'} fontSize={'sm'} mt={1}>
-                    Don't have token yet? <Link color={'gray.300'} href="https://www.smartcontracts.tools/token-generator/ethereum/" target="_blank">ETHEREUM Token Generator</Link>
+                    Don't have token yet? <Link color={'gray.300'} href="https://www.smartcontracts.tools/token-generator/ethereum/" target="_blank">ETHEREUM Token Generator <ExternalLinkIcon /></Link>
                 </chakra.p>
     
                 <FormControl mt={4} isInvalid={!!formikProps.errors.startingAt && !!formikProps.touched.startingAt}>
@@ -114,9 +114,8 @@ export default function BulksaleV1Form({formikProps, address, approvals, writeFn
                     </Flex>
                     <FormErrorMessage>{formikProps.errors.minimalProvideAmount}</FormErrorMessage>
                 </FormControl>
-
                 {
-                    approvals.readFn.data && approvals.readFn.data.toString() !== '0' ?
+                    approvals.allowance && approvals.allowance >= formikProps.values.distributeAmount * (10 ** tokenData.decimals) ?
                     <Button mt={8} 
                         type="submit" 
                         w={'full'} 
@@ -132,7 +131,7 @@ export default function BulksaleV1Form({formikProps, address, approvals, writeFn
                         variant="solid" 
                         colorScheme='blue'
                         onClick={approvals.writeFn.write}
-                        isLoading={approvals.writeFn.isLoading}
+                        isLoading={approvals.writeFn.isLoading || approvals.waitFn.isLoading}
                         isDisabled={!approvals.writeFn.write}
                     >
                         Approve token

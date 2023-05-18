@@ -1,4 +1,5 @@
 import { DynamoDBClient, GetItemCommand, BatchGetItemCommand, PutItemCommand, UpdateItemCommand, ScanCommand } from '@aws-sdk/client-dynamodb';
+import { SALE_TEMPLATE_V1_NAME } from '../constants';
 import { MetaData } from '../types/BulksaleV1';
 
 const dbClient = new DynamoDBClient({
@@ -77,7 +78,7 @@ export async function addAuction(auction: MetaData): Promise<MetaData | undefine
     TokenName: {S: auction.tokenName ? auction.tokenName : ''},
     TokenSymbol: {S: auction.tokenSymbol ? auction.tokenSymbol : ''},
     TokenDecimals: {N: auction.tokenDecimals ? auction.tokenDecimals.toString() : '0'},
-    TemplateName: {S: '0x53616c6554656d706c6174655631000000000000000000000000000000000000'},
+    TemplateName: {S: SALE_TEMPLATE_V1_NAME},
   };
   const command = new PutItemCommand({
     TableName: process.env.AWS_DYNAMO_TABLE_NAME,
@@ -103,7 +104,7 @@ export async function updateAuction(auction: MetaData): Promise<MetaData | undef
       ':TokenName': {S: auction.tokenName ? auction.tokenName : ''},
       ':TokenSymbol': {S: auction.tokenSymbol ? auction.tokenSymbol : ''},
       ':TokenDecimals': {N: auction.tokenDecimals ? auction.tokenDecimals.toString() : '0'},
-      ':TemplateName': {S: '0x53616c6554656d706c6174655631000000000000000000000000000000000000'}
+      ':TemplateName': {S: SALE_TEMPLATE_V1_NAME}
     },
   })
   const output = await dbClient.send(command)

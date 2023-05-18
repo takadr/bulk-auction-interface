@@ -1,12 +1,12 @@
 import { usePrepareContractWrite, useContractWrite, useWaitForTransaction } from 'wagmi';
 import { useDebounce } from 'use-debounce';
-import { utils } from 'ethers';
 import { useFormik, FormikProps } from 'formik';
 import useApprove from '../useApprove';
 import useTokenBasicInfo from '../useTokenBasicInfo';
 import { SaleForm } from '../../types/BulksaleV1';
 import Big, { multiply } from '../../utils/bignumber';
 import FactoryABI from '../../constants/abis/Factory.json';
+import { SALE_TEMPLATE_V1_NAME } from '../../constants';
 import 'rsuite/dist/rsuite-no-reset.min.css';
 
 const now = new Date().getTime();
@@ -73,14 +73,9 @@ export default function useBulksaleV1Form({
     };
 
     const handleSubmit = async (sale: SaleForm) => {
-        if(!writeFn || !writeFn.writeAsync) {
-            // TODO Error
-            return;
-        }
         try {
-            const result = await writeFn.writeAsync();
+            const result = await writeFn!.writeAsync!();
             onSubmitSuccess && onSubmitSuccess(result);
-            // result.hash
         } catch(e: any) {
             onSubmitError && onSubmitError(e);
         }
@@ -96,19 +91,12 @@ export default function useBulksaleV1Form({
     const [debouncedSale] = useDebounce(formikProps.values, 500);
     const approvals = useApprove(debouncedSale.token, address as `0x${string}`, process.env.NEXT_PUBLIC_FACTORY_ADDRESS as `0x${string}`);
     const tokenData = useTokenBasicInfo(debouncedSale.token);
-    // const allowanceReadFn = useContractRead({
-    //     address: debouncedSale.token ? debouncedSale.token : '0x',
-    //     abi: erc20ABI,
-    //     functionName: 'allowance',
-    //     args: [address as `0x${string}`, process.env.NEXT_PUBLIC_FACTORY_ADDRESS as `0x${string}`],
-    // })
-
     const prepareFn = usePrepareContractWrite({
         address: process.env.NEXT_PUBLIC_FACTORY_ADDRESS as `0x${string}`, //factory
         abi: FactoryABI,
         functionName: 'deploySaleClone',
         args: [
-            "0x53616c6554656d706c6174655631000000000000000000000000000000000000", // ethers.utils.formatBytes32String
+            SALE_TEMPLATE_V1_NAME,
             debouncedSale.token,
             debouncedSale.owner,
             multiply(debouncedSale.distributeAmount, tokenData.decimals ? Big(10).pow(tokenData.decimals) : 0).toString(),
@@ -121,9 +109,6 @@ export default function useBulksaleV1Form({
     const writeFn = useContractWrite({
         ...prepareFn.config,
         onSuccess(data) {
-            // console.log('Submitted!', data)
-            // setWaitingTransaction(waitFn);
-            // console.log(waitingTransaction)
             onContractWriteSuccess && onContractWriteSuccess(data);
         },
         onError(e: Error) {
@@ -131,18 +116,11 @@ export default function useBulksaleV1Form({
             onContractWriteError && onContractWriteError(e)
         },
     })
-    // TODO 
-    // Add tx hash with status loading to the store
 
     const waitFn = useWaitForTransaction({
         hash: writeFn.data?.hash,
         onSuccess(data) {
-            console.log('Transaction Confirmed!', data)
             onWaitForTransactionSuccess && onWaitForTransactionSuccess(data);
-            // TODO
-            // Modify tx status to confirmed in the store
-            // const newTxs = [...saleTxs.txs, data];
-            // setSaleTxs(Object.assign(saleTxs, {txs: newTxs}));
         },
         onError(e: Error) {
             console.log(e.message)

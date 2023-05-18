@@ -1,25 +1,30 @@
 import { useNetwork, usePrepareContractWrite, useContractWrite, useWaitForTransaction, useContractRead, erc20ABI } from 'wagmi';
 import { BigNumber, constants } from 'ethers';
-// import { useDebounce } from './useDebounce';
-import { useDebounce } from 'use-debounce';
+import { useState } from 'react';
 
-export default function useApprove(targetAddress: `0x${string}` | null, owner: `0x${string}`, spender: `0x${string}`): {
-    prepareFn: any,
-    writeFn: any,
-    waitFn: ReturnType<typeof useWaitForTransaction>
-    readFn: ReturnType<typeof useContractRead>
-  } {
+export default function useApprove(
+  targetAddress: `0x${string}` | null, 
+  owner: `0x${string}`, 
+  spender: `0x${string}`,
+  onSuccessWrite?: (data: any) => void,
+  onErrorWrite?: (e: Error) => void,
+  onSuccessConfirm?: (data: any) => void,
+  onErrorConfirm?: (e: Error) => void
+  ): {
+  prepareFn: any,
+  writeFn: any,
+  waitFn: ReturnType<typeof useWaitForTransaction>,
+  allowance: BigNumber
+} {
   const { chain } = useNetwork();
-//   const [approveArgs] = useDebounce<[`0x${string}`, BigNumber]>([spender, BigNumber.from(constants.MaxUint256)], 500)
-//   const [enabled] = useDebounce(!!targetAddress && !!owner && !!spender && !!chain, 500)
-//   const [allowanceArgs] = useDebounce<[`0x${string}`, `0x${string}`]>([owner, spender], 500)
+  const [allowance, setAllowance] = useState<BigNumber>(BigNumber.from(0)); 
   const approveArgs: [`0x${string}`, BigNumber] = [spender, BigNumber.from(constants.MaxUint256)]
   const allowanceArgs: [`0x${string}`, `0x${string}`] = [owner, spender]
   const enabled: boolean = !!targetAddress && !!owner && !!spender && !!chain
 
   const prepareFn = usePrepareContractWrite({
     chainId: chain?.id,
-    address: targetAddress,
+    address: targetAddress as `0x${string}`,
     abi: erc20ABI,
     functionName: 'approve',
     args: approveArgs,
@@ -29,28 +34,41 @@ export default function useApprove(targetAddress: `0x${string}` | null, owner: `
   const writeFn = useContractWrite({
     ...prepareFn.config,
     onSuccess(data) {
-        console.log('Approved!', data)
+      console.log('Approved!', data)
+      onSuccessWrite && onSuccessWrite(data);
+    },
+    onError(e: Error) {
+      onErrorWrite && onErrorWrite(e);
     }
   })
 
   const waitFn = useWaitForTransaction({
     chainId: chain?.id,
     hash: writeFn.data?.hash,
-    // wait: writeFn.data?.wait
+    onSuccess(data) {
+      onSuccessConfirm && onSuccessConfirm(data);
+    },
+    onError(e: Error) {
+      onErrorConfirm && onErrorConfirm(e);
+    }
   })
 
   const readFn = useContractRead({
-    address: targetAddress,
+    address: targetAddress as `0x${string}`,
     abi: erc20ABI,
     functionName: 'allowance',
     args: allowanceArgs,
-    enabled
+    enabled,
+    onSuccess(data) {
+      setAllowance(data)
+    },
+    watch: true
   })
 
   return {
     prepareFn,
     writeFn,
     waitFn,
-    readFn
+    allowance
   }
 }
