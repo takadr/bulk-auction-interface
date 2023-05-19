@@ -60,7 +60,7 @@ export default function DashboardPage() {
                                     <SaleCardSkeleton /><SaleCardSkeleton /><SaleCardSkeleton />
                                     </> 
                                     : data.sales.map((sale: Sale) => {
-                                        return <SaleCard sale={sale} now={now} editable />
+                                        return <SaleCard key={sale.id} sale={sale} now={now} editable />
                                     })
                                 }
                             </Stack>

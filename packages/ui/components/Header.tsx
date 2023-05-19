@@ -1,4 +1,3 @@
-import Router from 'next/router';
 import {
     chakra,
     Tag,
@@ -130,13 +129,13 @@ export const Header: FC<HeaderProps> = ({title}: {title?: string}) => {
                     </HStack>
                     <HStack spacing={4}>
                         {
-                            isConnected && currentUser && <Button variant="ghost" size={'md'} onClick={() => Router.push('/dashboard')}>
+                            isConnected && currentUser && <Link href="/dashboard"><Button variant="ghost" size={'md'}>
                                 Dashboard
-                            </Button>
+                            </Button></Link>
                         }
-                        <Button variant="ghost" size={'md'} onClick={() => Router.push('/sales')}>
+                        <Link href="/sales"><Button variant="ghost" size={'md'}>
                             Sales
-                        </Button>
+                        </Button></Link>
                         {
                             !currentUser && <SignInButton
                                 size={'sm'}

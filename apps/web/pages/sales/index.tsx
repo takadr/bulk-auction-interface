@@ -36,7 +36,7 @@ export default function SalePage() {
                                 <SaleCardSkeleton /><SaleCardSkeleton /><SaleCardSkeleton />
                             </> 
                             : activeSales.map((sale: Sale) => {
-                                return <SaleCard sale={sale} now={now} />
+                                return <SaleCard key={sale.id} sale={sale} now={now} />
                             })
                         }
                         {
@@ -56,7 +56,7 @@ export default function SalePage() {
                                 <SaleCardSkeleton /><SaleCardSkeleton /><SaleCardSkeleton />
                             </>  
                             : closedSales.map((sale: Sale) => {
-                                return <SaleCard sale={sale} now={now} />
+                                return <SaleCard key={sale.id} sale={sale} now={now} />
                             })
                         }
                         {

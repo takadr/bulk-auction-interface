@@ -28,7 +28,7 @@ const dynamoDBItemsToAuction = (item: any) => {
   } as MetaData;
 }
 
-export async function scanAuctions(lastEvaluatedKeyId?: string, lastEvaluatedKeyCreatedAt?: string): Promise<Auction[] | undefined> {
+export async function scanAuctions(lastEvaluatedKeyId?: string, lastEvaluatedKeyCreatedAt?: string): Promise<MetaData[] | undefined> {
   const command = new ScanCommand({
     TableName: process.env.AWS_DYNAMO_TABLE_NAME,
     Limit: 10,

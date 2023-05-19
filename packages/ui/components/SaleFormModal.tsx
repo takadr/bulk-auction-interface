@@ -89,7 +89,7 @@ export default function SaleFormModal({isOpen, onClose, onSubmitSuccess}: {isOpe
         },
     });
 
-    useContractEvent<[]>({
+    useContractEvent({
         address: process.env.NEXT_PUBLIC_FACTORY_ADDRESS as `0x${string}`,
         abi: FactoryABI,
         eventName: 'Deployed',
