@@ -43,7 +43,7 @@ export default function SalePage() {
                             !isLastActiveSales && <Button isLoading={isLoadingActiveSales || isValidatingActiveSales} onClick={loadMoreActiveSales}>Load more sale</Button>
                         }
                         {
-                            !isLoadingClosedSales && activeSales.length !== 0 && <Flex minH={'25vh'} justifyContent='center' alignItems={'center'}>
+                            !isLoadingClosedSales && activeSales.length === 0 && <Flex minH={'25vh'} justifyContent='center' alignItems={'center'}>
                                 <Text fontSize={'lg'} opacity={'.75'} textAlign={'center'}>No sales</Text>
                             </Flex>
                         }
@@ -63,7 +63,7 @@ export default function SalePage() {
                             !isLastClosedSales && <Button isLoading={isLoadingClosedSales || isValidatingClosedSales} onClick={loadMoreClosedSales}>Load more sale</Button>
                         }
                         {
-                            !isLoadingClosedSales && closedSales.length !== 0 && <Flex minH={'25vh'} justifyContent='center' alignItems={'center'}>
+                            !isLoadingClosedSales && closedSales.length === 0 && <Flex minH={'25vh'} justifyContent='center' alignItems={'center'}>
                                 <Text fontSize={'lg'} opacity={'.75'} textAlign={'center'}>No sales</Text>
                             </Flex>
                         }
