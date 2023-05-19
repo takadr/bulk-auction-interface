@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { chakra, Box, Divider, Skeleton, Badge, Tag, Heading, Card, CardBody, CardFooter, Progress, Text, Image, Stack, Link, Flex, Button, useDisclosure, useInterval } from '@chakra-ui/react';
+import { chakra, Box, Divider, Skeleton, Badge, Tag, Heading, Card, CardBody, CardFooter, Progress, Text, Image, Stack, Link, Flex, Button, useDisclosure, useInterval, SkeletonText } from '@chakra-ui/react';
 import { EditIcon } from '@chakra-ui/icons';
 import { useContractEvent, useContractRead } from 'wagmi';
 import Big from '../utils/bignumber';
@@ -108,7 +108,7 @@ export default function SaleCard({ sale, editable=false, now }: { sale: Sale, ed
                                 <Text fontSize={'sm'}>Interim Goal</Text><Text fontSize={'lg'}>{data?.metaData?.interimGoalAmount ? tokenAmountFormat(data?.metaData?.interimGoalAmount, 0, 2) : '-'} ETH</Text>
                             </Flex>
                             <Flex mt={1} justifyContent={'space-between'} alignItems={'baseline'}>
-                                <Text fontSize={'sm'}>Final Goal</Text><Text fontSize={'lg'}>{data?.metaData?.interimGoalAmount ? tokenAmountFormat(data?.metaData?.finalGoalAmount, 0, 2) : '-'} ETH</Text>
+                                <Text fontSize={'sm'}>Final Goal</Text><Text fontSize={'lg'}>{data?.metaData?.finalGoalAmount ? tokenAmountFormat(data?.metaData?.finalGoalAmount, 0, 2) : '-'} ETH</Text>
                             </Flex>
                         </chakra.div>
                     </Flex>
@@ -141,4 +141,36 @@ export default function SaleCard({ sale, editable=false, now }: { sale: Sale, ed
                 editable && isOpen && <SaleMetaFormModal isOpen={isOpen} onClose={onClose} existingContractAddress={sale.id as `0x${string}`} saleMetaData={data?.metaData} onSubmitSuccess={mutate} />
             }
         </Card>
+}
+
+export const SaleCardSkeleton = () => {
+    return <Card
+    direction={{ base: 'column', sm: 'row' }}
+    overflow='hidden'
+    >
+        <Box p={6}><Skeleton
+        w={{ base: '100%', sm: '260px' }}
+        h={{ base: '100%', sm: '260px' }}
+        
+        maxW={{ base: '100%', sm: '260px' }}
+        /></Box>
+    
+        <Stack w={'full'}>
+            <CardBody>
+                <Flex>
+                    <chakra.div flex={2} pr={4}>
+                        <Skeleton h={'20px'} />
+                        <SkeletonText py='4' />
+                    </chakra.div>
+                    <Stack flex={1} spacing={4}>
+                        <Skeleton h={'20px'} borderRadius={'4px'} />
+                        <Divider />
+                        <Skeleton h={'20px'} borderRadius={'4px'} />
+                        <Skeleton h={'20px'} borderRadius={'4px'} />
+                        <Skeleton h={'20px'} borderRadius={'4px'} />
+                    </Stack>
+                </Flex>
+            </CardBody>
+        </Stack>
+    </Card>
 }

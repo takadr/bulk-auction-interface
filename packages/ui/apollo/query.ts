@@ -1,8 +1,27 @@
 import { gql } from '@apollo/client';
 
-export const LIST_SALE_QUERY = gql`
-  query ListSales($skip: Int! = 0, $first: Int! = 10){
-    sales(orderBy: startingAt, skip: $skip, first: $first) {
+export const LIST_ACTIVE_SALE_QUERY = gql`
+  query ListSales($skip: Int! = 0, $first: Int! = 50, $now: Int! ){
+    sales(orderBy: startingAt, skip: $skip, first: $first, where: { closingAt_gt: $now }) {
+      id
+      templateName
+      owner
+      token
+      tokenName
+      tokenSymbol
+      tokenDecimals
+      startingAt
+      closingAt
+      distributeAmount
+      minimalProvideAmount
+      totalProvided
+    }
+  }
+`;
+
+export const LIST_CLOSED_SALE_QUERY = gql`
+  query ListSales($skip: Int! = 0, $first: Int! = 50, $now: Int! ){
+    sales(orderBy: startingAt, skip: $skip, first: $first, where: { closingAt_lt: $now }) {
       id
       templateName
       owner

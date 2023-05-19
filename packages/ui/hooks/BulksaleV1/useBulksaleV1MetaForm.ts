@@ -53,16 +53,16 @@ export default function useBulksaleV1MetaForm({contractId, onSubmitSuccess, onSu
         if(!auctionData.id) {
             errors.id = 'Contract address is required';
         }
-        if(auctionData.title.length > 100) {
+        if(auctionData.title && auctionData.title.length > 100) {
             errors.title = 'Max length is 100';
         }
-        if(auctionData.description.length > 1000) {
+        if(auctionData.description && auctionData.description.length > 1000) {
             errors.description = 'Max length is 1000';
         }
-        if(auctionData.terms.length > 1000) {
+        if(auctionData.terms && auctionData.terms.length > 1000) {
             errors.terms = 'Max length is 1000';
         }
-        if(auctionData.interimGoalAmount > auctionData.finalGoalAmount) {
+        if(auctionData.interimGoalAmount && auctionData.interimGoalAmount > auctionData.finalGoalAmount) {
             errors.finalGoalAmount = 'Final Goal Amount must be bigger than Interim Goal Amount';
         }
         if(auctionData.projectURL && !URL_REGEX.test(auctionData.projectURL)){

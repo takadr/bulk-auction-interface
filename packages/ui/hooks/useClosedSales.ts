@@ -2,7 +2,7 @@ import {SWRConfiguration} from 'swr';
 import useSWRInfinite from 'swr/infinite';
 import { useQuery } from 'wagmi';
 import client from '../apollo/client';
-import { LIST_SALE_QUERY } from '../apollo/query';
+import { LIST_CLOSED_SALE_QUERY } from '../apollo/query';
 import { Sale } from '../types/BulksaleV1';
 
 interface SWRSaleStore {
@@ -16,21 +16,22 @@ interface SWRSaleStore {
 }
 
 // TODO Send limit as a param
-const LIMIT = 10;
+const LIMIT = 50;
+const NOW = Math.floor(new Date().getTime() / 1000);
 
-export const useSWRSales = (config: SWRConfiguration): SWRSaleStore => {
+export const useSWRClosedSales = (config: SWRConfiguration): SWRSaleStore => {
   const getKey = (pageIndex: number, previousPageData: Sale[]) => {
     if (previousPageData && !previousPageData.length) return null
     const skip = previousPageData === null ? 0 : previousPageData.length;
-    return [skip];
+    return [skip, NOW, 'closedSales'];
   }
 
   const fetcher = async (args: [number]): Promise<Sale[]> => {
     return client
     .query({
-      query: LIST_SALE_QUERY,
+      query: LIST_CLOSED_SALE_QUERY,
       variables: {
-        skip: args[0], first: 10,
+        skip: args[0], first: LIMIT, now: NOW
       },
     })
     .then((result) => {
