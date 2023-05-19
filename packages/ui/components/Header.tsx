@@ -31,6 +31,7 @@ import { sepolia } from 'wagmi/chains';
 import ProvidersList from './ProvidersList';
 import { CurrentUserContext } from './providers/CurrentUserProvider';
 import SignInButton from './SignInButton';
+import { NonceContext } from './providers/NonceProvider';
 
 type HeaderProps = {
     title?: string;
@@ -42,6 +43,7 @@ export const Header: FC<HeaderProps> = ({title}: {title?: string}) => {
     const providersListDisclosure = useDisclosure();
     const toast = useToast({position: 'top-right', isClosable: true,})
     const { currentUser, mutate } = useContext(CurrentUserContext);
+    const nonce = useContext(NonceContext);
     const { address, isConnected, connector } = useAccount();
     const { data: ensAvatar } = useEnsAvatar({ address: currentUser ? currentUser.address : address });
     const { data: ensName } = useEnsName({ address: currentUser ? currentUser.address : address });
@@ -139,7 +141,17 @@ export const Header: FC<HeaderProps> = ({title}: {title?: string}) => {
                             !currentUser && <SignInButton
                                 size={'sm'}
                                 onSuccess={() => { mutate && mutate() }}
-                                onError={() => {}}
+                                onError={(args) => {
+                                    if ('error' in args) {
+                                        const error = args.error;
+                                        toast({
+                                            description: error.message,
+                                            status: 'error',
+                                            duration: 5000,
+                                        })
+                                    }
+                                }}
+                                nonce={nonce}
                             />
                         }
                         { isConnected ? connectedMenu() : noConnectedMenu() }

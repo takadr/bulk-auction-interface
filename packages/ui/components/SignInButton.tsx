@@ -15,10 +15,12 @@ function usePrevious(value: any) {
 export default function SignInButton({
     onSuccess,
     onError,
+    nonce,
     ...buttonProps
   }: {
     onSuccess: (args: { address: string }) => void
     onError: (args: { error: Error }) => void
+    nonce?: string
   } & ButtonProps) {
     const [state, setState] = useState<{
       loading?: boolean
@@ -49,7 +51,7 @@ export default function SignInButton({
     // to ensure deep linking works for WalletConnect
     // users on iOS when signing the SIWE message
     useEffect(() => {
-      fetchNonce()
+      // fetchNonce()
     }, [])
 
     useEffect(() => {
@@ -74,7 +76,8 @@ export default function SignInButton({
           uri: window.location.origin,
           version: '1',
           chainId,
-          nonce: state.nonce,
+          // nonce: state.nonce,
+          nonce: nonce
         })
         const signature = await signMessageAsync({
           message: message.prepareMessage(),
@@ -101,10 +104,14 @@ export default function SignInButton({
    
     return (
       <>
-        <Button {...buttonProps} variant={'solid'} colorScheme={'green'} isLoading={state.loading} isDisabled={!state.nonce} onClick={signIn}>
+        <Button {...buttonProps} variant={'solid'} colorScheme={'green'} isLoading={state.loading} isDisabled={!nonce} onClick={signIn}>
           Sign-In with Ethereum
         </Button>
-        { !isConnected && <ProvidersList isOpen={providersListDisclosure.isOpen} onClose={() => { setContinueSignIn(false); providersListDisclosure.onClose}} /> }
+        { !isConnected && <ProvidersList isOpen={providersListDisclosure.isOpen} onClose={() => { 
+          setTimeout(() => {
+            setContinueSignIn(false);
+            providersListDisclosure.onClose()
+          }, 200)}} /> }
       </>
       
     )
