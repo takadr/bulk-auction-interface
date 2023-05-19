@@ -13,6 +13,7 @@ export type Sale = {
     expirationDuration?: number; //In sec
     feeRatePerMil?: number;
     totalProvided: number;
+    blockNumber: string; // Deployed block number
 }
 
 export type SaleForm = {

@@ -50,7 +50,6 @@ export default function DashboardPage() {
                     <TabPanels>
                         <TabPanel>
                             <chakra.div textAlign={'right'}>
-                                {/* <Heading size={'md'}>Your sales(TODO)</Heading> */}
                                 <Button onClick={saleFormModalDisclosure.onOpen}><AddIcon fontSize={'sm'} mr={2} />Create new sale</Button>
                             </chakra.div>
                             <SaleFormModal isOpen={saleFormModalDisclosure.isOpen} onClose={saleFormModalDisclosure.onClose} onSubmitSuccess={refetch} />

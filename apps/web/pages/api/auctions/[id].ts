@@ -5,8 +5,8 @@ import ironOptions from 'ui/constants/ironOptions';
 
 const availableNetwork = [1, 11155111]; //Mainnet & Sepolia
 
-const requireAvailableNetwork = (req: NextApiRequest) => {
-    if(!availableNetwork.includes(req.session.siwe.chainId)) throw new Error('Wrong network');
+const requireAvailableNetwork = (chainId) => {
+    if(!availableNetwork.includes(chainId)) throw new Error('Wrong network');
 }
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
@@ -14,8 +14,8 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     switch (method) {
         case 'GET':
         try {
-            requireAvailableNetwork(req);
             const { id } = req.query;
+            // requireAvailableNetwork(chainId);
             const auction = await fetchAuction(id as string);
             res.json({ auction })
         } catch (_error) {

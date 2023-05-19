@@ -20,7 +20,7 @@ export default function useBulksaleV1Form({
     onWaitForTransactionError,
 }: {
     address: `0x${string}`,
-    onSubmitSuccess?: (result: any) => void, // TODO use SendTransactionResult
+    onSubmitSuccess?: (result: any) => void,
     onSubmitError?: (e: any) => void,
     onContractWriteSuccess?: (result: any) => void,
     onContractWriteError?: (e: any) => void,

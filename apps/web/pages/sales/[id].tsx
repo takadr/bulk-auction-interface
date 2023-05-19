@@ -8,7 +8,6 @@ import { GET_SALE_QUERY } from 'ui/apollo/query';
 import useSWRAuction from 'ui/hooks/useAuction';
 
 export default function SalePage() {
-    const { chain } = useNetwork();
     const { address, isConnected, connector } = useAccount();
     const router = useRouter();
     const { id } = router.query;

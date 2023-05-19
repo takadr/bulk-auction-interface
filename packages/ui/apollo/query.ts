@@ -15,6 +15,7 @@ export const LIST_ACTIVE_SALE_QUERY = gql`
       distributeAmount
       minimalProvideAmount
       totalProvided
+      blockNumber
     }
   }
 `;
@@ -34,6 +35,7 @@ export const LIST_CLOSED_SALE_QUERY = gql`
       distributeAmount
       minimalProvideAmount
       totalProvided
+      blockNumber
     }
   }
 `;
@@ -53,6 +55,7 @@ export const LIST_MY_SALE_QUERY = gql`
       distributeAmount
       minimalProvideAmount
       totalProvided
+      blockNumber
     }
   }
 `;
@@ -72,6 +75,7 @@ export const GET_SALE_QUERY = gql`
       distributeAmount
       minimalProvideAmount
       totalProvided
+      blockNumber
     }
   }
 `;

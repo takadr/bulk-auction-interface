@@ -1,3 +1,13 @@
+export const CHAIN_NAMES: {[key: string]: 'mainnet'|'sepolia'} = {
+    '1': 'mainnet',
+    '11155111': 'sepolia',
+}
+
+export const CHAIN_IDS = {
+    'mainnet': 1,
+    'sepolia': 11155111,
+}
+
 export const COINGECKO_URL = 'https://api.coingecko.com/api/v3/simple/price';
 
 export const SALE_TEMPLATE_V1_NAME = "0x53616c6554656d706c6174655631000000000000000000000000000000000000"

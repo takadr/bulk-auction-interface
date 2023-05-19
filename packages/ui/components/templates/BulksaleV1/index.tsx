@@ -17,6 +17,7 @@ import useWithdrawUnclaimedERC20OnSale from '../../../hooks/useWithdrawUnclaimed
 import useRate from '../../../hooks/useRate';
 import { Sale, MetaData } from '../../../types/BulksaleV1';
 import ExternalLinkTag from '../../ExternalLinkTag';
+import useIsClaimed from '../../../hooks/BulksaleV1/useIsClaimed';
 
 interface BulksaleV1Params {
     sale: Sale,
@@ -29,11 +30,11 @@ export default function BulksaleV1({sale, metaData, address, contractAddress}: B
     const toast = useToast({position: 'top-right', isClosable: true,});
     const { provided } = useBulksaleV1(contractAddress, address);
     const { data: balanceData } = useBalance({address});
-    
+    const { data: isClaimed, error: isClaimedError, mutate: mutateIsClaimed } = useIsClaimed(sale, address);
+
     const providedTokenSymbol = 'ETH';
     const providedTokenDecimal = 18;
 
-    const [isClaimed, setIsClaimed] = useState<boolean>(false);
     const [started, setStarted] = useState<boolean>(false);
     const [ended, setEnded] = useState<boolean>(false);
 
@@ -42,13 +43,14 @@ export default function BulksaleV1({sale, metaData, address, contractAddress}: B
     const {data: rateDate, mutate: updateRate, error: rateError} = useRate('ethereum', 'usd');
 
     useInterval(() => {
-        setIsClaimed(false);
         setStarted(sale.startingAt * 1000 <= new Date().getTime());
         setEnded(sale.closingAt * 1000 < new Date().getTime());
     }, 1000);
     useInterval(() => {
         updateRate();
     }, 10000);
+
+    // TODO listen Claimed event then refetchIsClaimed()
 
     const handleSubmit = async (values: {[key: string]: number}) => {
         // console.log(utils.parseEther(values.amount.toString()));
@@ -112,7 +114,7 @@ export default function BulksaleV1({sale, metaData, address, contractAddress}: B
         },
     });
 
-    const {prepareFn: claimPrepareFn, writeFn: claimWriteFn, waitFn: claimWaitFn} = useClaim(contractAddress, address);
+    const {prepareFn: claimPrepareFn, writeFn: claimWriteFn, waitFn: claimWaitFn} = useClaim({targetAddress: contractAddress, owner: address, onSuccessConfirm: mutateIsClaimed});
     const {prepareFn: withdrawERC20PrepareFn, writeFn: withdrawERC20WriteFn, waitFn: withdrawERC20WaitFn} = useWithdrawERC20Onsale(contractAddress);
     const {prepareFn: withdrawETHPrepareFn, writeFn: withdrawETHWriteFn, waitFn: withdrawETHWaitFn} = useWithdrawProvidedETH(contractAddress);
     const {prepareFn: withdrawUnclaimedERC20PrepareFn, writeFn: withdrawUnclaimedERC20WriteFn, waitFn: withdrawUnclaimedERC20WaitFn} = useWithdrawUnclaimedERC20OnSale(contractAddress);
@@ -204,6 +206,7 @@ export default function BulksaleV1({sale, metaData, address, contractAddress}: B
                         <Button
                             variant={'solid'}
                             isDisabled={isClaimed || !claimWriteFn.writeAsync}
+                            isLoading={claimWriteFn?.isLoading || claimWaitFn?.isLoading}
                             onClick={async() => {
                                 await claimWriteFn.writeAsync();
                             }}
@@ -224,7 +227,7 @@ export default function BulksaleV1({sale, metaData, address, contractAddress}: B
                         providedTokenSymbol={providedTokenSymbol}
                         providedTokenDecimal={providedTokenDecimal}
                         isEnding={ended}
-                        isClaimed={isClaimed}
+                        isClaimed={!!isClaimed}
                     />
                 </Box> }
 
