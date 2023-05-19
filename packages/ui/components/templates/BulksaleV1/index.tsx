@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
-import { Container, Heading, Image, Flex, Box, Button, FormControl, FormLabel, FormErrorMessage, NumberInput, NumberInputField, NumberInputStepper, NumberIncrementStepper, NumberDecrementStepper, Tooltip, Stack, Divider, chakra, useInterval, useToast, Link, HStack, Tag} from '@chakra-ui/react';
+import { Container, Heading, Image, Flex, Box, Button, FormControl, FormLabel, FormErrorMessage, NumberInput, NumberInputField, NumberInputStepper, NumberIncrementStepper, NumberDecrementStepper, Tooltip, Stack, Divider, chakra, useInterval, useToast, Link, HStack, Tag, Card, CardHeader, CardBody, StackDivider} from '@chakra-ui/react';
 import { ExternalLinkIcon, QuestionIcon } from '@chakra-ui/icons';
 import { useFormik } from 'formik';
 import { useProvider, useNetwork, useAccount, useContractRead, usePrepareContractWrite, useContractWrite, useWaitForTransaction, useContractEvent, usePrepareSendTransaction, useSendTransaction, useToken, erc20ABI, useBalance } from 'wagmi';
@@ -230,50 +230,57 @@ export default function BulksaleV1({sale, metaData, address, contractAddress}: B
                         isClaimed={!!isClaimed}
                     />
                 </Box> }
-
                 {
-                    sale.owner === address && <Stack spacing={4} py={8}>
-                        <Divider />
-                        <Heading textAlign={'center'}>Owner Menu</Heading>
-                        <chakra.div textAlign={'center'}>
-                            <Button
-                                variant={'solid'}
-                                isDisabled={!withdrawERC20WriteFn.writeAsync}
-                                onClick={async() => {
-                                    await claimWriteFn.writeAsync();
-                                }}
-                            >
-                                Withdraw Token 
-                                <Tooltip hasArrow label={'Finished, but the privided token is not enough. (Failed sale)'}><QuestionIcon mb={1} ml={1} /></Tooltip>
-                            </Button>
-                        </chakra.div>
+                    sale.owner?.toLowerCase() === address.toLowerCase() && <>
+                    <Divider mt={8} />
+                    <Card mt={8}>
+                        <CardHeader>
+                            <Heading size='md'>Owner Menu</Heading>
+                        </CardHeader>
+                    
+                        <CardBody>
+                            <Stack divider={<StackDivider />} spacing='4'>
+                                <chakra.div textAlign={'center'}>
+                                    <Button
+                                        variant={'solid'}
+                                        isDisabled={!withdrawERC20WriteFn.writeAsync}
+                                        onClick={async() => {
+                                            await claimWriteFn.writeAsync();
+                                        }}
+                                    >
+                                        Withdraw Token 
+                                        <Tooltip hasArrow label={'Finished, but the privided token is not enough. (Failed sale)'}><QuestionIcon mb={1} ml={1} /></Tooltip>
+                                    </Button>
+                                </chakra.div>
 
-                        <chakra.div textAlign={'center'}>
-                            <Button
-                                variant={'solid'}
-                                isDisabled={!withdrawETHWriteFn.writeAsync}
-                                onClick={async() => {
-                                    await withdrawETHWriteFn.writeAsync();
-                                }}
-                            >
-                                Withdraw ETH 
-                                <Tooltip hasArrow label={'Finished, and enough Ether provided.'}><QuestionIcon mb={1} ml={1} /></Tooltip>
-                            </Button>
-                        </chakra.div>
+                                <chakra.div textAlign={'center'}>
+                                    <Button
+                                        variant={'solid'}
+                                        isDisabled={!withdrawETHWriteFn.writeAsync}
+                                        onClick={async() => {
+                                            await withdrawETHWriteFn.writeAsync();
+                                        }}
+                                    >
+                                        Withdraw ETH 
+                                        <Tooltip hasArrow label={'Finished, and enough Ether provided.'}><QuestionIcon mb={1} ml={1} /></Tooltip>
+                                    </Button>
+                                </chakra.div>
 
-                        <chakra.div textAlign={'center'}>
-                            <Button
-                                variant={'solid'}
-                                isDisabled={!withdrawUnclaimedERC20WriteFn.writeAsync}
-                                onClick={async() => {
-                                    await withdrawUnclaimedERC20WriteFn.writeAsync();
-                                }}
-                            >
-                                Withdraw Unclaimed Token 
-                                <Tooltip hasArrow label={'Finished, passed lock duration, and still there\'re unsold ERC-20.'}><QuestionIcon mb={1} ml={1} /></Tooltip>
-                            </Button>
-                        </chakra.div>
-                    </Stack>
+                                <chakra.div textAlign={'center'}>
+                                    <Button
+                                        variant={'solid'}
+                                        isDisabled={!withdrawUnclaimedERC20WriteFn.writeAsync}
+                                        onClick={async() => {
+                                            await withdrawUnclaimedERC20WriteFn.writeAsync();
+                                        }}
+                                    >
+                                        Withdraw Unclaimed Token 
+                                        <Tooltip hasArrow label={'Finished, passed lock duration, and still there\'re unsold ERC-20.'}><QuestionIcon mb={1} ml={1} /></Tooltip>
+                                    </Button>
+                                </chakra.div>
+                            </Stack>
+                        </CardBody>
+                    </Card></>
                 }
             </Container>
         </>
