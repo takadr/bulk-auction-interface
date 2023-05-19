@@ -9,7 +9,7 @@ import SaleFormModal from 'ui/components/SaleFormModal';
 import { useQuery, useApolloClient } from "@apollo/client";
 import { useSWRAuctions } from 'ui/hooks/useAuctions';
 import { MetaData, Sale } from 'ui/types/BulksaleV1';
-import SaleCard from 'ui/components/SaleCard';
+import SaleCard, { SaleCardSkeleton } from 'ui/components/SaleCard';
 import { LIST_MY_SALE_QUERY, GET_SALE_QUERY }  from 'ui/apollo/query';
 
 export default function DashboardPage() {
@@ -44,7 +44,7 @@ export default function DashboardPage() {
                 <Heading size={'lg'}>Dashboard</Heading>
                 <Tabs mt={8}>
                     <TabList>
-                        <Tab>Sales</Tab>
+                        <Tab>Your Sales</Tab>
                     </TabList>
 
                     <TabPanels>
@@ -55,7 +55,10 @@ export default function DashboardPage() {
                             <SaleFormModal isOpen={saleFormModalDisclosure.isOpen} onClose={saleFormModalDisclosure.onClose} onSubmitSuccess={refetch} />
                             <Stack mt={4} spacing={8}>
                                 {
-                                    loading ? <Spinner /> : data.sales.map((sale: Sale) => {
+                                    loading ? <>
+                                    <SaleCardSkeleton /><SaleCardSkeleton /><SaleCardSkeleton />
+                                    </> 
+                                    : data.sales.map((sale: Sale) => {
                                         return <SaleCard sale={sale} now={now} editable />
                                     })
                                 }
