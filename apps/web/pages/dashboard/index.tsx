@@ -31,7 +31,8 @@ export default function DashboardPage() {
             </Container>
         </Layout>
     } else if (currentUser === null) {
-        <Layout>
+        Router.push('/')
+        return <Layout>
             <Container maxW="container.lg" py={16}>
                 <Box>404</Box>
             </Container>
@@ -55,7 +56,7 @@ export default function DashboardPage() {
                             <SaleFormModal isOpen={saleFormModalDisclosure.isOpen} onClose={saleFormModalDisclosure.onClose} onSubmitSuccess={refetch} />
                             <Stack mt={4} spacing={8}>
                                 {
-                                    loading ? <>
+                                    loading || !data ? <>
                                     <SaleCardSkeleton /><SaleCardSkeleton /><SaleCardSkeleton />
                                     </> 
                                     : data.sales.map((sale: Sale) => {
