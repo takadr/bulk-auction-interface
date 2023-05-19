@@ -23,6 +23,8 @@ type Sale @entity {
   minimalProvideAmount: BigInt!
   # The total ETH amount of bidding that the sale raised (in Wei)
   totalProvided: BigInt!
+  # Block number deployed
+  blockNumber: BigInt!
 }
 
 type Template @entity {

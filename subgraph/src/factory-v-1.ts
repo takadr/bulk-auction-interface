@@ -24,6 +24,7 @@ export function handleDeployed(event: DeployedEvent): void {
   sale.distributeAmount = event.params.distributeAmount
   sale.minimalProvideAmount = event.params.minimalProvideAmount
   sale.totalProvided = BigInt.fromI32(0)
+  sale.blockNumber = event.block.number
   sale.save()
   SaleTemplateV1.create(event.params.deployedAddr)
 }
