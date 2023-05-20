@@ -1,6 +1,6 @@
 import { DynamoDBClient, GetItemCommand, BatchGetItemCommand, PutItemCommand, UpdateItemCommand, ScanCommand } from '@aws-sdk/client-dynamodb';
 import { SALE_TEMPLATE_V1_NAME } from '../constants';
-import { MetaData } from '../types/BulksaleV1';
+import { MetaData, validateMetaData } from '../types/BulksaleV1';
 
 const dbClient = new DynamoDBClient({
   region: process.env.AWS_REGION as string,
@@ -66,6 +66,11 @@ export async function batchFetchAuction(auctionIds: string[]): Promise<MetaData[
 }
 
 export async function addAuction(auction: MetaData): Promise<MetaData | undefined> {
+  const errors = validateMetaData(auction)
+  if(Object.keys(errors).length > 0) {
+    const errorMessage = Object.entries(errors).map(e => e[1]).join(', ')
+    throw new Error(errorMessage)
+  }
   const item = {
     AuctionId: {S: (auction.id as string).toLowerCase()},
     Title: {S: auction.title ? auction.title : ''},
@@ -90,6 +95,12 @@ export async function addAuction(auction: MetaData): Promise<MetaData | undefine
 }
 
 export async function updateAuction(auction: MetaData): Promise<MetaData | undefined> {
+  const errors = validateMetaData(auction)
+  if(Object.keys(errors).length > 0) {
+    const errorMessage = Object.entries(errors).map(e => e[1]).join(', ')
+    throw new Error(errorMessage)
+  }
+
   const command = new UpdateItemCommand({
     TableName: process.env.AWS_DYNAMO_TABLE_NAME,
     Key: { AuctionId : { S: (auction.id as string).toLowerCase() } },

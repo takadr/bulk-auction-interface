@@ -115,7 +115,7 @@ export default function BulksaleV1Form({formikProps, address, approvals, writeFn
                 </FormControl>
 
                 <FormControl mt={4} isInvalid={!!formikProps.errors.minimalProvideAmount && !!formikProps.touched.minimalProvideAmount}>
-                    <FormLabel alignItems={'baseline'}>Minimum provide amount
+                    <FormLabel alignItems={'baseline'}>Minimum provide amount (削除予定)
                         <Tooltip hasArrow label={'TODO explanation'}><QuestionIcon mb={1} ml={1} /></Tooltip>
                     </FormLabel>
                     <Flex alignItems={'center'}>

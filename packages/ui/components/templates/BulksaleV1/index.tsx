@@ -276,7 +276,7 @@ export default function BulksaleV1({sale, refetchSale, metaData, refetchMetaData
                                             await claimWriteFn.writeAsync();
                                         }}
                                     >
-                                        Withdraw Token 
+                                        Withdraw Token (削除予定)
                                         <Tooltip hasArrow label={'Finished, but the privided token is not enough. (Failed sale)'}><QuestionIcon mb={1} ml={1} /></Tooltip>
                                     </Button>
                                 </chakra.div>
@@ -302,7 +302,7 @@ export default function BulksaleV1({sale, refetchSale, metaData, refetchMetaData
                                             await withdrawUnclaimedERC20WriteFn.writeAsync();
                                         }}
                                     >
-                                        Withdraw Unclaimed Token 
+                                        Withdraw Unclaimed Token (削除予定)
                                         <Tooltip hasArrow label={'Finished, passed lock duration, and still there\'re unsold ERC-20.'}><QuestionIcon mb={1} ml={1} /></Tooltip>
                                     </Button>
                                 </chakra.div>
