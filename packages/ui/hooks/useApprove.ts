@@ -2,7 +2,15 @@ import { useNetwork, usePrepareContractWrite, useContractWrite, useWaitForTransa
 import { BigNumber, constants } from 'ethers';
 import { useState } from 'react';
 
-export default function useApprove(
+export default function useApprove({
+  targetAddress,
+  owner,
+  spender,
+  onSuccessWrite,
+  onErrorWrite,
+  onSuccessConfirm,
+  onErrorConfirm
+}: {
   targetAddress: `0x${string}` | null, 
   owner: `0x${string}`, 
   spender: `0x${string}`,
@@ -10,11 +18,12 @@ export default function useApprove(
   onErrorWrite?: (e: Error) => void,
   onSuccessConfirm?: (data: any) => void,
   onErrorConfirm?: (e: Error) => void
-  ): {
+}): {
   prepareFn: any,
   writeFn: any,
   waitFn: ReturnType<typeof useWaitForTransaction>,
-  allowance: BigNumber
+  allowance: BigNumber,
+  refetchAllowance: () => Promise<any>
 } {
   const { chain } = useNetwork();
   const [allowance, setAllowance] = useState<BigNumber>(BigNumber.from(0)); 
@@ -34,7 +43,6 @@ export default function useApprove(
   const writeFn = useContractWrite({
     ...prepareFn.config,
     onSuccess(data) {
-      console.log('Approved!', data)
       onSuccessWrite && onSuccessWrite(data);
     },
     onError(e: Error) {
@@ -69,6 +77,7 @@ export default function useApprove(
     prepareFn,
     writeFn,
     waitFn,
-    allowance
+    allowance,
+    refetchAllowance: readFn.refetch
   }
 }

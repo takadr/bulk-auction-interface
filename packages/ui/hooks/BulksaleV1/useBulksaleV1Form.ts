@@ -66,7 +66,7 @@ export default function useBulksaleV1Form({
             errors.eventDuration = `Sale duration must be less than or equal to 30 days`;
         }
 
-        if(balance && tokenData && Big(balance.toString()).lt(Big(formikProps.values.distributeAmount).pow(tokenData.decimals))) {
+        if(balance && tokenData && Big(balance.toString()).lt(Big(formikProps.values.distributeAmount).mul(Big(10).pow(tokenData.decimals)))) {
             errors.distributeAmount = `You need to have enough balance for distribution`;
         }
       
@@ -90,7 +90,6 @@ export default function useBulksaleV1Form({
     });
 
     const [debouncedSale] = useDebounce(formikProps.values, 500);
-    const approvals = useApprove(debouncedSale.token, address as `0x${string}`, process.env.NEXT_PUBLIC_FACTORY_ADDRESS as `0x${string}`);
     const { data: balance } = useContractRead( {
         address: debouncedSale.token as `0x${string}`,
         abi: erc20ABI,
@@ -135,6 +134,13 @@ export default function useBulksaleV1Form({
             onWaitForTransactionError && onWaitForTransactionError(e);
         }
     })
+    
+    const approvals = useApprove({
+        targetAddress: debouncedSale.token, 
+        owner: address as `0x${string}`, 
+        spender: process.env.NEXT_PUBLIC_FACTORY_ADDRESS as `0x${string}`,
+        onSuccessConfirm: prepareFn.refetch
+    });
 
     return {
         formikProps,

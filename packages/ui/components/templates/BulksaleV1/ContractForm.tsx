@@ -21,7 +21,8 @@ import { differenceInSeconds, addSeconds } from 'date-fns';
 import { SaleForm } from '../../../types/BulksaleV1';
 import { BigNumber } from 'ethers';
 import { tokenAmountFormat } from '../../../utils';
-import Big from '../../../utils/bignumber';
+import Big, { multiply } from '../../../utils/bignumber';
+import { useEffect } from 'react';
 
 export default function BulksaleV1Form({formikProps, address, approvals, writeFn, tokenData, balance}: {formikProps: FormikProps<SaleForm>, address: `0x${string}`, approvals: any, writeFn: any, tokenData: any, balance?: BigNumber | undefined}) {
     return (
@@ -134,7 +135,7 @@ export default function BulksaleV1Form({formikProps, address, approvals, writeFn
                     <FormErrorMessage>{formikProps.errors.minimalProvideAmount}</FormErrorMessage>
                 </FormControl>
                 {
-                    approvals.allowance && approvals.allowance >= formikProps.values.distributeAmount * (10 ** tokenData?.decimals) ?
+                    approvals.allowance && Big(approvals.allowance).gte(multiply(Big(formikProps.values.distributeAmount.toString()), Big(10).pow(tokenData ? tokenData.decimals : 0))) ?
                     <Button mt={8} 
                         type="submit" 
                         w={'full'} 
