@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useContext, memo } from 'react';
 import { useAccount, useNetwork, useSignMessage } from 'wagmi';
 import { SiweMessage } from 'siwe';
 import { Button, ButtonProps, useDisclosure } from '@chakra-ui/react';
@@ -12,10 +12,9 @@ function usePrevious(value: any) {
   return ref.current;
 }
 
-export default function SignInButton({
+export default memo(function SignInButton({
     onSuccess,
     onError,
-    nonce,
     ...buttonProps
   }: {
     onSuccess: (args: { address: string }) => void
@@ -24,7 +23,6 @@ export default function SignInButton({
   } & ButtonProps) {
     const [state, setState] = useState<{
       loading?: boolean
-      nonce?: string
     }>({})
     const providersListDisclosure = useDisclosure();
     const [continueSignIn, setContinueSignIn] = useState(false);
@@ -32,16 +30,14 @@ export default function SignInButton({
       try {
         const nonceRes = await fetch('/api/nonce')
         const nonce = await nonceRes.text()
-        setState((x) => ({ ...x, nonce }))
+        return nonce
       } catch (error) {
-        setState((x) => ({ ...x, error: error as Error }))
+        // setState((x) => ({ ...x, error: error as Error }))
       }
     }
     const { address, isConnected } = useAccount({
       onConnect: async ({address, connector}) => {
         console.log('On Connect', address, connector)
-        // setTimeout(() => signIn(address), 100);
-        // await signIn(address);
       }
     })
     const { chain } = useNetwork()
@@ -69,6 +65,7 @@ export default function SignInButton({
    
         setState((x) => ({ ...x, loading: true }))
         // Create SIWE message with pre-fetched nonce and sign with wallet
+        const _nonce = await fetchNonce();
         const message = new SiweMessage({
           domain: window.location.host,
           address: address,
@@ -76,8 +73,7 @@ export default function SignInButton({
           uri: window.location.origin,
           version: '1',
           chainId,
-          // nonce: state.nonce,
-          nonce: nonce
+          nonce: _nonce
         })
         const signature = await signMessageAsync({
           message: message.prepareMessage(),
@@ -96,15 +92,15 @@ export default function SignInButton({
         setState((x) => ({ ...x, loading: false }))
         onSuccess({ address: address as `0x${string}` })
       } catch (error) {
-        setState((x) => ({ ...x, loading: false, nonce: undefined }))
+        setState((x) => ({ ...x, loading: false }))
         onError({ error: error as Error })
-        fetchNonce()
+        // fetchNonce()
       }
     }
    
     return (
       <>
-        <Button {...buttonProps} variant={'solid'} colorScheme={'green'} isLoading={state.loading} isDisabled={!nonce} onClick={signIn}>
+        <Button {...buttonProps} variant={'solid'} colorScheme={'green'} isLoading={state.loading} onClick={signIn}>
           Sign-In with Ethereum
         </Button>
         { !isConnected && <ProvidersList isOpen={providersListDisclosure.isOpen} onClose={() => { 
@@ -115,4 +111,7 @@ export default function SignInButton({
       </>
       
     )
-  }
+  }, (prevProps, nextProps) => {
+    if(prevProps.nonce === nextProps.nonce) { return true }
+    return false
+  })

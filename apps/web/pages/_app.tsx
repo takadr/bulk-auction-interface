@@ -6,7 +6,6 @@ import theme from 'ui/themes';
 import client from 'ui/connector'; 
 import apolloClient from 'ui/apollo/client';
 import { CurrentUserProvider } from 'ui/components/providers/CurrentUserProvider';
-import { NonceProvider } from 'ui/components/providers/NonceProvider';
 import "ui/styles.css";
 
 export default function MyApp({ Component, pageProps }: AppProps) {
@@ -15,9 +14,7 @@ export default function MyApp({ Component, pageProps }: AppProps) {
       <WagmiConfig client={client}>
         <ApolloProvider client={apolloClient}>
           <CurrentUserProvider>
-            <NonceProvider>
-              <Component {...pageProps} />
-            </NonceProvider>
+            <Component {...pageProps} />
           </CurrentUserProvider>
         </ApolloProvider>
       </WagmiConfig>

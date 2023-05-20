@@ -7,12 +7,10 @@ import { useAtom } from 'jotai';
 import { saleClonesAtom, saleTxAtom, waitingTransactionAtom } from 'ui/store';
 import SignInButton from 'ui/components/SignInButton';
 import { CurrentUserContext } from 'ui/components/providers/CurrentUserProvider';
-import { NonceContext } from 'ui/components/providers/NonceProvider';
 import Layout from 'ui/components/layouts/layout';
 
 export default function Web() {
   const { currentUser } = useContext(CurrentUserContext);
-  const nonce = useContext(NonceContext);
   const { chain } = useNetwork();
   const { address, isConnected, connector } = useAccount();
   const { disconnect } = useDisconnect();
@@ -51,7 +49,7 @@ export default function Web() {
                 console.log(error.message)
             }
         }}
-        nonce={nonce}
+        // nonce={nonce}
     />
       }
     </Layout>
