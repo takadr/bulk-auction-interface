@@ -94,22 +94,22 @@ export default function PersonalStatistics({
             </Flex>
           ) : (
             !isClaimed && (
-              <div>
-                  <>
-                  Your contribution
-                  <span style={{ fontWeight: 'bold', marginLeft: '10px' }}>
-                      <>
-                      {active ? fixedProvidedAmount : '????'}{' '}
-                      {providedTokenSymbol.toUpperCase()}
-                      </>
-                  </span>
-                  {parseFloat(fixedProvidedAmount) === 0 && (
-                      <p>
+              <Flex justifyContent={'space-between'}>
+                <div>
+                  Your contribution:
+                </div>
+                <chakra.div>
+                    <chakra.p fontWeight={'bold'}>
+                    {active ? fixedProvidedAmount : '????'}{' '}
+                    {providedTokenSymbol.toUpperCase()}
+                    </chakra.p>
+                    {parseFloat(fixedProvidedAmount) === 0 && (
+                      <chakra.p fontSize={'sm'}>
                       Your contribution is too small so that it is shown as 0
-                      </p>
+                      </chakra.p>
                   )}
-                </>
-              </div>
+                </chakra.div>
+              </Flex>
             )
           )}
         </Stack>

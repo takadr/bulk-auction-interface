@@ -8,7 +8,7 @@ export default function useClaim({
   onSuccessConfirm,
 } : {
   targetAddress: `0x${string}` | null,
-  owner: `0x${string}`,
+  owner: `0x${string}`|undefined,
   onSuccessWrite?: (data: any) => void,
   onSuccessConfirm?: (data: any) => void,
 }): {

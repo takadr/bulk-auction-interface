@@ -67,13 +67,16 @@ export default function StatisticsInCircle({
                 : '????'}
             </span>
             <div>
-              {!!interimGoalAmount && !isDifferentialNetwork ? (
+              {!!interimGoalAmount && !isDifferentialNetwork ? 
                 <>
                   GOAL {tokenAmountFormat(interimGoalAmount, 18, 2)}
                   {providedTokenSymbol.toUpperCase()}
-                  {totalProvided.gte(interimGoalAmount) ? 'Achieved🎉' : ''}
+                  { 
+                    totalProvided.gte(interimGoalAmount) && started && 
+                      <chakra.p textAlign={'center'}> Achieved 🎉</chakra.p>
+                  }
                 </>
-              ) : (
+              : (
                 <p>
                   Please connect to {targetedChain}
                 </p>

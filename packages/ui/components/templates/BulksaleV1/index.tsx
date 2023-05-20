@@ -22,12 +22,12 @@ import ExternalLinkTag from '../../ExternalLinkTag';
 import useIsClaimed from '../../../hooks/BulksaleV1/useIsClaimed';
 import SaleTemplateV1ABI from '../../../constants/abis/SaleTemplateV1.json';
 
-interface BulksaleV1Params {
-    sale: Sale,
-    refetchSale: () => Promise<ApolloQueryResult<any>>,
-    metaData: MetaData,
-    refetchMetaData: KeyedMutator<any>,
-    address: `0x${string}`
+type BulksaleV1Params = {
+    sale: Sale;
+    refetchSale: () => Promise<ApolloQueryResult<any>>;
+    metaData: MetaData;
+    refetchMetaData: KeyedMutator<any>;
+    address: `0x${string}`|undefined;
     contractAddress: `0x${string}`;
 }
 
@@ -228,21 +228,6 @@ export default function BulksaleV1({sale, refetchSale, metaData, refetchMetaData
                         } ETH
                     </chakra.p>
                 </Box> }
-                
-                { ended && 
-                    <chakra.div>
-                        <Button
-                            variant={'solid'}
-                            isDisabled={isClaimed || !claimWriteFn.writeAsync}
-                            isLoading={claimWriteFn?.isLoading || claimWaitFn?.isLoading}
-                            onClick={async() => {
-                                await claimWriteFn.writeAsync();
-                            }}
-                        >
-                            { isClaimed ? 'Claimed' : 'Claim' }
-                        </Button>
-                    </chakra.div>
-                }
 
                 { address && started && <Box mt={1}>
                     <PersonalStatistics
@@ -258,6 +243,22 @@ export default function BulksaleV1({sale, refetchSale, metaData, refetchMetaData
                         isClaimed={!!isClaimed}
                     />
                 </Box> }
+
+                { ended && 
+                    <chakra.div textAlign={'right'} mt={2}>
+                        <Button
+                            variant={'solid'}
+                            isDisabled={isClaimed || !claimWriteFn.writeAsync}
+                            isLoading={claimWriteFn?.isLoading || claimWaitFn?.isLoading}
+                            onClick={async() => {
+                                await claimWriteFn.writeAsync();
+                            }}
+                        >
+                            { isClaimed ? 'Claimed' : 'Claim' }
+                        </Button>
+                    </chakra.div>
+                }
+
                 {
                     address && sale.owner?.toLowerCase() === address.toLowerCase() && <>
                     <Divider mt={8} />

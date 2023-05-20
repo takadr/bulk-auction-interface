@@ -1,7 +1,7 @@
 import { useContractRead } from "wagmi";
 import SaleTemplateV1ABI from '../../constants/abis/SaleTemplateV1.json';
 
-export default function useProvided(contractAddress: `0x${string}`, address: `0x${string}`): {
+export default function useProvided(contractAddress: `0x${string}`, address: `0x${string}`|undefined): {
     provided: BigInt,
     refetch: () => Promise<any>
 } {

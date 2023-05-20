@@ -5,7 +5,7 @@ import { CHAIN_NAMES } from "../../constants";
 import { Sale } from "../../types/BulksaleV1";
 import useSWR, { SWRResponse } from "swr";
 
-export default function useSWRIsClaimed(sale: Sale, address: `0x${string}`): SWRResponse<boolean|undefined, Error> {
+export default function useSWRIsClaimed(sale: Sale, address: `0x${string}`|undefined): SWRResponse<boolean|undefined, Error> {
     const provider = ethers.getDefaultProvider(CHAIN_NAMES[process.env.NEXT_PUBLIC_CHAIN_ID as string])
     const saleContract = new ethers.Contract(sale.id as string, SaleTemplateV1ABI, provider)
     const filter = saleContract.filters.Claimed(address)
