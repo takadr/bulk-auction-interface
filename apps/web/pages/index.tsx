@@ -22,7 +22,6 @@ export default function Web() {
   const [waitingTransaction, setWaitingTransaction] = useAtom(waitingTransactionAtom);
 
 
-  const token = process.env.NEXT_PUBLIC_TOKEN_ADDRESS;
   // const token = "0x7169D38820dfd117C3FA1f22a697dBA58d90BA06"; // USDT
   const factory = process.env.NEXT_PUBLIC_FACTORY_ADDRESS;
 

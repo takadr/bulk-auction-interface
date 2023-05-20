@@ -5,7 +5,6 @@
     "build": {
       "outputs": [".next/**", "!.next/cache/**"],
       "env": [
-        "NEXT_PUBLIC_TOKEN_ADDRESS",
         "NEXT_PUBLIC_FACTORY_ADDRESS"
       ]
     },
