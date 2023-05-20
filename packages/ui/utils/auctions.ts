@@ -78,7 +78,7 @@ export async function addAuction(auction: MetaData): Promise<MetaData | undefine
     Terms: {S: auction.terms ? auction.terms : ''},
     ProjectURL: {S: auction.projectURL ? auction.projectURL : ''},
     LogoURL: {S: auction.logoURL ? auction.logoURL : ''},
-    otherURL: {S: auction.otherURL ? auction.otherURL : ''},
+    OtherURL: {S: auction.otherURL ? auction.otherURL : ''},
     InterimGoalAmount: {N: auction.interimGoalAmount ? auction.interimGoalAmount.toString() : ''},
     FinalGoalAmount: {N: auction.finalGoalAmount ? auction.finalGoalAmount.toString() : ''},
     TokenName: {S: auction.tokenName ? auction.tokenName : ''},
