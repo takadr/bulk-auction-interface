@@ -26,7 +26,9 @@ export default function SalePage() {
         <Layout>
             <BulksaleV1
                 sale={saleData.sale}
+                refetchSale={refetch}
                 metaData={metaData.metaData}
+                refetchMetaData={mutate}
                 contractAddress={id as `0x${string}`}
                 address={address}
             />

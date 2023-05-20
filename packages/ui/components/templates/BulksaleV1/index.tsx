@@ -2,14 +2,16 @@ import { useState, useEffect, useCallback } from 'react';
 import { Container, Heading, Image, Flex, Box, Button, FormControl, FormLabel, FormErrorMessage, NumberInput, NumberInputField, NumberInputStepper, NumberIncrementStepper, NumberDecrementStepper, Tooltip, Stack, Divider, chakra, useInterval, useToast, Link, HStack, Tag, Card, CardHeader, CardBody, StackDivider} from '@chakra-ui/react';
 import { ExternalLinkIcon, QuestionIcon } from '@chakra-ui/icons';
 import { useFormik } from 'formik';
-import { useProvider, useNetwork, useAccount, useContractRead, usePrepareContractWrite, useContractWrite, useWaitForTransaction, useContractEvent, usePrepareSendTransaction, useSendTransaction, useToken, erc20ABI, useBalance } from 'wagmi';
+import { useWaitForTransaction, useContractEvent, usePrepareSendTransaction, useSendTransaction, useBalance } from 'wagmi';
+import { ApolloQueryResult } from '@apollo/client';
+import { KeyedMutator } from 'swr';
 import { format, formatDistance, formatRelative, subDays } from 'date-fns';
 import Big from '../../../utils/bignumber';
 import { BigNumber, utils } from 'ethers';
 import CalendarInCircle from './CalendarInCircle';
 import PersonalStatistics from './PersonalStatistics';
 import StatisticsInCircle from './StatisticsInCircle';
-import useBulksaleV1 from '../../../hooks/BulksaleV1/useBulksaleV1';
+import useProvided from '../../../hooks/BulksaleV1/useProvided';
 import useClaim from '../../../hooks/useClaim';
 import useWithdrawERC20Onsale from '../../../hooks/useWithdrawERC20Onsale';
 import useWithdrawProvidedETH from '../../../hooks/useWithdrawProvidedETH';
@@ -18,17 +20,20 @@ import useRate from '../../../hooks/useRate';
 import { Sale, MetaData } from '../../../types/BulksaleV1';
 import ExternalLinkTag from '../../ExternalLinkTag';
 import useIsClaimed from '../../../hooks/BulksaleV1/useIsClaimed';
+import SaleTemplateV1ABI from '../../../constants/abis/SaleTemplateV1.json';
 
 interface BulksaleV1Params {
     sale: Sale,
+    refetchSale: () => Promise<ApolloQueryResult<any>>,
     metaData: MetaData,
+    refetchMetaData: KeyedMutator<any>,
     address: `0x${string}`
     contractAddress: `0x${string}`;
 }
 
-export default function BulksaleV1({sale, metaData, address, contractAddress}: BulksaleV1Params) {
+export default function BulksaleV1({sale, refetchSale, metaData, refetchMetaData, address, contractAddress}: BulksaleV1Params) {
     const toast = useToast({position: 'top-right', isClosable: true,});
-    const { provided } = useBulksaleV1(contractAddress, address);
+    const { provided, refetch: refetchProvided } = useProvided(contractAddress, address);
     const { data: balanceData } = useBalance({address});
     const { data: isClaimed, error: isClaimedError, mutate: mutateIsClaimed } = useIsClaimed(sale, address);
 
@@ -48,14 +53,32 @@ export default function BulksaleV1({sale, metaData, address, contractAddress}: B
     }, 1000);
     useInterval(() => {
         updateRate();
+        refetchSale();
+        refetchMetaData();
+        refetchProvided();
     }, 10000);
 
-    // TODO listen Claimed event then refetchIsClaimed()
+    // useContractEvent({
+    //     address: sale.id as `0x${string}`,
+    //     abi: SaleTemplateV1ABI,
+    //     eventName: 'Received',
+    //     listener(account, amount) {
+    //         refetchSale();
+    //     },
+    // });
+    // useContractEvent({
+    //     address: sale.id as `0x${string}`,
+    //     abi: SaleTemplateV1ABI,
+    //     eventName: 'Claimed',
+    //     listener(account, userShare, allocation) {
+    //         if(address && (account as string).toLowerCase() === address.toLowerCase()) {
+    //             refetchSale();
+    //         }
+    //     },
+    // })
 
     const handleSubmit = async (values: {[key: string]: number}) => {
-        // console.log(utils.parseEther(values.amount.toString()));
-        // console.log(sendTransactionAsync);
-        const result = await sendTransactionAsync?.()
+        const result = await sendTransactionAsync?.();
     };
 
     const validate = () => {
@@ -76,7 +99,7 @@ export default function BulksaleV1({sale, metaData, address, contractAddress}: B
         },
     });
 
-    const { data, sendTransactionAsync } = useSendTransaction({
+    const { data, sendTransactionAsync, isLoading: isLoadingSendTX } = useSendTransaction({
         ...config,
         onError(e: Error) {
             toast({
@@ -96,6 +119,7 @@ export default function BulksaleV1({sale, metaData, address, contractAddress}: B
  
     const { isLoading, isSuccess } = useWaitForTransaction({
         hash: data?.hash,
+        confirmations: 2,
         onError(e: Error) {
             toast({
                 description: e.message,
@@ -109,15 +133,19 @@ export default function BulksaleV1({sale, metaData, address, contractAddress}: B
                 status: 'success',
                 duration: 5000,
             })
-            // TODO Update contract statuses
-            // setTimeout(forceUpdate, 1000);
+            formikProps.resetForm();
+            setTimeout(() => {
+                refetchSale();
+                refetchProvided();
+            }, 0)
+            
         },
     });
 
     const {prepareFn: claimPrepareFn, writeFn: claimWriteFn, waitFn: claimWaitFn} = useClaim({targetAddress: contractAddress, owner: address, onSuccessConfirm: mutateIsClaimed});
-    const {prepareFn: withdrawERC20PrepareFn, writeFn: withdrawERC20WriteFn, waitFn: withdrawERC20WaitFn} = useWithdrawERC20Onsale(contractAddress);
-    const {prepareFn: withdrawETHPrepareFn, writeFn: withdrawETHWriteFn, waitFn: withdrawETHWaitFn} = useWithdrawProvidedETH(contractAddress);
-    const {prepareFn: withdrawUnclaimedERC20PrepareFn, writeFn: withdrawUnclaimedERC20WriteFn, waitFn: withdrawUnclaimedERC20WaitFn} = useWithdrawUnclaimedERC20OnSale(contractAddress);
+    const {prepareFn: withdrawERC20PrepareFn, writeFn: withdrawERC20WriteFn, waitFn: withdrawERC20WaitFn} = useWithdrawERC20Onsale({targetAddress: contractAddress, onSuccessConfirm: refetchSale});
+    const {prepareFn: withdrawETHPrepareFn, writeFn: withdrawETHWriteFn, waitFn: withdrawETHWaitFn} = useWithdrawProvidedETH({targetAddress: contractAddress, onSuccessConfirm: refetchSale});
+    const {prepareFn: withdrawUnclaimedERC20PrepareFn, writeFn: withdrawUnclaimedERC20WriteFn, waitFn: withdrawUnclaimedERC20WaitFn} = useWithdrawUnclaimedERC20OnSale({ targetAddress: contractAddress, onSuccessConfirm: refetchSale });
 
     return (
         <>
@@ -187,7 +215,7 @@ export default function BulksaleV1({sale, metaData, address, contractAddress}: B
                                     </NumberInputStepper>
                                 </NumberInput>
                                 <chakra.div px={2}>{providedTokenSymbol}</chakra.div>
-                                <Button isLoading={isLoading} isDisabled={!sendTransactionAsync || !started} type='submit' variant='solid' colorScheme={'green'}>
+                                <Button isLoading={isLoading || isLoadingSendTX} isDisabled={!sendTransactionAsync || !started} type='submit' variant='solid' colorScheme={'green'}>
                                     Donate
                                 </Button>
                             </Flex>
@@ -216,7 +244,7 @@ export default function BulksaleV1({sale, metaData, address, contractAddress}: B
                     </chakra.div>
                 }
 
-                { started && <Box mt={1}>
+                { address && started && <Box mt={1}>
                     <PersonalStatistics
                         inputValue={formikProps.values.amount}
                         myTotalProvided={Big(provided.toString())}
@@ -231,7 +259,7 @@ export default function BulksaleV1({sale, metaData, address, contractAddress}: B
                     />
                 </Box> }
                 {
-                    sale.owner?.toLowerCase() === address.toLowerCase() && <>
+                    address && sale.owner?.toLowerCase() === address.toLowerCase() && <>
                     <Divider mt={8} />
                     <Card mt={8}>
                         <CardHeader>
