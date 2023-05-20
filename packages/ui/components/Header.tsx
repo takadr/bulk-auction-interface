@@ -90,7 +90,17 @@ export const Header: FC<HeaderProps> = ({title, Router}: {title?: string, Router
                     </MenuButton>
                     <MenuList zIndex={101}>
                         {
-                            currentUser ? <MenuItem onClick={async() => { await fetch('/api/logout'); mutate && mutate(); disconnect(); }}>Sign out and Disconnect</MenuItem>
+                            currentUser ? <MenuItem onClick={async() => { 
+                                await fetch('/api/logout', { credentials: 'same-origin' });
+                                toast({
+                                    id: 'signout',
+                                    description: "Signed out.",
+                                    status: 'info',
+                                    duration: 5000,
+                                })
+                                disconnect();
+                                mutate && mutate()
+                            }}>Sign out and Disconnect</MenuItem>
                             : <MenuItem onClick={() => disconnect()}>Disconnect</MenuItem>
                         }
                         <Divider />
