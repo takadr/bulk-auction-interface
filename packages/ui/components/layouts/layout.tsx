@@ -3,11 +3,11 @@ import { useAccount, useNetwork } from 'wagmi';
 import { Header } from '../Header';
 
 
-export default function Layout({title, children}: {title?: string, children: React.ReactNode}) {
+export default function Layout({title, children, Router}: {title?: string, children: React.ReactNode, Router: any}) {
     const { chain } = useNetwork();
 
     return <>
-    <Header title={title ? title : 'DFGC Sale Maker(仮)'} />
+    <Header title={title ? title : 'DFGC Sale Maker(仮)'} Router={Router} />
     {
         chain && chain.unsupported && 
         <chakra.div px={8}>

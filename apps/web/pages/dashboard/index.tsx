@@ -25,14 +25,14 @@ export default function DashboardPage() {
     }, 500);
 
     if(typeof currentUser === 'undefined') {
-        return <Layout>
+        return <Layout Router={Router}>
             <Container maxW="container.lg" py={16} textAlign='center'>
                 <Spinner />
             </Container>
         </Layout>
     } else if (currentUser === null) {
         Router.push('/')
-        return <Layout>
+        return <Layout Router={Router}>
             <Container maxW="container.lg" py={16}>
                 <Box>404</Box>
             </Container>
@@ -40,7 +40,7 @@ export default function DashboardPage() {
     }
     
     return (
-        <Layout>
+        <Layout Router={Router}>
             <Container maxW="container.xl" py={16}>
                 <Heading size={'lg'}>Dashboard</Heading>
                 <Tabs mt={8}>

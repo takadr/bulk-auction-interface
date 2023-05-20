@@ -21,7 +21,7 @@ export default function SalePage() {
     }, 500);
   
     return (
-        <Layout>
+        <Layout Router={Router}>
             <Container maxW="container.xl" py={16}>
             <Tabs variant='soft-rounded' colorScheme='green'>
                 <TabList>

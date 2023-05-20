@@ -1,4 +1,5 @@
 import { useState, useEffect, useContext } from 'react';
+import Router from 'next/router';
 import { Box, Button, Link, Spinner, Stack, Container, Flex, Alert, AlertIcon, chakra, useColorMode } from '@chakra-ui/react';
 import { useAccount, useConnect, useDisconnect, useNetwork, useSwitchNetwork, useSignMessage } from 'wagmi';
 import { useDisclosure } from '@chakra-ui/react';
@@ -40,7 +41,7 @@ export default function Web() {
   // }
 
   return (
-    <Layout>
+    <Layout Router={Router}>
       {
         !currentUser && <SignInButton
         size={'sm'}

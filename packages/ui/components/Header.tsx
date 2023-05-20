@@ -15,14 +15,12 @@ import {
     useToast,
     Switch,
     Divider,
-    Link
-} from '@chakra-ui/react';
-import {
+    Link,
     Menu,
     MenuButton,
     MenuList,
     MenuItem,
-} from '@chakra-ui/react'
+} from '@chakra-ui/react';
 import { FC, useState, useContext } from 'react';
 import { MoonIcon, HamburgerIcon, SunIcon, ChevronDownIcon, ChevronRightIcon } from '@chakra-ui/icons';
 import { useAccount, useEnsAvatar, useEnsName, useDisconnect, useNetwork, useSwitchNetwork } from 'wagmi';
@@ -34,9 +32,10 @@ import { NonceContext } from './providers/NonceProvider';
 
 type HeaderProps = {
     title?: string;
+    Router: any
 };
 
-export const Header: FC<HeaderProps> = ({title}: {title?: string}) => {
+export const Header: FC<HeaderProps> = ({title, Router}: {title?: string, Router: any}) => {
     const { colorMode, setColorMode, toggleColorMode } = useColorMode();
     const { isOpen, onOpen, onClose } = useDisclosure();
     const providersListDisclosure = useDisclosure();
@@ -129,13 +128,13 @@ export const Header: FC<HeaderProps> = ({title}: {title?: string}) => {
                     </HStack>
                     <HStack spacing={4}>
                         {
-                            isConnected && currentUser && <Link href="/dashboard"><Button variant="ghost" size={'md'}>
+                            isConnected && currentUser && <Button variant="ghost" size={'md'} onClick={() => Router.push("/dashboard")}>
                                 Dashboard
-                            </Button></Link>
+                            </Button>
                         }
-                        <Link href="/sales"><Button variant="ghost" size={'md'}>
+                        <Button variant="ghost" size={'md'} onClick={() => Router.push("/sales")}>
                             Sales
-                        </Button></Link>
+                        </Button>
                         {
                             !currentUser && <SignInButton
                                 size={'sm'}

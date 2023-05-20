@@ -23,7 +23,7 @@ export default function SalePage() {
         return <Skeleton />
     }
     return (
-        <Layout>
+        <Layout Router={Router}>
             <BulksaleV1
                 sale={saleData.sale}
                 refetchSale={refetch}

@@ -1,8 +1,7 @@
 import { format } from 'date-fns';
 import { useState } from 'react';
-import { Circle } from 'rc-progress';
-import { chakra, Spinner, Toast, Link, useInterval } from "@chakra-ui/react";
-import { getExpectedAmount, getTargetPercetage, getFiatConversionAmount, getEtherscanLink, getCountdown } from "../../../utils";
+import { chakra, useInterval } from "@chakra-ui/react";
+import { getCountdown } from "../../../utils";
 
 type Props = {
   unixEndDate: number;
@@ -10,9 +9,9 @@ type Props = {
 
 const initialCountdown = {
   days: '0',
-  hours: '0',
-  mins: '0',
-  secs: '0',
+  hours: '00',
+  mins: '00',
+  secs: '00',
 };
 
 export default function CountdownCalendar({ unixEndDate }: Props) {
