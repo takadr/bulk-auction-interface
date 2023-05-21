@@ -1,6 +1,6 @@
 import Router, { useRouter } from 'next/router';
 import { useAccount, useNetwork } from 'wagmi';
-import { chakra, Skeleton } from '@chakra-ui/react';
+import { chakra, Spinner } from '@chakra-ui/react';
 import BulksaleV1 from 'ui/components/templates/BulksaleV1/index';
 import Layout from 'ui/components/layouts/layout';
 import { useQuery } from '@apollo/client';
@@ -18,20 +18,19 @@ export default function SalePage() {
     const { data: saleData, loading, error: test, refetch } = useQuery(GET_SALE_QUERY, {variables: { id: id as string } });
     const { data: metaData, mutate, error } = useSWRAuction(id as string);
 
-    // TODO 
-    if(loading || !metaData) {
-        return <Skeleton />
-    }
     return (
         <Layout Router={Router}>
-            <BulksaleV1
-                sale={saleData.sale}
-                refetchSale={refetch}
-                metaData={metaData.metaData}
-                refetchMetaData={mutate}
-                contractAddress={id as `0x${string}`}
-                address={address}
-            />
+            {
+                (loading || !metaData) ? <Spinner /> :
+                <BulksaleV1
+                    sale={saleData.sale}
+                    refetchSale={refetch}
+                    metaData={metaData.metaData}
+                    refetchMetaData={mutate}
+                    contractAddress={id as `0x${string}`}
+                    address={address}
+                />
+            }
         </Layout>
     )
 }
