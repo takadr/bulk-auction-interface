@@ -44,7 +44,7 @@ export type MetaData = {
     createdAt?: number;
 }
 
-export const validateMetaData = (metaData: MetaData) => {
+export const validateMetaData = (metaData: MetaData, minimumProvided?: number) => {
     const errors: any = {};
     if(!metaData.id) {
         errors.id = 'Contract address is required';
@@ -69,6 +69,9 @@ export const validateMetaData = (metaData: MetaData) => {
     }
     if(metaData.otherURL && !URL_REGEX.test(metaData.otherURL)){
         errors.otherURL = 'Invalid URL format'
+    }
+    if(minimumProvided && metaData.interimGoalAmount && minimumProvided > metaData.interimGoalAmount) {
+        errors.interimGoalAmount = 'Interim Goal Amount must be bigger than or equal to Minimum provided'
     }
     return errors;
 };

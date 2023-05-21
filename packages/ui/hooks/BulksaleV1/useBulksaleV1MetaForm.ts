@@ -3,8 +3,9 @@ import { useFormik, FormikProps } from 'formik';
 import { MetaData, validateMetaData } from '../../types/BulksaleV1';
 import { URL_REGEX } from '../../constants';
 
-export default function useBulksaleV1MetaForm({contractId, onSubmitSuccess, onSubmitError, saleMetaData}: {
+export default function useBulksaleV1MetaForm({contractId, minimumProvided, onSubmitSuccess, onSubmitError, saleMetaData}: {
     contractId?: `0x${string}`,
+    minimumProvided: number, // Numbers that take decimals into account. e.g. 10 
     onSubmitSuccess?: (result: Response) => void,
     onSubmitError?: (e: any) => void,
     saleMetaData?: MetaData,
@@ -24,8 +25,8 @@ export default function useBulksaleV1MetaForm({contractId, onSubmitSuccess, onSu
         projectURL: '',
         logoURL: '',
         otherURL: '',
-        interimGoalAmount: 0,
-        finalGoalAmount: 0
+        interimGoalAmount: minimumProvided,
+        finalGoalAmount: minimumProvided
     };
 
 
@@ -52,7 +53,7 @@ export default function useBulksaleV1MetaForm({contractId, onSubmitSuccess, onSu
         enableReinitialize: true,
         initialValues: saleMetaData ? saleMetaData : initMetaData,
         onSubmit: handleSubmit,
-        validate: validateMetaData
+        validate: (value: MetaData) => validateMetaData(value, minimumProvided)
     });
 
     return {

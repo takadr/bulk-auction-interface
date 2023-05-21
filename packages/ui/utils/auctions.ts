@@ -66,6 +66,8 @@ export async function batchFetchAuction(auctionIds: string[]): Promise<MetaData[
 }
 
 export async function addAuction(auction: MetaData): Promise<MetaData | undefined> {
+  // TODO Take Minimum provided into account
+  // validateMetaData(auction, minimumProvided)
   const errors = validateMetaData(auction)
   if(Object.keys(errors).length > 0) {
     const errorMessage = Object.entries(errors).map(e => e[1]).join(', ')
@@ -79,8 +81,8 @@ export async function addAuction(auction: MetaData): Promise<MetaData | undefine
     ProjectURL: {S: auction.projectURL ? auction.projectURL : ''},
     LogoURL: {S: auction.logoURL ? auction.logoURL : ''},
     OtherURL: {S: auction.otherURL ? auction.otherURL : ''},
-    InterimGoalAmount: {N: auction.interimGoalAmount ? auction.interimGoalAmount.toString() : ''},
-    FinalGoalAmount: {N: auction.finalGoalAmount ? auction.finalGoalAmount.toString() : ''},
+    InterimGoalAmount: {N: auction.interimGoalAmount ? auction.interimGoalAmount.toString() : '0'},
+    FinalGoalAmount: {N: auction.finalGoalAmount ? auction.finalGoalAmount.toString() : '0'},
     TokenName: {S: auction.tokenName ? auction.tokenName : ''},
     TokenSymbol: {S: auction.tokenSymbol ? auction.tokenSymbol : ''},
     TokenDecimals: {N: auction.tokenDecimals ? auction.tokenDecimals.toString() : '0'},
@@ -112,8 +114,8 @@ export async function updateAuction(auction: MetaData): Promise<MetaData | undef
       ':ProjectURL': {S: auction.projectURL ? auction.projectURL : ''},
       ':LogoURL': {S: auction.logoURL ? auction.logoURL : ''},
       ':OtherURL': {S: auction.otherURL ? auction.otherURL : ''},
-      ':InterimGoalAmount':  {N: auction.interimGoalAmount ? auction.interimGoalAmount.toString() : ''},
-      ':FinalGoalAmount': {N: auction.finalGoalAmount ? auction.finalGoalAmount.toString() : ''},
+      ':InterimGoalAmount':  {N: auction.interimGoalAmount ? auction.interimGoalAmount.toString() : '0'},
+      ':FinalGoalAmount': {N: auction.finalGoalAmount ? auction.finalGoalAmount.toString() : '0'},
       ':TokenName': {S: auction.tokenName ? auction.tokenName : ''},
       ':TokenSymbol': {S: auction.tokenSymbol ? auction.tokenSymbol : ''},
       ':TokenDecimals': {N: auction.tokenDecimals ? auction.tokenDecimals.toString() : '0'},

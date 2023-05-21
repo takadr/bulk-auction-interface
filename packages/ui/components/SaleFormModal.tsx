@@ -71,6 +71,7 @@ export default function SaleFormModal({isOpen, onClose, onSubmitSuccess}: {isOpe
 
     const { formikProps: metaFormikProps } = useBulksaleV1MetaForm({
         contractId: contractAddress,
+        minimumProvided: formikProps.values.minimalProvideAmount,
         onSubmitSuccess: (response) => {
             handleClose();
             onSubmitSuccess && onSubmitSuccess();
@@ -118,7 +119,7 @@ export default function SaleFormModal({isOpen, onClose, onSubmitSuccess}: {isOpe
                 <ModalHeader>Create new sale</ModalHeader>
                 <ModalCloseButton />
                 <ModalBody pb={6}>
-                    <Steps pb={6} px={10} stepParams={stepParams} currentStep={step} />
+                    <Steps mx={'auto'} maxW={'450px'} pb={6} px={10} stepParams={stepParams} currentStep={step} />
                     {
                         step === 1 ? <BulksaleV1Form 
                             formikProps={formikProps} 
