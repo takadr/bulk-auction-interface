@@ -91,7 +91,7 @@ export const Header: FC<HeaderProps> = ({title, Router}: {title?: string, Router
                     <MenuList zIndex={101}>
                         {
                             currentUser ? <MenuItem onClick={async() => { 
-                                await fetch('/api/logout', { credentials: 'same-origin' });
+                                await fetch('/api/logout', { method: 'POST', credentials: 'same-origin' });
                                 toast({
                                     id: 'signout',
                                     description: "Signed out.",

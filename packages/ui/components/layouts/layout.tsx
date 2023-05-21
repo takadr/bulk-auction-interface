@@ -11,7 +11,7 @@ export default function Layout({title, children, Router}: {title?: string, child
     const { disconnect } = useDisconnect();
     const toast = useToast({position: 'top-right', isClosable: true,})
     const logout = async() => {
-        await fetch('/api/logout', { credentials: 'same-origin' });
+        await fetch('/api/logout', { method: 'POST', credentials: 'same-origin' });
         disconnect(); 
         mutate && mutate()
     }

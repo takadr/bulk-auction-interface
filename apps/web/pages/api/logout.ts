@@ -5,14 +5,14 @@ import ironOptions from 'ui/constants/ironOptions';
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   const { method } = req
   switch (method) {
-    case 'GET':
+    case 'POST':
       req.session.destroy()
       // TODO
       // Before going to production, you likely want to invalidate nonces on logout to prevent replay attacks through session duplication (e.g. store expired nonce and make sure they can't be used again).
       res.send({ ok: true })
       break
     default:
-      res.setHeader('Allow', ['GET'])
+      res.setHeader('Allow', ['POST'])
       res.status(405).end(`Method ${method} Not Allowed`)
   }
 }
