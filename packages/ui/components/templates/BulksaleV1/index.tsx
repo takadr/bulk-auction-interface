@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
-import { Container, Heading, Image, Flex, Box, Button, FormControl, FormLabel, FormErrorMessage, NumberInput, NumberInputField, NumberInputStepper, NumberIncrementStepper, NumberDecrementStepper, Tooltip, Stack, Divider, chakra, useInterval, useToast, Link, HStack, Tag, Card, CardHeader, CardBody, StackDivider} from '@chakra-ui/react';
+import { Container, Heading, Image, Flex, Box, Button, FormControl, FormLabel, FormErrorMessage, NumberInput, NumberInputField, NumberInputStepper, NumberIncrementStepper, NumberDecrementStepper, Tooltip, Stack, Divider, chakra, useInterval, useToast, Link, HStack, Tag, Card, CardHeader, CardBody, StackDivider, SkeletonCircle, Skeleton, SkeletonText} from '@chakra-ui/react';
 import { ExternalLinkIcon, QuestionIcon } from '@chakra-ui/icons';
 import { useFormik } from 'formik';
 import { useWaitForTransaction, useContractEvent, usePrepareSendTransaction, useSendTransaction, useBalance } from 'wagmi';
@@ -314,4 +314,25 @@ export default function BulksaleV1({sale, refetchSale, metaData, refetchMetaData
             </Container>
         </>
     );
+}
+
+
+export const SkeletonSale = () => {
+    return <Container maxW={'container.md'} py={16}>
+        <Flex alignItems={'center'} minH={'150px'}>
+            <SkeletonCircle 
+                w={'150px'}
+                h={'150px'}
+            />
+            <Box px={8}>
+                <Heading><Skeleton h={'30px'} /></Heading>
+                <HStack mt={4} spacing={4}>
+                    <Skeleton h={'20px'} w={'100px'} />
+                    <Skeleton h={'20px'} w={'100px'} />
+                    <Skeleton h={'20px'} w={'100px'} />
+                </HStack>
+            </Box>
+        </Flex>
+        <Box mt={4}><SkeletonText /></Box>
+    </Container>
 }

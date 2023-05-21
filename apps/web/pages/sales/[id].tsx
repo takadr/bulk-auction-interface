@@ -1,7 +1,7 @@
 import Router, { useRouter } from 'next/router';
 import { useAccount, useNetwork } from 'wagmi';
 import { chakra, Spinner } from '@chakra-ui/react';
-import BulksaleV1 from 'ui/components/templates/BulksaleV1/index';
+import BulksaleV1, { SkeletonSale } from 'ui/components/templates/BulksaleV1/index';
 import Layout from 'ui/components/layouts/layout';
 import { useQuery } from '@apollo/client';
 import { GET_SALE_QUERY } from 'ui/apollo/query';
@@ -21,7 +21,7 @@ export default function SalePage() {
     return (
         <Layout Router={Router}>
             {
-                (loading || !metaData) ? <Spinner /> :
+                (loading || !metaData) ? <SkeletonSale /> :
                 <BulksaleV1
                     sale={saleData.sale}
                     refetchSale={refetch}
