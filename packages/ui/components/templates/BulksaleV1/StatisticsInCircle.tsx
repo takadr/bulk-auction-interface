@@ -1,7 +1,7 @@
 import { Circle } from 'rc-progress';
 import Big from '../../../utils/bignumber';
-import { chakra, Spinner, Toast, Link, Heading, BoxProps } from "@chakra-ui/react";
-import { getExpectedAmount, getTargetPercetage, getFiatConversionAmount, tokenAmountFormat, getEtherscanLink } from "../../../utils";
+import { chakra, Link, Heading, BoxProps } from "@chakra-ui/react";
+import { getTargetPercetage, getFiatConversionAmount, tokenAmountFormat, getEtherscanLink } from "../../../utils";
 
 type Props = {
   totalProvided: Big;

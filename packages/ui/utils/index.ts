@@ -1,19 +1,30 @@
 import Big from 'big.js';
-import { BigNumberValueType, add, divide, multiply } from './bignumber';
+import { BigNumberValueType, add, divide, multiply, getBigNumber } from './bignumber';
 // TODO Consider using BigDecimal or libraries
 // https://stackoverflow.com/questions/54409854/how-to-divide-two-native-javascript-bigints-and-get-a-decimal-result
 // https://stackoverflow.com/questions/16742578/bigdecimal-in-javascript/66939244#66939244
+
+// From SaleTemplateV1
+export const calculateAllocation = (us: Big, tp: Big, tda: Big): Big => {
+  let al = Big(0);
+  if(tda.lt(tp)){
+      al = (us.mul(tda)).div(tp);
+  } else {
+      /* sender's share is very tiny and so calculate tda/tp first */
+      al = us.mul(tda.div(tp));
+  }
+  return al.round(0, 0)
+}
+
 export const getExpectedAmount = (myTotalDonations: BigNumberValueType, inputtingValue: BigNumberValueType, totalProvided: BigNumberValueType, distributeAmount: BigNumberValueType) => {
-    // console.log(myTotalDonations, inputtingValue, totalProvided, totalDistributeAmount)
     const donations = add(myTotalDonations, inputtingValue);
     const totalDonations = add(totalProvided, inputtingValue);
     if (totalDonations <= Big(0)) {
         return 0;
     }
-    // console.log(Number(donations), Number(totalDonations), Number(totalDistributeAmount))
-    return multiply(divide(donations, totalDonations), distributeAmount);
-    // return (Number(donations) / Number(totalDonations)) * Number(totalDistributeAmount);
+    return calculateAllocation(donations, totalDonations, getBigNumber(distributeAmount))
 }
+
 export const getTargetPercetage = (totalProvided: BigNumberValueType, finalGoalAmount: BigNumberValueType): number => {
     if (finalGoalAmount <= Big(0)) {
         return 0;

@@ -1,5 +1,5 @@
 import { WarningIcon } from "@chakra-ui/icons";
-import { chakra, Spinner, Text, Box, Heading, BoxProps, Card, CardBody, CardHeader, Stack, StackDivider, Flex, SkeletonText } from "@chakra-ui/react";
+import { chakra, BoxProps, Card, CardBody, Stack, StackDivider, Flex } from "@chakra-ui/react";
 import { getExpectedAmount, tokenAmountFormat } from "../../../utils";
 import Big, { add, multiply } from "../../../utils/bignumber";
 
