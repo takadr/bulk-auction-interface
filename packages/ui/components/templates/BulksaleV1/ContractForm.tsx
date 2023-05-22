@@ -17,7 +17,7 @@ import {
 import { ExternalLinkIcon, QuestionIcon } from '@chakra-ui/icons';
 import { CustomProvider, DateRangePicker } from 'rsuite';
 import { FormikProps } from 'formik';
-import { differenceInSeconds, addSeconds } from 'date-fns';
+import { differenceInSeconds, addSeconds, format } from 'date-fns';
 import { SaleForm } from '../../../types/BulksaleV1';
 import { BigNumber } from 'ethers';
 import { tokenAmountFormat } from '../../../utils';
@@ -81,15 +81,18 @@ export default function BulksaleV1Form({formikProps, address, approvals, writeFn
                         // value={
                         //     [
                         //         new Date(formikProps.values.startingAt), 
-                        //         addSeconds(new Date(formikProps.values.startingAt), formikProps.values.eventDuration)
+                        //         new Date(formikProps.values.startingAt + formikProps.values.eventDuration*1000)
                         //     ]}
                         format="yyyy-MM-dd HH:mm:ss"
                         cleanable={false}
                         defaultValue={[new Date(formikProps.values.startingAt), new Date(formikProps.values.startingAt + formikProps.values.eventDuration*1000)]}
                     />
+                    <chakra.span fontSize={'sm'} ml={2}>({format(0, 'z')})</chakra.span>
+                    {/* {new Date(formikProps.values.startingAt).toLocaleString()}
+                    -
+                    {new Date(formikProps.values.startingAt + formikProps.values.eventDuration*1000).toLocaleString()} */}
                     <FormErrorMessage>{formikProps.errors.startingAt}</FormErrorMessage>
                     <FormErrorMessage>{formikProps.errors.eventDuration}</FormErrorMessage>
-                    {/* {new Date(formikProps.values.startingAt).toLocaleDateString()} - {addSeconds(new Date(formikProps.values.startingAt), formikProps.values.eventDuration).toLocaleDateString()} */}
                 </FormControl>
 
                 <FormControl mt={4} isInvalid={!!formikProps.errors.distributeAmount && !!formikProps.touched.distributeAmount}>
