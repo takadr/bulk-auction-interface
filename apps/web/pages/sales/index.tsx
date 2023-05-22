@@ -1,7 +1,7 @@
 import { useContext, useState } from 'react';
 import Router, { useRouter } from 'next/router';
 import { useAccount, useNetwork } from 'wagmi';
-import { chakra, Spinner, Container, Button, Box, Text, Tabs, TabList, Tab, TabPanels, TabPanel, Stack, Flex, Tag, useInterval } from '@chakra-ui/react';
+import { chakra, Spinner, Container, Button, Box, Text, Tabs, TabList, Tab, TabPanels, TabPanel, Stack, Flex, Tag, useInterval, Alert, AlertIcon } from '@chakra-ui/react';
 import { useQuery } from "@apollo/client";
 import { MetaData, Sale } from 'ui/types/BulksaleV1';
 import { CurrentUserContext } from 'ui/components/providers/CurrentUserProvider';
@@ -31,42 +31,48 @@ export default function SalePage() {
                 <TabPanels>
                     <TabPanel>
                         <Stack mt={4} spacing={8}>
-                        {
-                            isLoadingActiveSales ? <>
-                                <SaleCardSkeleton /><SaleCardSkeleton /><SaleCardSkeleton />
-                            </> 
-                            : activeSales.map((sale: Sale) => {
-                                return <SaleCard key={sale.id} sale={sale} now={now} />
-                            })
-                        }
-                        {
-                            !isLastActiveSales && <Button isLoading={isLoadingActiveSales || isValidatingActiveSales} onClick={loadMoreActiveSales}>Load more sale</Button>
-                        }
-                        {
-                            !isLoadingClosedSales && activeSales.length === 0 && <Flex minH={'25vh'} justifyContent='center' alignItems={'center'}>
-                                <Text fontSize={'lg'} opacity={'.75'} textAlign={'center'}>No sales</Text>
-                            </Flex>
-                        }
+                            {
+                                activeSalesError && <Alert status={'error'}><AlertIcon />{activeSalesError.message}</Alert>
+                            }
+                            {
+                                isLoadingActiveSales ? <>
+                                    <SaleCardSkeleton /><SaleCardSkeleton /><SaleCardSkeleton />
+                                </> 
+                                : activeSales.map((sale: Sale) => {
+                                    return <SaleCard key={sale.id} sale={sale} now={now} />
+                                })
+                            }
+                            {
+                                !isLastActiveSales && activeSales.length > 0 && <Button isLoading={isLoadingActiveSales || isValidatingActiveSales} onClick={loadMoreActiveSales}>Load more sale</Button>
+                            }
+                            {
+                                !isLoadingClosedSales && activeSales.length === 0 && <Flex minH={'25vh'} justifyContent='center' alignItems={'center'}>
+                                    <Text fontSize={'lg'} opacity={'.75'} textAlign={'center'}>No sales</Text>
+                                </Flex>
+                            }
                         </Stack>
                     </TabPanel>
                     <TabPanel>
                         <Stack mt={4} spacing={8}>
-                        {
-                            isLoadingClosedSales ? <>
-                                <SaleCardSkeleton /><SaleCardSkeleton /><SaleCardSkeleton />
-                            </>  
-                            : closedSales.map((sale: Sale) => {
-                                return <SaleCard key={sale.id} sale={sale} now={now} />
-                            })
-                        }
-                        {
-                            !isLastClosedSales && <Button isLoading={isLoadingClosedSales || isValidatingClosedSales} onClick={loadMoreClosedSales}>Load more sale</Button>
-                        }
-                        {
-                            !isLoadingClosedSales && closedSales.length === 0 && <Flex minH={'25vh'} justifyContent='center' alignItems={'center'}>
-                                <Text fontSize={'lg'} opacity={'.75'} textAlign={'center'}>No sales</Text>
-                            </Flex>
-                        }
+                            {
+                                closedSalesError && <Alert status={'error'}><AlertIcon />{closedSalesError.message}</Alert>
+                            }
+                            {
+                                isLoadingClosedSales ? <>
+                                    <SaleCardSkeleton /><SaleCardSkeleton /><SaleCardSkeleton />
+                                </>  
+                                : closedSales.map((sale: Sale) => {
+                                    return <SaleCard key={sale.id} sale={sale} now={now} />
+                                })
+                            }
+                            {
+                                !isLastClosedSales && closedSales.length > 0 && <Button isLoading={isLoadingClosedSales || isValidatingClosedSales} onClick={loadMoreClosedSales}>Load more sale</Button>
+                            }
+                            {
+                                !isLoadingClosedSales && closedSales.length === 0 && <Flex minH={'25vh'} justifyContent='center' alignItems={'center'}>
+                                    <Text fontSize={'lg'} opacity={'.75'} textAlign={'center'}>No sales</Text>
+                                </Flex>
+                            }
                         </Stack>
                     </TabPanel>
                 </TabPanels>
