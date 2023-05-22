@@ -100,7 +100,7 @@ export default function SaleCard({ sale, editable=false, now }: { sale: Sale, ed
                             <Flex justifyContent={'space-between'} alignItems={'baseline'}><chakra.span>Distributes</chakra.span> <chakra.span fontSize={'2xl'}>{tokenAmountFormat(sale.distributeAmount, sale.tokenDecimals, 2)} <chakra.span fontSize={'md'}>{sale.tokenSymbol}</chakra.span></chakra.span></Flex>
                             <Divider />
                             <Flex mt={2} justifyContent={'space-between'} alignItems={'baseline'}><chakra.span>Total raised</chakra.span> <chakra.span fontSize={'2xl'}>{sale.totalProvided ? tokenAmountFormat(sale.totalProvided, 18, 2) : 0} <chakra.span fontSize={'md'}>ETH</chakra.span></chakra.span></Flex>
-                            <Progress borderRadius={'4px'} hasStripe value={data?.metaData?.finalGoalAmount ? ((sale.totalProvided / (10**sale.tokenDecimals))/data?.metaData?.finalGoalAmount) * 100 : 0} />
+                            <Progress borderRadius={'4px'} hasStripe value={data?.metaData?.finalGoalAmount ? ((sale.totalProvided / (10**18))/data?.metaData?.finalGoalAmount) * 100 : 0} />
                             <Flex mt={2} justifyContent={'space-between'} alignItems={'baseline'}>
                                 <Text fontSize={'sm'}>Minimum</Text><Text fontSize={'lg'}>{tokenAmountFormat(sale.minimalProvideAmount, 18, 2)} <chakra.span fontSize={'sm'}>ETH</chakra.span></Text>
                             </Flex>
