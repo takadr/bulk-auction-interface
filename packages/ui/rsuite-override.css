@@ -1,0 +1,46 @@
+.rs-picker-menu {
+    z-index: 10000 !important;
+}
+
+.rs-picker-default .rs-btn, .rs-picker-default .rs-picker-toggle, .rs-picker-input .rs-btn, .rs-picker-input .rs-picker-toggle {
+    background-color: inherit!important;
+    background: inherit!important;
+    height: var(--chakra-sizes-10);
+    outline: 2px solid transparent;
+    outline-offset: 2px;
+    display: flex;
+    border-color: inherit !important;
+}
+.rs-picker-default .rs-btn:hover, .rs-picker-default:hover {
+    border-color: var(--chakra-colors-whiteAlpha-400) !important;
+}
+.rs-picker-toggle-value {
+    color: inherit !important;
+}
+.rs-picker-default .rs-btn, .rs-picker-default .rs-picker-toggle.rs-picker-toggle-active .rs-picker-toggle-textbox {
+    background-color: inherit!important;
+    background: inherit!important;
+}
+.rs-picker-toggle-textbox {
+    /* width: 100% !important;
+    min-width: 0px;
+    outline: 2px solid transparent;
+    outline-offset: 2px;
+    position: relative; */
+    /* -webkit-appearance: none;
+    -moz-appearance: none;
+    -ms-appearance: none;
+    appearance: none;
+    transition-property: var(--chakra-transition-property-common);
+    transition-duration: var(--chakra-transition-duration-normal);
+    font-size: var(--chakra-fontSizes-md);
+    -webkit-padding-start: var(--chakra-space-4);
+    padding-inline-start: var(--chakra-space-4);
+    -webkit-padding-end: var(--chakra-space-4);
+    padding-inline-end: var(--chakra-space-4);
+    height: var(--chakra-sizes-10);
+    border-radius: var(--chakra-radii-md);
+    border: 1px solid;
+    border-color: inherit;
+    background: inherit; */
+}

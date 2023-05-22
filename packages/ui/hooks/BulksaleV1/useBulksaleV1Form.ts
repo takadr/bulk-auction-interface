@@ -6,8 +6,9 @@ import { SaleForm } from '../../types/BulksaleV1';
 import Big, { multiply } from '../../utils/bignumber';
 import FactoryABI from '../../constants/abis/Factory.json';
 import { SALE_TEMPLATE_V1_NAME } from '../../constants';
-import 'rsuite/dist/rsuite-no-reset.min.css';
 import { BigNumber } from 'ethers';
+import 'rsuite/dist/rsuite-no-reset.min.css';
+import '../../rsuite-override.css';
 
 const now = new Date().getTime();
 export default function useBulksaleV1Form({
