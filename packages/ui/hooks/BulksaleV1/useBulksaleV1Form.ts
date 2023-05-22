@@ -18,6 +18,8 @@ export default function useBulksaleV1Form({
     onContractWriteError,
     onWaitForTransactionSuccess,
     onWaitForTransactionError,
+    onApprovalTxSent,
+    onApprovalTxConfirmed,
 }: {
     address: `0x${string}`,
     onSubmitSuccess?: (result: any) => void,
@@ -26,6 +28,8 @@ export default function useBulksaleV1Form({
     onContractWriteError?: (e: any) => void,
     onWaitForTransactionSuccess?: (result: any) => void,
     onWaitForTransactionError?: (e: any) => void,
+    onApprovalTxSent?: (result: any) => void,
+    onApprovalTxConfirmed?: (result: any) => void,
 }): 
 {
     formikProps: FormikProps<SaleForm>,
@@ -139,7 +143,13 @@ export default function useBulksaleV1Form({
         targetAddress: debouncedSale.token, 
         owner: address as `0x${string}`, 
         spender: process.env.NEXT_PUBLIC_FACTORY_ADDRESS as `0x${string}`,
-        onSuccessConfirm: prepareFn.refetch
+        onSuccessWrite(data) {
+            onApprovalTxSent && onApprovalTxSent(data)
+        },
+        onSuccessConfirm(data) {
+            onApprovalTxConfirmed && onApprovalTxConfirmed(data)
+            prepareFn.refetch()
+        }
     });
 
     return {

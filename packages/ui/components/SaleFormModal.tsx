@@ -59,6 +59,20 @@ export default function SaleFormModal({isOpen, onClose, onSubmitSuccess}: {isOpe
                 status: 'error',
                 duration: 5000,
             })
+        },
+        onApprovalTxSent: (result: any) => {
+            toast({
+                description: `Transaction sent! ${result.hash}`,
+                status: 'success',
+                duration: 5000,
+            })
+        },
+        onApprovalTxConfirmed: (result: any) => {
+            toast({
+                description: `Approval confirmed!`,
+                status: 'success',
+                duration: 5000,
+            })
         }
     });
 
