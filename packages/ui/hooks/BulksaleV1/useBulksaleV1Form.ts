@@ -106,7 +106,7 @@ export default function useBulksaleV1Form({
             SALE_TEMPLATE_V1_NAME,
             debouncedSale.token,
             debouncedSale.owner,
-            multiply(debouncedSale.distributeAmount, tokenData?.decimals ? Big(10).pow(tokenData.decimals) : 0).toString(),
+            multiply(debouncedSale.distributeAmount, tokenData?.decimals ? Big(10).pow(tokenData.decimals) : Big(10).pow(0)).toString(),
             Math.round(debouncedSale.startingAt / 1000),
             debouncedSale.eventDuration,
             multiply(debouncedSale.minimalProvideAmount, Big(10).pow(18)).toString(), // ETH

@@ -33,8 +33,8 @@ type BulksaleV1Params = {
 
 export default function BulksaleV1({sale, refetchSale, metaData, refetchMetaData, address, contractAddress}: BulksaleV1Params) {
     const toast = useToast({position: 'top-right', isClosable: true,});
-    const { provided, refetch: refetchProvided } = useProvided(contractAddress, address);
-    const { data: balanceData } = useBalance({address});
+    const { provided, isLoading: isLoadingProvidedAmount, refetch: refetchProvided } = useProvided(contractAddress, address);
+    const { data: balanceData, isLoading: isLoadingBalance } = useBalance({address});
     const { data: isClaimed, error: isClaimedError, mutate: mutateIsClaimed } = useIsClaimed(sale, address);
 
     const providedTokenSymbol = 'ETH';
@@ -117,7 +117,7 @@ export default function BulksaleV1({sale, refetchSale, metaData, refetchMetaData
         },
     })
  
-    const { isLoading, isSuccess } = useWaitForTransaction({
+    const { isLoading: isLoadingWaitTX, isSuccess } = useWaitForTransaction({
         hash: data?.hash,
         confirmations: 2,
         onError(e: Error) {
@@ -215,7 +215,7 @@ export default function BulksaleV1({sale, refetchSale, metaData, refetchMetaData
                                     </NumberInputStepper>
                                 </NumberInput>
                                 <chakra.div px={2}>{providedTokenSymbol}</chakra.div>
-                                <Button isLoading={isLoading || isLoadingSendTX} isDisabled={!sendTransactionAsync || !started} type='submit' variant='solid' colorScheme={'green'}>
+                                <Button isLoading={isLoadingWaitTX || isLoadingSendTX} isDisabled={!sendTransactionAsync || !started} type='submit' variant='solid' colorScheme={'green'}>
                                     Donate
                                 </Button>
                             </Flex>
@@ -241,6 +241,7 @@ export default function BulksaleV1({sale, refetchSale, metaData, refetchMetaData
                         providedTokenDecimal={providedTokenDecimal}
                         isEnding={ended}
                         isClaimed={!!isClaimed}
+                        isLodingTX={isLoadingWaitTX || isLoadingSendTX}
                     />
                 </Box> }
 
@@ -277,7 +278,7 @@ export default function BulksaleV1({sale, refetchSale, metaData, refetchMetaData
                                             await claimWriteFn.writeAsync();
                                         }}
                                     >
-                                        Withdraw Token (削除予定)
+                                        Withdraw Token
                                         <Tooltip hasArrow label={'Finished, but the privided token is not enough. (Failed sale)'}><QuestionIcon mb={1} ml={1} /></Tooltip>
                                     </Button>
                                 </chakra.div>
