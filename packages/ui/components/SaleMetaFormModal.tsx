@@ -33,7 +33,7 @@ export default function SaleMetaFormModal({isOpen, onClose, existingContractAddr
             onSubmitSuccess && onSubmitSuccess();
             handleClose();
             toast({
-                description: `Auction information successfully saved!`,
+                title: `Sale information successfully saved!`,
                 status: 'success',
                 duration: 5000,
             })

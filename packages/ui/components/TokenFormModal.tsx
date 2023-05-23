@@ -104,12 +104,12 @@ export default function TokenFormModal({isOpen, onClose}: {isOpen: boolean, onCl
             const result = await writeFn.writeAsync();
             handleClose();
             toast({
-                description: `Transaction sent! ${result.hash}`,
+                title: 'Transaction sent!',
                 status: 'success',
                 duration: 5000,
+                render: (props) => <TxSentToast txid={result.hash} {...props} />
             })
         } catch(e: any) {
-            // TODO
             toast({
                 description: e.message,
                 status: 'error',
@@ -166,7 +166,7 @@ export default function TokenFormModal({isOpen, onClose}: {isOpen: boolean, onCl
             // TODO
             // Modify tx status to confirmed in the store
             toast({
-                description: `Transaction confirmed! ${data.transactionHash}`,
+                title: `Transaction confirmed!`,
                 status: 'success',
                 duration: 5000,
             })

@@ -94,7 +94,7 @@ export const Header: FC<HeaderProps> = ({title, Router}: {title?: string, Router
                                 await fetch('/api/logout', { method: 'POST', credentials: 'same-origin' });
                                 toast({
                                     id: 'signout',
-                                    description: "Signed out.",
+                                    title: "Signed out.",
                                     status: 'info',
                                     duration: 5000,
                                 })

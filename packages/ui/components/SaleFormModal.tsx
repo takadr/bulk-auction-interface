@@ -18,6 +18,7 @@ import BulksaleV1Form from './templates/BulksaleV1/ContractForm';
 import useBulksaleV1Form from '../hooks/BulksaleV1/useBulksaleV1Form';
 import MetaDataForm from './templates/BulksaleV1/MetaDataForm';
 import useBulksaleV1MetaForm from '../hooks/BulksaleV1/useBulksaleV1MetaForm';
+import TxSentToast from './TxSentToast';
 
 export default function SaleFormModal({isOpen, onClose, onSubmitSuccess}: {isOpen: boolean, onClose: () => void, onSubmitSuccess?: () => void}) {
     const { address } = useAccount();
@@ -34,9 +35,10 @@ export default function SaleFormModal({isOpen, onClose, onSubmitSuccess}: {isOpe
             setStep(2);
             onSubmitSuccess && onSubmitSuccess();
             toast({
-                description: `Transaction sent! ${result.hash}`,
+                title: 'Transaction sent!',
                 status: 'success',
                 duration: 5000,
+                render: (props) => <TxSentToast txid={result.hash} {...props} />
             })
         },
         onSubmitError: (e: any) => {
@@ -48,7 +50,7 @@ export default function SaleFormModal({isOpen, onClose, onSubmitSuccess}: {isOpe
         },
         onWaitForTransactionSuccess: (result: any) => {
             toast({
-                description: `Transaction confirmed!`,
+                title: `Transaction confirmed!`,
                 status: 'success',
                 duration: 5000,
             })
@@ -62,14 +64,15 @@ export default function SaleFormModal({isOpen, onClose, onSubmitSuccess}: {isOpe
         },
         onApprovalTxSent: (result: any) => {
             toast({
-                description: `Transaction sent! ${result.hash}`,
+                title: 'Transaction sent!',
                 status: 'success',
                 duration: 5000,
+                render: (props) => <TxSentToast txid={result.hash} {...props} />
             })
         },
         onApprovalTxConfirmed: (result: any) => {
             toast({
-                description: `Approval confirmed!`,
+                title: `Approval confirmed!`,
                 status: 'success',
                 duration: 5000,
             })
@@ -90,7 +93,7 @@ export default function SaleFormModal({isOpen, onClose, onSubmitSuccess}: {isOpe
             handleClose();
             onSubmitSuccess && onSubmitSuccess();
             toast({
-                description: `Auction information successfully saved!`,
+                title: `Sale information successfully saved!`,
                 status: 'success',
                 duration: 5000,
             })

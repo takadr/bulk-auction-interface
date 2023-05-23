@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback } from 'react';
-import { Container, Heading, Image, Flex, Box, Button, FormControl, FormLabel, FormErrorMessage, NumberInput, NumberInputField, NumberInputStepper, NumberIncrementStepper, NumberDecrementStepper, Tooltip, Stack, Divider, chakra, useInterval, useToast, Link, HStack, Tag, Card, CardHeader, CardBody, StackDivider, SkeletonCircle, Skeleton, SkeletonText} from '@chakra-ui/react';
-import { ExternalLinkIcon, QuestionIcon } from '@chakra-ui/icons';
+import { Container, Heading, Image, Flex, Box, Button, FormControl, FormLabel, FormErrorMessage, NumberInput, NumberInputField, NumberInputStepper, NumberIncrementStepper, NumberDecrementStepper, Tooltip, Stack, Divider, chakra, useInterval, useToast, Link, HStack, Tag, Card, CardHeader, CardBody, StackDivider, SkeletonCircle, Skeleton, SkeletonText, Alert, AlertIcon, AlertTitle, AlertDescription, CloseButton} from '@chakra-ui/react';
+import { CheckCircleIcon, ExternalLinkIcon, InfoIcon, QuestionIcon } from '@chakra-ui/icons';
 import { useFormik } from 'formik';
 import { useWaitForTransaction, useContractEvent, usePrepareSendTransaction, useSendTransaction, useBalance } from 'wagmi';
 import { ApolloQueryResult } from '@apollo/client';
@@ -19,8 +19,8 @@ import useRate from '../../../hooks/useRate';
 import { Sale, MetaData } from '../../../types/BulksaleV1';
 import ExternalLinkTag from '../../ExternalLinkTag';
 import useIsClaimed from '../../../hooks/BulksaleV1/useIsClaimed';
-import SaleTemplateV1ABI from '../../../constants/abis/SaleTemplateV1.json';
 import ClaimButton from './ClaimButton';
+import TxSentToast from '../../TxSentToast';
 
 type BulksaleV1Params = {
     sale: Sale;
@@ -110,9 +110,10 @@ export default function BulksaleV1({sale, refetchSale, metaData, refetchMetaData
         },
         onSuccess(data) {
             toast({
-                description: `Transaction sent! ${data?.hash}`,
+                title: 'Transaction sent!',
                 status: 'success',
                 duration: 5000,
+                render: (props) => <TxSentToast txid={data?.hash} {...props} />
             })
         },
     })

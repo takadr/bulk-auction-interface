@@ -4,6 +4,7 @@ import useClaim from '../../../hooks/useClaim';
 import { Sale } from "../../../types/BulksaleV1";
 import { getExpectedAmount } from "../../../utils";
 import Big from "../../../utils/bignumber";
+import TxSentToast from "../../TxSentToast";
 
 interface Props {
     sale: Sale;
@@ -25,14 +26,15 @@ export default function ClaimButton({
         owner: address, 
         onSuccessWrite: (data) => {
             toast({
-                description: `Transaction sent! ${data?.hash}`,
+                title: 'Transaction sent!',
                 status: 'success',
                 duration: 5000,
+                render: (props) => <TxSentToast txid={data?.hash} {...props} />
             })
         },
         onSuccessConfirm: (data) => { 
             toast({
-                description: `Transaction confirmed!`,
+                title: `Transaction confirmed!`,
                 status: 'success',
                 duration: 5000,
             })
