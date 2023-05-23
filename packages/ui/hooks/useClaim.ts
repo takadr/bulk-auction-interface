@@ -31,7 +31,6 @@ export default function useClaim({
   const writeFn = useContractWrite({
     ...prepareFn.config,
     onSuccess(data) {
-      console.log('Claimed!', data)
       onSuccessWrite && onSuccessWrite(data)
     }
   })
@@ -40,7 +39,6 @@ export default function useClaim({
     chainId: chain?.id,
     hash: writeFn.data?.hash,
     onSuccess(data){
-      console.log('Claim Confirmed!', data)
       onSuccessConfirm && onSuccessConfirm(data)
     }
   })

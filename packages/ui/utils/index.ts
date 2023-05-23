@@ -16,11 +16,11 @@ export const calculateAllocation = (us: Big, tp: Big, tda: Big): Big => {
   return al.round(0, 0)
 }
 
-export const getExpectedAmount = (myTotalDonations: BigNumberValueType, inputtingValue: BigNumberValueType, totalProvided: BigNumberValueType, distributeAmount: BigNumberValueType) => {
+export const getExpectedAmount = (myTotalDonations: BigNumberValueType, inputtingValue: BigNumberValueType, totalProvided: BigNumberValueType, distributeAmount: BigNumberValueType): Big => {
     const donations = add(myTotalDonations, inputtingValue);
     const totalDonations = add(totalProvided, inputtingValue);
     if (totalDonations <= Big(0)) {
-        return 0;
+        return Big(0);
     }
     return calculateAllocation(donations, totalDonations, getBigNumber(distributeAmount))
 }

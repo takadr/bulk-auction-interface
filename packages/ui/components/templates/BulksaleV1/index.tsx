@@ -12,7 +12,6 @@ import CalendarInCircle from './CalendarInCircle';
 import PersonalStatistics from './PersonalStatistics';
 import StatisticsInCircle from './StatisticsInCircle';
 import useProvided from '../../../hooks/BulksaleV1/useProvided';
-import useClaim from '../../../hooks/useClaim';
 import useWithdrawERC20Onsale from '../../../hooks/useWithdrawERC20Onsale';
 import useWithdrawProvidedETH from '../../../hooks/useWithdrawProvidedETH';
 import useWithdrawUnclaimedERC20OnSale from '../../../hooks/useWithdrawUnclaimedERC20OnSale';
@@ -21,6 +20,7 @@ import { Sale, MetaData } from '../../../types/BulksaleV1';
 import ExternalLinkTag from '../../ExternalLinkTag';
 import useIsClaimed from '../../../hooks/BulksaleV1/useIsClaimed';
 import SaleTemplateV1ABI from '../../../constants/abis/SaleTemplateV1.json';
+import ClaimButton from './ClaimButton';
 
 type BulksaleV1Params = {
     sale: Sale;
@@ -142,7 +142,7 @@ export default function BulksaleV1({sale, refetchSale, metaData, refetchMetaData
         },
     });
 
-    const {prepareFn: claimPrepareFn, writeFn: claimWriteFn, waitFn: claimWaitFn} = useClaim({targetAddress: contractAddress, owner: address, onSuccessConfirm: mutateIsClaimed});
+    
     const {prepareFn: withdrawERC20PrepareFn, writeFn: withdrawERC20WriteFn, waitFn: withdrawERC20WaitFn} = useWithdrawERC20Onsale({targetAddress: contractAddress, onSuccessConfirm: refetchSale});
     const {prepareFn: withdrawETHPrepareFn, writeFn: withdrawETHWriteFn, waitFn: withdrawETHWaitFn} = useWithdrawProvidedETH({targetAddress: contractAddress, onSuccessConfirm: refetchSale});
     const {prepareFn: withdrawUnclaimedERC20PrepareFn, writeFn: withdrawUnclaimedERC20WriteFn, waitFn: withdrawUnclaimedERC20WaitFn} = useWithdrawUnclaimedERC20OnSale({ targetAddress: contractAddress, onSuccessConfirm: refetchSale });
@@ -245,18 +245,15 @@ export default function BulksaleV1({sale, refetchSale, metaData, refetchMetaData
                     />
                 </Box> }
 
-                { ended && 
+                { address && ended && 
                     <chakra.div textAlign={'right'} mt={2}>
-                        <Button
-                            variant={'solid'}
-                            isDisabled={isClaimed || !claimWriteFn.writeAsync}
-                            isLoading={claimWriteFn?.isLoading || claimWaitFn?.isLoading}
-                            onClick={async() => {
-                                await claimWriteFn.writeAsync();
-                            }}
-                        >
-                            { isClaimed ? 'Claimed' : 'Claim' }
-                        </Button>
+                        <ClaimButton
+                            sale={sale}
+                            address={address}
+                            myTotalProvided={provided}
+                            isClaimed={!!isClaimed}
+                            mutateIsClaimed={mutateIsClaimed}
+                        />
                     </chakra.div>
                 }
 
@@ -275,7 +272,7 @@ export default function BulksaleV1({sale, refetchSale, metaData, refetchMetaData
                                         variant={'solid'}
                                         isDisabled={!withdrawERC20WriteFn.writeAsync}
                                         onClick={async() => {
-                                            await claimWriteFn.writeAsync();
+                                            await withdrawERC20WriteFn.writeAsync();
                                         }}
                                     >
                                         Withdraw Token

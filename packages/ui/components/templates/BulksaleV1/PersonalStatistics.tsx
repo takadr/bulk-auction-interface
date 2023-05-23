@@ -30,9 +30,6 @@ export default function PersonalStatistics({
     isLodingTX,
     ...boxProps
   }: Props & BoxProps) {
-  
-    // TODO Format price
-    console.log(myTotalProvided.toString(), inputValue, totalProvided.toString(), distributeAmount.toString())
     const inputValueInBig = multiply(Big(inputValue), Big(10).pow(providedTokenDecimal));
     const expectedAmount = tokenAmountFormat(getExpectedAmount(myTotalProvided, inputValueInBig, totalProvided, distributeAmount), distributedTokenDecimal, 2);
     const sumOfProvidedAmount = tokenAmountFormat(add(myTotalProvided, inputValueInBig), providedTokenDecimal, 2);
