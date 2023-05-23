@@ -1,23 +1,39 @@
-import { useContractRead } from "wagmi";
+import { useContractReads } from "wagmi";
+import { NULL_ADDRESS } from "../../constants";
 import SaleTemplateV1ABI from '../../constants/abis/SaleTemplateV1.json';
+import Big, { getBigNumber } from "../../utils/bignumber";
 
 export default function useProvided(contractAddress: `0x${string}`, address: `0x${string}`|undefined): {
-    provided: BigInt,
+    provided: Big,
+    totalProvided: Big,
     isLoading: boolean,
+    isError: boolean,
     refetch: () => Promise<any>
 } {
-    const {data: provided, refetch, isLoading} = useContractRead({
+    const saleContractConfig ={
         address: contractAddress,
         abi: SaleTemplateV1ABI,
-        functionName: 'provided',
-        args: [address],
-        staleTime: 1000,
-        cacheTime: 1000,
-    });
+    }
+
+    const { data, isError, refetch, isLoading } = useContractReads({
+        contracts: [
+          {
+            ...saleContractConfig,
+            functionName: 'provided',
+            args: [address || NULL_ADDRESS],
+          },
+          {
+            ...saleContractConfig,
+            functionName: 'totalProvided',
+          },
+        ],
+    })
 
     return {
-        provided: provided ? BigInt(String(provided)) : BigInt(0),
+        provided: data && data[0] ? getBigNumber(String(data[0])) : Big(0),
+        totalProvided: data && data[1] ? getBigNumber(String(data[1])) : Big(0),
         isLoading,
+        isError,
         refetch
     }
 }

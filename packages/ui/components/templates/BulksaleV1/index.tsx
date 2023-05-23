@@ -33,7 +33,7 @@ type BulksaleV1Params = {
 
 export default function BulksaleV1({sale, refetchSale, metaData, refetchMetaData, address, contractAddress}: BulksaleV1Params) {
     const toast = useToast({position: 'top-right', isClosable: true,});
-    const { provided, isLoading: isLoadingProvidedAmount, refetch: refetchProvided } = useProvided(contractAddress, address);
+    const { provided, totalProvided, isLoading: isLoadingProvidedAmount, refetch: refetchProvided } = useProvided(contractAddress, address);
     const { data: balanceData, isLoading: isLoadingBalance } = useBalance({address});
     const { data: isClaimed, error: isClaimedError, mutate: mutateIsClaimed } = useIsClaimed(sale, address);
 
@@ -172,7 +172,7 @@ export default function BulksaleV1({sale, refetchSale, metaData, refetchMetaData
                 
                 <Flex mt={8} flexDirection={{base: 'column', md: 'row'}}>
                     <StatisticsInCircle
-                        totalProvided={Big(sale.totalProvided.toString())}
+                        totalProvided={totalProvided}
                         interimGoalAmount={Big(metaData.interimGoalAmount ? metaData.interimGoalAmount : 0).mul(Big(10).pow(providedTokenDecimal))}
                         finalGoalAmount={Big(metaData.finalGoalAmount ? metaData.finalGoalAmount : 0).mul(Big(10).pow(providedTokenDecimal))}
                         providedTokenSymbol={providedTokenSymbol}
@@ -232,8 +232,8 @@ export default function BulksaleV1({sale, refetchSale, metaData, refetchMetaData
                 { address && started && <Box mt={1}>
                     <PersonalStatistics
                         inputValue={formikProps.values.amount}
-                        myTotalProvided={Big(provided.toString())}
-                        totalProvided={Big(sale.totalProvided.toString())}
+                        myTotalProvided={provided}
+                        totalProvided={totalProvided}
                         distributeAmount={Big(sale.distributeAmount.toString())}
                         distributedTokenSymbol={sale.tokenSymbol ? sale.tokenSymbol : ''}
                         distributedTokenDecimal={sale.tokenDecimals ? sale.tokenDecimals : 0}
