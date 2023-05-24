@@ -42,7 +42,7 @@ export const LIST_CLOSED_SALE_QUERY = gql`
 
 export const LIST_MY_SALE_QUERY = gql`
   query MySale($id: ID!) {
-    sales(orderBy: startingAt, owner: $id) {
+    sales(orderBy: startingAt, where: { owner: $id }) {
       id
       templateName
       owner

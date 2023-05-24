@@ -49,7 +49,7 @@ export default function PersonalStatistics({
         <Stack divider={<StackDivider />} spacing='4'>
           <Flex justifyContent={'space-between'}>
               <span>
-                {!isClaimed ? 'Estimated amount you will receive' : 'Amount you receive'}: 
+                {!isClaimed ? 'Estimated amount you will receive' : 'Amount you received'}: 
               </span>
               <chakra.div textAlign={'right'}>
                 <chakra.span fontWeight={'bold'} ml={2}>

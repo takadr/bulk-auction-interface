@@ -63,6 +63,11 @@ export default function DashboardPage() {
                                         return <SaleCard key={sale.id} sale={sale} now={now} editable />
                                     })
                                 }
+                                {
+                                    !loading && data && data.sales.length === 0 && <Flex minH={'25vh'} justifyContent='center' alignItems={'center'}>
+                                        <Text fontSize={'lg'} opacity={'.75'} textAlign={'center'}>No sales</Text>
+                                    </Flex>
+                                }
                             </Stack>
                         </TabPanel>
                     </TabPanels>
