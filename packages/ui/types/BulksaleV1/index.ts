@@ -71,7 +71,7 @@ export const validateMetaData = (metaData: MetaData, minimumProvided?: number) =
         errors.otherURL = 'Invalid URL format'
     }
     if(minimumProvided && metaData.interimGoalAmount && minimumProvided > metaData.interimGoalAmount) {
-        errors.interimGoalAmount = 'Interim Goal Amount must be bigger than or equal to Minimum provided'
+        errors.interimGoalAmount = `Interim Goal Amount must be bigger than or equal to Minimum provided (${minimumProvided} ETH)`
     }
     return errors;
 };
