@@ -5,22 +5,21 @@ import { useFormik } from 'formik';
 import { useWaitForTransaction, useContractEvent, usePrepareSendTransaction, useSendTransaction, useBalance } from 'wagmi';
 import { ApolloQueryResult } from '@apollo/client';
 import { KeyedMutator } from 'swr';
-import { format, formatDistance, formatRelative, subDays } from 'date-fns';
 import Big from '../../../utils/bignumber';
 import { BigNumber, utils } from 'ethers';
 import CalendarInCircle from './CalendarInCircle';
 import PersonalStatistics from './PersonalStatistics';
 import StatisticsInCircle from './StatisticsInCircle';
 import useProvided from '../../../hooks/BulksaleV1/useProvided';
-import useWithdrawERC20Onsale from '../../../hooks/useWithdrawERC20Onsale';
-import useWithdrawProvidedETH from '../../../hooks/useWithdrawProvidedETH';
-import useWithdrawUnclaimedERC20OnSale from '../../../hooks/useWithdrawUnclaimedERC20OnSale';
 import useRate from '../../../hooks/useRate';
 import { Sale, MetaData } from '../../../types/BulksaleV1';
 import ExternalLinkTag from '../../ExternalLinkTag';
 import useIsClaimed from '../../../hooks/BulksaleV1/useIsClaimed';
 import ClaimButton from './ClaimButton';
 import TxSentToast from '../../TxSentToast';
+import WithdrawUnclaimedToken from './WithdrawUnclaimedToken';
+import WithdrawProvidedETH from './WithdrawProvidedETH';
+import WithdrawERC20 from './WithdrawERC20';
 
 type BulksaleV1Params = {
     sale: Sale;
@@ -147,11 +146,6 @@ export default function BulksaleV1({sale, refetchSale, metaData, refetchMetaData
         },
     });
 
-    
-    const {prepareFn: withdrawERC20PrepareFn, writeFn: withdrawERC20WriteFn, waitFn: withdrawERC20WaitFn} = useWithdrawERC20Onsale({targetAddress: contractAddress, onSuccessConfirm: refetchSale});
-    const {prepareFn: withdrawETHPrepareFn, writeFn: withdrawETHWriteFn, waitFn: withdrawETHWaitFn} = useWithdrawProvidedETH({targetAddress: contractAddress, onSuccessConfirm: refetchSale});
-    const {prepareFn: withdrawUnclaimedERC20PrepareFn, writeFn: withdrawUnclaimedERC20WriteFn, waitFn: withdrawUnclaimedERC20WaitFn} = useWithdrawUnclaimedERC20OnSale({ targetAddress: contractAddress, onSuccessConfirm: refetchSale });
-
     return (
         <>
             <Container maxW={'container.md'} py={16}>
@@ -273,42 +267,15 @@ export default function BulksaleV1({sale, refetchSale, metaData, refetchMetaData
                         <CardBody>
                             <Stack divider={<StackDivider />} spacing='4'>
                                 <chakra.div textAlign={'center'}>
-                                    <Button
-                                        variant={'solid'}
-                                        isDisabled={!withdrawERC20WriteFn.writeAsync}
-                                        onClick={async() => {
-                                            await withdrawERC20WriteFn.writeAsync();
-                                        }}
-                                    >
-                                        Withdraw Token
-                                        <Tooltip hasArrow label={'Finished, but the privided token is not enough. (Failed sale)'}><QuestionIcon mb={1} ml={1} /></Tooltip>
-                                    </Button>
+                                    <WithdrawERC20 sale={sale} onSuccessConfirm={refetchSale} />
                                 </chakra.div>
 
                                 <chakra.div textAlign={'center'}>
-                                    <Button
-                                        variant={'solid'}
-                                        isDisabled={!withdrawETHWriteFn.writeAsync}
-                                        onClick={async() => {
-                                            await withdrawETHWriteFn.writeAsync();
-                                        }}
-                                    >
-                                        Withdraw ETH 
-                                        <Tooltip hasArrow label={'Finished, and enough Ether provided.'}><QuestionIcon mb={1} ml={1} /></Tooltip>
-                                    </Button>
+                                    <WithdrawProvidedETH  sale={sale} onSuccessConfirm={refetchSale} />
                                 </chakra.div>
 
                                 <chakra.div textAlign={'center'}>
-                                    <Button
-                                        variant={'solid'}
-                                        isDisabled={!withdrawUnclaimedERC20WriteFn.writeAsync}
-                                        onClick={async() => {
-                                            await withdrawUnclaimedERC20WriteFn.writeAsync();
-                                        }}
-                                    >
-                                        Withdraw Unclaimed Token (削除予定)
-                                        <Tooltip hasArrow label={'Finished, passed lock duration, and still there\'re unsold ERC-20.'}><QuestionIcon mb={1} ml={1} /></Tooltip>
-                                    </Button>
+                                    <WithdrawUnclaimedToken sale={sale} onSuccessConfirm={refetchSale} />
                                 </chakra.div>
                             </Stack>
                         </CardBody>

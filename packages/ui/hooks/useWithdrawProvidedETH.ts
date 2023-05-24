@@ -4,11 +4,15 @@ import Template from '../constants/abis/Template.json';
 export default function useWithdrawProvidedETH({
   targetAddress,
   onSuccessWrite,
+  onErrorWrite,
   onSuccessConfirm,
+  onErrorConfirm,
 } : {
   targetAddress: `0x${string}` | null,
   onSuccessWrite?: (data: any) => void,
+  onErrorWrite?: (error: Error) => void,
   onSuccessConfirm?: (data: any) => void,
+  onErrorConfirm?: (error: Error) => void,
 }): {
     prepareFn: any,
     writeFn: any,
@@ -30,6 +34,9 @@ export default function useWithdrawProvidedETH({
     onSuccess(data) {
         console.log('Withdrew!', data)
         onSuccessWrite && onSuccessWrite(data)
+    },
+    onError(e: Error) {
+      onErrorWrite && onErrorWrite(e)
     }
   })
 
@@ -39,6 +46,9 @@ export default function useWithdrawProvidedETH({
     onSuccess(data) {
       console.log('Withdrew!', data)
       onSuccessConfirm && onSuccessConfirm(data)
+    },
+    onError(e: Error) {
+      onErrorConfirm && onErrorConfirm(e)
     }
   })
 
