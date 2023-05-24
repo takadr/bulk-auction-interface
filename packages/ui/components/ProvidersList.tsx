@@ -8,9 +8,7 @@ import {
   ModalBody,
   ModalCloseButton,
 } from '@chakra-ui/react';
-import metamaskLogo from '../images/metamask-fox.svg';
-import coinbaseLogo from '../images/coinbase-wallet-logo.png';
-import walletConnectLogo from '../images/wallet-connect-logo.png';
+import ProviderLogo from './ProviderLogo';
 
 export default function ProvidersList({isOpen, onClose}: {isOpen: boolean, onClose: () => void}) {
   const toast = useToast({position: 'top-right', isClosable: true,})
@@ -30,12 +28,6 @@ export default function ProvidersList({isOpen, onClose}: {isOpen: boolean, onClo
       }
     });
   const { disconnect } = useDisconnect();
-
-  const logoMap: {[key: string]: any} = {
-    'metaMask': metamaskLogo,
-    'coinbaseWallet': coinbaseLogo,
-    'walletConnect': walletConnectLogo
-  }
  
   return (
     <Modal
@@ -67,7 +59,7 @@ export default function ProvidersList({isOpen, onClose}: {isOpen: boolean, onClo
                         connector.id === pendingConnector?.id &&
                         ' (connecting)'}
                       </>
-                      <Image width={'30px'} src={logoMap[connector.id].src} />
+                      <ProviderLogo width={'30px'} connectorId={connector.id} />
                     </Flex>
                   </Button>
                 ))}

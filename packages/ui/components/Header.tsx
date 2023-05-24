@@ -28,6 +28,7 @@ import { sepolia } from 'wagmi/chains';
 import ProvidersList from './ProvidersList';
 import { CurrentUserContext } from './providers/CurrentUserProvider';
 import SignInButton from './SignInButton';
+import ProviderLogo from './ProviderLogo';
 
 type HeaderProps = {
     title?: string;
@@ -67,8 +68,8 @@ export const Header: FC<HeaderProps> = ({title, Router}: {title?: string, Router
             <>
             <Menu>
                 <HStack spacing={1}>
-                    <Tag size={'sm'}>{connector?.name}</Tag>
-                    <Tag size={'sm'}>{chain?.name}</Tag>
+                    { connector?.id && <ProviderLogo width={'26px'} connectorId={connector.id} /> }
+                    <Tag size={'sm'}>{chain?.unsupported ? 'Unsupported Chain' : chain?.name}</Tag>
                     <MenuButton>
                         <HStack>
                             { ensName && <Avatar
@@ -106,7 +107,7 @@ export const Header: FC<HeaderProps> = ({title, Router}: {title?: string, Router
                         <Divider />
                         <HStack px={4} pt={2}>
                             <MoonIcon color={colorMode === 'light' ? 'gray' : 'white'} />
-                            <Switch defaultChecked={colorMode !== 'light'} onChange={(e: any) => e.target.checked ? setColorMode('light') : setColorMode('dark')} />
+                            <Switch isChecked={colorMode === 'light'} onChange={(e: any) => e.target.checked ? setColorMode('light') : setColorMode('dark')} />
                             <SunIcon color={colorMode === 'light' ? 'gray' : 'white'} />
                         </HStack>
                     </MenuList>
