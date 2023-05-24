@@ -1,11 +1,10 @@
 import { useEffect, useState } from 'react';
-import { chakra, Box, Divider, Skeleton, Badge, Tag, Heading, Card, CardBody, CardFooter, Progress, Text, Image, Stack, Link, Flex, Button, useDisclosure, useInterval, SkeletonText } from '@chakra-ui/react';
+import Link from 'next/link';
+import { chakra, Box, Divider, Skeleton, Badge, Tag, Heading, Card, CardBody, CardFooter, Progress, Text, Image, Stack, Flex, Button, useDisclosure, useInterval, SkeletonText } from '@chakra-ui/react';
 import { EditIcon } from '@chakra-ui/icons';
-import { useContractEvent, useContractRead } from 'wagmi';
 import Big from '../utils/bignumber';
 import { MetaData, Sale } from '../types/BulksaleV1';
 import useSWRAuction from '../hooks/useAuction';
-import SaleTemplateV1ABI from '../constants/abis/SaleTemplateV1.json';
 import SaleMetaFormModal from './SaleMetaFormModal';
 import { tokenAmountFormat, getCountdown, ellipsisText } from '../utils';
 

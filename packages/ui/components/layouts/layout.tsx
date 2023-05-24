@@ -1,10 +1,11 @@
 import { useContext, useEffect } from 'react';
+import Router from 'next/router';
 import { chakra, Alert, AlertIcon, Box, useToast } from '@chakra-ui/react';
 import { useAccount, useDisconnect, useNetwork } from 'wagmi';
 import { Header } from '../Header';
 import { CurrentUserContext } from '../providers/CurrentUserProvider';
 
-export default function Layout({title, children, Router}: {title?: string, children: React.ReactNode, Router: any}) {
+export default function Layout({title, children}: {title?: string, children: React.ReactNode}) {
     const { chain } = useNetwork();
     const { currentUser, mutate } = useContext(CurrentUserContext);
     const { address, isConnected, connector } = useAccount();
@@ -31,7 +32,7 @@ export default function Layout({title, children, Router}: {title?: string, child
     }, [address])
 
     return <>
-    <Header title={title ? title : 'DFGC Sale Maker(仮)'} Router={Router} />
+    <Header title={title ? title : 'DFGC Sale Maker(仮)'}/>
     {
         chain && chain.unsupported && 
         <chakra.div px={8}>

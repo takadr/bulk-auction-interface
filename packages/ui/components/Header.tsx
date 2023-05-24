@@ -22,6 +22,7 @@ import {
     MenuItem,
 } from '@chakra-ui/react';
 import { FC, useState, useContext } from 'react';
+import Router from 'next/router';
 import { MoonIcon, HamburgerIcon, SunIcon, ChevronDownIcon, ChevronRightIcon } from '@chakra-ui/icons';
 import { useAccount, useEnsAvatar, useEnsName, useDisconnect, useNetwork, useSwitchNetwork } from 'wagmi';
 import { sepolia } from 'wagmi/chains';
@@ -32,10 +33,9 @@ import ProviderLogo from './ProviderLogo';
 
 type HeaderProps = {
     title?: string;
-    Router: any
 };
 
-export const Header: FC<HeaderProps> = ({title, Router}: {title?: string, Router: any}) => {
+export const Header: FC<HeaderProps> = ({title}: {title?: string}) => {
     const { colorMode, setColorMode, toggleColorMode } = useColorMode();
     const { isOpen, onOpen, onClose } = useDisclosure();
     const providersListDisclosure = useDisclosure();

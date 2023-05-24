@@ -20,14 +20,14 @@ export default function SalePage() {
     const { data: saleData, loading, error: apolloError, refetch } = useQuery(GET_SALE_QUERY, {variables: { id: id as string } });
     const { data: metaData, mutate, error: dynamodbError } = useSWRAuction(id as string);
 
-    if(apolloError || dynamodbError) return <Layout Router={Router}><Render500 error={apolloError || dynamodbError} /></Layout>
+    if(apolloError || dynamodbError) return <Layout><Render500 error={apolloError || dynamodbError} /></Layout>
 
-    if(loading || !metaData) return <Layout Router={Router}><SkeletonSale /></Layout>
+    if(loading || !metaData) return <Layout><SkeletonSale /></Layout>
 
-    if(!saleData) return <Layout Router={Router}><Render404 /></Layout>
+    if(!saleData) return <Layout><Render404 /></Layout>
 
     return (
-        <Layout Router={Router}>
+        <Layout>
             <BulksaleV1
                 sale={saleData.sale}
                 refetchSale={refetch}

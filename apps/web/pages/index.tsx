@@ -9,8 +9,8 @@ export default function Web() {
   const { currentUser } = useContext(CurrentUserContext);
 
   return (
-    <Layout Router={Router}>
-      <Hero currentUser={currentUser} router={Router} />
+    <Layout>
+      <Hero currentUser={currentUser} />
       <Container maxW={'container.lg'}>
         <Heading>Active Sales</Heading>
         <Stack py={4}>

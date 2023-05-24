@@ -1,3 +1,4 @@
+import Router from "next/router";
 import {
   Button,
   Flex,
@@ -12,14 +13,12 @@ type HeroProps = {
     title?: string,
     subtitle?: string,
     currentUser?: User,
-    router?: any,
 }
   
 export default function Hero({
   title="Bulksale maker(仮)",
   subtitle="A Great tool for starting your own token sale",
   currentUser,
-  router,
   ...rest
 }: HeroProps) {
   return (
