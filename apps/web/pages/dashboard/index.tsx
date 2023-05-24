@@ -7,10 +7,10 @@ import Layout from 'ui/components/layouts/layout';
 import { CurrentUserContext } from 'ui/components/providers/CurrentUserProvider';
 import SaleFormModal from 'ui/components/SaleFormModal';
 import { useQuery, useApolloClient } from "@apollo/client";
-import { useSWRAuctions } from 'ui/hooks/useAuctions';
 import { MetaData, Sale } from 'ui/types/BulksaleV1';
 import SaleCard, { SaleCardSkeleton } from 'ui/components/SaleCard';
 import { LIST_MY_SALE_QUERY, GET_SALE_QUERY }  from 'ui/apollo/query';
+import Render404 from 'ui/components/errors/404';
 
 export default function DashboardPage() {
     const { chain } = useNetwork();
@@ -33,9 +33,7 @@ export default function DashboardPage() {
     } else if (currentUser === null) {
         Router.push('/')
         return <Layout Router={Router}>
-            <Container maxW="container.lg" py={16}>
-                <Box>404</Box>
-            </Container>
+            <Render404 />
         </Layout>
     }
     

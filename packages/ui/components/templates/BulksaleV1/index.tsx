@@ -20,6 +20,8 @@ import TxSentToast from '../../TxSentToast';
 import WithdrawUnclaimedToken from './WithdrawUnclaimedToken';
 import WithdrawProvidedETH from './WithdrawProvidedETH';
 import WithdrawERC20 from './WithdrawERC20';
+import { getEtherscanLink, tokenAmountFormat } from '../../../utils';
+import { CHAIN_NAMES } from '../../../constants';
 
 type BulksaleV1Params = {
     sale: Sale;
@@ -161,6 +163,7 @@ export default function BulksaleV1({sale, refetchSale, metaData, refetchMetaData
                     />
                     <Box px={8}>
                         <Heading>{metaData.title ? metaData.title : 'Unnamed Sale'}</Heading>
+                        <chakra.p>{tokenAmountFormat(sale.distributeAmount, sale.tokenDecimals, 2)} {sale.tokenSymbol} <Link href={getEtherscanLink(CHAIN_NAMES[process.env.NEXT_PUBLIC_CHAIN_ID!], sale.token as `0x${string}`, 'token')} target={'_blank'}><ExternalLinkIcon /></Link></chakra.p>
                         <HStack mt={4} spacing={4}>
                             { metaData.projectURL && <ExternalLinkTag url={metaData.projectURL} /> }
                             { metaData.otherURL && <ExternalLinkTag url={metaData.otherURL} /> }
