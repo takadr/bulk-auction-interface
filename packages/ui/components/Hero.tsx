@@ -72,7 +72,7 @@ export default function Hero({
                 }}
                 />
             }
-            <Button size={'lg'} onClick={() => router.push('/sales')}>Browse Sales</Button>
+            <Button size={'lg'} onClick={() => Router.push('/sales')}>Browse Sales</Button>
         </HStack>
       </Stack>
     </Flex>
