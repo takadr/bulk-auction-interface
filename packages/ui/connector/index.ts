@@ -29,6 +29,13 @@ const client: any = createClient({
       chains,
       options: {
         projectId: '',
+        qrModalOptions: {
+          themeVariables: {
+            '--w3m-z-index': '2000'
+          },
+          explorerAllowList: undefined,
+          explorerDenyList: undefined
+        }
       },
     }),
     // new InjectedConnector({
