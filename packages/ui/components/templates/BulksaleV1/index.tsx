@@ -81,8 +81,12 @@ export default function BulksaleV1({sale, refetchSale, metaData, refetchMetaData
         const result = await sendTransactionAsync?.();
     };
 
-    const validate = () => {
-        // TODO
+    const validate = (values: {amount: number}) => {
+        let errors: any = {};
+        if(values.amount === 0) {
+            errors.amount = "Amount must be more than 0";
+        }
+        return errors;
     };
     
     const formikProps = useFormik({
@@ -206,7 +210,7 @@ export default function BulksaleV1({sale, refetchSale, metaData, refetchMetaData
                                 {
                                     //TODO Set max as account balance
                                 }
-                                <NumberInput isDisabled={!started} flex="1" name="amount" value={formikProps.values.amount} min={0.01} step={0.01} max={balanceData ? Number(balanceData.formatted) : 100} onBlur={formikProps.handleBlur} onChange={(strVal: string, val: number) =>
+                                <NumberInput isDisabled={!started} flex="1" name="amount" value={formikProps.values.amount} step={0.01} max={balanceData ? Number(balanceData.formatted) : 100} onBlur={formikProps.handleBlur} onChange={(strVal: string, val: number) =>
                                     formikProps.setFieldValue('amount', strVal ? strVal : 0)
                                 }>
                                     <NumberInputField/>
