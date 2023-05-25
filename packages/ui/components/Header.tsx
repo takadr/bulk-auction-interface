@@ -147,7 +147,10 @@ export const Header: FC<HeaderProps> = ({title}: {title?: string}) => {
                         {
                             !currentUser && <SignInButton
                                 size={'sm'}
-                                onSuccess={() => { mutate && mutate() }}
+                                onSuccess={() => { 
+                                    mutate && mutate()
+                                    Router.push('/dashboard')
+                                }}
                                 onError={(args) => {
                                     if ('error' in args) {
                                         const error = args.error;

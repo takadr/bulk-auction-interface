@@ -64,7 +64,9 @@ export default function Hero({
             {
                 !currentUser && <SignInButton
                 size={'lg'}
-                onSuccess={(args: any) => { }}
+                onSuccess={(args: any) => {
+                  Router.push('/dashboard')
+                }}
                 onError={(args: any) => {
                     if ('error' in args) {
                         const error = args.error;
