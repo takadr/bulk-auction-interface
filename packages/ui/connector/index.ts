@@ -28,7 +28,7 @@ const client: any = createClient({
     new WalletConnectConnector({
       chains,
       options: {
-        projectId: '',
+        projectId: process.env.NEXT_PUBLIC_WALLET_CONNECT_ID!,
         qrModalOptions: {
           themeVariables: {
             '--w3m-z-index': '2000'
