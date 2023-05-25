@@ -17,7 +17,7 @@ export default function DashboardPage() {
     const { address, isConnected, connector } = useAccount();
     const { currentUser, mutate } = useContext(CurrentUserContext);
     const saleFormModalDisclosure = useDisclosure();
-    const { data, loading, error: test, refetch } = useQuery(LIST_MY_SALE_QUERY, {variables: { id: address.toLowerCase()} });
+    const { data, loading, error: test, refetch } = useQuery(LIST_MY_SALE_QUERY, {variables: { id: String(address).toLowerCase() } });
     const [now, setNow] = useState<number>(Math.floor(Date.now() / 1000));
 
     useInterval(() => {
