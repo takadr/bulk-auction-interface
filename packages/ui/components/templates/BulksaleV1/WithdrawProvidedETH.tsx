@@ -42,7 +42,10 @@ export default function WithdrawProvidedETH({sale, onSuccessConfirm}: Props) {
     });
 
     return <Box>
-        <Heading fontSize={'lg'} textAlign={'left'}>ETH balance of Sale contract</Heading>
+        <Heading fontSize={'lg'} textAlign={'left'}>
+            ETH balance of Sale contract
+            <Tooltip hasArrow label={'ETH withdrawals will be available 3 days after the end of the sale.'}><QuestionIcon mb={1} ml={1} /></Tooltip>
+        </Heading>
         <Flex alignItems={'center'} justifyContent={'space-between'}>
             <chakra.p fontSize={'lg'}>{typeof balanceData !== 'undefined' ? tokenAmountFormat(getBigNumber(balanceData.value.toString()), 18, 2) : '-'} ETH</chakra.p>
             <Button
@@ -52,7 +55,6 @@ export default function WithdrawProvidedETH({sale, onSuccessConfirm}: Props) {
                 onClick={() => withdrawETHWriteFn.writeAsync()}
             >
                 Withdraw ETH
-                <Tooltip hasArrow label={'Finished, and enough Ether provided.'}><QuestionIcon mb={1} ml={1} /></Tooltip>
             </Button>
         </Flex>
     </Box>

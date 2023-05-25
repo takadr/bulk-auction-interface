@@ -48,7 +48,10 @@ export default function WithdrawUnclaimedToken({sale, onSuccessConfirm}: Props) 
     });
 
     return <Box>
-        <Heading fontSize={'lg'} textAlign={'left'}>Unclaimed token balance (削除予定)</Heading>
+        <Heading fontSize={'lg'} textAlign={'left'}>
+            Unclaimed token balance (削除予定)
+            <Tooltip hasArrow label={'Finished, passed lock duration, and still there\'re unsold ERC-20.'}><QuestionIcon mb={1} ml={1} /></Tooltip>
+        </Heading>
         <Flex alignItems={'center'} justifyContent={'space-between'}>
             <chakra.p fontSize={'lg'}>{typeof balance !== 'undefined' ? tokenAmountFormat(getBigNumber(balance.toString()), sale.tokenDecimals, 2) : '-'} {sale.tokenSymbol}</chakra.p>
             <Button
@@ -58,7 +61,6 @@ export default function WithdrawUnclaimedToken({sale, onSuccessConfirm}: Props) 
                 onClick={() => withdrawUnclaimedERC20WriteFn.writeAsync()}
             >
                 Withdraw Unclaimed Token
-                <Tooltip hasArrow label={'Finished, passed lock duration, and still there\'re unsold ERC-20.'}><QuestionIcon mb={1} ml={1} /></Tooltip>
             </Button>
         </Flex>
     </Box>

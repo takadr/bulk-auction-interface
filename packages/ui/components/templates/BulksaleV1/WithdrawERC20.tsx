@@ -48,7 +48,10 @@ export default function WithdrawERC20({sale, onSuccessConfirm}: Props) {
     });
 
     return <Box>
-        <Heading fontSize={'lg'} textAlign={'left'}>Token balance of Sale contract</Heading>
+        <Heading fontSize={'lg'} textAlign={'left'}>
+            Token balance of Sale contract
+            <Tooltip hasArrow label={'Token withdrawals will be available immediately after the end of the sale if the sale could not achieve the minimum threshold that is set in the contract.'}><QuestionIcon mb={1} ml={1} /></Tooltip>
+        </Heading>
         <Flex alignItems={'center'} justifyContent={'space-between'}>
             <chakra.p fontSize={'lg'}>{typeof balance !== 'undefined' ? tokenAmountFormat(getBigNumber(balance.toString()), sale.tokenDecimals, 2) : '-'} {sale.tokenSymbol}</chakra.p>
             <Button
@@ -58,7 +61,6 @@ export default function WithdrawERC20({sale, onSuccessConfirm}: Props) {
                 onClick={() => withdrawERC20WriteFn.writeAsync()}
             >
                 Withdraw Token
-                <Tooltip hasArrow label={'Finished, but the privided token is not enough. (Failed sale)'}><QuestionIcon mb={1} ml={1} /></Tooltip>
             </Button>
         </Flex>
     </Box>
