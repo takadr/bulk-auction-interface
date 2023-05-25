@@ -58,7 +58,7 @@ export const validateMetaData = (metaData: MetaData, minimumProvided?: number) =
     if(metaData.terms && metaData.terms.length > 1000) {
         errors.terms = 'Max length is 1000';
     }
-    if(metaData.interimGoalAmount && metaData.finalGoalAmount && metaData.interimGoalAmount > metaData.finalGoalAmount) {
+    if(metaData.interimGoalAmount && metaData.finalGoalAmount && Number(metaData.interimGoalAmount) > Number(metaData.finalGoalAmount)) {
         errors.finalGoalAmount = 'Final Goal Amount must be bigger than Interim Goal Amount';
     }
     if(metaData.projectURL && !URL_REGEX.test(metaData.projectURL)){
@@ -70,7 +70,7 @@ export const validateMetaData = (metaData: MetaData, minimumProvided?: number) =
     if(metaData.otherURL && !URL_REGEX.test(metaData.otherURL)){
         errors.otherURL = 'Invalid URL format'
     }
-    if(minimumProvided && metaData.interimGoalAmount && minimumProvided > metaData.interimGoalAmount) {
+    if(minimumProvided && metaData.interimGoalAmount && Number(minimumProvided) > Number(metaData.interimGoalAmount)) {
         errors.interimGoalAmount = `Interim Goal Amount must be bigger than or equal to Minimum provided (${minimumProvided} ETH)`
     }
     return errors;
