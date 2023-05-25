@@ -1,7 +1,8 @@
+import { chakra, Link, Heading, BoxProps } from "@chakra-ui/react";
 import { Circle } from 'rc-progress';
 import Big from '../../../utils/bignumber';
-import { chakra, Link, Heading, BoxProps } from "@chakra-ui/react";
 import { getTargetPercetage, getFiatConversionAmount, tokenAmountFormat, getEtherscanLink } from "../../../utils";
+import { CHAIN_NAMES } from '../../../constants';
 
 type Props = {
   totalProvided: Big;
@@ -27,12 +28,7 @@ export default function StatisticsInCircle({
   started,
   ...boxProps
 }: Props & BoxProps) {
-  // const { chainId } = useActiveWeb3React();
-  // const isDifferentialNetwork = !(targetedChainId === chainId);
-  // TODO
-  const chain = 'sepolia';
-  const isDifferentialNetwork = false;
-  const targetedChain = 'sepolia';
+  const chain = CHAIN_NAMES[process.env.NEXT_PUBLIC_CHAIN_ID as string];
 
   return (
     <chakra.div {...boxProps}>
@@ -43,16 +39,13 @@ export default function StatisticsInCircle({
             strokeWidth={4}
             strokeColor={'#48BB78'}
           />
-          {/* <StarPosition>
-            <StarTwoTone />
-          </StarPosition> */}
           <chakra.div textAlign={'center'} position={'absolute'} margin={'auto'} top={0} bottom={0} left={0} right={0} display={'flex'} flexDirection={'column'} justifyContent={'center'}>
             <Heading as={'h3'} fontSize={'lg'}>
               Total Provided
             </Heading>
             <chakra.div>
               <>
-                <chakra.span fontSize={'2xl'}>{started && !isDifferentialNetwork ? tokenAmountFormat(totalProvided, providedTokenDecimal, 2) : '????'}{' '}</chakra.span>
+                <chakra.span fontSize={'2xl'}>{started ? tokenAmountFormat(totalProvided, providedTokenDecimal, 2) : '????'}{' '}</chakra.span>
                 {providedTokenSymbol.toUpperCase()}
               </>
             </chakra.div>
@@ -61,26 +54,32 @@ export default function StatisticsInCircle({
                 // TODO Fiat symbol ($, ¥)
                 '$'
               }
-              {started && !isDifferentialNetwork
+              {started
                 ? '' +
-                  getFiatConversionAmount(Number(tokenAmountFormat(totalProvided, providedTokenDecimal, 2)), fiatRate)
+                  getFiatConversionAmount(Number(tokenAmountFormat(totalProvided, providedTokenDecimal, 2)), fiatRate).toFixed(2)
                 : '????'}
             </span>
             <div>
-              {!!interimGoalAmount && !isDifferentialNetwork ? 
-                <>
-                  GOAL {tokenAmountFormat(interimGoalAmount, 18, 2)}
+              {!!interimGoalAmount && 
+                <chakra.div textAlign={'center'}>
+                  INTERIM GOAL {tokenAmountFormat(interimGoalAmount, 18, 2)}
                   {providedTokenSymbol.toUpperCase()}
                   { 
                     totalProvided.gte(interimGoalAmount) && started && 
-                      <chakra.p textAlign={'center'}> Achieved 🎉</chakra.p>
+                    <chakra.span textAlign={'center'}> 🎉</chakra.span>
                   }
-                </>
-              : (
-                <p>
-                  Please connect to {targetedChain}
-                </p>
-              )}
+                </chakra.div>
+              }
+              {!!finalGoalAmount && 
+                <chakra.div textAlign={'center'}>
+                  FINAL GOAL {tokenAmountFormat(finalGoalAmount, 18, 2)}
+                  {providedTokenSymbol.toUpperCase()}
+                  { 
+                    totalProvided.gte(finalGoalAmount) && started && 
+                    <chakra.span textAlign={'center'}> 🎉</chakra.span>
+                  }
+                </chakra.div>
+              }
             </div>
           </chakra.div>
         </Link>
