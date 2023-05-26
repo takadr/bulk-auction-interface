@@ -3,12 +3,12 @@ import Template from '../constants/abis/Template.json';
 
 export default function useClaim({
   targetAddress,
-  owner,
+  address,
   onSuccessWrite,
   onSuccessConfirm,
 } : {
   targetAddress: `0x${string}` | null,
-  owner: `0x${string}`|undefined,
+  address: `0x${string}`|undefined,
   onSuccessWrite?: (data: any) => void,
   onSuccessConfirm?: (data: any) => void,
 }): {
@@ -17,14 +17,14 @@ export default function useClaim({
   waitFn: ReturnType<typeof useWaitForTransaction>,
 } {
   const { chain } = useNetwork();
-  const enabled: boolean = !!targetAddress && !!owner && !!chain
+  const enabled: boolean = !!targetAddress && !!address && !!chain
 
   const prepareFn = usePrepareContractWrite({
     chainId: chain?.id,
     address: targetAddress ? targetAddress : '0x00',
     abi: Template,
     functionName: 'claim',
-    args: [owner, owner], // Contributer, Reciepient
+    args: [address, address], // Contributer, Reciepient
     enabled
   })
 

@@ -23,7 +23,7 @@ export default function ClaimButton({
   }: Props & ButtonProps) {
     const {prepareFn: claimPrepareFn, writeFn: claimWriteFn, waitFn: claimWaitFn} = useClaim({
         targetAddress: sale.id as `0x${string}`, 
-        owner: address, 
+        address, 
         onSuccessWrite: (data) => {
             toast({
                 title: 'Transaction sent!',
