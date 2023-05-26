@@ -50,7 +50,7 @@ export default function WithdrawProvidedETH({sale, onSuccessConfirm}: Props) {
             <chakra.p fontSize={'lg'}>{typeof balanceData !== 'undefined' ? tokenAmountFormat(getBigNumber(balanceData.value.toString()), 18, 2) : '-'} ETH</chakra.p>
             <Button
                 variant={'solid'}
-                isDisabled={!balanceData || balanceData.value.toNumber() === 0 || !withdrawETHWriteFn.writeAsync}
+                isDisabled={!balanceData || balanceData.value.isZero() || !withdrawETHWriteFn.writeAsync}
                 isLoading={withdrawETHWriteFn.isLoading || withdrawETHWaitFn.isLoading}
                 onClick={() => withdrawETHWriteFn.writeAsync()}
             >
