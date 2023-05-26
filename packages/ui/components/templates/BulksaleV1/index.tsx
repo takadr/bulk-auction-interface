@@ -209,7 +209,7 @@ export default function BulksaleV1({sale, refetchSale, metaData, refetchMetaData
                                     //TODO Set max as account balance
                                 }
                                 <NumberInput isDisabled={!started} flex="1" name="amount" value={formikProps.values.amount} step={0.01} max={balanceData ? Number(balanceData.formatted) : 100} onBlur={formikProps.handleBlur} onChange={(strVal: string, val: number) =>
-                                    formikProps.setFieldValue('amount', strVal ? strVal : 0)
+                                    formikProps.setFieldValue('amount', strVal && Number(strVal) === val ? strVal : (isNaN(val) ? 0 : val))
                                 }>
                                     <NumberInputField/>
                                     <NumberInputStepper>

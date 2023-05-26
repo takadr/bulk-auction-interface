@@ -86,7 +86,7 @@ export default function MetaDataForm({formikProps, waitFn, onSkip}: {formikProps
                         </FormLabel>
                         <Flex alignItems={'center'}>
                             <NumberInput flex="1" name="interimGoalAmount" value={formikProps.values.interimGoalAmount} step={0.01} precision={2} min={0} max={10000000} onBlur={formikProps.handleBlur} onChange={(strVal: string, val: number) =>
-                                formikProps.setFieldValue('interimGoalAmount', strVal ? strVal : 0)
+                                formikProps.setFieldValue('interimGoalAmount', strVal && Number(strVal) === val ? strVal : (isNaN(val) ? 0 : val))
                             }>
                                 <NumberInputField/>
                                 <NumberInputStepper>
@@ -105,7 +105,7 @@ export default function MetaDataForm({formikProps, waitFn, onSkip}: {formikProps
                         </FormLabel>
                         <Flex alignItems={'center'}>
                             <NumberInput flex="1" name="finalGoalAmount" value={formikProps.values.finalGoalAmount} step={0.01} precision={2} min={0} max={10000000} onBlur={formikProps.handleBlur} onChange={(strVal: string, val: number) =>
-                                formikProps.setFieldValue('finalGoalAmount', strVal ? strVal : 0)
+                                formikProps.setFieldValue('finalGoalAmount', strVal && Number(strVal) === val ? strVal : (isNaN(val) ? 0 : val))
                             }>
                                 <NumberInputField/>
                                 <NumberInputStepper>

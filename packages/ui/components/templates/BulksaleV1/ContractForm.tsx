@@ -103,8 +103,8 @@ export default function BulksaleV1Form({formikProps, address, approvals, writeFn
                     </Flex>
                     
                     <Flex alignItems={'center'}>
-                        <NumberInput flex="1" name="distributeAmount" value={formikProps.values.distributeAmount} precision={2} min={0.01} step={0.01} max={Number.MAX_SAFE_INTEGER} onBlur={formikProps.handleBlur} onChange={(strVal: string, val: number) =>
-                            formikProps.setFieldValue('distributeAmount', strVal ? strVal : 0)
+                        <NumberInput flex="1" name="distributeAmount" value={formikProps.values.distributeAmount} precision={2} min={0.01} step={0.01} max={Number.MAX_SAFE_INTEGER} onBlur={formikProps.handleBlur} onChange={(strVal: string, val: number) => 
+                            formikProps.setFieldValue('distributeAmount', strVal && Number(strVal) === val ? strVal : (isNaN(val) ? 0 : val))
                         }>
                             <NumberInputField/>
                             <NumberInputStepper>
@@ -125,7 +125,7 @@ export default function BulksaleV1Form({formikProps, address, approvals, writeFn
                     <Flex alignItems={'center'}>
                         <NumberInput flex="1" name="minimalProvideAmount" value={formikProps.values.minimalProvideAmount} step={0.01} precision={2} min={0} max={10000000} onBlur={formikProps.handleBlur} onChange={(strVal: string, val: number) =>
                             // formikProps.setFieldValue('minimalProvideAmount', val)
-                            formikProps.setFieldValue('minimalProvideAmount', strVal ? strVal : 0)
+                            formikProps.setFieldValue('minimalProvideAmount', strVal && Number(strVal) === val ? strVal : (isNaN(val) ? 0 : val))
                         }>
                             <NumberInputField/>
                             <NumberInputStepper>
