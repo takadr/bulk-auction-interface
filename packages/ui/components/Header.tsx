@@ -104,12 +104,16 @@ export const Header: FC<HeaderProps> = ({title}: {title?: string}) => {
                             }}>Sign out and Disconnect</MenuItem>
                             : <MenuItem onClick={() => disconnect()}>Disconnect</MenuItem>
                         }
+                        {
+                        /* Hide color mode toggle switch for now
                         <Divider />
                         <HStack px={4} pt={2}>
                             <MoonIcon color={colorMode === 'light' ? 'gray' : 'white'} />
                             <Switch isChecked={colorMode === 'light'} onChange={(e: any) => e.target.checked ? setColorMode('light') : setColorMode('dark')} />
                             <SunIcon color={colorMode === 'light' ? 'gray' : 'white'} />
-                        </HStack>
+                        </HStack> 
+                        */
+                        }
                     </MenuList>
                 </HStack>
             </Menu>

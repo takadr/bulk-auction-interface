@@ -1,6 +1,5 @@
 import { useContext, useEffect } from 'react';
-import Router from 'next/router';
-import { chakra, Alert, AlertIcon, Box, useToast } from '@chakra-ui/react';
+import { chakra, Alert, AlertIcon, useColorMode, useToast } from '@chakra-ui/react';
 import { useAccount, useDisconnect, useNetwork } from 'wagmi';
 import { Header } from '../Header';
 import { CurrentUserContext } from '../providers/CurrentUserProvider';
@@ -20,7 +19,6 @@ export default function Layout({title, children}: {title?: string, children: Rea
     // Detect account change and sign out if SIWE user and account does not match
     useEffect(() => {
         if(currentUser && currentUser.address != address) {
-            // console.log("Address mismatch!! ", currentUser.address, address)
             logout()
             !toast.isActive('signout') && !toast.isActive('addressChanged') && toast({
                 id: 'addressChanged',
@@ -30,6 +28,12 @@ export default function Layout({title, children}: {title?: string, children: Rea
             })
         }
     }, [address])
+    
+    // Dark mode only for now
+    const { colorMode, toggleColorMode } = useColorMode();
+    useEffect(() => {
+        if(colorMode === 'light') toggleColorMode()
+    }, [colorMode])
 
     return <>
     <Header title={title ? title : 'DFGC Sale Maker(仮)'}/>

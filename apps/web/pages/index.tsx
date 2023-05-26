@@ -1,6 +1,5 @@
-import { useContext } from 'react';
-import Router from 'next/router';
-import { Stack, Container, chakra, Heading } from '@chakra-ui/react';
+import { useContext, useEffect } from 'react';
+import { Stack, Container, chakra, Heading, useColorMode } from '@chakra-ui/react';
 import { CurrentUserContext } from 'ui/components/providers/CurrentUserProvider';
 import Layout from 'ui/components/layouts/layout';
 import Hero from 'ui/components/Hero';
