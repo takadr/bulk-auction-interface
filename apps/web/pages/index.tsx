@@ -5,11 +5,11 @@ import Layout from 'ui/components/layouts/layout';
 import Hero from 'ui/components/Hero';
 
 export default function Web() {
-  const { currentUser } = useContext(CurrentUserContext);
+  const { currentUser, mutate } = useContext(CurrentUserContext);
 
   return (
     <Layout>
-      <Hero currentUser={currentUser} />
+      <Hero currentUser={currentUser} mutate={mutate} />
       <Container maxW={'container.lg'}>
         <Heading>Active Sales</Heading>
         <Stack py={4}>

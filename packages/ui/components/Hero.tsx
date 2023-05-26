@@ -8,17 +8,20 @@ import {
 } from "@chakra-ui/react";
 import { User } from "../types";
 import SignInButton from "./SignInButton";
+import { KeyedMutator } from "swr";
 
 type HeroProps = {
     title?: string,
     subtitle?: string,
     currentUser?: User,
+    mutate?: KeyedMutator<User | undefined>
 }
   
 export default function Hero({
   title="Bulksale maker(仮)",
   subtitle="A Great tool for starting your own token sale",
   currentUser,
+  mutate,
   ...rest
 }: HeroProps) {
   return (
@@ -64,7 +67,8 @@ export default function Hero({
             {
                 !currentUser && <SignInButton
                 size={'lg'}
-                onSuccess={(args: any) => {
+                onSuccess={async (args: any) => {
+                  mutate && await mutate()
                   Router.push('/dashboard')
                 }}
                 onError={(args: any) => {

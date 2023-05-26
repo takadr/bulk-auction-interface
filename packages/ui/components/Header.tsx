@@ -151,8 +151,8 @@ export const Header: FC<HeaderProps> = ({title}: {title?: string}) => {
                         {
                             !currentUser && <SignInButton
                                 size={'sm'}
-                                onSuccess={() => { 
-                                    mutate && mutate()
+                                onSuccess={async () => { 
+                                    mutate && await mutate()
                                     Router.push('/dashboard')
                                 }}
                                 onError={(args) => {
