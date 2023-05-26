@@ -35,7 +35,7 @@ type BulksaleV1Params = {
 export default function BulksaleV1({sale, refetchSale, metaData, refetchMetaData, address, contractAddress}: BulksaleV1Params) {
     const toast = useToast({position: 'top-right', isClosable: true,});
     const { provided, totalProvided, isLoading: isLoadingProvidedAmount, refetch: refetchProvided } = useProvided(contractAddress, address);
-    const { data: balanceData, isLoading: isLoadingBalance } = useBalance({address});
+    const { data: balanceData, isLoading: isLoadingBalance, refetch: refetchBalance } = useBalance({address, enabled: !!address});
     const { data: isClaimed, error: isClaimedError, mutate: mutateIsClaimed } = useIsClaimed(sale, address);
 
     const providedTokenSymbol = 'ETH';
@@ -143,6 +143,7 @@ export default function BulksaleV1({sale, refetchSale, metaData, refetchMetaData
             setTimeout(() => {
                 refetchSale();
                 refetchProvided();
+                refetchBalance();
             }, 0)
             
         },
