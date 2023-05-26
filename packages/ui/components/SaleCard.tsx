@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { chakra, Box, Divider, Skeleton, Badge, Tag, Heading, Card, CardBody, CardFooter, Progress, Text, Image, Stack, Flex, Button, useDisclosure, useInterval, SkeletonText } from '@chakra-ui/react';
 import { EditIcon } from '@chakra-ui/icons';
-import Big from '../utils/bignumber';
+import Big, { divideToNum } from '../utils/bignumber';
 import { MetaData, Sale } from '../types/BulksaleV1';
 import useSWRAuction from '../hooks/useAuction';
 import SaleMetaFormModal from './SaleMetaFormModal';
@@ -137,7 +137,7 @@ export default function SaleCard({ sale, editable=false, now }: { sale: Sale, ed
                 </CardFooter> */}
             </Stack>
             {
-                editable && isOpen && <SaleMetaFormModal minimumProvided={Number(Big(sale.minimalProvideAmount).div(Big(10).pow(18).toNumber()))} isOpen={isOpen} onClose={onClose} existingContractAddress={sale.id as `0x${string}`} saleMetaData={data?.metaData} onSubmitSuccess={mutate} />
+                editable && isOpen && <SaleMetaFormModal minimumProvided={divideToNum(sale.minimalProvideAmount, Big(10).pow(18))} isOpen={isOpen} onClose={onClose} existingContractAddress={sale.id as `0x${string}`} saleMetaData={data?.metaData} onSubmitSuccess={mutate} />
             }
         </Card>
 }
