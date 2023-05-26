@@ -1,5 +1,5 @@
 import type { AppProps } from "next/app";
-import { ChakraProvider } from '@chakra-ui/react';
+import { ChakraProvider, ColorModeScript } from '@chakra-ui/react';
 import { WagmiConfig } from 'wagmi';
 import { ApolloProvider } from '@apollo/client';
 import theme from 'ui/themes';
@@ -14,6 +14,7 @@ export default function MyApp({ Component, pageProps }: AppProps) {
       <WagmiConfig client={client}>
         <ApolloProvider client={apolloClient}>
           <CurrentUserProvider>
+            <ColorModeScript initialColorMode={'dark'} />
             <Component {...pageProps} />
           </CurrentUserProvider>
         </ApolloProvider>
