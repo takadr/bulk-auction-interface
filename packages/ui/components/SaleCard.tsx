@@ -104,11 +104,11 @@ export default function SaleCard({ sale, editable=false, now }: { sale: Sale, ed
                                 <Text fontSize={'sm'}>Minimum</Text><Text fontSize={'lg'}>{tokenAmountFormat(sale.minimalProvideAmount, 18, 2)} <chakra.span fontSize={'sm'}>ETH</chakra.span></Text>
                             </Flex>
                             <Flex mt={1} justifyContent={'space-between'} alignItems={'baseline'}>
-                                <Text fontSize={'sm'}>Interim Goal</Text><Text fontSize={'lg'}>{data?.metaData?.interimGoalAmount ? tokenAmountFormat(data?.metaData?.interimGoalAmount, 0, 2) : '-'} <chakra.span fontSize={'sm'}>ETH</chakra.span></Text>
+                                <Text fontSize={'sm'}>Minimum Target</Text><Text fontSize={'lg'}>{data?.metaData?.interimGoalAmount ? tokenAmountFormat(data?.metaData?.interimGoalAmount, 0, 2) : '-'} <chakra.span fontSize={'sm'}>ETH</chakra.span></Text>
                             </Flex>
-                            <Flex mt={1} justifyContent={'space-between'} alignItems={'baseline'}>
-                                <Text fontSize={'sm'}>Final Goal</Text><Text fontSize={'lg'}>{data?.metaData?.finalGoalAmount ? tokenAmountFormat(data?.metaData?.finalGoalAmount, 0, 2) : '-'} <chakra.span fontSize={'sm'}>ETH</chakra.span></Text>
-                            </Flex>
+                            {/* <Flex mt={1} justifyContent={'space-between'} alignItems={'baseline'}>
+                                <Text fontSize={'sm'}>Target</Text><Text fontSize={'lg'}>{data?.metaData?.finalGoalAmount ? tokenAmountFormat(data?.metaData?.finalGoalAmount, 0, 2) : '-'} <chakra.span fontSize={'sm'}>ETH</chakra.span></Text>
+                            </Flex> */}
                         </chakra.div>
                     </Flex>
                     <Flex alignItems={'center'}>

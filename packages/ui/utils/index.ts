@@ -19,18 +19,17 @@ export const calculateAllocation = (us: Big, tp: Big, tda: Big): Big => {
 export const getExpectedAmount = (myTotalDonations: BigNumberValueType, inputtingValue: BigNumberValueType, totalProvided: BigNumberValueType, distributeAmount: BigNumberValueType): Big => {
     const donations = add(myTotalDonations, inputtingValue);
     const totalDonations = add(totalProvided, inputtingValue);
-    if (totalDonations <= Big(0)) {
+    if (totalDonations.lte(Big(0))) {
         return Big(0);
     }
     return calculateAllocation(donations, totalDonations, getBigNumber(distributeAmount))
 }
 
 export const getTargetPercetage = (totalProvided: BigNumberValueType, finalGoalAmount: BigNumberValueType): number => {
-    if (finalGoalAmount <= Big(0)) {
+    if (getBigNumber(finalGoalAmount).lte(Big(0))) {
         return 0;
     }
-    return multiply(divide(totalProvided, finalGoalAmount), 100).toNumber();
-    // return (parseFloat(totalProvided.toString())/parseFloat(finalGoalAmount.toString())) * 100;
+    return Math.min(100, multiply(divide(totalProvided, finalGoalAmount), 100).toNumber());
 }
 
 export const getFiatConversionAmount = (token: number, fiatRate: number) => {

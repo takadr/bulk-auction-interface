@@ -120,7 +120,7 @@ export default function BulksaleV1Form({formikProps, address, approvals, writeFn
 
                 <FormControl mt={4} isInvalid={!!formikProps.errors.minimalProvideAmount && !!formikProps.touched.minimalProvideAmount}>
                     <FormLabel alignItems={'baseline'}>Minimum provide amount
-                        <Tooltip hasArrow label={'TODO explanation'}><QuestionIcon mb={1} ml={1} /></Tooltip>
+                        <Tooltip hasArrow label={'If the bid amount falls below this value, the auction will be void, and the bid amount will be refunded.'}><QuestionIcon mb={1} ml={1} /></Tooltip>
                     </FormLabel>
                     <Flex alignItems={'center'}>
                         <NumberInput flex="1" name="minimalProvideAmount" value={formikProps.values.minimalProvideAmount} step={0.01} precision={2} min={0} max={10000000} onBlur={formikProps.handleBlur} onChange={(strVal: string, val: number) =>

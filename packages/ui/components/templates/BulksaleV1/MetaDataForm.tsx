@@ -81,7 +81,7 @@ export default function MetaDataForm({formikProps, waitFn, onSkip}: {formikProps
                     </FormControl>
 
                     <FormControl mt={4} isInvalid={!!formikProps.errors.interimGoalAmount && !!formikProps.touched.interimGoalAmount}>
-                        <FormLabel alignItems={'baseline'}>Interim Goal Amount
+                        <FormLabel alignItems={'baseline'}>Minimum Target Amount
                             <Tooltip hasArrow label={'TODO explanation'}><QuestionIcon mb={1} ml={1} /></Tooltip>
                         </FormLabel>
                         <Flex alignItems={'center'}>
@@ -100,8 +100,8 @@ export default function MetaDataForm({formikProps, waitFn, onSkip}: {formikProps
                     </FormControl>
 
                     <FormControl mt={4} isInvalid={!!formikProps.errors.finalGoalAmount && !!formikProps.touched.finalGoalAmount}>
-                        <FormLabel alignItems={'baseline'}>Final Goal Amount
-                            <Tooltip hasArrow label={'TODO explanation'}><QuestionIcon mb={1} ml={1} /></Tooltip>
+                        <FormLabel alignItems={'baseline'}>Target Amount
+                            <Tooltip hasArrow label={'Bidder can bid even above the Target.'}><QuestionIcon mb={1} ml={1} /></Tooltip>
                         </FormLabel>
                         <Flex alignItems={'center'}>
                             <NumberInput flex="1" name="finalGoalAmount" value={formikProps.values.finalGoalAmount} step={0.01} precision={2} min={0} max={10000000} onBlur={formikProps.handleBlur} onChange={(strVal: string, val: number) =>

@@ -62,7 +62,7 @@ export default function StatisticsInCircle({
             <div>
               {!!interimGoalAmount && 
                 <chakra.div textAlign={'center'}>
-                  INTERIM GOAL {tokenAmountFormat(interimGoalAmount, 18, 2)}
+                  Minimum Target {tokenAmountFormat(interimGoalAmount, 18, 2)}
                   {providedTokenSymbol.toUpperCase()}
                   { 
                     totalProvided.gte(interimGoalAmount) && started && 
@@ -70,7 +70,8 @@ export default function StatisticsInCircle({
                   }
                 </chakra.div>
               }
-              {!!finalGoalAmount && 
+              {/* {
+              !!finalGoalAmount && 
                 <chakra.div textAlign={'center'}>
                   FINAL GOAL {tokenAmountFormat(finalGoalAmount, 18, 2)}
                   {providedTokenSymbol.toUpperCase()}
@@ -79,7 +80,7 @@ export default function StatisticsInCircle({
                     <chakra.span textAlign={'center'}> 🎉</chakra.span>
                   }
                 </chakra.div>
-              }
+              } */}
             </div>
           </chakra.div>
         </Link>
