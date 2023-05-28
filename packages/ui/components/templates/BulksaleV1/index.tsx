@@ -5,7 +5,7 @@ import { useFormik } from 'formik';
 import { useWaitForTransaction, useContractEvent, usePrepareSendTransaction, useSendTransaction, useBalance } from 'wagmi';
 import { ApolloQueryResult } from '@apollo/client';
 import { KeyedMutator } from 'swr';
-import Big from '../../../utils/bignumber';
+import Big, { getBigNumber } from '../../../utils/bignumber';
 import { BigNumber, utils } from 'ethers';
 import CalendarInCircle from './CalendarInCircle';
 import PersonalStatistics from './PersonalStatistics';
@@ -176,8 +176,9 @@ export default function BulksaleV1({sale, refetchSale, metaData, refetchMetaData
                 <Flex mt={8} flexDirection={{base: 'column', md: 'row'}}>
                     <StatisticsInCircle
                         totalProvided={totalProvided}
-                        interimGoalAmount={Big(metaData.interimGoalAmount ? metaData.interimGoalAmount : 0).mul(Big(10).pow(providedTokenDecimal))}
-                        finalGoalAmount={Big(metaData.finalGoalAmount ? metaData.finalGoalAmount : 0).mul(Big(10).pow(providedTokenDecimal))}
+                        minimalProvideAmount={sale.minimalProvideAmount ? getBigNumber(sale.minimalProvideAmount) : Big(0)}
+                        interimGoalAmount={getBigNumber(metaData.interimGoalAmount ? metaData.interimGoalAmount : 0).mul(Big(10).pow(providedTokenDecimal))}
+                        finalGoalAmount={getBigNumber(metaData.finalGoalAmount ? metaData.finalGoalAmount : 0).mul(Big(10).pow(providedTokenDecimal))}
                         providedTokenSymbol={providedTokenSymbol}
                         providedTokenDecimal={providedTokenDecimal}
                         fiatSymbol={fiatSymbol}
@@ -185,11 +186,13 @@ export default function BulksaleV1({sale, refetchSale, metaData, refetchMetaData
                         contractAddress={contractAddress}
                         started={started}
                         w={{base: 'full', md: '50%'}}
+                        p={0.5}
                      />
                     <CalendarInCircle
                         unixStartDate={sale.startingAt}
                         unixEndDate={sale.closingAt}
                         w={{base: 'full', md: '50%'}}
+                        p={0.5}
                     />
                 </Flex>
 

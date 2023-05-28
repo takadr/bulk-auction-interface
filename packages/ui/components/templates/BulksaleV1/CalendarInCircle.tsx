@@ -1,6 +1,6 @@
 import { format } from 'date-fns';
 import { Circle } from 'rc-progress';
-import { chakra, BoxProps } from '@chakra-ui/react';
+import { chakra, BoxProps, useToken } from '@chakra-ui/react';
 import CountdownCalendar from './CountdownCalendar';
 
 type Props = {
@@ -20,13 +20,18 @@ export default function CalendarInCircle({
     return rest > 0 ? Math.min(100, (rest / duration) * 100) : 0;
   }
 
+  const [gray600, green400] = useToken('colors', ['gray.600', 'green.400']);
+
   return (
     <chakra.div {...boxProps}>
       <chakra.div position={'relative'}>
         <Circle
           percent={getRestTermPercetage()}
           strokeWidth={4}
-          strokeColor={'#48BB78'}
+          trailWidth={4}
+          // strokeLinecap="square"
+          strokeColor={green400}
+          trailColor={gray600}
         />
 
         {unixStartDate * 1000 > Date.now() ? (
