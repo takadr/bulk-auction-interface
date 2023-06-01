@@ -20,8 +20,8 @@ import { FormikProps } from 'formik';
 import { differenceInSeconds, addSeconds, format } from 'date-fns';
 import { SaleForm } from '../../../types/BulksaleV1';
 import { BigNumber } from 'ethers';
-import { tokenAmountFormat } from '../../../utils';
-import Big, { multiply } from '../../../utils/bignumber';
+import { getDecimalsForView, tokenAmountFormat } from '../../../utils';
+import Big, { getBigNumber, multiply } from '../../../utils/bignumber';
 import { useEffect } from 'react';
 
 export default function BulksaleV1Form({formikProps, address, approvals, writeFn, tokenData, balance}: {formikProps: FormikProps<SaleForm>, address: `0x${string}`, approvals: any, writeFn: any, tokenData: any, balance?: BigNumber | undefined}) {
@@ -114,7 +114,9 @@ export default function BulksaleV1Form({formikProps, address, approvals, writeFn
                         </NumberInput>
                         <chakra.div px={2} minW={'3rem'}>{tokenData?.symbol}</chakra.div>
                     </Flex>
-                    <chakra.p color={'gray.400'} fontSize={'sm'}>Balance: {balance && tokenData ? tokenAmountFormat(Big(balance.toString()), tokenData?.decimals, 2) : '-'} {tokenData?.symbol}</chakra.p>
+                    <chakra.p color={'gray.400'} fontSize={'sm'}>
+                        Balance: {balance && tokenData ? tokenAmountFormat(Big(balance.toString()), tokenData?.decimals, getDecimalsForView(getBigNumber(tokenData?.totalSupply.value.toString()), tokenData?.decimals)) : '-'} {tokenData?.symbol}
+                    </chakra.p>
                     <FormErrorMessage>{formikProps.errors.distributeAmount}</FormErrorMessage>
                 </FormControl>
 

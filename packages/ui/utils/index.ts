@@ -1,5 +1,4 @@
-import Big from 'big.js';
-import { BigNumberValueType, add, divide, multiply, getBigNumber } from './bignumber';
+import Big, { BigNumberValueType, add, divide, multiply, getBigNumber } from './bignumber';
 // TODO Consider using BigDecimal or libraries
 // https://stackoverflow.com/questions/54409854/how-to-divide-two-native-javascript-bigints-and-get-a-decimal-result
 // https://stackoverflow.com/questions/16742578/bigdecimal-in-javascript/66939244#66939244
@@ -36,9 +35,9 @@ export const getFiatConversionAmount = (token: number, fiatRate: number) => {
     return token * fiatRate;
 }
 
-export const tokenAmountFormat = (amount: BigNumberValueType, decimal: number, precision: number): string => {
+export const tokenAmountFormat = (amount: BigNumberValueType, decimals: number, precision: number): string => {
     // const adjuster = 10**precision;
-    const numerator = Big(10**decimal);
+    const numerator = Big(10**decimals);
     return divide(amount, numerator).toFixed(precision);
 }
 
@@ -85,4 +84,17 @@ export const getCountdown = (duration: number): Countdown => {
     return text.length >= maxLength
     ? text.slice(0, maxLength - ellipsis.length) + ellipsis
     : text
+  }
+
+  export const getDecimalsForView = (amount: Big, decimals: number): number => {
+    const digits = divide(amount, Big(10).pow(Number(decimals))).toString().length
+    if(digits >= 8) {
+      if(decimals >= 2) {
+        return 2
+      } else {
+        return decimals
+      }
+    } else {
+      return Math.min(10 - digits, decimals)
+    }
   }

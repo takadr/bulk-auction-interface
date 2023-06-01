@@ -3,7 +3,7 @@ import { chakra, useToast, Button, Tooltip, Flex, Box, Heading } from "@chakra-u
 import { useContractRead, erc20ABI } from "wagmi";
 import useWithdrawERC20Onsale from '../../../hooks/useWithdrawERC20Onsale';
 import { Sale } from "../../../types/BulksaleV1";
-import { tokenAmountFormat } from "../../../utils";
+import { getDecimalsForView, tokenAmountFormat } from "../../../utils";
 import { getBigNumber } from "../../../utils/bignumber";
 import TxSentToast from "../../TxSentToast";
 
@@ -53,7 +53,7 @@ export default function WithdrawERC20({sale, onSuccessConfirm}: Props) {
             <Tooltip hasArrow label={'Token withdrawals will be available immediately after the end of the sale if the sale could not achieve the minimum threshold that is set in the contract.'}><QuestionIcon mb={1} ml={1} /></Tooltip>
         </Heading>
         <Flex alignItems={'center'} justifyContent={'space-between'}>
-            <chakra.p fontSize={'lg'}>{typeof balance !== 'undefined' ? tokenAmountFormat(getBigNumber(balance.toString()), sale.tokenDecimals, 2) : '-'} {sale.tokenSymbol}</chakra.p>
+            <chakra.p fontSize={'lg'}>{typeof balance !== 'undefined' ? tokenAmountFormat(getBigNumber(balance.toString()), sale.tokenDecimals, getDecimalsForView(getBigNumber(sale.distributeAmount), sale.tokenDecimals)) : '-'} {sale.tokenSymbol}</chakra.p>
             <Button
                 variant={'solid'}
                 isDisabled={!balance || balance.isZero() || !withdrawERC20WriteFn.writeAsync}

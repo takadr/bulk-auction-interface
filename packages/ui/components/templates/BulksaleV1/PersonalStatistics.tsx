@@ -1,6 +1,6 @@
 import { WarningIcon } from "@chakra-ui/icons";
 import { chakra, BoxProps, Card, CardBody, Stack, StackDivider, Flex } from "@chakra-ui/react";
-import { getExpectedAmount, tokenAmountFormat } from "../../../utils";
+import { getDecimalsForView, getExpectedAmount, tokenAmountFormat } from "../../../utils";
 import Big, { add, multiply } from "../../../utils/bignumber";
 
 interface Props {
@@ -31,7 +31,7 @@ export default function PersonalStatistics({
     ...boxProps
   }: Props & BoxProps) {
     const inputValueInBig = multiply(Big(inputValue), Big(10).pow(providedTokenDecimal));
-    const expectedAmount = tokenAmountFormat(getExpectedAmount(myTotalProvided, inputValueInBig, totalProvided, distributeAmount), distributedTokenDecimal, 2);
+    const expectedAmount = tokenAmountFormat(getExpectedAmount(myTotalProvided, inputValueInBig, totalProvided, distributeAmount), distributedTokenDecimal, getDecimalsForView(distributeAmount, distributedTokenDecimal));
     const sumOfProvidedAmount = tokenAmountFormat(add(myTotalProvided, inputValueInBig), providedTokenDecimal, 2);
     const fixedProvidedAmount = tokenAmountFormat(myTotalProvided, providedTokenDecimal, 2);
     const inputtingValueInFormat = tokenAmountFormat(inputValueInBig, providedTokenDecimal, 2);
