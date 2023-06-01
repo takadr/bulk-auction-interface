@@ -12,9 +12,11 @@ import {
     NumberInputStepper,
     NumberIncrementStepper,
     NumberDecrementStepper,
-    Link
+    Link,
+    AlertIcon,
+    Alert
 } from '@chakra-ui/react';
-import { ExternalLinkIcon, QuestionIcon } from '@chakra-ui/icons';
+import { ExternalLinkIcon, QuestionIcon, WarningTwoIcon } from '@chakra-ui/icons';
 import { CustomProvider, DateRangePicker } from 'rsuite';
 import { FormikProps } from 'formik';
 import { differenceInSeconds, addSeconds, format } from 'date-fns';
@@ -103,7 +105,7 @@ export default function BulksaleV1Form({formikProps, address, approvals, writeFn
                     </Flex>
                     
                     <Flex alignItems={'center'}>
-                        <NumberInput flex="1" name="distributeAmount" value={formikProps.values.distributeAmount} precision={2} min={0.01} step={0.01} max={Number.MAX_SAFE_INTEGER} onBlur={formikProps.handleBlur} onChange={(strVal: string, val: number) => 
+                        <NumberInput flex="1" name="distributeAmount" value={formikProps.values.distributeAmount} precision={tokenData ? getDecimalsForView(getBigNumber(tokenData?.totalSupply.value.toString()), tokenData?.decimals) : 0} min={0} max={Number.MAX_SAFE_INTEGER} onBlur={formikProps.handleBlur} onChange={(strVal: string, val: number) => 
                             formikProps.setFieldValue('distributeAmount', strVal && Number(strVal) === val ? strVal : (isNaN(val) ? 0 : val))
                         }>
                             <NumberInputField/>
@@ -118,6 +120,13 @@ export default function BulksaleV1Form({formikProps, address, approvals, writeFn
                         Balance: {balance && tokenData ? tokenAmountFormat(Big(balance.toString()), tokenData?.decimals, getDecimalsForView(getBigNumber(tokenData?.totalSupply.value.toString()), tokenData?.decimals)) : '-'} {tokenData?.symbol}
                     </chakra.p>
                     <FormErrorMessage>{formikProps.errors.distributeAmount}</FormErrorMessage>
+                    { !!Number(formikProps.values.distributeAmount) && !!tokenData && !!multiply(formikProps.values.distributeAmount, Big(10).pow(tokenData?.decimals)).lt(1000) &&
+                        <Alert status='warning' py={2} px={2}>
+                            <AlertIcon />
+                            {/* <WarningTwoIcon color={'yellow.400'} mr={1} /> */}
+                            <chakra.span fontSize={'sm'}>Due to the small amount of distribution, there is a possibility that allocations cannot be made to all participants. Tokens that become unallocated cannot be refunded. Please consider increasing the distribution amount.</chakra.span>
+                        </Alert>
+                    }
                 </FormControl>
 
                 <FormControl mt={4} isInvalid={!!formikProps.errors.minimalProvideAmount && !!formikProps.touched.minimalProvideAmount}>
