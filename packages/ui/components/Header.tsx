@@ -55,7 +55,7 @@ export const Header: FC<HeaderProps> = ({title}: {title?: string}) => {
     const noConnectedMenu = () => {
         return (
             <>
-                <Button onClick={providersListDisclosure.onOpen} variant={'outline'} size='sm'>
+                <Button onClick={providersListDisclosure.onOpen} variant={'outline'} size={{base: 'xs', md: 'sm'}}>
                     Connect wallet
                 </Button>
                 <ProvidersList isOpen={providersListDisclosure.isOpen} onClose={providersListDisclosure.onClose} />
@@ -69,7 +69,7 @@ export const Header: FC<HeaderProps> = ({title}: {title?: string}) => {
             <Menu>
                 <HStack spacing={1}>
                     { connector?.id && <ProviderLogo width={'26px'} connectorId={connector.id} /> }
-                    <Tag size={'sm'}>{chain?.unsupported ? 'Unsupported Chain' : chain?.name}</Tag>
+                    <Tag size={'sm'} display={{ base: 'none', md: 'flex' }}>{chain?.unsupported ? 'Unsupported Chain' : chain?.name}</Tag>
                     <MenuButton>
                         <HStack>
                             { ensName && <Avatar
@@ -77,12 +77,12 @@ export const Header: FC<HeaderProps> = ({title}: {title?: string}) => {
                             src={ensAvatar ? ensAvatar : ''}
                             /> }
                             <VStack
-                            display={{ base: 'none', md: 'flex' }}
+                            display={{ base: 'flex', md: 'flex' }}
                             alignItems="flex-start"
                             spacing="1px"
                             ml="2">
                                 <Text fontSize="sm">
-                                    { currentUser ? 'Signed in as ' : '' }
+                                    <chakra.span display={{ base: 'none', md: 'inline' }}>{ currentUser ? 'Signed in as ' : '' }</chakra.span>
                                     {ensName ? `${ensName} (${getDisplayAddress()})` : `${getDisplayAddress()}` }
                                 </Text>
                             </VStack>
@@ -90,6 +90,19 @@ export const Header: FC<HeaderProps> = ({title}: {title?: string}) => {
                         </HStack>
                     </MenuButton>
                     <MenuList zIndex={101}>
+                        <HStack spacing={1} px={2} display={{ base: 'block', md: 'none' }}>
+                            <Tag size={'sm'}>{chain?.unsupported ? 'Unsupported Chain' : chain?.name}</Tag>
+                            { currentUser && <Tag size={'sm'}>Signed in</Tag>}
+                        </HStack>
+                        {
+                            isConnected && currentUser && <MenuItem display={{base: 'block', md: 'none'}} onClick={() => Router.push("/dashboard")}>
+                                Dashboard
+                            </MenuItem>
+                        }
+                        <MenuItem display={{base: 'block', md: 'none'}} onClick={() => Router.push("/sales")}>
+                            Sales
+                        </MenuItem>
+                        <Divider display={{base: 'block', md: 'none'}} />
                         {
                             currentUser ? <MenuItem onClick={async() => { 
                                 await fetch('/api/logout', { method: 'POST', credentials: 'same-origin' });
@@ -139,18 +152,18 @@ export const Header: FC<HeaderProps> = ({title}: {title?: string}) => {
                             </Heading>
                         </Link>
                     </HStack>
-                    <HStack spacing={4}>
+                    <HStack spacing={{base: 2, md: 4}}>
                         {
-                            isConnected && currentUser && <Button variant="ghost" size={'md'} onClick={() => Router.push("/dashboard")}>
+                            isConnected && currentUser && <Button display={{base: 'none', md: 'block'}} variant="ghost" size={'md'} onClick={() => Router.push("/dashboard")}>
                                 Dashboard
                             </Button>
                         }
-                        <Button variant="ghost" size={'md'} onClick={() => Router.push("/sales")}>
+                        <Button variant="ghost" display={{base: 'none', md: 'block'}} size={'md'} onClick={() => Router.push("/sales")}>
                             Sales
                         </Button>
                         {
                             !currentUser && <SignInButton
-                                size={'sm'}
+                                size={{base: 'xs', md: 'sm'}}
                                 onSuccess={async () => { 
                                     mutate && await mutate()
                                     Router.push('/dashboard')

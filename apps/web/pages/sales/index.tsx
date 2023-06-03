@@ -25,12 +25,12 @@ export default function SalePage() {
             <Container maxW="container.xl" py={16}>
             <Tabs variant='soft-rounded' colorScheme='green'>
                 <TabList>
-                    <Tab>Active & Upcomming Sales</Tab>
-                    <Tab>Closed Sales</Tab>
+                    <Tab fontSize={{base: 'sm', md: 'md'}}>Active & Upcomming Sales</Tab>
+                    <Tab fontSize={{base: 'sm', md: 'md'}}>Closed Sales</Tab>
                 </TabList>
-                <TabPanels>
-                    <TabPanel>
-                        <Stack mt={4} spacing={8}>
+                <TabPanels mt={4}>
+                    <TabPanel p={{base: 0, md: 4}}>
+                        <Stack spacing={8}>
                             {
                                 activeSalesError && <Alert status={'error'}><AlertIcon />{activeSalesError.message}</Alert>
                             }
@@ -52,8 +52,8 @@ export default function SalePage() {
                             }
                         </Stack>
                     </TabPanel>
-                    <TabPanel>
-                        <Stack mt={4} spacing={8}>
+                    <TabPanel p={{base: 0, md: 4}}>
+                        <Stack spacing={8}>
                             {
                                 closedSalesError && <Alert status={'error'}><AlertIcon />{closedSalesError.message}</Alert>
                             }

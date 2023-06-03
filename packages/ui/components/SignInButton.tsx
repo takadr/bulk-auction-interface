@@ -1,7 +1,7 @@
-import { useState, useEffect, useRef, useContext, memo } from 'react';
+import { useState, useEffect, useRef, memo } from 'react';
 import { useAccount, useNetwork, useSignMessage } from 'wagmi';
 import { SiweMessage } from 'siwe';
-import { Button, ButtonProps, useDisclosure } from '@chakra-ui/react';
+import { Button, ButtonProps, useDisclosure, chakra } from '@chakra-ui/react';
 import ProvidersList from './ProvidersList';
 
 function usePrevious(value: any) {
@@ -101,7 +101,8 @@ export default memo(function SignInButton({
     return (
       <>
         <Button {...buttonProps} variant={'solid'} colorScheme={'green'} isLoading={state.loading} onClick={signIn}>
-          Sign-In with Ethereum
+          Sign In
+          <chakra.span display={{base: 'none', md: 'inline'}}> with Ethereum</chakra.span>
         </Button>
         { !isConnected && <ProvidersList isOpen={providersListDisclosure.isOpen} onClose={() => { 
           setTimeout(() => {

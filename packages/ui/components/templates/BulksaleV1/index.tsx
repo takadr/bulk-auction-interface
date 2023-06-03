@@ -152,7 +152,7 @@ export default function BulksaleV1({sale, refetchSale, metaData, refetchMetaData
     return (
         <>
             <Container maxW={'container.md'} py={16}>
-                <Flex alignItems={'center'} minH={'150px'}>
+                <Flex flexDirection={{base: 'column', md: 'row'}} alignItems={'center'} minH={'150px'}>
                     <Image
                     borderRadius={'100%'}
                     objectFit='cover'

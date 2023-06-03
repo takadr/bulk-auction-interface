@@ -84,7 +84,7 @@ export default function SaleCard({ sale, editable=false, now }: { sale: Sale, ed
         
             <Stack w={'full'}>
                 <CardBody>
-                    <Flex>
+                    <Flex flexDirection={{base: 'column', md: 'row'}}>
                         <chakra.div flex={2} pr={4}>
                             <Heading size='lg'>
                                 <Link href={`/sales/${sale.id}`}>{data?.metaData?.title ? data?.metaData?.title : 'Unnamed Sale'}</Link>
@@ -115,7 +115,7 @@ export default function SaleCard({ sale, editable=false, now }: { sale: Sale, ed
                             </Flex> */}
                         </chakra.div>
                     </Flex>
-                    <Flex alignItems={'center'}>
+                    <Flex mt={{base: 2, md: 0}} alignItems={'center'}>
                         {
                             stage === '0' && <>
                                 <Tag><Box boxSize='1em' bg='gray.500' borderRadius={'100%'} /> <Text ml={1}>Not started</Text></Tag>

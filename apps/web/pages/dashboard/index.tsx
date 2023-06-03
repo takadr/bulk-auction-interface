@@ -41,14 +41,14 @@ export default function DashboardPage() {
         <Layout>
             <Container maxW="container.xl" py={16}>
                 <Heading size={'lg'}>Dashboard</Heading>
-                <Tabs mt={8}>
+                <Tabs mt={{base: 4, md: 8}}>
                     <TabList>
                         <Tab>Your Sales</Tab>
                     </TabList>
 
                     <TabPanels>
-                        <TabPanel>
-                            <chakra.div textAlign={'right'}>
+                        <TabPanel p={{base: 0, md: 4}}>
+                            <chakra.div mt={4} textAlign={'right'}>
                                 <Button onClick={saleFormModalDisclosure.onOpen}><AddIcon fontSize={'sm'} mr={2} />Create new sale</Button>
                             </chakra.div>
                             <SaleFormModal isOpen={saleFormModalDisclosure.isOpen} onClose={saleFormModalDisclosure.onClose} onSubmitSuccess={refetch} />
