@@ -1,3 +1,4 @@
+import { ReactElement, useRef } from 'react';
 import { 
     chakra,
     Button,
@@ -14,7 +15,17 @@ import {
     NumberDecrementStepper,
     Link,
     AlertIcon,
-    Alert
+    Alert,
+    AlertDialog,
+    AlertDialogBody,
+    AlertDialogFooter,
+    AlertDialogHeader,
+    AlertDialogContent,
+    AlertDialogOverlay,
+    AlertDialogCloseButton,
+    useDisclosure,
+    Stack,
+    Divider,
 } from '@chakra-ui/react';
 import { ExternalLinkIcon, QuestionIcon, WarningTwoIcon } from '@chakra-ui/icons';
 import { CustomProvider, DateRangePicker } from 'rsuite';
@@ -22,14 +33,18 @@ import { FormikProps } from 'formik';
 import { differenceInSeconds, addSeconds, format } from 'date-fns';
 import { SaleForm } from '../../../types/BulksaleV1';
 import { BigNumber } from 'ethers';
-import { getDecimalsForView, tokenAmountFormat } from '../../../utils';
+import { getDecimalsForView, getEtherscanLink, tokenAmountFormat } from '../../../utils';
 import Big, { getBigNumber, multiply } from '../../../utils/bignumber';
-import { useEffect } from 'react';
+import { CHAIN_NAMES } from '../../../constants';
 
 export default function BulksaleV1Form({formikProps, address, approvals, writeFn, tokenData, balance}: {formikProps: FormikProps<SaleForm>, address: `0x${string}`, approvals: any, writeFn: any, tokenData: any, balance?: BigNumber | undefined}) {
+    const { isOpen, onOpen, onClose } = useDisclosure()
+    const containerRef = useRef<HTMLFormElement>(null)
+    const cancelRef = useRef<HTMLButtonElement>(null)
+
     return (
         <div>
-            <form onSubmit={formikProps.handleSubmit}>
+            <form ref={containerRef} onSubmit={formikProps.handleSubmit}>
                 <FormControl isInvalid={!!formikProps.errors.token && !!formikProps.touched.token}>
                     <FormLabel htmlFor='token' alignItems={'baseline'}>Token address
                         <Tooltip hasArrow label={'TODO explanation'}><QuestionIcon mb={1} ml={1} /></Tooltip>
@@ -150,16 +165,89 @@ export default function BulksaleV1Form({formikProps, address, approvals, writeFn
                 </FormControl>
                 {
                     approvals.allowance && Big(approvals.allowance).gte(multiply(Big(formikProps.values.distributeAmount.toString()), Big(10).pow(tokenData ? tokenData.decimals : 0))) ?
-                    <Button mt={8} 
-                        type="submit" 
-                        w={'full'} 
-                        variant="solid" 
-                        colorScheme='green'
-                        isLoading={writeFn.isLoading}
-                        isDisabled={!writeFn.writeAsync || !formikProps.isValid}
-                    >
-                        Deploy Sale Contract
-                    </Button> :
+                    <>
+                        <Button mt={8} 
+                            w={'full'} 
+                            variant="solid" 
+                            colorScheme='green'
+                            isLoading={writeFn.isLoading}
+                            isDisabled={!writeFn.writeAsync || !formikProps.isValid}
+                            onClick={onOpen}
+                        >
+                            Deploy Sale Contract
+                        </Button>
+                        <AlertDialog
+                            isOpen={isOpen}
+                            size={'lg'}
+                            leastDestructiveRef={cancelRef}
+                            onClose={onClose}
+                            closeOnOverlayClick={false}
+                            portalProps={{containerRef: containerRef}}
+                        >
+                            <AlertDialogOverlay>
+                            <AlertDialogContent>
+                                <AlertDialogHeader fontSize='lg' fontWeight='bold'>
+                                Confirmation
+                                </AlertDialogHeader>
+
+                                <AlertDialogBody>
+                                    <Stack spacing={4} divider={<Divider />}>
+                                        <div>
+                                            <chakra.p>Token address</chakra.p>
+                                            <chakra.p fontWeight={'bold'}>
+                                                <Link href={getEtherscanLink(CHAIN_NAMES[process.env.NEXT_PUBLIC_CHAIN_ID!], formikProps.values.token as `0x${string}`, 'token')} target={'_blank'}>
+                                                    {formikProps.values.token}
+                                                    <ExternalLinkIcon ml={1} />
+                                                </Link>
+                                            </chakra.p>
+                                        </div>
+
+                                        <div>
+                                            <chakra.p>Start date - End date</chakra.p>
+                                            <chakra.p fontWeight={'bold'}>
+                                                <>
+                                                {format(formikProps.values.startingAt, 'yyyy/MM/dd HH:mm:ss')}
+                                                {` - `}
+                                                {format(formikProps.values.startingAt + formikProps.values.eventDuration*1000, 'yyyy/MM/dd HH:mm:ss')}
+                                                {' '}{format(new Date, '(z)')}
+                                                </>
+                                            </chakra.p>
+                                        </div>
+
+                                        <div>
+                                            <chakra.p>Total distribute amount</chakra.p>
+                                            <chakra.p fontWeight={'bold'}>
+                                                {tokenData ? formikProps.values.distributeAmount.toFixed(getDecimalsForView(getBigNumber(tokenData?.totalSupply.value.toString()), tokenData?.decimals)) : '-'} {tokenData?.symbol}
+                                            </chakra.p>
+                                        </div>
+
+                                        <div>
+                                            <chakra.p>Minimum provide amount</chakra.p>
+                                            <chakra.p fontWeight={'bold'}>{formikProps.values.minimalProvideAmount.toFixed(2)} ETH</chakra.p>
+                                        </div>
+                                    </Stack>
+                                </AlertDialogBody>
+
+                                <AlertDialogFooter>
+                                    <Button ref={cancelRef} onClick={onClose}>
+                                        Cancel
+                                    </Button>
+                                    <Button 
+                                        ml={4}
+                                        type="submit"
+                                        variant="solid" 
+                                        colorScheme='green'
+                                        isLoading={writeFn.isLoading}
+                                        isDisabled={!writeFn.writeAsync || !formikProps.isValid}
+                                    >
+                                        Deploy Sale Contract
+                                    </Button>
+                                </AlertDialogFooter>
+                            </AlertDialogContent>
+                            </AlertDialogOverlay>
+                        </AlertDialog>
+                    </>
+                    :
                     <Button mt={8} 
                         w={'full'} 
                         variant="solid" 
