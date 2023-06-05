@@ -42,8 +42,8 @@ export const Header: FC<HeaderProps> = ({title}: {title?: string}) => {
     const toast = useToast({position: 'top-right', isClosable: true,})
     const { currentUser, mutate } = useContext(CurrentUserContext);
     const { address, isConnected, connector } = useAccount();
-    const { data: ensAvatar } = useEnsAvatar({ address: currentUser ? currentUser.address : address });
-    const { data: ensName } = useEnsName({ address: currentUser ? currentUser.address : address });
+    const { data: ensAvatar } = useEnsAvatar({ address: currentUser ? currentUser.address : address, staleTime: 1000 * 60 * 60 * 1 });
+    const { data: ensName } = useEnsName({ address: currentUser ? currentUser.address : address, staleTime: 1000 * 60 * 60 * 1 });
     const { chain } = useNetwork();
     const { disconnect } = useDisconnect();
 
@@ -68,13 +68,14 @@ export const Header: FC<HeaderProps> = ({title}: {title?: string}) => {
             <>
             <Menu>
                 <HStack spacing={1}>
-                    { connector?.id && <ProviderLogo width={'26px'} connectorId={connector.id} /> }
+                    { connector?.id && <ProviderLogo display={{ base: 'none', md: 'flex' }} width={'26px'} connectorId={connector.id} /> }
                     <Tag size={'sm'} display={{ base: 'none', md: 'flex' }}>{chain?.unsupported ? 'Unsupported Chain' : chain?.name}</Tag>
                     <MenuButton>
                         <HStack>
-                            { ensName && <Avatar
+                            { ensName && ensAvatar && <Avatar
                             size={'sm'}
-                            src={ensAvatar ? ensAvatar : ''}
+                            src={ensAvatar}
+                            ml={1}
                             /> }
                             <VStack
                             display={{ base: 'flex', md: 'flex' }}
@@ -83,7 +84,7 @@ export const Header: FC<HeaderProps> = ({title}: {title?: string}) => {
                             ml="2">
                                 <Text fontSize="sm">
                                     <chakra.span display={{ base: 'none', md: 'inline' }}>{ currentUser ? 'Signed in as ' : '' }</chakra.span>
-                                    {ensName ? `${ensName} (${getDisplayAddress()})` : `${getDisplayAddress()}` }
+                                    {ensName ? `${ensName}` : `${getDisplayAddress()}` }
                                 </Text>
                             </VStack>
                             <ChevronDownIcon />
