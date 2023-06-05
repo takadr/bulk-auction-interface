@@ -132,8 +132,16 @@
   },
   {
     "inputs": [
-      { "internalType": "bytes32", "name": "templateName", "type": "bytes32" },
-      { "internalType": "address", "name": "templateAddr", "type": "address" }
+      {
+        "internalType": "bytes32",
+        "name": "templateName",
+        "type": "bytes32"
+      },
+      {
+        "internalType": "address",
+        "name": "templateAddr",
+        "type": "address"
+      }
     ],
     "name": "addTemplate",
     "outputs": [],
@@ -142,16 +150,36 @@
   },
   {
     "inputs": [
-      { "internalType": "bytes32", "name": "templateName", "type": "bytes32" },
-      { "internalType": "address", "name": "tokenAddr", "type": "address" },
-      { "internalType": "address", "name": "owner", "type": "address" },
+      {
+        "internalType": "bytes32",
+        "name": "templateName",
+        "type": "bytes32"
+      },
+      {
+        "internalType": "address",
+        "name": "tokenAddr",
+        "type": "address"
+      },
+      {
+        "internalType": "address",
+        "name": "owner",
+        "type": "address"
+      },
       {
         "internalType": "uint256",
         "name": "distributeAmount",
         "type": "uint256"
       },
-      { "internalType": "uint256", "name": "startingAt", "type": "uint256" },
-      { "internalType": "uint256", "name": "eventDuration", "type": "uint256" },
+      {
+        "internalType": "uint256",
+        "name": "startingAt",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "eventDuration",
+        "type": "uint256"
+      },
       {
         "internalType": "uint256",
         "name": "minimalProvideAmount",
@@ -160,7 +188,11 @@
     ],
     "name": "deploySaleClone",
     "outputs": [
-      { "internalType": "address", "name": "deployedAddr", "type": "address" }
+      {
+        "internalType": "address",
+        "name": "deployedAddr",
+        "type": "address"
+      }
     ],
     "stateMutability": "nonpayable",
     "type": "function"
@@ -168,13 +200,23 @@
   {
     "inputs": [],
     "name": "owner",
-    "outputs": [{ "internalType": "address", "name": "", "type": "address" }],
+    "outputs": [
+      {
+        "internalType": "address",
+        "name": "",
+        "type": "address"
+      }
+    ],
     "stateMutability": "view",
     "type": "function"
   },
   {
     "inputs": [
-      { "internalType": "bytes32", "name": "templateName", "type": "bytes32" }
+      {
+        "internalType": "bytes32",
+        "name": "templateName",
+        "type": "bytes32"
+      }
     ],
     "name": "removeTemplate",
     "outputs": [],
@@ -189,15 +231,31 @@
     "type": "function"
   },
   {
-    "inputs": [{ "internalType": "bytes32", "name": "", "type": "bytes32" }],
+    "inputs": [
+      {
+        "internalType": "bytes32",
+        "name": "",
+        "type": "bytes32"
+      }
+    ],
     "name": "templates",
-    "outputs": [{ "internalType": "address", "name": "", "type": "address" }],
+    "outputs": [
+      {
+        "internalType": "address",
+        "name": "",
+        "type": "address"
+      }
+    ],
     "stateMutability": "view",
     "type": "function"
   },
   {
     "inputs": [
-      { "internalType": "address", "name": "newOwner", "type": "address" }
+      {
+        "internalType": "address",
+        "name": "newOwner",
+        "type": "address"
+      }
     ],
     "name": "transferOwnership",
     "outputs": [],
@@ -205,11 +263,20 @@
     "type": "function"
   },
   {
-    "inputs": [{ "internalType": "address", "name": "to", "type": "address" }],
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "to",
+        "type": "address"
+      }
+    ],
     "name": "withdrawEther",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"
   },
-  { "stateMutability": "payable", "type": "receive" }
+  {
+    "stateMutability": "payable",
+    "type": "receive"
+  }
 ]
