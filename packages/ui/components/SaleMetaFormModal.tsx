@@ -12,7 +12,7 @@ import { useAccount } from 'wagmi';
 import { CustomProvider } from 'rsuite';
 import MetaDataForm from './templates/BulksaleV1/MetaDataForm';
 import useBulksaleV1MetaForm from '../hooks/BulksaleV1/useBulksaleV1MetaForm';
-import { MetaData } from '../types/BulksaleV1';
+import { MetaData } from 'lib/types/BulksaleV1';
 
 export default function SaleMetaFormModal({isOpen, onClose, existingContractAddress, saleMetaData, minimumProvided, onSubmitSuccess}: {isOpen: boolean, onClose: () => void, onSuccess?: () => void, existingContractAddress?: `0x${string}`, saleMetaData?: MetaData, minimumProvided: number, onSubmitSuccess?: () => void}) {
     const { address } = useAccount();

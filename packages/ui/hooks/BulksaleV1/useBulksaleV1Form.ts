@@ -2,13 +2,13 @@ import { usePrepareContractWrite, useContractWrite, useWaitForTransaction, erc20
 import { useDebounce } from 'use-debounce';
 import { useFormik, FormikProps } from 'formik';
 import useApprove from '../useApprove';
-import { SaleForm } from '../../types/BulksaleV1';
-import Big, { multiply } from '../../utils/bignumber';
-import FactoryABI from '../../constants/abis/Factory.json';
-import { SALE_TEMPLATE_V1_NAME } from '../../constants';
+import { SaleForm } from 'lib/types/BulksaleV1';
+import Big, { multiply } from 'lib/utils/bignumber';
+import FactoryABI from 'lib/constants/abis/Factory.json';
+import { SALE_TEMPLATE_V1_NAME } from 'lib/constants';
 import { BigNumber } from 'ethers';
 import 'rsuite/dist/rsuite-no-reset.min.css';
-import '../../rsuite-override.css';
+import 'assets/css/rsuite-override.css';
 
 const now = new Date().getTime();
 export default function useBulksaleV1Form({

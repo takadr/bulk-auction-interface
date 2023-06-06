@@ -1,8 +1,8 @@
 import { useState } from "react";
 import { ethers } from "ethers";
-import SaleTemplateV1ABI from '../../constants/abis/SaleTemplateV1.json';
-import { CHAIN_NAMES } from "../../constants";
-import { Sale } from "../../types/BulksaleV1";
+import SaleTemplateV1ABI from 'lib/constants/abis/SaleTemplateV1.json';
+import { CHAIN_NAMES } from "lib/constants";
+import { Sale } from "lib/types/BulksaleV1";
 import useSWR, { SWRResponse } from "swr";
 
 export default function useSWRIsClaimed(sale: Sale, address: `0x${string}`|undefined): SWRResponse<boolean|undefined, Error> {

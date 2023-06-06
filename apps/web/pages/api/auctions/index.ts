@@ -2,9 +2,9 @@ import { NextApiRequest, NextApiResponse } from 'next';
 import { withIronSessionApiRoute } from 'iron-session/next';
 import { erc20ABI } from 'wagmi';
 import { ethers } from 'ethers';
-import { scanAuctions, addAuction, updateAuction } from 'ui/utils/auctions';
-import SaleTemplateV1ABI from 'ui/constants/abis/SaleTemplateV1.json';
-import ironOptions from 'ui/constants/ironOptions';
+import { scanAuctions, addAuction, updateAuction } from 'lib/utils/auctions';
+import SaleTemplateV1ABI from 'lib/constants/abis/SaleTemplateV1.json';
+import ironOptions from 'lib/constants/ironOptions';
 
 const availableNetwork = [1, 11155111]; //Mainnet & Sepolia
 

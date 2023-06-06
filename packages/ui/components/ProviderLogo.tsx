@@ -1,8 +1,8 @@
 
 import { Image, ImageProps } from '@chakra-ui/react';
-import metamaskLogo from '../images/metamask-fox.svg';
-import coinbaseLogo from '../images/coinbase-wallet-logo.png';
-import walletConnectLogo from '../images/wallet-connect-logo.png';
+import metamaskLogo from 'assets/images/metamask-fox.svg';
+import coinbaseLogo from 'assets/images/coinbase-wallet-logo.png';
+import walletConnectLogo from 'assets/images/wallet-connect-logo.png';
 
 const logoMap: {[key: string]: any} = {
     'metaMask': metamaskLogo,

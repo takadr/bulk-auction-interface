@@ -3,7 +3,7 @@ import Router, { useRouter } from 'next/router';
 import { useAccount, useNetwork } from 'wagmi';
 import { chakra, Spinner, Container, Button, Box, Text, Tabs, TabList, Tab, TabPanels, TabPanel, Stack, Flex, Tag, useInterval, Alert, AlertIcon } from '@chakra-ui/react';
 import { useQuery } from "@apollo/client";
-import { MetaData, Sale } from 'ui/types/BulksaleV1';
+import { MetaData, Sale } from 'lib/types/BulksaleV1';
 import { CurrentUserContext } from 'ui/components/providers/CurrentUserProvider';
 import Layout from 'ui/components/layouts/layout';
 import SaleCard, { SaleCardSkeleton } from 'ui/components/SaleCard';

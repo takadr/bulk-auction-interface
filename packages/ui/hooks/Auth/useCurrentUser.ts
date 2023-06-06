@@ -1,5 +1,5 @@
 import useSWR, {SWRResponse} from 'swr';
-import { User } from '../../types';
+import { User } from 'lib/types';
 
 export const useCurrentUser = (): SWRResponse<User|undefined, Error> => {
     const fetcher = (url: string): Promise<User|undefined> => fetch(url, {credentials: 'same-origin'})

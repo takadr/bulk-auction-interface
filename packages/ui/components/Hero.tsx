@@ -6,7 +6,7 @@ import {
   Stack,
   HStack,
 } from "@chakra-ui/react";
-import { User } from "../types";
+import { User } from "lib/types";
 import SignInButton from "./SignInButton";
 import { KeyedMutator } from "swr";
 

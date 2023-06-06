@@ -19,8 +19,8 @@ import {
 import { QuestionIcon } from '@chakra-ui/icons';
 import { FormikProps } from 'formik';
 import { useWaitForTransaction } from 'wagmi';
-import { MetaData } from '../../../types/BulksaleV1/index';
-import { SAMPLE_DISCLAIMERS } from '../../../constants';
+import { MetaData } from 'lib/types/BulksaleV1/index';
+import { SAMPLE_DISCLAIMERS } from 'lib/constants';
 
 export default function MetaDataForm({formikProps, waitFn, onSkip}: {formikProps: FormikProps<MetaData>, waitFn?: ReturnType<typeof useWaitForTransaction>, onSkip?: () => void}) {
     return <div>

@@ -1,5 +1,5 @@
 {
   "extends": "tsconfig/react-library.json",
-  "include": ["."],
+  "include": [".", "../lib/types/images/index.d.ts"],
   "exclude": ["dist", "build", "node_modules"]
 }

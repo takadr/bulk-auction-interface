@@ -2,11 +2,11 @@ import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { chakra, Box, Divider, Skeleton, Badge, Tag, Heading, Card, CardBody, CardFooter, Progress, Text, Image, Stack, Flex, Button, useDisclosure, useInterval, SkeletonText } from '@chakra-ui/react';
 import { EditIcon } from '@chakra-ui/icons';
-import Big, { divideToNum, getBigNumber } from '../utils/bignumber';
-import { MetaData, Sale } from '../types/BulksaleV1';
+import Big, { divideToNum, getBigNumber } from 'lib/utils/bignumber';
+import { MetaData, Sale } from 'lib/types/BulksaleV1';
 import useSWRAuction from '../hooks/useAuction';
 import SaleMetaFormModal from './SaleMetaFormModal';
-import { tokenAmountFormat, getCountdown, ellipsisText, getDecimalsForView } from '../utils';
+import { tokenAmountFormat, getCountdown, ellipsisText, getDecimalsForView } from 'lib/utils';
 
 export default function SaleCard({ sale, editable=false, now }: { sale: Sale, editable?: boolean, now: number }){
     // TODO use enum

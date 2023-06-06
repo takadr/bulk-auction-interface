@@ -1,8 +1,8 @@
 import { chakra, Link, Heading, BoxProps, useToken, Tooltip } from "@chakra-ui/react";
 import { Circle } from 'rc-progress';
-import Big from '../../../utils/bignumber';
-import { getTargetPercetage, getFiatConversionAmount, tokenAmountFormat, getEtherscanLink } from "../../../utils";
-import { CHAIN_NAMES } from '../../../constants';
+import Big from 'lib/utils/bignumber';
+import { getTargetPercetage, getFiatConversionAmount, tokenAmountFormat, getEtherscanLink } from "lib/utils";
+import { CHAIN_NAMES } from 'lib/constants';
 import { TriangleUpIcon } from "@chakra-ui/icons";
 
 type Props = {

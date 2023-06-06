@@ -5,7 +5,20 @@
     "build": {
       "outputs": [".next/**", "!.next/cache/**"],
       "env": [
-        "NEXT_PUBLIC_FACTORY_ADDRESS"
+        "NEXT_PUBLIC_FACTORY_ADDRESS",
+        "NEXT_PUBLIC_SUBGRAPH_SLUG",
+        "NEXT_PUBLIC_SUBGRAPH_VERSION",
+        "NEXT_PUBLIC_CHAIN_ID",
+        "NEXT_PUBLIC_WALLET_CONNECT_ID",
+        "BASIC_AUTH_USER",
+        "BASIC_AUTH_PASS",
+        "IRON_SESSION_PASSWORD",
+        "IRON_SESSION_COOKIE_NAME",
+        "AWS_ACCESS_KEY_ID",
+        "AWS_SECRET_ACCESS_KEY",
+        "AWS_REGION",
+        "AWS_DYNAMO_TABLE_NAME",
+        "NODE_ENV"
       ]
     },
     "lint": {},

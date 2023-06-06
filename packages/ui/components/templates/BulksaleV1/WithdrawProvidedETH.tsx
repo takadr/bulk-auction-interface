@@ -2,9 +2,9 @@ import { QuestionIcon } from "@chakra-ui/icons";
 import { useToast, Box, Heading, chakra, Button, Tooltip, Flex } from "@chakra-ui/react";
 import { useBalance } from "wagmi";
 import useWithdrawProvidedETH from '../../../hooks/useWithdrawProvidedETH';
-import { Sale } from "../../../types/BulksaleV1";
-import { tokenAmountFormat } from "../../../utils";
-import { getBigNumber } from "../../../utils/bignumber";
+import { Sale } from "lib/types/BulksaleV1";
+import { tokenAmountFormat } from "lib/utils";
+import { getBigNumber } from "lib/utils/bignumber";
 import TxSentToast from "../../TxSentToast";
 
 type Props = {

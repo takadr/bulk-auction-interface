@@ -1,7 +1,7 @@
 import { useContractReads } from "wagmi";
-import { NULL_ADDRESS } from "../../constants";
-import SaleTemplateV1ABI from '../../constants/abis/SaleTemplateV1.json';
-import Big, { getBigNumber } from "../../utils/bignumber";
+import { NULL_ADDRESS } from "lib/constants";
+import SaleTemplateV1ABI from 'lib/constants/abis/SaleTemplateV1.json';
+import Big, { getBigNumber } from "lib/utils/bignumber";
 
 export default function useProvided(contractAddress: `0x${string}`, address: `0x${string}`|undefined): {
     provided: Big,

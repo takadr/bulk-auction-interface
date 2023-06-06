@@ -1,9 +1,9 @@
 import {SWRConfiguration} from 'swr';
 import useSWRInfinite from 'swr/infinite';
 import { useQuery } from 'wagmi';
-import client from '../apollo/client';
-import { LIST_ACTIVE_SALE_QUERY } from '../apollo/query';
-import { Sale } from '../types/BulksaleV1';
+import client from 'lib/apollo/client';
+import { LIST_ACTIVE_SALE_QUERY } from 'lib/apollo/query';
+import { Sale } from 'lib/types/BulksaleV1';
 
 interface SWRSaleStore {
   sales: Sale[]

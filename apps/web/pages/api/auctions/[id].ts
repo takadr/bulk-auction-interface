@@ -1,7 +1,7 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import { withIronSessionApiRoute } from 'iron-session/next';
-import { fetchAuction } from 'ui/utils/auctions';
-import ironOptions from 'ui/constants/ironOptions';
+import { fetchAuction } from 'lib/utils/auctions';
+import ironOptions from 'lib/constants/ironOptions';
 
 const availableNetwork = [1, 11155111]; //Mainnet & Sepolia
 

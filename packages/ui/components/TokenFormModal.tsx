@@ -28,6 +28,7 @@ import { Field, Form, Formik, useFormik, FieldProps } from 'formik';
 import { useProvider, useNetwork, useAccount, useContract, usePrepareContractWrite, useContractWrite, useWaitForTransaction, erc20ABI } from 'wagmi';
 import { useDebounce } from 'use-debounce';
 import { BigNumber, constants, utils } from 'ethers';
+import TxSentToast from './TxSentToast';
 
 export default function TokenFormModal({isOpen, onClose}: {isOpen: boolean, onClose: () => void}) {
     interface Token {

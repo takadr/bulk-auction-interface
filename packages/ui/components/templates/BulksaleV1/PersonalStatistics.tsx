@@ -1,7 +1,7 @@
 import { WarningIcon } from "@chakra-ui/icons";
 import { chakra, BoxProps, Card, CardBody, Stack, StackDivider, Flex } from "@chakra-ui/react";
-import { getDecimalsForView, getExpectedAmount, tokenAmountFormat } from "../../../utils";
-import Big, { add, multiply } from "../../../utils/bignumber";
+import { getDecimalsForView, getExpectedAmount, tokenAmountFormat } from "lib/utils";
+import Big, { add, multiply } from "lib/utils/bignumber";
 
 interface Props {
     inputValue: number;

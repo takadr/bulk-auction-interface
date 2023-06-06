@@ -1,6 +1,6 @@
 import { createContext } from 'react';
 import { KeyedMutator } from 'swr';
-import { User } from '../../types';
+import { User } from 'lib/types';
 import { useCurrentUser } from '../../hooks/Auth/useCurrentUser';
 
 export type CurrentUserContextType ={

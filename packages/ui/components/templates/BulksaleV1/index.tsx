@@ -5,14 +5,14 @@ import { useFormik } from 'formik';
 import { useWaitForTransaction, useContractEvent, usePrepareSendTransaction, useSendTransaction, useBalance } from 'wagmi';
 import { ApolloQueryResult } from '@apollo/client';
 import { KeyedMutator } from 'swr';
-import Big, { getBigNumber } from '../../../utils/bignumber';
+import Big, { getBigNumber } from 'lib/utils/bignumber';
 import { BigNumber, utils } from 'ethers';
 import CalendarInCircle from './CalendarInCircle';
 import PersonalStatistics from './PersonalStatistics';
 import StatisticsInCircle from './StatisticsInCircle';
 import useProvided from '../../../hooks/BulksaleV1/useProvided';
 import useRate from '../../../hooks/useRate';
-import { Sale, MetaData } from '../../../types/BulksaleV1';
+import { Sale, MetaData } from 'lib/types/BulksaleV1';
 import ExternalLinkTag from '../../ExternalLinkTag';
 import useIsClaimed from '../../../hooks/BulksaleV1/useIsClaimed';
 import ClaimButton from './ClaimButton';
@@ -20,8 +20,8 @@ import TxSentToast from '../../TxSentToast';
 import WithdrawUnclaimedToken from './WithdrawUnclaimedToken';
 import WithdrawProvidedETH from './WithdrawProvidedETH';
 import WithdrawERC20 from './WithdrawERC20';
-import { getDecimalsForView, getEtherscanLink, tokenAmountFormat } from '../../../utils';
-import { CHAIN_NAMES } from '../../../constants';
+import { getDecimalsForView, getEtherscanLink, tokenAmountFormat } from 'lib/utils';
+import { CHAIN_NAMES } from 'lib/constants';
 
 type BulksaleV1Params = {
     sale: Sale;

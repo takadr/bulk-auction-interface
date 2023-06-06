@@ -7,9 +7,9 @@ import Layout from 'ui/components/layouts/layout';
 import { CurrentUserContext } from 'ui/components/providers/CurrentUserProvider';
 import SaleFormModal from 'ui/components/SaleFormModal';
 import { useQuery, useApolloClient } from "@apollo/client";
-import { MetaData, Sale } from 'ui/types/BulksaleV1';
+import { MetaData, Sale } from 'lib/types/BulksaleV1';
 import SaleCard, { SaleCardSkeleton } from 'ui/components/SaleCard';
-import { LIST_MY_SALE_QUERY, GET_SALE_QUERY }  from 'ui/apollo/query';
+import { LIST_MY_SALE_QUERY, GET_SALE_QUERY }  from 'lib/apollo/query';
 import Render404 from 'ui/components/errors/404';
 
 export default function DashboardPage() {

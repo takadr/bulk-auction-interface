@@ -1,7 +1,7 @@
 import { format } from 'date-fns';
 import { useState } from 'react';
 import { chakra, useInterval } from "@chakra-ui/react";
-import { getCountdown } from "../../../utils";
+import { getCountdown } from "lib/utils";
 
 type Props = {
   unixEndDate: number;

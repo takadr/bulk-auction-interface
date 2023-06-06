@@ -31,11 +31,11 @@ import { ExternalLinkIcon, QuestionIcon, WarningTwoIcon } from '@chakra-ui/icons
 import { CustomProvider, DateRangePicker } from 'rsuite';
 import { FormikProps } from 'formik';
 import { differenceInSeconds, addSeconds, format } from 'date-fns';
-import { SaleForm } from '../../../types/BulksaleV1';
+import { SaleForm } from 'lib/types/BulksaleV1';
 import { BigNumber } from 'ethers';
-import { getDecimalsForView, getEtherscanLink, tokenAmountFormat } from '../../../utils';
-import Big, { getBigNumber, multiply } from '../../../utils/bignumber';
-import { CHAIN_NAMES } from '../../../constants';
+import { getDecimalsForView, getEtherscanLink, tokenAmountFormat } from 'lib/utils';
+import Big, { getBigNumber, multiply } from 'lib/utils/bignumber';
+import { CHAIN_NAMES } from 'lib/constants';
 
 export default function BulksaleV1Form({formikProps, address, approvals, writeFn, tokenData, balance}: {formikProps: FormikProps<SaleForm>, address: `0x${string}`, approvals: any, writeFn: any, tokenData: any, balance?: BigNumber | undefined}) {
     const { isOpen, onOpen, onClose } = useDisclosure()
@@ -57,7 +57,7 @@ export default function BulksaleV1Form({formikProps, address, approvals, writeFn
                 </FormControl>
 
                 <chakra.p color={'gray.400'} fontSize={'sm'} mt={1}>
-                    Don't have token yet? <Link color={'gray.300'} href="https://www.smartcontracts.tools/token-generator/ethereum/" target="_blank">ETHEREUM Token Generator <ExternalLinkIcon /></Link>
+                    Don&apos;t have token yet? <Link color={'gray.300'} href="https://www.smartcontracts.tools/token-generator/ethereum/" target="_blank">ETHEREUM Token Generator <ExternalLinkIcon /></Link>
                 </chakra.p>
 
                 <FormControl mt={4} isInvalid={(!!formikProps.errors.startingAt && !!formikProps.touched.startingAt) || (!!formikProps.errors.eventDuration && !!formikProps.touched.eventDuration)}>

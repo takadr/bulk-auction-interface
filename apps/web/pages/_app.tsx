@@ -3,10 +3,10 @@ import { ChakraProvider, ColorModeScript } from '@chakra-ui/react';
 import { WagmiConfig } from 'wagmi';
 import { ApolloProvider } from '@apollo/client';
 import theme from 'ui/themes';
-import client from 'ui/connector'; 
-import apolloClient from 'ui/apollo/client';
+import client from 'lib/connector'; 
+import apolloClient from 'lib/apollo/client';
 import { CurrentUserProvider } from 'ui/components/providers/CurrentUserProvider';
-import "ui/styles.css";
+import "assets/css/styles.css";
 
 export default function MyApp({ Component, pageProps }: AppProps) {
   return (

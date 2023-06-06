@@ -1,6 +1,6 @@
 import { ExternalLinkIcon } from '@chakra-ui/icons';
 import { Link, Tag, Image, HStack } from '@chakra-ui/react';
-import { getDomainFromURL } from '../utils';
+import { getDomainFromURL } from 'lib/utils';
 
 export const ExternalLinkTag = ({url}: {url: string}) => {
     const urlObj = new URL(url);

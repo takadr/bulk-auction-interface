@@ -1,9 +1,9 @@
 import { chakra, ButtonProps, Button, useToast } from "@chakra-ui/react";
 import { KeyedMutator } from "swr";
 import useClaim from '../../../hooks/useClaim';
-import { Sale } from "../../../types/BulksaleV1";
-import { getExpectedAmount } from "../../../utils";
-import Big from "../../../utils/bignumber";
+import { Sale } from "lib/types/BulksaleV1";
+import { getExpectedAmount } from "lib/utils";
+import Big from "lib/utils/bignumber";
 import TxSentToast from "../../TxSentToast";
 
 interface Props {
