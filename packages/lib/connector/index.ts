@@ -15,7 +15,7 @@ const getSupportedChain = (): Chain[] => {
   } else if(process.env.NEXT_PUBLIC_CHAIN_ID === '11155111') {
     return [sepolia]
   }
-  return []
+  return [sepolia]
 }
  
 // Configure chains & providers with the Alchemy provider.
