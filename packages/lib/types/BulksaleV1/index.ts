@@ -1,4 +1,5 @@
 import { URL_REGEX } from "../../constants";
+import Big from "../../utils/bignumber";
 
 export type Sale = {
     id?: string;
@@ -19,6 +20,7 @@ export type Sale = {
 }
 
 export type SaleForm = {
+    templateName: string;
     token: `0x${string}` | null;
     owner: `0x${string}`;
     distributeAmount: number;
@@ -42,6 +44,12 @@ export type MetaData = {
     tokenDecimals?: number;
     templateName?: string;
     createdAt?: number;
+}
+
+export type Template = {
+    id: string;
+    templateName: `0x${string}`;
+    addedAt: Big; //Timestamp
 }
 
 export const validateMetaData = (metaData: MetaData, minimumProvided?: number) => {

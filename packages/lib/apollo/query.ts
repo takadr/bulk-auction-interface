@@ -79,3 +79,13 @@ export const GET_SALE_QUERY = gql`
     }
   }
 `;
+
+export const LIST_TEMPLATE_QUERY = gql`
+  query ListTemplates {
+    templates(orderBy: addedAt) {
+      id
+      templateName
+      addedAt
+    }
+  }
+`;

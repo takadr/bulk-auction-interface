@@ -26,26 +26,44 @@ import {
     useDisclosure,
     Stack,
     Divider,
+    Select,
+    Spinner,
 } from '@chakra-ui/react';
 import { ExternalLinkIcon, QuestionIcon, WarningTwoIcon } from '@chakra-ui/icons';
+import { useQuery } from '@apollo/client';
 import { CustomProvider, DateRangePicker } from 'rsuite';
 import { FormikProps } from 'formik';
 import { differenceInSeconds, addSeconds, format } from 'date-fns';
-import { SaleForm } from 'lib/types/BulksaleV1';
-import { BigNumber } from 'ethers';
+import { BigNumber, ethers } from 'ethers';
 import { getDecimalsForView, getEtherscanLink, tokenAmountFormat } from 'lib/utils';
 import Big, { getBigNumber, multiply } from 'lib/utils/bignumber';
+import { SaleForm, Template } from 'lib/types/BulksaleV1';
 import { CHAIN_NAMES } from 'lib/constants';
+import { LIST_TEMPLATE_QUERY } from 'lib/apollo/query';
 
 export default function BulksaleV1Form({formikProps, address, approvals, writeFn, tokenData, balance}: {formikProps: FormikProps<SaleForm>, address: `0x${string}`, approvals: any, writeFn: any, tokenData: any, balance?: BigNumber | undefined}) {
     const { isOpen, onOpen, onClose } = useDisclosure()
     const containerRef = useRef<HTMLFormElement>(null)
     const cancelRef = useRef<HTMLButtonElement>(null)
+    const { data, loading, error, refetch } = useQuery(LIST_TEMPLATE_QUERY);
 
     return (
         <div>
             <form ref={containerRef} onSubmit={formikProps.handleSubmit}>
                 <FormControl isInvalid={!!formikProps.errors.token && !!formikProps.touched.token}>
+                    <FormLabel htmlFor='token' alignItems={'baseline'}>Sale Template
+                        <Tooltip hasArrow label={'TODO explanation'}><QuestionIcon mb={1} ml={1} /></Tooltip>
+                    </FormLabel>
+                    <Select isDisabled={true} id="templateName" name="templateName" onBlur={formikProps.handleBlur} onChange={formikProps.handleChange} value={formikProps.values.templateName}>
+                        { !data && <option value=""><Spinner /></option> }
+                        {
+                            data && data.templates.map((template: Template) => <option value={template.templateName}>{ethers.utils.parseBytes32String(template.templateName)}</option>)
+                        }
+                    </Select>
+                    <FormErrorMessage>{formikProps.errors.templateName}</FormErrorMessage>
+                </FormControl>
+
+                <FormControl mt={4} isInvalid={!!formikProps.errors.token && !!formikProps.touched.token}>
                     <FormLabel htmlFor='token' alignItems={'baseline'}>Token address
                         <Tooltip hasArrow label={'TODO explanation'}><QuestionIcon mb={1} ml={1} /></Tooltip>
                     </FormLabel>
@@ -192,6 +210,13 @@ export default function BulksaleV1Form({formikProps, address, approvals, writeFn
 
                                 <AlertDialogBody>
                                     <Stack spacing={4} divider={<Divider />}>
+                                        <div>
+                                            <chakra.p>Sale Template</chakra.p>
+                                            <chakra.p fontWeight={'bold'}>
+                                                {ethers.utils.parseBytes32String(formikProps.values.templateName)}
+                                            </chakra.p>
+                                        </div>
+
                                         <div>
                                             <chakra.p>Token address</chakra.p>
                                             <chakra.p fontWeight={'bold'}>

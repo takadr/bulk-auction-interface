@@ -42,6 +42,7 @@ export default function useBulksaleV1Form({
     balance: BigNumber | undefined
 } {
     const emptySale: SaleForm = {
+        templateName: SALE_TEMPLATE_V1_NAME,
         token: null,
         startingAt: now + (60 * 60 * 24 * 7 * 1000),
         eventDuration: 60 * 60 * 24 * 7,
@@ -52,6 +53,10 @@ export default function useBulksaleV1Form({
 
     const validate = (values: SaleForm) => {
         const errors: any = {};
+
+        if (!values.templateName) {
+            errors.templateName = 'Template is required';
+        }
 
         if (!values.token) {
             errors.token = 'Token is required';
@@ -108,7 +113,7 @@ export default function useBulksaleV1Form({
         abi: FactoryABI,
         functionName: 'deploySaleClone',
         args: [
-            SALE_TEMPLATE_V1_NAME,
+            debouncedSale.templateName, //SALE_TEMPLATE_V1_NAME
             debouncedSale.token,
             debouncedSale.owner,
             multiply(debouncedSale.distributeAmount, tokenData?.decimals ? Big(10).pow(tokenData.decimals) : Big(10).pow(0)).toString(),
