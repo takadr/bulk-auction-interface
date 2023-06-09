@@ -2,8 +2,9 @@ import { NextApiRequest, NextApiResponse } from 'next';
 import { withIronSessionApiRoute } from 'iron-session/next';
 import { fetchAuction } from 'lib/utils/auctions';
 import ironOptions from 'lib/constants/ironOptions';
+import { CHAIN_IDS } from 'lib/constants';
 
-const availableNetwork = [1, 11155111]; //Mainnet & Sepolia
+const availableNetwork = Object.values(CHAIN_IDS);
 
 const requireAvailableNetwork = (chainId) => {
     if(!availableNetwork.includes(chainId)) throw new Error('Wrong network');

@@ -1,7 +1,7 @@
 import { chakra, Link, Heading, BoxProps, useToken, Tooltip } from "@chakra-ui/react";
 import { Circle } from 'rc-progress';
 import Big from 'lib/utils/bignumber';
-import { getTargetPercetage, getFiatConversionAmount, tokenAmountFormat, getEtherscanLink } from "lib/utils";
+import { getTargetPercetage, getFiatConversionAmount, tokenAmountFormat, getEtherscanLink, etherAmountFormat, formatEther } from "lib/utils";
 import { CHAIN_NAMES } from 'lib/constants';
 import { TriangleUpIcon } from "@chakra-ui/icons";
 
@@ -43,19 +43,19 @@ export default function StatisticsInCircle({
     <chakra.div {...boxProps}>
       <chakra.div position={'relative'}>
         <Tooltip hasArrow label={<chakra.p textAlign={'center'} p={1}>
-          Minimum: {tokenAmountFormat(minimalProvideAmount, 18, 2)}ETH
+          Minimum: {etherAmountFormat(minimalProvideAmount)}ETH
           { totalProvided.gte(minimalProvideAmount) && <><br /> Achieved 🎉</>}
         </chakra.p>}>
           <TriangleUpIcon 
             position={'absolute'}
             zIndex={100}
             transform={`rotate(${minimumPercent * 360/100}deg)`}
-            left={`calc(${(Math.sin((minimumPercent/100)*(2*Math.PI))+1) * 100/2}% - 8px - ${Math.sin((minimumPercent/100)*(2*Math.PI)) * 5.1}%)`}
+            left={`calc(${(Math.sin((minimumPercent/100)*(2*Math.PI))+1) * 100/2}% - 8px - ${Math.sin((minimumPercent/100)*(2*Math.PI)) * 5.1}%)`}// 5.1 is used for adjusting position of arrow. TODO: move it to util
             bottom={`calc(${(Math.cos((minimumPercent/100)*(2*Math.PI))+1) * 100/2}% - 8px - ${Math.cos((minimumPercent/100)*(2*Math.PI)) * 5.1}%)`}
           />
         </Tooltip>
         <Tooltip hasArrow label={<chakra.p textAlign={'center'} p={1}>
-            Minimum Target: {tokenAmountFormat(interimGoalAmount, 18, 2)}ETH
+            Minimum Target: {etherAmountFormat(interimGoalAmount)}ETH
             { totalProvided.gte(interimGoalAmount) && <><br /> Achieved 🎉</>}
           </chakra.p>}>
           <TriangleUpIcon 
@@ -82,7 +82,7 @@ export default function StatisticsInCircle({
             </Heading>
             <chakra.div>
               <>
-                <chakra.span fontSize={'2xl'}>{started ? tokenAmountFormat(totalProvided, providedTokenDecimal, 2) : '????'}{' '}</chakra.span>
+                <chakra.span fontSize={'2xl'}>{started ? etherAmountFormat(totalProvided) : '????'}{' '}</chakra.span>
                 {providedTokenSymbol.toUpperCase()}
               </>
             </chakra.div>
@@ -93,13 +93,13 @@ export default function StatisticsInCircle({
               }
               {started
                 ? '' +
-                  getFiatConversionAmount(Number(tokenAmountFormat(totalProvided, providedTokenDecimal, 2)), fiatRate).toFixed(2)
+                  getFiatConversionAmount(Number(formatEther(totalProvided)), fiatRate).toFixed(2)
                 : '????'}
             </span>
             <div>
               {!!interimGoalAmount && 
                 <chakra.div textAlign={'center'}>
-                  Minimum Target {tokenAmountFormat(interimGoalAmount, 18, 2)}
+                  Minimum Target {etherAmountFormat(interimGoalAmount)}
                   {providedTokenSymbol.toUpperCase()}
                   { 
                     totalProvided.gte(interimGoalAmount) && started && 

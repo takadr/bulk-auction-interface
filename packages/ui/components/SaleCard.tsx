@@ -2,11 +2,11 @@ import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { chakra, Box, Divider, Skeleton, Badge, Tag, Heading, Card, CardBody, CardFooter, Progress, Text, Image, Stack, Flex, Button, useDisclosure, useInterval, SkeletonText } from '@chakra-ui/react';
 import { EditIcon } from '@chakra-ui/icons';
-import Big, { divideToNum, getBigNumber } from 'lib/utils/bignumber';
+import Big, { divideToNum, getBigNumber, multiply } from 'lib/utils/bignumber';
 import { MetaData, Sale } from 'lib/types/BulksaleV1';
 import useSWRAuction from '../hooks/useAuction';
 import SaleMetaFormModal from './SaleMetaFormModal';
-import { tokenAmountFormat, getCountdown, ellipsisText, getDecimalsForView } from 'lib/utils';
+import { tokenAmountFormat, getCountdown, ellipsisText, getDecimalsForView, getTargetPercetage, etherAmountFormat, parseEtherInBig } from 'lib/utils';
 
 export default function SaleCard({ sale, editable=false, now }: { sale: Sale, editable?: boolean, now: number }){
     // TODO use enum
@@ -102,13 +102,13 @@ export default function SaleCard({ sale, editable=false, now }: { sale: Sale, ed
                                 </chakra.span>
                             </Flex>
                             <Divider />
-                            <Flex mt={2} justifyContent={'space-between'} alignItems={'baseline'}><chakra.span>Total raised</chakra.span> <chakra.span fontSize={'2xl'}>{sale.totalProvided ? tokenAmountFormat(sale.totalProvided, 18, 2) : 0} <chakra.span fontSize={'md'}>ETH</chakra.span></chakra.span></Flex>
-                            <Progress borderRadius={'4px'} hasStripe value={data?.metaData?.finalGoalAmount ? ((sale.totalProvided / (10**18))/data?.metaData?.finalGoalAmount) * 100 : 0} />
+                            <Flex mt={2} justifyContent={'space-between'} alignItems={'baseline'}><chakra.span>Total provided</chakra.span> <chakra.span fontSize={'2xl'}>{sale.totalProvided ? etherAmountFormat(sale.totalProvided, 2) : 0} <chakra.span fontSize={'md'}>ETH</chakra.span></chakra.span></Flex>
+                            <Progress borderRadius={'4px'} hasStripe value={data?.metaData?.finalGoalAmount ? getTargetPercetage(sale.totalProvided, parseEtherInBig(data.metaData.finalGoalAmount)) : 0} />
                             <Flex mt={2} justifyContent={'space-between'} alignItems={'baseline'}>
-                                <Text fontSize={'sm'}>Minimum</Text><Text fontSize={'lg'}>{tokenAmountFormat(sale.minimalProvideAmount, 18, 2)} <chakra.span fontSize={'sm'}>ETH</chakra.span></Text>
+                                <Text fontSize={'sm'}>Minimum</Text><Text fontSize={'lg'}>{etherAmountFormat(sale.minimalProvideAmount, 2)} <chakra.span fontSize={'sm'}>ETH</chakra.span></Text>
                             </Flex>
                             <Flex mt={1} justifyContent={'space-between'} alignItems={'baseline'}>
-                                <Text fontSize={'sm'}>Minimum Target</Text><Text fontSize={'lg'}>{data?.metaData?.interimGoalAmount ? tokenAmountFormat(data?.metaData?.interimGoalAmount, 0, 2) : '-'} <chakra.span fontSize={'sm'}>ETH</chakra.span></Text>
+                                <Text fontSize={'sm'}>Minimum Target</Text><Text fontSize={'lg'}>{data?.metaData?.interimGoalAmount ? tokenAmountFormat(data.metaData.interimGoalAmount, 0, 2) : '-'} <chakra.span fontSize={'sm'}>ETH</chakra.span></Text>
                             </Flex>
                             {/* <Flex mt={1} justifyContent={'space-between'} alignItems={'baseline'}>
                                 <Text fontSize={'sm'}>Target</Text><Text fontSize={'lg'}>{data?.metaData?.finalGoalAmount ? tokenAmountFormat(data?.metaData?.finalGoalAmount, 0, 2) : '-'} <chakra.span fontSize={'sm'}>ETH</chakra.span></Text>

@@ -240,7 +240,7 @@ export default function BulksaleV1({sale, refetchSale, metaData, refetchMetaData
                         inputValue={formikProps.values.amount}
                         myTotalProvided={provided}
                         totalProvided={totalProvided}
-                        distributeAmount={Big(sale.distributeAmount.toString())}
+                        distributeAmount={sale.distributeAmount}
                         distributedTokenSymbol={sale.tokenSymbol ? sale.tokenSymbol : ''}
                         distributedTokenDecimal={sale.tokenDecimals ? sale.tokenDecimals : 0}
                         providedTokenSymbol={providedTokenSymbol}

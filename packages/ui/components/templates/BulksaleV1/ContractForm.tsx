@@ -150,10 +150,10 @@ export default function BulksaleV1Form({formikProps, address, approvals, writeFn
                         <chakra.div px={2} minW={'3rem'}>{tokenData?.symbol}</chakra.div>
                     </Flex>
                     <chakra.p color={'gray.400'} fontSize={'sm'}>
-                        Balance: {balance && tokenData ? tokenAmountFormat(Big(balance.toString()), tokenData?.decimals, getDecimalsForView(getBigNumber(tokenData?.totalSupply.value.toString()), tokenData?.decimals)) : '-'} {tokenData?.symbol}
+                        Balance: {balance && tokenData ? tokenAmountFormat(Big(balance.toString()), tokenData.decimals, getDecimalsForView(getBigNumber(tokenData.totalSupply.value.toString()), tokenData.decimals)) : '-'} {tokenData?.symbol}
                     </chakra.p>
                     <FormErrorMessage>{formikProps.errors.distributeAmount}</FormErrorMessage>
-                    { !!Number(formikProps.values.distributeAmount) && !!tokenData && !!multiply(formikProps.values.distributeAmount, Big(10).pow(tokenData?.decimals)).lt(1000) &&
+                    { !!Number(formikProps.values.distributeAmount) && !!tokenData && !!multiply(formikProps.values.distributeAmount, Big(10).pow(tokenData.decimals)).lt(1000) &&
                         <Alert status='warning' py={2} px={2}>
                             <AlertIcon />
                             {/* <WarningTwoIcon color={'yellow.400'} mr={1} /> */}

@@ -12,6 +12,8 @@ export const COINGECKO_URL = 'https://api.coingecko.com/api/v3/simple/price';
 
 export const NULL_ADDRESS = '0x0000000000000000000000000000000000000000';
 
+export const ETHER_DECIMALS_FOR_VIEW = 2
+
 export const SALE_TEMPLATE_V1_NAME = "0x53616c6554656d706c6174655631000000000000000000000000000000000000"
 
 export const LOCK_DURATION: {[key: string]: number} = {

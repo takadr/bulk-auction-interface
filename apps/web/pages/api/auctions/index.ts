@@ -5,8 +5,9 @@ import { ethers } from 'ethers';
 import { scanAuctions, addAuction, updateAuction } from 'lib/utils/auctions';
 import SaleTemplateV1ABI from 'lib/constants/abis/SaleTemplateV1.json';
 import ironOptions from 'lib/constants/ironOptions';
+import { CHAIN_IDS } from 'lib/constants';
 
-const availableNetwork = [1, 11155111]; //Mainnet & Sepolia
+const availableNetwork = Object.values(CHAIN_IDS);
 
 const requireContractOwner = (req: NextApiRequest): Promise<any> => {
     return new Promise(async (resolve, reject) => {

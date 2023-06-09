@@ -8,14 +8,14 @@ export type Sale = {
     tokenSymbol: string;
     tokenDecimals: number;
     owner?: `0x${string}`;
-    distributeAmount: number;
+    distributeAmount: Big;
     startingAt: number; //Timestamp
     closingAt: number; //Timestamp
-    minimalProvideAmount: number;
+    minimalProvideAmount: Big;
     lockDuration?: number; //In sec
     expirationDuration?: number; //In sec
     feeRatePerMil?: number;
-    totalProvided: number;
+    totalProvided: Big;
     blockNumber: string; // Deployed block number
 }
 

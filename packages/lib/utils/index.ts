@@ -1,7 +1,6 @@
+import { ethers } from 'ethers';
+import { ETHER_DECIMALS_FOR_VIEW } from '../constants';
 import Big, { BigNumberValueType, add, divide, multiply, getBigNumber } from './bignumber';
-// TODO Consider using BigDecimal or libraries
-// https://stackoverflow.com/questions/54409854/how-to-divide-two-native-javascript-bigints-and-get-a-decimal-result
-// https://stackoverflow.com/questions/16742578/bigdecimal-in-javascript/66939244#66939244
 
 // From SaleTemplateV1
 export const calculateAllocation = (us: Big, tp: Big, tda: Big): Big => {
@@ -35,10 +34,34 @@ export const getFiatConversionAmount = (token: number, fiatRate: number) => {
     return token * fiatRate;
 }
 
+export function parseEther(ether: BigNumberValueType): string {
+  return multiply(ether, Big(10).pow(18)).toString();
+}
+
+export function parseEtherInBig(ether: BigNumberValueType): Big {
+  return multiply(ether, Big(10).pow(18));
+}
+
+export function formatEther(wei: BigNumberValueType): string {
+  return divide(wei, Big(10).pow(18)).toString();
+}
+
+export function formatEtherInBig(wei: BigNumberValueType): Big {
+  return divide(wei, Big(10).pow(18));
+}
+
 export const tokenAmountFormat = (amount: BigNumberValueType, decimals: number, precision: number): string => {
-    // const adjuster = 10**precision;
-    const numerator = Big(10**decimals);
+    const numerator = Big(10).pow(typeof decimals !== 'number' ? parseInt(decimals) : decimals);
     return divide(amount, numerator).toFixed(precision);
+}
+
+export const etherAmountFormat = (amount: BigNumberValueType, precision: number=ETHER_DECIMALS_FOR_VIEW, smallValueNotation: boolean=true): string => {
+  const amountInBig = formatEtherInBig(amount)
+  if(smallValueNotation && amountInBig.gt(0) && amountInBig.lt(0.01)) {
+    return '< 0.01'
+  } else {
+    return formatEtherInBig(amount).toFixed(precision);
+  }
 }
 
 export const getEtherscanLink = (
