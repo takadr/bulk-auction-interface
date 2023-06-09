@@ -7,6 +7,8 @@ import { QueryType, useSWRSales } from 'ui/hooks/useSales';
 
 export default function SalePage() {
     const { sales: activeSales, isLast: isLastActiveSales, isLoading: isLoadingActiveSales, isValidating: isValidatingActiveSales, error: activeSalesError, loadMoreSales: loadMoreActiveSales } = useSWRSales({});
+    // const { sales: activeSales, isLast: isLastActiveSales, isLoading: isLoadingActiveSales, isValidating: isValidatingActiveSales, error: activeSalesError, loadMoreSales: loadMoreActiveSales } = useSWRSales({}, QueryType.ACTIVE);
+    // const { sales: upcomingSales, isLast: isLastUpcomingSales, isLoading: isLoadingUpcomingSales, isValidating: isValidatingUpcomingSales, error: upcomingSalesError, loadMoreSales: loadMoreUpcomingSales } = useSWRSales({}, QueryType.UPCOMING);
     const { sales: closedSales, isLast: isLastClosedSales, isLoading: isLoadingClosedSales, isValidating: isValidatingClosedSales, error: closedSalesError, loadMoreSales: loadMoreClosedSales } = useSWRSales({}, QueryType.CLOSED);
     const [now, setNow] = useState<number>(Math.floor(Date.now() / 1000));
 
@@ -20,6 +22,8 @@ export default function SalePage() {
             <Tabs variant='soft-rounded' colorScheme='green'>
                 <TabList>
                     <Tab fontSize={{base: 'sm', md: 'md'}}>Active & Upcomming Sales</Tab>
+                    {/* <Tab fontSize={{base: 'sm', md: 'md'}}>Active Sales</Tab>
+                    <Tab fontSize={{base: 'sm', md: 'md'}}>Upcomming Sales</Tab> */}
                     <Tab fontSize={{base: 'sm', md: 'md'}}>Closed Sales</Tab>
                 </TabList>
                 <TabPanels mt={4}>
@@ -40,12 +44,37 @@ export default function SalePage() {
                                 !isLastActiveSales && activeSales.length > 0 && <Button isLoading={isLoadingActiveSales || isValidatingActiveSales} onClick={loadMoreActiveSales}>Load more sale</Button>
                             }
                             {
-                                !isLoadingClosedSales && activeSales.length === 0 && <Flex minH={'25vh'} justifyContent='center' alignItems={'center'}>
+                                !isLoadingActiveSales && activeSales.length === 0 && <Flex minH={'25vh'} justifyContent='center' alignItems={'center'}>
                                     <Text fontSize={'lg'} opacity={'.75'} textAlign={'center'}>No sales</Text>
                                 </Flex>
                             }
                         </Stack>
                     </TabPanel>
+
+                    {/* <TabPanel p={{base: 0, md: 4}}>
+                        <Stack spacing={8}>
+                            {
+                                upcomingSalesError && <Alert status={'error'}><AlertIcon />{upcomingSalesError.message}</Alert>
+                            }
+                            {
+                                isLoadingUpcomingSales ? <>
+                                    <SaleCardSkeleton /><SaleCardSkeleton /><SaleCardSkeleton />
+                                </> 
+                                : upcomingSales.map((sale: Sale) => {
+                                    return <SaleCard key={sale.id} sale={sale} now={now} />
+                                })
+                            }
+                            {
+                                !isLastUpcomingSales && upcomingSales.length > 0 && <Button isLoading={isLoadingUpcomingSales || isValidatingUpcomingSales} onClick={loadMoreUpcomingSales}>Load more sale</Button>
+                            }
+                            {
+                                !isLoadingUpcomingSales && upcomingSales.length === 0 && <Flex minH={'25vh'} justifyContent='center' alignItems={'center'}>
+                                    <Text fontSize={'lg'} opacity={'.75'} textAlign={'center'}>No sales</Text>
+                                </Flex>
+                            }
+                        </Stack>
+                    </TabPanel> */}
+
                     <TabPanel p={{base: 0, md: 4}}>
                         <Stack spacing={8}>
                             {
