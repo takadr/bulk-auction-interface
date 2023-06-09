@@ -1,19 +1,13 @@
-import { useContext, useState } from 'react';
-import Router, { useRouter } from 'next/router';
-import { useAccount, useNetwork } from 'wagmi';
-import { chakra, Spinner, Container, Button, Box, Text, Tabs, TabList, Tab, TabPanels, TabPanel, Stack, Flex, Tag, useInterval, Alert, AlertIcon } from '@chakra-ui/react';
-import { useQuery } from "@apollo/client";
-import { MetaData, Sale } from 'lib/types/BulksaleV1';
-import { CurrentUserContext } from 'ui/components/providers/CurrentUserProvider';
+import { useState } from 'react';
+import { Container, Button, Text, Tabs, TabList, Tab, TabPanels, TabPanel, Stack, Flex, Tag, useInterval, Alert, AlertIcon } from '@chakra-ui/react';
+import { Sale } from 'lib/types/BulksaleV1';
 import Layout from 'ui/components/layouts/layout';
 import SaleCard, { SaleCardSkeleton } from 'ui/components/SaleCard';
-import { useSWRActiveSales } from 'ui/hooks/useActiveSales';
-import { useSWRClosedSales } from 'ui/hooks/useClosedSales';
+import { QueryType, useSWRSales } from 'ui/hooks/useSales';
 
 export default function SalePage() {
-    const { currentUser, mutate } = useContext(CurrentUserContext);
-    const { sales: activeSales, isLast: isLastActiveSales, isLoading: isLoadingActiveSales, isValidating: isValidatingActiveSales, error: activeSalesError, loadMoreSales: loadMoreActiveSales } = useSWRActiveSales({});
-    const { sales: closedSales, isLast: isLastClosedSales, isLoading: isLoadingClosedSales, isValidating: isValidatingClosedSales, error: closedSalesError, loadMoreSales: loadMoreClosedSales } = useSWRClosedSales({});
+    const { sales: activeSales, isLast: isLastActiveSales, isLoading: isLoadingActiveSales, isValidating: isValidatingActiveSales, error: activeSalesError, loadMoreSales: loadMoreActiveSales } = useSWRSales({});
+    const { sales: closedSales, isLast: isLastClosedSales, isLoading: isLoadingClosedSales, isValidating: isValidatingClosedSales, error: closedSalesError, loadMoreSales: loadMoreClosedSales } = useSWRSales({}, QueryType.CLOSED);
     const [now, setNow] = useState<number>(Math.floor(Date.now() / 1000));
 
     useInterval(() => {
