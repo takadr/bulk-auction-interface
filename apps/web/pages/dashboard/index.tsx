@@ -1,15 +1,15 @@
-import { useContext, useState } from 'react';
-import Router, { useRouter } from 'next/router';
+import { useContext } from 'react';
+import Router from 'next/router';
 import { useAccount, useNetwork } from 'wagmi';
 import { chakra, Spinner, Container, Flex, Heading, Box, Button, Tabs, TabList, TabPanels, Tab, TabPanel, Card, CardBody, CardFooter, Progress, Text, Image, Stack, Link, useDisclosure, useInterval } from '@chakra-ui/react';
 import { AddIcon } from '@chakra-ui/icons';
+import { useQuery } from "@apollo/client";
+import { Sale } from 'lib/types/BulksaleV1';
 import Layout from 'ui/components/layouts/layout';
+import { LIST_MY_SALE_QUERY }  from 'lib/apollo/query';
 import { CurrentUserContext } from 'ui/components/providers/CurrentUserProvider';
 import SaleFormModal from 'ui/components/SaleFormModal';
-import { useQuery, useApolloClient } from "@apollo/client";
-import { MetaData, Sale } from 'lib/types/BulksaleV1';
 import SaleCard, { SaleCardSkeleton } from 'ui/components/SaleCard';
-import { LIST_MY_SALE_QUERY, GET_SALE_QUERY }  from 'lib/apollo/query';
 import Render404 from 'ui/components/errors/404';
 
 export default function DashboardPage() {
@@ -17,12 +17,7 @@ export default function DashboardPage() {
     const { address, isConnected, connector } = useAccount();
     const { currentUser, mutate } = useContext(CurrentUserContext);
     const saleFormModalDisclosure = useDisclosure();
-    const { data, loading, error: test, refetch } = useQuery(LIST_MY_SALE_QUERY, {variables: { id: String(address).toLowerCase() } });
-    const [now, setNow] = useState<number>(Math.floor(Date.now() / 1000));
-
-    useInterval(() => {
-        setNow(Math.floor(Date.now() / 1000))
-    }, 500);
+    const { data, loading, error, refetch } = useQuery(LIST_MY_SALE_QUERY, {variables: { id: String(address).toLowerCase() } });
 
     if(typeof currentUser === 'undefined') {
         return <Layout>
@@ -58,7 +53,7 @@ export default function DashboardPage() {
                                     <SaleCardSkeleton /><SaleCardSkeleton /><SaleCardSkeleton />
                                     </> 
                                     : data.sales.map((sale: Sale) => {
-                                        return <SaleCard key={sale.id} sale={sale} now={now} editable />
+                                        return <SaleCard key={sale.id} sale={sale} editable />
                                     })
                                 }
                                 {

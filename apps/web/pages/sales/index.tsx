@@ -1,5 +1,4 @@
-import { useState } from 'react';
-import { Container, Button, Text, Tabs, TabList, Tab, TabPanels, TabPanel, Stack, Flex, Tag, useInterval, Alert, AlertIcon } from '@chakra-ui/react';
+import { Container, Button, Text, Tabs, TabList, Tab, TabPanels, TabPanel, Stack, Flex, Alert, AlertIcon } from '@chakra-ui/react';
 import { Sale } from 'lib/types/BulksaleV1';
 import Layout from 'ui/components/layouts/layout';
 import SaleCard, { SaleCardSkeleton } from 'ui/components/SaleCard';
@@ -10,11 +9,6 @@ export default function SalePage() {
     // const { sales: activeSales, isLast: isLastActiveSales, isLoading: isLoadingActiveSales, isValidating: isValidatingActiveSales, error: activeSalesError, loadMoreSales: loadMoreActiveSales } = useSWRSales({}, QueryType.ACTIVE);
     // const { sales: upcomingSales, isLast: isLastUpcomingSales, isLoading: isLoadingUpcomingSales, isValidating: isValidatingUpcomingSales, error: upcomingSalesError, loadMoreSales: loadMoreUpcomingSales } = useSWRSales({}, QueryType.UPCOMING);
     const { sales: closedSales, isLast: isLastClosedSales, isLoading: isLoadingClosedSales, isValidating: isValidatingClosedSales, error: closedSalesError, loadMoreSales: loadMoreClosedSales } = useSWRSales({}, QueryType.CLOSED);
-    const [now, setNow] = useState<number>(Math.floor(Date.now() / 1000));
-
-    useInterval(() => {
-        setNow(Math.floor(Date.now() / 1000))
-    }, 500);
   
     return (
         <Layout>
@@ -37,7 +31,7 @@ export default function SalePage() {
                                     <SaleCardSkeleton /><SaleCardSkeleton /><SaleCardSkeleton />
                                 </> 
                                 : activeSales.map((sale: Sale) => {
-                                    return <SaleCard key={sale.id} sale={sale} now={now} />
+                                    return <SaleCard key={sale.id} sale={sale} />
                                 })
                             }
                             {
@@ -61,7 +55,7 @@ export default function SalePage() {
                                     <SaleCardSkeleton /><SaleCardSkeleton /><SaleCardSkeleton />
                                 </> 
                                 : upcomingSales.map((sale: Sale) => {
-                                    return <SaleCard key={sale.id} sale={sale} now={now} />
+                                    return <SaleCard key={sale.id} sale={sale} />
                                 })
                             }
                             {
@@ -85,7 +79,7 @@ export default function SalePage() {
                                     <SaleCardSkeleton /><SaleCardSkeleton /><SaleCardSkeleton />
                                 </>  
                                 : closedSales.map((sale: Sale) => {
-                                    return <SaleCard key={sale.id} sale={sale} now={now} />
+                                    return <SaleCard key={sale.id} sale={sale} />
                                 })
                             }
                             {

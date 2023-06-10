@@ -10,8 +10,6 @@ import {
 import { Button, useToast, Flex, chakra, useColorMode } from '@chakra-ui/react';
 import { useAccount, useContractEvent } from 'wagmi';
 import { CustomProvider } from 'rsuite';
-import { useAtom } from 'jotai';
-import { waitingTransactionAtom } from 'lib/store';
 import FactoryABI from 'lib/constants/abis/Factory.json';
 import { Steps } from './Steps';
 import BulksaleV1Form from './templates/BulksaleV1/ContractForm';
@@ -23,7 +21,6 @@ import TxSentToast from './TxSentToast';
 export default function SaleFormModal({isOpen, onClose, onSubmitSuccess}: {isOpen: boolean, onClose: () => void, onSubmitSuccess?: () => void}) {
     const { address } = useAccount();
     const toast = useToast({position: 'top-right', isClosable: true,});
-    const [waitingTransaction, setWaitingTransaction] = useAtom(waitingTransactionAtom);
     const { colorMode, setColorMode, toggleColorMode } = useColorMode();
     const [step, setStep] = useState<1|2>(1);
     const [contractAddress, setContractAddress] = useState<`0x${string}`|undefined>(undefined);
@@ -31,7 +28,6 @@ export default function SaleFormModal({isOpen, onClose, onSubmitSuccess}: {isOpe
     const { formikProps, approvals, prepareFn, writeFn, waitFn, tokenData, balance } = useBulksaleV1Form({
         address: address as `0x${string}`,
         onSubmitSuccess: (result) => {
-            setWaitingTransaction(result.hash);
             setStep(2);
             onSubmitSuccess && onSubmitSuccess();
             toast({

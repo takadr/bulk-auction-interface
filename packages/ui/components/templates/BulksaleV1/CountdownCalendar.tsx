@@ -1,7 +1,8 @@
 import { format } from 'date-fns';
-import { useState } from 'react';
-import { chakra, useInterval } from "@chakra-ui/react";
+import { useEffect, useState } from 'react';
+import { chakra } from "@chakra-ui/react";
 import { getCountdown } from "lib/utils";
+import { useNow } from '../../../hooks/useNow';
 
 type Props = {
   unixEndDate: number;
@@ -16,16 +17,16 @@ const initialCountdown = {
 
 export default function CountdownCalendar({ unixEndDate }: Props) {
   const [countdown, setCountdown] = useState(initialCountdown);
+  const [now] = useNow();
 
-  useInterval(() => {
+  useEffect(() => {
     if (!unixEndDate) {
       setCountdown({ days: '?', hours: '?', mins: '?', secs: '?' });
       return;
     }
-    const now = Math.floor(Date.now() / 1000);
     const newCountdown = getCountdown(unixEndDate - now);
     setCountdown(newCountdown);
-  }, 500);
+  }, [now])
 
   return (
     <chakra.div>

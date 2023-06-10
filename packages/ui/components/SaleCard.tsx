@@ -1,14 +1,15 @@
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
-import { chakra, Box, Divider, Skeleton, Badge, Tag, Heading, Card, CardBody, CardFooter, Progress, Text, Image, Stack, Flex, Button, useDisclosure, useInterval, SkeletonText } from '@chakra-ui/react';
+import { chakra, Box, Divider, Skeleton, Tag, Heading, Card, CardBody, Progress, Text, Image, Stack, Flex, Button, useDisclosure, SkeletonText } from '@chakra-ui/react';
 import { EditIcon } from '@chakra-ui/icons';
-import Big, { divideToNum, getBigNumber, multiply } from 'lib/utils/bignumber';
-import { MetaData, Sale } from 'lib/types/BulksaleV1';
+import Big, { divideToNum, getBigNumber } from 'lib/utils/bignumber';
+import { Sale } from 'lib/types/BulksaleV1';
 import useSWRAuction from '../hooks/useAuction';
 import SaleMetaFormModal from './SaleMetaFormModal';
 import { tokenAmountFormat, getCountdown, ellipsisText, getDecimalsForView, getTargetPercetage, etherAmountFormat, parseEtherInBig } from 'lib/utils';
+import { useNow } from '../hooks/useNow';
 
-export default function SaleCard({ sale, editable=false, now }: { sale: Sale, editable?: boolean, now: number }){
+export default function SaleCard({ sale, editable=false }: { sale: Sale, editable?: boolean }){
     // TODO use enum
     // 0-> not started, 1 -> started, 2 -> closed
     const [stage, setStage] = useState<'0'|'1'|'2'>('0');
@@ -20,6 +21,7 @@ export default function SaleCard({ sale, editable=false, now }: { sale: Sale, ed
         mins: '00',
         secs: '00',
     });
+    const [now] = useNow();
     useEffect(() => {
         let currentStage = stage
         if(now < sale.startingAt) {
