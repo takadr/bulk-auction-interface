@@ -3,6 +3,7 @@ import Big from "../../utils/bignumber";
 
 export type Sale = {
     id?: string;
+    templateName: string;
     token: `0x${string}` | null;
     tokenName: string;
     tokenSymbol: string;
