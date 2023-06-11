@@ -12,7 +12,7 @@ import PersonalStatistics from './PersonalStatistics';
 import StatisticsInCircle from './StatisticsInCircle';
 import useProvided from '../../../hooks/BulksaleV1/useProvided';
 import useRate from '../../../hooks/useRate';
-import { Sale, MetaData } from 'lib/types/BulksaleV1';
+import { Sale, MetaData } from 'lib/types/Sale';
 import ExternalLinkTag from '../../ExternalLinkTag';
 import useIsClaimed from '../../../hooks/BulksaleV1/useIsClaimed';
 import ClaimButton from './ClaimButton';

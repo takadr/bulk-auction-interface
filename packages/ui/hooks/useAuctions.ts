@@ -1,6 +1,6 @@
 import {SWRConfiguration} from 'swr';
 import useSWRInfinite from 'swr/infinite';
-import { MetaData } from 'lib/types/BulksaleV1';
+import { MetaData } from 'lib/types/Sale';
 
 interface SWRAuctionStore {
   auctions: MetaData[]

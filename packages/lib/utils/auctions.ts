@@ -1,6 +1,6 @@
 import { DynamoDBClient, GetItemCommand, BatchGetItemCommand, PutItemCommand, UpdateItemCommand, ScanCommand } from '@aws-sdk/client-dynamodb';
 import { SALE_TEMPLATE_V1_NAME } from '../constants';
-import { MetaData, validateMetaData } from '../types/BulksaleV1';
+import { MetaData, validateMetaData } from '../types/Sale';
 
 const dbClient = new DynamoDBClient({
   region: process.env.AWS_REGION as string,

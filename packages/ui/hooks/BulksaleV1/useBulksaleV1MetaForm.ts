@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 import { useFormik, FormikProps } from 'formik';
-import { MetaData, validateMetaData } from 'lib/types/BulksaleV1';
+import { MetaData, validateMetaData } from 'lib/types/Sale';
 import { URL_REGEX } from 'lib/constants';
 
 export default function useBulksaleV1MetaForm({contractId, minimumProvided, onSubmitSuccess, onSubmitError, saleMetaData}: {

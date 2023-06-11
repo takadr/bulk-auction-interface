@@ -2,7 +2,7 @@ import { usePrepareContractWrite, useContractWrite, useWaitForTransaction, erc20
 import { useDebounce } from 'use-debounce';
 import { useFormik, FormikProps } from 'formik';
 import useApprove from '../useApprove';
-import { SaleForm } from 'lib/types/BulksaleV1';
+import { SaleForm } from 'lib/types/Sale';
 import Big, { multiply } from 'lib/utils/bignumber';
 import FactoryABI from 'lib/constants/abis/Factory.json';
 import { SALE_TEMPLATE_V1_NAME } from 'lib/constants';

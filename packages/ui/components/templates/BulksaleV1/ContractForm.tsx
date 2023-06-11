@@ -37,7 +37,7 @@ import { differenceInSeconds, addSeconds, format } from 'date-fns';
 import { BigNumber, ethers } from 'ethers';
 import { getDecimalsForView, getEtherscanLink, tokenAmountFormat } from 'lib/utils';
 import Big, { getBigNumber, multiply } from 'lib/utils/bignumber';
-import { SaleForm, Template } from 'lib/types/BulksaleV1';
+import { SaleForm, Template } from 'lib/types/Sale';
 import { CHAIN_NAMES } from 'lib/constants';
 import { LIST_TEMPLATE_QUERY } from 'lib/apollo/query';
 

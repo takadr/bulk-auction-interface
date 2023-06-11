@@ -2,7 +2,7 @@ import { QuestionIcon } from "@chakra-ui/icons";
 import { useToast, Button, Tooltip, Flex, Box, Heading, chakra } from "@chakra-ui/react";
 import { useContractRead, erc20ABI } from "wagmi";
 import useWithdrawUnclaimedERC20OnSale from '../../../hooks/useWithdrawUnclaimedERC20OnSale';
-import { Sale } from "lib/types/BulksaleV1";
+import { Sale } from "lib/types/Sale";
 import { getDecimalsForView, tokenAmountFormat } from "lib/utils";
 import { getBigNumber } from "lib/utils/bignumber";
 import TxSentToast from "../../TxSentToast";

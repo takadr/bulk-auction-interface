@@ -1,5 +1,5 @@
 import { Container, Button, Text, Tabs, TabList, Tab, TabPanels, TabPanel, Stack, Flex, Alert, AlertIcon } from '@chakra-ui/react';
-import { Sale } from 'lib/types/BulksaleV1';
+import { Sale } from 'lib/types/Sale';
 import Layout from 'ui/components/layouts/layout';
 import SaleCard, { SaleCardSkeleton } from 'ui/components/SaleCard';
 import { QueryType, useSWRSales } from 'ui/hooks/useSales';

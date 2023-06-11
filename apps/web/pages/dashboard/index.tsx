@@ -4,7 +4,7 @@ import { useAccount, useNetwork } from 'wagmi';
 import { chakra, Spinner, Container, Flex, Heading, Box, Button, Tabs, TabList, TabPanels, Tab, TabPanel, Card, CardBody, CardFooter, Progress, Text, Image, Stack, Link, useDisclosure, useInterval } from '@chakra-ui/react';
 import { AddIcon } from '@chakra-ui/icons';
 import { useQuery } from "@apollo/client";
-import { Sale } from 'lib/types/BulksaleV1';
+import { Sale } from 'lib/types/Sale';
 import Layout from 'ui/components/layouts/layout';
 import { LIST_MY_SALE_QUERY }  from 'lib/apollo/query';
 import { CurrentUserContext } from 'ui/components/providers/CurrentUserProvider';

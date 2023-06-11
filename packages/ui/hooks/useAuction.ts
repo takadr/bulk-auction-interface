@@ -1,5 +1,5 @@
 import useSWR, {SWRResponse} from 'swr';
-import { MetaData } from 'lib/types/BulksaleV1';
+import { MetaData } from 'lib/types/Sale';
 import { LOCK_DURATION, EXPIRATION_DURATION, FEE_RATE_PER_MIL, SALE_TEMPLATE_V1_NAME } from 'lib/constants';
 
 type Constants = { lockDuration: number, expirationDuration: number, feeRatePerMil: number }

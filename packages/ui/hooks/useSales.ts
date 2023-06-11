@@ -3,7 +3,7 @@ import useSWRInfinite from 'swr/infinite';
 import { useQuery } from 'wagmi';
 import client from 'lib/apollo/client';
 import { LIST_ACTIVE_AND_UPCOMING_SALE_QUERY, LIST_ACTIVE_SALE_QUERY, LIST_UPCOMING_SALE_QUERY, LIST_CLOSED_SALE_QUERY } from 'lib/apollo/query';
-import { Sale } from 'lib/types/BulksaleV1';
+import { Sale } from 'lib/types/Sale';
 import { DocumentNode } from '@apollo/client';
 
 interface SWRSaleStore {
