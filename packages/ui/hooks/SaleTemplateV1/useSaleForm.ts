@@ -11,7 +11,7 @@ import 'rsuite/dist/rsuite-no-reset.min.css';
 import 'assets/css/rsuite-override.css';
 
 const now = new Date().getTime();
-export default function useBulksaleV1Form({
+export default function useSaleForm({
     address, 
     onSubmitSuccess, 
     onSubmitError,

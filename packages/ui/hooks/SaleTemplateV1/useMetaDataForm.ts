@@ -3,7 +3,7 @@ import { useFormik, FormikProps } from 'formik';
 import { MetaData, validateMetaData } from 'lib/types/Sale';
 import { URL_REGEX } from 'lib/constants';
 
-export default function useBulksaleV1MetaForm({contractId, minimumProvided, onSubmitSuccess, onSubmitError, saleMetaData}: {
+export default function useMetaDataForm({contractId, minimumProvided, onSubmitSuccess, onSubmitError, saleMetaData}: {
     contractId?: `0x${string}`,
     minimumProvided: number, // Numbers that take decimals into account. e.g. 10 
     onSubmitSuccess?: (result: Response) => void,

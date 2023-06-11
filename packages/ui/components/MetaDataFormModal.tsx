@@ -10,11 +10,11 @@ import {
 import { Button, useToast, Flex, chakra, useColorMode } from '@chakra-ui/react';
 import { useAccount } from 'wagmi';
 import { CustomProvider } from 'rsuite';
-import MetaDataForm from './templates/BulksaleV1/MetaDataForm';
-import useBulksaleV1MetaForm from '../hooks/BulksaleV1/useBulksaleV1MetaForm';
+import MetaDataForm from './templates/SaleTemplateV1/MetaDataForm';
+import useMetaDataForm from '../hooks/SaleTemplateV1/useMetaDataForm';
 import { MetaData } from 'lib/types/Sale';
 
-export default function SaleMetaFormModal({isOpen, onClose, existingContractAddress, saleMetaData, minimumProvided, onSubmitSuccess}: {isOpen: boolean, onClose: () => void, onSuccess?: () => void, existingContractAddress?: `0x${string}`, saleMetaData?: MetaData, minimumProvided: number, onSubmitSuccess?: () => void}) {
+export default function MetaDataFormModal({isOpen, onClose, existingContractAddress, saleMetaData, minimumProvided, onSubmitSuccess}: {isOpen: boolean, onClose: () => void, onSuccess?: () => void, existingContractAddress?: `0x${string}`, saleMetaData?: MetaData, minimumProvided: number, onSubmitSuccess?: () => void}) {
     const { address } = useAccount();
     const toast = useToast({position: 'top-right', isClosable: true,});
     const { colorMode, setColorMode, toggleColorMode } = useColorMode();
@@ -25,7 +25,7 @@ export default function SaleMetaFormModal({isOpen, onClose, existingContractAddr
         onClose();
     }
 
-    const { formikProps } = useBulksaleV1MetaForm({
+    const { formikProps } = useMetaDataForm({
         contractId: contractAddress,
         minimumProvided: minimumProvided,
         saleMetaData,

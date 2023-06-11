@@ -5,7 +5,7 @@ import { EditIcon } from '@chakra-ui/icons';
 import Big, { divideToNum, getBigNumber } from 'lib/utils/bignumber';
 import { Sale } from 'lib/types/Sale';
 import useSWRAuction from '../hooks/useAuction';
-import SaleMetaFormModal from './SaleMetaFormModal';
+import MetaDataFormModal from './MetaDataFormModal';
 import { tokenAmountFormat, getCountdown, ellipsisText, getDecimalsForView, getTargetPercetage, etherAmountFormat, parseEtherInBig } from 'lib/utils';
 import { useNow } from '../hooks/useNow';
 
@@ -143,7 +143,7 @@ export default function SaleCard({ sale, editable=false }: { sale: Sale, editabl
                 </CardFooter> */}
             </Stack>
             {
-                editable && isOpen && <SaleMetaFormModal minimumProvided={divideToNum(sale.minimalProvideAmount, Big(10).pow(18))} isOpen={isOpen} onClose={onClose} existingContractAddress={sale.id as `0x${string}`} saleMetaData={data?.metaData} onSubmitSuccess={mutate} />
+                editable && isOpen && <MetaDataFormModal minimumProvided={divideToNum(sale.minimalProvideAmount, Big(10).pow(18))} isOpen={isOpen} onClose={onClose} existingContractAddress={sale.id as `0x${string}`} saleMetaData={data?.metaData} onSubmitSuccess={mutate} />
             }
         </Card>
 }

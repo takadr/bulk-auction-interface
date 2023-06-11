@@ -10,11 +10,11 @@ import { BigNumber, utils } from 'ethers';
 import CalendarInCircle from './CalendarInCircle';
 import PersonalStatistics from './PersonalStatistics';
 import StatisticsInCircle from './StatisticsInCircle';
-import useProvided from '../../../hooks/BulksaleV1/useProvided';
+import useProvided from '../../../hooks/SaleTemplateV1/useProvided';
 import useRate from '../../../hooks/useRate';
 import { Sale, MetaData } from 'lib/types/Sale';
 import ExternalLinkTag from '../../ExternalLinkTag';
-import useIsClaimed from '../../../hooks/BulksaleV1/useIsClaimed';
+import useIsClaimed from '../../../hooks/SaleTemplateV1/useIsClaimed';
 import ClaimButton from './ClaimButton';
 import TxSentToast from '../../TxSentToast';
 import WithdrawUnclaimedToken from './WithdrawUnclaimedToken';
@@ -23,7 +23,7 @@ import WithdrawERC20 from './WithdrawERC20';
 import { getDecimalsForView, getEtherscanLink, tokenAmountFormat } from 'lib/utils';
 import { CHAIN_NAMES } from 'lib/constants';
 
-type BulksaleV1Params = {
+type SaleTemplateV1Params = {
     sale: Sale;
     refetchSale: () => Promise<ApolloQueryResult<any>>;
     metaData: MetaData;
@@ -32,7 +32,7 @@ type BulksaleV1Params = {
     contractAddress: `0x${string}`;
 }
 
-export default function BulksaleV1({sale, refetchSale, metaData, refetchMetaData, address, contractAddress}: BulksaleV1Params) {
+export default function SaleTemplateV1({sale, refetchSale, metaData, refetchMetaData, address, contractAddress}: SaleTemplateV1Params) {
     const toast = useToast({position: 'top-right', isClosable: true,});
     const { provided, totalProvided, isLoading: isLoadingProvidedAmount, refetch: refetchProvided } = useProvided(contractAddress, address);
     const { data: balanceData, isLoading: isLoadingBalance, refetch: refetchBalance } = useBalance({address, enabled: !!address});

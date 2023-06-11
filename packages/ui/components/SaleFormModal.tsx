@@ -12,10 +12,10 @@ import { useAccount, useContractEvent } from 'wagmi';
 import { CustomProvider } from 'rsuite';
 import FactoryABI from 'lib/constants/abis/Factory.json';
 import { Steps } from './Steps';
-import BulksaleV1Form from './templates/BulksaleV1/ContractForm';
-import useBulksaleV1Form from '../hooks/BulksaleV1/useBulksaleV1Form';
-import MetaDataForm from './templates/BulksaleV1/MetaDataForm';
-import useBulksaleV1MetaForm from '../hooks/BulksaleV1/useBulksaleV1MetaForm';
+import SaleForm from './templates/SaleTemplateV1/SaleForm';
+import useSaleForm from '../hooks/SaleTemplateV1/useSaleForm';
+import MetaDataForm from './templates/SaleTemplateV1/MetaDataForm';
+import useMetaDataForm from '../hooks/SaleTemplateV1/useMetaDataForm';
 import TxSentToast from './TxSentToast';
 
 export default function SaleFormModal({isOpen, onClose, onSubmitSuccess}: {isOpen: boolean, onClose: () => void, onSubmitSuccess?: () => void}) {
@@ -25,7 +25,7 @@ export default function SaleFormModal({isOpen, onClose, onSubmitSuccess}: {isOpe
     const [step, setStep] = useState<1|2>(1);
     const [contractAddress, setContractAddress] = useState<`0x${string}`|undefined>(undefined);
 
-    const { formikProps, approvals, prepareFn, writeFn, waitFn, tokenData, balance } = useBulksaleV1Form({
+    const { formikProps, approvals, prepareFn, writeFn, waitFn, tokenData, balance } = useSaleForm({
         address: address as `0x${string}`,
         onSubmitSuccess: (result) => {
             setStep(2);
@@ -82,7 +82,7 @@ export default function SaleFormModal({isOpen, onClose, onSubmitSuccess}: {isOpe
         setStep(1);
     }
 
-    const { formikProps: metaFormikProps } = useBulksaleV1MetaForm({
+    const { formikProps: metaFormikProps } = useMetaDataForm({
         contractId: contractAddress,
         minimumProvided: formikProps.values.minimalProvideAmount,
         onSubmitSuccess: (response) => {
@@ -134,7 +134,7 @@ export default function SaleFormModal({isOpen, onClose, onSubmitSuccess}: {isOpe
                 <ModalBody pb={6}>
                     <Steps mx={'auto'} maxW={'450px'} pb={6} px={10} stepParams={stepParams} currentStep={step} />
                     {
-                        step === 1 ? <BulksaleV1Form 
+                        step === 1 ? <SaleForm 
                             formikProps={formikProps} 
                             address={address as `0x${string}`}
                             approvals={approvals}

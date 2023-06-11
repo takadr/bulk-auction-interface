@@ -156,7 +156,7 @@ export default function MetaDataForm({formikProps, waitFn, onSkip}: {formikProps
                     isDisabled={waitFn && waitFn.isLoading}
                     leftIcon={waitFn && waitFn.isLoading ? <Spinner /> : undefined}
                 >
-                    { waitFn && waitFn.isLoading ? 'Please wait for the transaction to be confirmed' : 'Save Bulksale Information' }
+                    { waitFn && waitFn.isLoading ? 'Please wait for the transaction to be confirmed' : 'Save Sale Information' }
                 </Button>
                 { onSkip && <Button 
                     flex={1}

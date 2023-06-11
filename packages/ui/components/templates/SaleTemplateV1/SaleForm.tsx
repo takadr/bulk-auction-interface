@@ -41,7 +41,7 @@ import { SaleForm, Template } from 'lib/types/Sale';
 import { CHAIN_NAMES } from 'lib/constants';
 import { LIST_TEMPLATE_QUERY } from 'lib/apollo/query';
 
-export default function BulksaleV1Form({formikProps, address, approvals, writeFn, tokenData, balance}: {formikProps: FormikProps<SaleForm>, address: `0x${string}`, approvals: any, writeFn: any, tokenData: any, balance?: BigNumber | undefined}) {
+export default function SaleForm({formikProps, address, approvals, writeFn, tokenData, balance}: {formikProps: FormikProps<SaleForm>, address: `0x${string}`, approvals: any, writeFn: any, tokenData: any, balance?: BigNumber | undefined}) {
     const { isOpen, onOpen, onClose } = useDisclosure()
     const containerRef = useRef<HTMLFormElement>(null)
     const cancelRef = useRef<HTMLButtonElement>(null)
