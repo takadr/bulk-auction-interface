@@ -45,6 +45,7 @@ export default function ProvidersList({isOpen, onClose}: {isOpen: boolean, onClo
                   <Button
                     disabled={!connector.ready}
                     key={connector.id}
+                    id={`${connector.id}`}
                     w={'full'}
                     size={'lg'}
                     onClick={() => { 

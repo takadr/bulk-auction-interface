@@ -55,7 +55,7 @@ export const Header: FC<HeaderProps> = ({title}: {title?: string}) => {
     const noConnectedMenu = () => {
         return (
             <>
-                <Button onClick={providersListDisclosure.onOpen} variant={'outline'} size={{base: 'xs', md: 'sm'}}>
+                <Button id="connectButton" onClick={providersListDisclosure.onOpen} variant={'outline'} size={{base: 'xs', md: 'sm'}}>
                     Connect wallet
                 </Button>
                 <ProvidersList isOpen={providersListDisclosure.isOpen} onClose={providersListDisclosure.onClose} />
@@ -82,7 +82,7 @@ export const Header: FC<HeaderProps> = ({title}: {title?: string}) => {
                             alignItems="flex-start"
                             spacing="1px"
                             ml="2">
-                                <Text fontSize="sm">
+                                <Text fontSize="sm" id="account">
                                     <chakra.span display={{ base: 'none', md: 'inline' }}>{ currentUser ? 'Signed in as ' : '' }</chakra.span>
                                     {ensName ? `${ensName}` : `${getDisplayAddress()}` }
                                 </Text>
