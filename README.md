@@ -25,6 +25,8 @@ cd apps/web
 npm run test:headless
 ```
 
+* Comment out BASIC_AUTH_USER and BASIC_AUTH_PASS in your .env while e2e test
+
 ## Subgraph
 
 ### deploy

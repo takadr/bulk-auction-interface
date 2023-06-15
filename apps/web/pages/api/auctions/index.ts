@@ -1,7 +1,7 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import { withIronSessionApiRoute } from 'iron-session/next';
 import { erc20ABI } from 'wagmi';
-import { ethers } from 'ethers';
+import { ethers, utils } from 'ethers';
 import { scanAuctions, addAuction, updateAuction } from 'lib/utils/auctions';
 import SaleTemplateV1ABI from 'lib/constants/abis/SaleTemplateV1.json';
 import ironOptions from 'lib/constants/ironOptions';

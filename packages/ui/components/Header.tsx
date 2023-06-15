@@ -164,6 +164,7 @@ export const Header: FC<HeaderProps> = ({title}: {title?: string}) => {
                         </Button>
                         {
                             !currentUser && <SignInButton
+                                id='sign-in-with-ethereum'
                                 size={{base: 'xs', md: 'sm'}}
                                 onSuccess={async () => { 
                                     mutate && await mutate()

@@ -102,7 +102,7 @@ export default memo(function SignInButton({
       <>
         <Button {...buttonProps} variant={'solid'} colorScheme={'green'} isLoading={state.loading} onClick={signIn}>
           Sign In
-          <chakra.span display={{base: 'none', md: 'inline'}}> with Ethereum</chakra.span>
+          <chakra.span display={{base: 'none', md: 'inline'}} ml={1}> with Ethereum</chakra.span>
         </Button>
         { !isConnected && <ProvidersList isOpen={providersListDisclosure.isOpen} onClose={() => { 
           setTimeout(() => {

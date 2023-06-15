@@ -5,14 +5,15 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "start": "next start",
+    "start": "env-cmd -f ../../.env next start",
     "lint": "next lint",
-    "synpress:run": "env-cmd -f ../../.env synpress run",
+    "synpress:run": "SKIP_METAMASK_SETUP=true env-cmd -f ../../.env synpress run --configFile ./synpress.config.js --noExit",
     "test": "start-server-and-test 'npm run start' http://localhost:3000 'npm run synpress:run'",
     "test:headless": "start-server-and-test 'npm run start' http://localhost:3000 'npm run synpress:run --headless'"
   },
   "dependencies": {
     "assets": "workspace:*",
+    "cypress-wait-until": "^2.0.0",
     "lib": "workspace:*",
     "next": "latest",
     "react": "^18.2.0",
@@ -25,6 +26,8 @@
     "@types/react": "^18.0.22",
     "@types/react-dom": "^18.0.7",
     "cypress": "^12.14.0",
+    "cypress-dotenv": "^2.0.0",
+    "dotenv": "^16.1.4",
     "env-cmd": "^10.1.0",
     "eslint-config-custom": "workspace:*",
     "start-server-and-test": "^2.0.0",
