@@ -49,6 +49,7 @@ module.exports = defineConfig({
     env: {
       FACTORY_ADDRESS: process.env.NEXT_PUBLIC_FACTORY_ADDRESS,
       PRIVATE_KEY: process.env.PRIVATE_KEY,
+      TEST_TOKEN: process.env.TEST_TOKEN,
       NETWORK_NAME: process.env.NETWORK_NAME,
       SKIP_METAMASK_SETUP: true
     }

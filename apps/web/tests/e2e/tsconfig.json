@@ -9,7 +9,8 @@
       // "@testing-library/cypress"
     ],
     "outDir": "./output",
-    "suppressImplicitAnyIndexErrors": true
+    "suppressImplicitAnyIndexErrors": true,
+    "resolveJsonModule": true,
+    "allowSyntheticDefaultImports": true
   },
-  "resolveJsonModule": true
 }

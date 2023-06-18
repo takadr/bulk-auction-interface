@@ -212,14 +212,14 @@ export default function SaleForm({formikProps, address, approvals, writeFn, toke
                                     <Stack spacing={4} divider={<Divider />}>
                                         <div>
                                             <chakra.p>Sale Template</chakra.p>
-                                            <chakra.p fontWeight={'bold'}>
+                                            <chakra.p fontWeight={'bold'} aria-label="Sale Template">
                                                 {ethers.utils.parseBytes32String(formikProps.values.templateName)}
                                             </chakra.p>
                                         </div>
 
                                         <div>
                                             <chakra.p>Token address</chakra.p>
-                                            <chakra.p fontWeight={'bold'}>
+                                            <chakra.p fontWeight={'bold'} aria-label="Token address">
                                                 <Link href={getEtherscanLink(CHAIN_NAMES[process.env.NEXT_PUBLIC_CHAIN_ID!], formikProps.values.token as `0x${string}`, 'token')} target={'_blank'}>
                                                     {formikProps.values.token}
                                                     <ExternalLinkIcon ml={1} />
@@ -229,7 +229,7 @@ export default function SaleForm({formikProps, address, approvals, writeFn, toke
 
                                         <div>
                                             <chakra.p>Start date - End date</chakra.p>
-                                            <chakra.p fontWeight={'bold'}>
+                                            <chakra.p fontWeight={'bold'} aria-label="Start date - End date">
                                                 <>
                                                 {format(formikProps.values.startingAt, 'yyyy/MM/dd HH:mm:ss')}
                                                 {` - `}
@@ -241,14 +241,14 @@ export default function SaleForm({formikProps, address, approvals, writeFn, toke
 
                                         <div>
                                             <chakra.p>Total distribute amount</chakra.p>
-                                            <chakra.p fontWeight={'bold'}>
-                                                {tokenData ? formikProps.values.distributeAmount.toFixed(getDecimalsForView(getBigNumber(tokenData?.totalSupply.value.toString()), tokenData?.decimals)) : '-'} {tokenData?.symbol}
+                                            <chakra.p fontWeight={'bold'} aria-label="Total distribute amount">
+                                                {tokenData ? Number(formikProps.values.distributeAmount).toFixed(getDecimalsForView(getBigNumber(tokenData?.totalSupply.value.toString()), tokenData?.decimals)) : '-'} {tokenData?.symbol}
                                             </chakra.p>
                                         </div>
 
                                         <div>
                                             <chakra.p>Minimum provide amount</chakra.p>
-                                            <chakra.p fontWeight={'bold'}>{formikProps.values.minimalProvideAmount.toFixed(2)} ETH</chakra.p>
+                                            <chakra.p fontWeight={'bold'} aria-label="Minimum provide amount">{Number(formikProps.values.minimalProvideAmount).toFixed(2)} ETH</chakra.p>
                                         </div>
                                     </Stack>
                                 </AlertDialogBody>
