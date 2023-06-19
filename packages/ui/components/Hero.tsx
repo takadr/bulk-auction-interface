@@ -4,11 +4,12 @@ import {
   Flex,
   Heading,
   Stack,
-  HStack,
+  HStack
 } from "@chakra-ui/react";
+import { KeyedMutator } from "swr";
 import { User } from "lib/types";
 import SignInButton from "./SignInButton";
-import { KeyedMutator } from "swr";
+import bgImage from 'assets/images/background_sky-min.png';
 
 type HeroProps = {
     title?: string,
@@ -33,7 +34,10 @@ export default function Hero({
       minH="50vh"
       px={{base: 2, md: 8}}
       mb={16}
-      bg={'gray.700'}
+      bg={`linear-gradient(rgba(0, 0, 0, .6),  rgba(0, 0, 0, .6)), url("${bgImage.src}")`}
+      bgRepeat={'no-repeat'}
+      bgSize={'cover'}
+      bgPos={'center'}
       {...rest}
     >
       <Stack

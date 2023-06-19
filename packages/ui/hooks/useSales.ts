@@ -12,8 +12,14 @@ interface SWRSaleStore {
   error?: Error
   isLoading: boolean,
   isValidating: boolean,
-  fetcher: (args: [number]) => Promise<Sale[]>
+  fetcher: (args: [number, number]) => Promise<Sale[]>
   loadMoreSales: () => void
+}
+
+type SalesParams = {
+  first?: number;
+  skip?: number;
+  keySuffix?: string;
 }
 
 export enum QueryType {
@@ -42,19 +48,24 @@ const getQuery = (queryType: QueryType): DocumentNode => {
   }
 }
 
-export const useSWRSales = (config: SWRConfiguration, queryType: QueryType=QueryType.ACTIVE_AND_UPCOMING): SWRSaleStore => {
+export const useSWRSales = (config: SalesParams & SWRConfiguration, queryType: QueryType=QueryType.ACTIVE_AND_UPCOMING): SWRSaleStore => {
   const getKey = (pageIndex: number, previousPageData: Sale[]) => {
     if (previousPageData && !previousPageData.length) return null
     const skip = previousPageData === null ? 0 : previousPageData.length;
-    return [skip, NOW, `queryType_${queryType.toString()}`];
+    return [
+      config.skip ? config.skip : skip, 
+      config.first ? config.first : LIMIT, 
+      NOW, 
+      `queryType_${queryType.toString()}${config.keySuffix ? `_${config.keySuffix}` : ''}`
+    ];
   }
 
-  const fetcher = async (args: [number]): Promise<Sale[]> => {
+  const fetcher = async (args: [number, number]): Promise<Sale[]> => {
     return client
     .query({
       query: getQuery(queryType),
       variables: {
-        skip: args[0], first: LIMIT, now: NOW
+        skip: args[0], first: args[1], now: NOW
       },
     })
     .then((result) => {
