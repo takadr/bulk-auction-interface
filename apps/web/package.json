@@ -3,11 +3,11 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
-    "dev": "env-cmd -f ../../.env next dev",
-    "build": "env-cmd -f ../../.env next build",
-    "start": "env-cmd -f ../../.env next start",
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
     "lint": "next lint",
-    "synpress:run": "SKIP_METAMASK_SETUP=true env-cmd -f ../../.env synpress run --configFile ./synpress.config.js",
+    "synpress:run": "SKIP_METAMASK_SETUP=true synpress run --configFile ./synpress.config.js",
     "test": "start-server-and-test 'npm run start' http://localhost:3000 'npm run synpress:run'",
     "test:headless": "start-server-and-test 'npm run start' http://localhost:3000 'npm run synpress:run --headless'"
   },
