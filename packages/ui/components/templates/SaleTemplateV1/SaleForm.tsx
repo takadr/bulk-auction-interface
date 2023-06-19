@@ -57,7 +57,7 @@ export default function SaleForm({formikProps, address, approvals, writeFn, toke
                     <Select isDisabled={true} id="templateName" name="templateName" onBlur={formikProps.handleBlur} onChange={formikProps.handleChange} value={formikProps.values.templateName}>
                         { !data && <option value=""><Spinner /></option> }
                         {
-                            data && data.templates.map((template: Template) => <option value={template.templateName}>{ethers.utils.parseBytes32String(template.templateName)}</option>)
+                            data && data.templates.map((template: Template) => <option key={template.id} value={template.templateName}>{ethers.utils.parseBytes32String(template.templateName)}</option>)
                         }
                     </Select>
                     <FormErrorMessage>{formikProps.errors.templateName}</FormErrorMessage>

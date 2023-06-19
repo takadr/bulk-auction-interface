@@ -13,7 +13,6 @@ import {
     VStack,
     useDisclosure,
     useToast,
-    Switch,
     Divider,
     Link,
     Menu,
@@ -21,11 +20,10 @@ import {
     MenuList,
     MenuItem,
 } from '@chakra-ui/react';
-import { FC, useState, useContext } from 'react';
+import { FC, useState, useContext, useEffect } from 'react';
 import Router from 'next/router';
-import { MoonIcon, HamburgerIcon, SunIcon, ChevronDownIcon, ChevronRightIcon } from '@chakra-ui/icons';
-import { useAccount, useEnsAvatar, useEnsName, useDisconnect, useNetwork, useSwitchNetwork } from 'wagmi';
-import { sepolia } from 'wagmi/chains';
+import { ChevronDownIcon } from '@chakra-ui/icons';
+import { useAccount, useEnsAvatar, useEnsName, useDisconnect, useNetwork, useSwitchNetwork, Chain } from 'wagmi';
 import ProvidersList from './ProvidersList';
 import { CurrentUserContext } from './providers/CurrentUserProvider';
 import SignInButton from './SignInButton';
@@ -33,24 +31,37 @@ import ProviderLogo from './ProviderLogo';
 
 type HeaderProps = {
     title?: string;
+    chain: (Chain & { unsupported?: boolean | undefined }) | undefined;
 };
 
-export const Header: FC<HeaderProps> = ({title}: {title?: string}) => {
-    const { colorMode, setColorMode, toggleColorMode } = useColorMode();
-    const { isOpen, onOpen, onClose } = useDisclosure();
+export const Header: FC<HeaderProps> = ({title, chain}: HeaderProps) => {
     const providersListDisclosure = useDisclosure();
     const toast = useToast({position: 'top-right', isClosable: true,})
     const { currentUser, mutate } = useContext(CurrentUserContext);
-    const { address, isConnected, connector } = useAccount();
+    const { address, isConnected: _isConnected, connector } = useAccount();
     const { data: ensAvatar } = useEnsAvatar({ address: currentUser ? currentUser.address : address, staleTime: 1000 * 60 * 60 * 1 });
     const { data: ensName } = useEnsName({ address: currentUser ? currentUser.address : address, staleTime: 1000 * 60 * 60 * 1 });
-    const { chain } = useNetwork();
+    const [chainName, setChainName] = useState<string>('')
+    const [addressString, setAddressString] = useState<string>('')
+    const [isConnected, setIsConnected] = useState<boolean>(false)
     const { disconnect } = useDisconnect();
 
-    const getDisplayAddress = () => {
+    useEffect(() => {
+        if(typeof chain === 'undefined'){
+            setChainName('')
+        } else {
+            setChainName(chain.unsupported ? 'Unsupported Chain' : chain.name)
+        }
+    }, [chain])
+
+    useEffect(() => {
         const _address = currentUser ? currentUser.address : address;
-        return `${_address?.slice(0, 5)}...${_address?.slice(-4)}`;
-    }
+        setAddressString(`${_address?.slice(0, 5)}...${_address?.slice(-4)}`)
+    }, [currentUser, address])
+
+    useEffect(() => {
+        setIsConnected(_isConnected)
+    }, [_isConnected])
 
     const noConnectedMenu = () => {
         return (
@@ -69,7 +80,7 @@ export const Header: FC<HeaderProps> = ({title}: {title?: string}) => {
             <Menu>
                 <HStack spacing={1}>
                     { connector?.id && <ProviderLogo display={{ base: 'none', md: 'flex' }} width={'26px'} connectorId={connector.id} /> }
-                    <Tag size={'sm'} display={{ base: 'none', md: 'flex' }}>{chain?.unsupported ? 'Unsupported Chain' : chain?.name}</Tag>
+                    <Tag size={'sm'} display={{ base: 'none', md: 'flex' }}>{chainName}</Tag>
                     <MenuButton>
                         <HStack>
                             { ensName && ensAvatar && <Avatar
@@ -84,7 +95,7 @@ export const Header: FC<HeaderProps> = ({title}: {title?: string}) => {
                             ml="2">
                                 <Text fontSize="sm" id="account">
                                     <chakra.span display={{ base: 'none', md: 'inline' }}>{ currentUser ? 'Signed in as ' : '' }</chakra.span>
-                                    {ensName ? `${ensName}` : `${getDisplayAddress()}` }
+                                    {ensName ? `${ensName}` : `${addressString}` }
                                 </Text>
                             </VStack>
                             <ChevronDownIcon />
@@ -92,7 +103,7 @@ export const Header: FC<HeaderProps> = ({title}: {title?: string}) => {
                     </MenuButton>
                     <MenuList zIndex={101}>
                         <HStack spacing={1} px={2} display={{ base: 'block', md: 'none' }}>
-                            <Tag size={'sm'}>{chain?.unsupported ? 'Unsupported Chain' : chain?.name}</Tag>
+                            <Tag size={'sm'}>{chainName}</Tag>
                             { currentUser && <Tag size={'sm'}>Signed in</Tag>}
                         </HStack>
                         {
@@ -117,16 +128,6 @@ export const Header: FC<HeaderProps> = ({title}: {title?: string}) => {
                                 mutate && mutate()
                             }}>Sign out and Disconnect</MenuItem>
                             : <MenuItem onClick={() => disconnect()}>Disconnect</MenuItem>
-                        }
-                        {
-                        /* Hide color mode toggle switch for now
-                        <Divider />
-                        <HStack px={4} pt={2}>
-                            <MoonIcon color={colorMode === 'light' ? 'gray' : 'white'} />
-                            <Switch isChecked={colorMode === 'light'} onChange={(e: any) => e.target.checked ? setColorMode('light') : setColorMode('dark')} />
-                            <SunIcon color={colorMode === 'light' ? 'gray' : 'white'} />
-                        </HStack> 
-                        */
                         }
                     </MenuList>
                 </HStack>

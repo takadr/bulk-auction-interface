@@ -36,7 +36,7 @@ export default function Layout({title, children}: {title?: string, children: Rea
     }, [colorMode])
 
     return <>
-    <Header title={title ? title : 'DFGC Sale Maker(仮)'}/>
+    <Header title={title ? title : 'DFGC Sale Maker(仮)'} chain={chain}/>
     {
         chain && chain.unsupported && 
         <chakra.div px={{base: 0, md: 8}}>

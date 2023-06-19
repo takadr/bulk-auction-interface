@@ -7,19 +7,21 @@ export default function useWithdrawProvidedETH({
   onErrorWrite,
   onSuccessConfirm,
   onErrorConfirm,
+  isReady=true
 } : {
   targetAddress: `0x${string}` | null,
   onSuccessWrite?: (data: any) => void,
   onErrorWrite?: (error: Error) => void,
   onSuccessConfirm?: (data: any) => void,
   onErrorConfirm?: (error: Error) => void,
+  isReady?: boolean
 }): {
     prepareFn: any,
     writeFn: any,
     waitFn: ReturnType<typeof useWaitForTransaction>
   } {
   const { chain } = useNetwork();
-  const enabled: boolean = !!targetAddress && !!chain
+  const enabled: boolean = isReady && !!targetAddress && !!chain
 
   const prepareFn = usePrepareContractWrite({
     chainId: chain?.id,

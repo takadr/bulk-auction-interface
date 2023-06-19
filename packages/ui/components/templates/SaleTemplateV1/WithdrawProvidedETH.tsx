@@ -38,7 +38,8 @@ export default function WithdrawProvidedETH({sale, onSuccessConfirm}: Props) {
                 duration: 5000,
             })
             onSuccessConfirm && onSuccessConfirm(data);
-        } 
+        },
+        isReady: balanceData && !balanceData.value.isZero()
     });
 
     return <Box>

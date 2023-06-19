@@ -44,7 +44,8 @@ export default function WithdrawERC20({sale, onSuccessConfirm}: Props) {
                 duration: 5000,
             })
             onSuccessConfirm && onSuccessConfirm(data);
-        } 
+        },
+        isReady: balance && !balance.isZero()
     });
 
     return <Box>
