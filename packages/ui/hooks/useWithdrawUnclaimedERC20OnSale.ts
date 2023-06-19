@@ -1,5 +1,5 @@
 import { useNetwork, usePrepareContractWrite, useContractWrite, useWaitForTransaction } from 'wagmi';
-import Template from 'lib/constants/abis/Template.json';
+import Template from 'lib/constants/abis/SaleTemplateV1.json';
 
 export default function useWithdrawUnclaimedERC20OnSale({
   targetAddress,

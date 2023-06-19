@@ -17,7 +17,6 @@ import ExternalLinkTag from '../../ExternalLinkTag';
 import useIsClaimed from '../../../hooks/SaleTemplateV1/useIsClaimed';
 import ClaimButton from './ClaimButton';
 import TxSentToast from '../../TxSentToast';
-import WithdrawUnclaimedToken from './WithdrawUnclaimedToken';
 import WithdrawProvidedETH from './WithdrawProvidedETH';
 import WithdrawERC20 from './WithdrawERC20';
 import { getDecimalsForView, getEtherscanLink, tokenAmountFormat } from 'lib/utils';
@@ -279,10 +278,6 @@ export default function SaleTemplateV1({sale, refetchSale, metaData, refetchMeta
 
                                 <chakra.div textAlign={'center'}>
                                     <WithdrawProvidedETH  sale={sale} onSuccessConfirm={refetchSale} />
-                                </chakra.div>
-
-                                <chakra.div textAlign={'center'}>
-                                    <WithdrawUnclaimedToken sale={sale} onSuccessConfirm={refetchSale} />
                                 </chakra.div>
                             </Stack>
                         </CardBody>
