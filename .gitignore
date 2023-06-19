@@ -35,6 +35,10 @@ yarn-error.log*
 # vercel
 .vercel
 
+# Cypress
+apps/web/tests/e2e/screenshots/
+apps/web/tests/e2e/videos/
+
 # Subgraph
 subgraph/generated
 subgraph/tests/.latest.json
