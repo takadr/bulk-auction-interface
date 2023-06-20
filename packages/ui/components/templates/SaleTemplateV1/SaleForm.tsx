@@ -128,7 +128,7 @@ export default function SaleForm({formikProps, address, approvals, writeFn, toke
                     </Flex>
                     
                     <Flex alignItems={'center'}>
-                        <NumberInput flex="1" name="distributeAmount" value={formikProps.values.distributeAmount} precision={tokenData ? getDecimalsForView(getBigNumber(tokenData?.totalSupply.value.toString()), tokenData?.decimals) : 0} min={0} max={Number.MAX_SAFE_INTEGER} onBlur={formikProps.handleBlur} onChange={(strVal: string, val: number) => 
+                        <NumberInput flex="1" name="distributeAmount" value={formikProps.values.distributeAmount} min={0} max={Number.MAX_SAFE_INTEGER} onBlur={formikProps.handleBlur} onChange={(strVal: string, val: number) => 
                             formikProps.setFieldValue('distributeAmount', strVal && Number(strVal) === val ? strVal : (isNaN(val) ? 0 : val))
                         }>
                             <NumberInputField/>
@@ -156,7 +156,7 @@ export default function SaleForm({formikProps, address, approvals, writeFn, toke
                         <Tooltip hasArrow label={'If the bid amount falls below this value, the auction will be void, and the bid amount will be refunded.'}><QuestionIcon mb={1} ml={1} /></Tooltip>
                     </FormLabel>
                     <Flex alignItems={'center'}>
-                        <NumberInput flex="1" name="minimalProvideAmount" value={formikProps.values.minimalProvideAmount} step={0.01} precision={2} min={0} max={10000000} onBlur={formikProps.handleBlur} onChange={(strVal: string, val: number) =>
+                        <NumberInput flex="1" name="minimalProvideAmount" value={formikProps.values.minimalProvideAmount} step={0.01} min={0} max={10000000} onBlur={formikProps.handleBlur} onChange={(strVal: string, val: number) =>
                             formikProps.setFieldValue('minimalProvideAmount', strVal && Number(strVal) === val ? strVal : (isNaN(val) ? 0 : val))
                         }>
                             <NumberInputField/>

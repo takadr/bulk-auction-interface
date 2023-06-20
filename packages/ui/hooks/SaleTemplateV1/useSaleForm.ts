@@ -47,7 +47,7 @@ export default function useSaleForm({
         startingAt: now + (60 * 60 * 24 * 7 * 1000),
         eventDuration: 60 * 60 * 24 * 7,
         distributeAmount: 1,
-        minimalProvideAmount: 10,
+        minimalProvideAmount: 0,
         owner: address,
     }
 
