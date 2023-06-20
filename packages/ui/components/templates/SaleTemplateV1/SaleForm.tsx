@@ -1,4 +1,4 @@
-import { ReactElement, useRef } from 'react';
+import { useRef } from 'react';
 import { 
     chakra,
     Button,
@@ -22,18 +22,17 @@ import {
     AlertDialogHeader,
     AlertDialogContent,
     AlertDialogOverlay,
-    AlertDialogCloseButton,
     useDisclosure,
     Stack,
     Divider,
     Select,
     Spinner,
 } from '@chakra-ui/react';
-import { ExternalLinkIcon, QuestionIcon, WarningTwoIcon } from '@chakra-ui/icons';
+import { ExternalLinkIcon, QuestionIcon } from '@chakra-ui/icons';
 import { useQuery } from '@apollo/client';
-import { CustomProvider, DateRangePicker } from 'rsuite';
+import { DateRangePicker } from 'rsuite';
 import { FormikProps } from 'formik';
-import { differenceInSeconds, addSeconds, format } from 'date-fns';
+import { differenceInSeconds, format } from 'date-fns';
 import { BigNumber, ethers } from 'ethers';
 import { getDecimalsForView, getEtherscanLink, tokenAmountFormat } from 'lib/utils';
 import Big, { getBigNumber, multiply } from 'lib/utils/bignumber';
@@ -83,7 +82,6 @@ export default function SaleForm({formikProps, address, approvals, writeFn, toke
                         <Tooltip hasArrow label={'TODO explanation'}><QuestionIcon mb={1} ml={1} /></Tooltip>
                     </FormLabel>
                     <DateRangePicker
-                        // className={colorMode === 'light' ? 'rs-theme-high-contrast' : 'rs-theme-dark'}
                         onEnter={() => {
                             formikProps.setTouched({startingAt: true, eventDuration: true});
                             setTimeout(formikProps.validateForm, 200)
@@ -113,19 +111,11 @@ export default function SaleForm({formikProps, address, approvals, writeFn, toke
                                 setTimeout(formikProps.validateForm, 200)
                             }
                         }
-                        // value={
-                        //     [
-                        //         new Date(formikProps.values.startingAt), 
-                        //         new Date(formikProps.values.startingAt + formikProps.values.eventDuration*1000)
-                        //     ]}
                         format="yyyy-MM-dd HH:mm:ss"
                         cleanable={false}
                         defaultValue={[new Date(formikProps.values.startingAt), new Date(formikProps.values.startingAt + formikProps.values.eventDuration*1000)]}
                     />
                     <chakra.span fontSize={'sm'} ml={2}>({format(0, 'z')})</chakra.span>
-                    {/* {new Date(formikProps.values.startingAt).toLocaleString()}
-                    -
-                    {new Date(formikProps.values.startingAt + formikProps.values.eventDuration*1000).toLocaleString()} */}
                     <FormErrorMessage>{formikProps.errors.startingAt}</FormErrorMessage>
                     <FormErrorMessage>{formikProps.errors.eventDuration}</FormErrorMessage>
                 </FormControl>
@@ -156,7 +146,6 @@ export default function SaleForm({formikProps, address, approvals, writeFn, toke
                     { !!Number(formikProps.values.distributeAmount) && !!tokenData && !!multiply(formikProps.values.distributeAmount, Big(10).pow(tokenData.decimals)).lt(1000) &&
                         <Alert status='warning' py={2} px={2}>
                             <AlertIcon />
-                            {/* <WarningTwoIcon color={'yellow.400'} mr={1} /> */}
                             <chakra.span fontSize={'sm'}>Due to the small amount of distribution, there is a possibility that allocations cannot be made to all participants. Tokens that become unallocated cannot be refunded. Please consider increasing the distribution amount.</chakra.span>
                         </Alert>
                     }
@@ -168,7 +157,6 @@ export default function SaleForm({formikProps, address, approvals, writeFn, toke
                     </FormLabel>
                     <Flex alignItems={'center'}>
                         <NumberInput flex="1" name="minimalProvideAmount" value={formikProps.values.minimalProvideAmount} step={0.01} precision={2} min={0} max={10000000} onBlur={formikProps.handleBlur} onChange={(strVal: string, val: number) =>
-                            // formikProps.setFieldValue('minimalProvideAmount', val)
                             formikProps.setFieldValue('minimalProvideAmount', strVal && Number(strVal) === val ? strVal : (isNaN(val) ? 0 : val))
                         }>
                             <NumberInputField/>

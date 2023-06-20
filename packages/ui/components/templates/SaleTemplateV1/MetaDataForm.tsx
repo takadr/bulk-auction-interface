@@ -33,8 +33,6 @@ export default function MetaDataForm({formikProps, waitFn, onSkip}: {formikProps
                         </FormLabel>
                         <HStack>
                             <Input 
-                                // isReadOnly={!!waitFn} 
-                                // isDisabled={!!waitFn}
                                 isReadOnly={true} 
                                 isDisabled={true}
                                 fontSize={'sm'} 
@@ -43,7 +41,7 @@ export default function MetaDataForm({formikProps, waitFn, onSkip}: {formikProps
                                 onBlur={formikProps.handleBlur}
                                 onChange={formikProps.handleChange}
                                 value={formikProps.values.id}
-                                placeholder={waitFn && waitFn.isLoading ? 'Waiting for the transaction to be confirmed...' :'e.g.) 0x0123456789012345678901234567890123456789'} />
+                                placeholder={waitFn && waitFn.isLoading ? 'Waiting for the transaction to be confirmed...' : ''} />
                             { waitFn && waitFn.isLoading && <Spinner  /> }
                         </HStack>
                         <FormErrorMessage>{formikProps.errors.id}</FormErrorMessage>
@@ -53,7 +51,7 @@ export default function MetaDataForm({formikProps, waitFn, onSkip}: {formikProps
                         <FormLabel htmlFor='title' alignItems={'baseline'}>Title
                             <Tooltip hasArrow label={'TODO explanation'}><QuestionIcon mb={1} ml={1} /></Tooltip>
                         </FormLabel>
-                        <Input id="title" name="title" maxLength={100} onBlur={formikProps.handleBlur} onChange={formikProps.handleChange} value={formikProps.values.title} placeholder='e.g.) DFGC Donation Event' />
+                        <Input id="title" name="title" maxLength={100} onBlur={formikProps.handleBlur} onChange={formikProps.handleChange} value={formikProps.values.title} placeholder='e.g. DFGC Donation Event' />
                         <FormErrorMessage>{formikProps.errors.title}</FormErrorMessage>
                     </FormControl>
 

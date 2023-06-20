@@ -34,7 +34,6 @@ export default function useWithdrawERC20Onsale({
   const writeFn = useContractWrite({
     ...prepareFn.config,
     onSuccess(data) {
-        console.log('Withdrew!', data)
         onSuccessWrite && onSuccessWrite(data);
     },
     onError(e: Error) {

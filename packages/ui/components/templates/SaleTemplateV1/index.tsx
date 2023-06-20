@@ -1,12 +1,11 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState } from 'react';
 import { Container, Heading, Image, Flex, Box, Button, FormControl, FormLabel, FormErrorMessage, NumberInput, NumberInputField, NumberInputStepper, NumberIncrementStepper, NumberDecrementStepper, Tooltip, Stack, Divider, chakra, useInterval, useToast, Link, HStack, Tag, Card, CardHeader, CardBody, StackDivider, SkeletonCircle, Skeleton, SkeletonText, Alert, AlertIcon, AlertTitle, AlertDescription, CloseButton} from '@chakra-ui/react';
-import { CheckCircleIcon, ExternalLinkIcon, InfoIcon, QuestionIcon } from '@chakra-ui/icons';
+import { ExternalLinkIcon, InfoIcon, QuestionIcon } from '@chakra-ui/icons';
 import { useFormik } from 'formik';
-import { useWaitForTransaction, useContractEvent, usePrepareSendTransaction, useSendTransaction, useBalance } from 'wagmi';
+import { useWaitForTransaction, usePrepareSendTransaction, useSendTransaction, useBalance } from 'wagmi';
 import { ApolloQueryResult } from '@apollo/client';
 import { KeyedMutator } from 'swr';
 import Big, { getBigNumber } from 'lib/utils/bignumber';
-import { BigNumber, utils } from 'ethers';
 import CalendarInCircle from './CalendarInCircle';
 import PersonalStatistics from './PersonalStatistics';
 import StatisticsInCircle from './StatisticsInCircle';
@@ -19,7 +18,7 @@ import ClaimButton from './ClaimButton';
 import TxSentToast from '../../TxSentToast';
 import WithdrawProvidedETH from './WithdrawProvidedETH';
 import WithdrawERC20 from './WithdrawERC20';
-import { getDecimalsForView, getEtherscanLink, tokenAmountFormat } from 'lib/utils';
+import { getDecimalsForView, getEtherscanLink, tokenAmountFormat, parseEther } from 'lib/utils';
 import { CHAIN_NAMES } from 'lib/constants';
 
 type SaleTemplateV1Params = {
@@ -58,25 +57,6 @@ export default function SaleTemplateV1({sale, refetchSale, metaData, refetchMeta
         refetchProvided();
     }, 10000);
 
-    // useContractEvent({
-    //     address: sale.id as `0x${string}`,
-    //     abi: SaleTemplateV1ABI,
-    //     eventName: 'Received',
-    //     listener(account, amount) {
-    //         refetchSale();
-    //     },
-    // });
-    // useContractEvent({
-    //     address: sale.id as `0x${string}`,
-    //     abi: SaleTemplateV1ABI,
-    //     eventName: 'Claimed',
-    //     listener(account, userShare, allocation) {
-    //         if(address && (account as string).toLowerCase() === address.toLowerCase()) {
-    //             refetchSale();
-    //         }
-    //     },
-    // })
-
     const handleSubmit = async (values: {[key: string]: number}) => {
         const result = await sendTransactionAsync?.();
     };
@@ -99,8 +79,9 @@ export default function SaleTemplateV1({sale, refetchSale, metaData, refetchMeta
     const { config, isError } = usePrepareSendTransaction({
         request: {
             to: contractAddress,
-            value: formikProps.values.amount ? utils.parseEther(formikProps.values.amount.toString()) : undefined,
+            value: formikProps.values.amount ? parseEther(formikProps.values.amount) : undefined,
         },
+        enabled: started && !ended
     });
 
     const { data, sendTransactionAsync, isLoading: isLoadingSendTX } = useSendTransaction({
@@ -157,7 +138,6 @@ export default function SaleTemplateV1({sale, refetchSale, metaData, refetchMeta
                     objectFit='cover'
                     w={'150px'}
                     h={'150px'}
-                    // maxW={{ base: '100%', sm: '200px' }}
                     src={metaData.logoURL ? metaData.logoURL : 'https://dummyimage.com/200x200/bbb/fff.png&text=No+Image'}
                     alt={metaData.title}
                     />
@@ -207,12 +187,18 @@ export default function SaleTemplateV1({sale, refetchSale, metaData, refetchMeta
                                 <Tooltip hasArrow label={'TODO explanation'}><QuestionIcon mb={1} ml={1} /></Tooltip>
                             </FormLabel>
                             <Flex alignItems={'center'}>
-                                {
-                                    //TODO Set max as account balance
-                                }
-                                <NumberInput isDisabled={!started} flex="1" name="amount" value={formikProps.values.amount} step={0.01} max={balanceData ? Number(balanceData.formatted) : 100} onBlur={formikProps.handleBlur} onChange={(strVal: string, val: number) =>
-                                    formikProps.setFieldValue('amount', strVal && Number(strVal) === val ? strVal : (isNaN(val) ? 0 : val))
-                                }>
+                                <NumberInput 
+                                    isDisabled={!started} 
+                                    flex="1" 
+                                    name="amount" 
+                                    value={formikProps.values.amount} 
+                                    step={0.01} 
+                                    max={balanceData ? Number(balanceData.formatted) : undefined} 
+                                    onBlur={formikProps.handleBlur} 
+                                    onChange={(strVal: string, val: number) =>
+                                        formikProps.setFieldValue('amount', strVal && Number(strVal) === val ? strVal : (isNaN(val) ? 0 : val))
+                                    }
+                                >
                                     <NumberInputField/>
                                     <NumberInputStepper>
                                         <NumberIncrementStepper />
