@@ -1,3 +1,4 @@
+import { FC, useState, useContext, useEffect } from 'react';
 import {
     chakra,
     Tag,
@@ -5,7 +6,6 @@ import {
     Flex,
     Container,
     Heading,
-    useColorMode,
     Button,
     HStack,
     Avatar,
@@ -20,48 +20,35 @@ import {
     MenuList,
     MenuItem,
 } from '@chakra-ui/react';
-import { FC, useState, useContext, useEffect } from 'react';
-import Router from 'next/router';
 import { ChevronDownIcon } from '@chakra-ui/icons';
-import { useAccount, useEnsAvatar, useEnsName, useDisconnect, useNetwork, useSwitchNetwork, Chain } from 'wagmi';
+import Router from 'next/router';
+import { useAccount, useEnsAvatar, useEnsName, useDisconnect, useNetwork } from 'wagmi';
 import ProvidersList from './ProvidersList';
 import { CurrentUserContext } from './providers/CurrentUserProvider';
 import SignInButton from './SignInButton';
 import ProviderLogo from './ProviderLogo';
+import { useIsMounted } from '../hooks/useIsMounted';
 
 type HeaderProps = {
     title?: string;
-    chain: (Chain & { unsupported?: boolean | undefined }) | undefined;
 };
 
-export const Header: FC<HeaderProps> = ({title, chain}: HeaderProps) => {
+export const Header: FC<HeaderProps> = ({title}) => {
+    const isMounted = useIsMounted();
+    const { chain } = useNetwork();
     const providersListDisclosure = useDisclosure();
     const toast = useToast({position: 'top-right', isClosable: true,})
     const { currentUser, mutate } = useContext(CurrentUserContext);
-    const { address, isConnected: _isConnected, connector } = useAccount();
+    const { address, isConnected, connector } = useAccount();
     const { data: ensAvatar } = useEnsAvatar({ address: currentUser ? currentUser.address : address, staleTime: 1000 * 60 * 60 * 1 });
     const { data: ensName } = useEnsName({ address: currentUser ? currentUser.address : address, staleTime: 1000 * 60 * 60 * 1 });
-    const [chainName, setChainName] = useState<string>('')
     const [addressString, setAddressString] = useState<string>('')
-    const [isConnected, setIsConnected] = useState<boolean>(false)
     const { disconnect } = useDisconnect();
-
-    useEffect(() => {
-        if(typeof chain === 'undefined'){
-            setChainName('')
-        } else {
-            setChainName(chain.unsupported ? 'Unsupported Chain' : chain.name)
-        }
-    }, [chain])
 
     useEffect(() => {
         const _address = currentUser ? currentUser.address : address;
         setAddressString(`${_address?.slice(0, 5)}...${_address?.slice(-4)}`)
     }, [currentUser, address])
-
-    useEffect(() => {
-        setIsConnected(_isConnected)
-    }, [_isConnected])
 
     const noConnectedMenu = () => {
         return (
@@ -80,7 +67,7 @@ export const Header: FC<HeaderProps> = ({title, chain}: HeaderProps) => {
             <Menu>
                 <HStack spacing={1}>
                     { connector?.id && <ProviderLogo display={{ base: 'none', md: 'flex' }} width={'26px'} connectorId={connector.id} /> }
-                    <Tag size={'sm'} display={{ base: 'none', md: 'flex' }}>{chainName}</Tag>
+                    <Tag size={'sm'} display={{ base: 'none', md: 'flex' }}>{chain?.unsupported ? 'Unsupported Chain' : chain?.name}</Tag>
                     <MenuButton>
                         <HStack>
                             { ensName && ensAvatar && <Avatar
@@ -103,7 +90,7 @@ export const Header: FC<HeaderProps> = ({title, chain}: HeaderProps) => {
                     </MenuButton>
                     <MenuList zIndex={101}>
                         <HStack spacing={1} px={2} display={{ base: 'block', md: 'none' }}>
-                            <Tag size={'sm'}>{chainName}</Tag>
+                            <Tag size={'sm'}>{chain?.unsupported ? 'Unsupported Chain' : chain?.name}</Tag>
                             { currentUser && <Tag size={'sm'}>Signed in</Tag>}
                         </HStack>
                         {
@@ -135,6 +122,9 @@ export const Header: FC<HeaderProps> = ({title, chain}: HeaderProps) => {
             </>
         )
     }
+    // To avoid hydration issues
+    // https://github.com/wagmi-dev/wagmi/issues/542#issuecomment-1144178142
+    if (!isMounted) return null
 
     return (
         <Box px={{base: 0, md: 4}}  position={'sticky'} top={'0'} zIndex={100} bg={'chakra-body-bg'} opacity={0.975}>
