@@ -46,7 +46,12 @@ export default function DashboardPage() {
                             <chakra.div mt={4} textAlign={'right'}>
                                 <Button onClick={saleFormModalDisclosure.onOpen}><AddIcon fontSize={'sm'} mr={2} />Create new sale</Button>
                             </chakra.div>
-                            <SaleFormModal isOpen={saleFormModalDisclosure.isOpen} onClose={saleFormModalDisclosure.onClose} onSubmitSuccess={refetch} />
+                            <SaleFormModal 
+                                isOpen={saleFormModalDisclosure.isOpen} 
+                                onClose={saleFormModalDisclosure.onClose} 
+                                onDeployConfirmed={refetch}
+                                onInformationSaved={refetch}
+                            />
                             <Stack mt={4} spacing={8}>
                                 {
                                     loading || !data ? <>

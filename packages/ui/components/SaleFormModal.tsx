@@ -7,7 +7,7 @@ import {
     ModalBody,
     ModalCloseButton,
 } from '@chakra-ui/react';
-import { Button, useToast, Flex, chakra, useColorMode } from '@chakra-ui/react';
+import { useToast, useColorMode } from '@chakra-ui/react';
 import { useAccount, useContractEvent } from 'wagmi';
 import { CustomProvider } from 'rsuite';
 import FactoryABI from 'lib/constants/abis/Factory.json';
@@ -18,7 +18,16 @@ import MetaDataForm from './templates/SaleTemplateV1/MetaDataForm';
 import useMetaDataForm from '../hooks/SaleTemplateV1/useMetaDataForm';
 import TxSentToast from './TxSentToast';
 
-export default function SaleFormModal({isOpen, onClose, onSubmitSuccess}: {isOpen: boolean, onClose: () => void, onSubmitSuccess?: () => void}) {
+type SaleFormModalProps = {
+    isOpen: boolean;
+    onClose: () => void;
+    onDeploy?: () => void;
+    onDeployConfirmed?: () => void;
+    onInformationSaved?: () => void;
+    onInformationCanceled?: () => void;
+}
+
+export default function SaleFormModal({isOpen, onClose, onDeploy, onDeployConfirmed, onInformationSaved, onInformationCanceled}: SaleFormModalProps) {
     const { address } = useAccount();
     const toast = useToast({position: 'top-right', isClosable: true,});
     const { colorMode, setColorMode, toggleColorMode } = useColorMode();
@@ -29,7 +38,7 @@ export default function SaleFormModal({isOpen, onClose, onSubmitSuccess}: {isOpe
         address: address as `0x${string}`,
         onSubmitSuccess: (result) => {
             setStep(2);
-            onSubmitSuccess && onSubmitSuccess();
+            onDeploy && onDeploy();
             toast({
                 title: 'Transaction sent!',
                 status: 'success',
@@ -45,6 +54,7 @@ export default function SaleFormModal({isOpen, onClose, onSubmitSuccess}: {isOpe
             })
         },
         onWaitForTransactionSuccess: (result: any) => {
+            onDeployConfirmed && onDeployConfirmed();
             toast({
                 title: `Transaction confirmed!`,
                 status: 'success',
@@ -87,7 +97,7 @@ export default function SaleFormModal({isOpen, onClose, onSubmitSuccess}: {isOpe
         minimumProvided: formikProps.values.minimalProvideAmount,
         onSubmitSuccess: (response) => {
             handleClose();
-            onSubmitSuccess && onSubmitSuccess();
+            onInformationSaved && onInformationSaved();
             toast({
                 title: `Sale information successfully saved!`,
                 status: 'success',
@@ -108,7 +118,11 @@ export default function SaleFormModal({isOpen, onClose, onSubmitSuccess}: {isOpe
         abi: FactoryABI,
         eventName: 'Deployed',
         listener(templateName, deployedAddr, tokenAddr, owner) {
-            if((owner as string).toLowerCase() === (address as string).toLowerCase() && (tokenAddr as string).toLowerCase() === (formikProps.values.token as string).toLowerCase()) {
+            if(
+                formikProps.values.token && 
+                (owner as string).toLowerCase() === (address as string).toLowerCase() && 
+                (tokenAddr as string).toLowerCase() === (formikProps.values.token as string).toLowerCase()
+            ) {
                 setContractAddress(deployedAddr as `0x${string}`);
             }
         },
@@ -142,7 +156,10 @@ export default function SaleFormModal({isOpen, onClose, onSubmitSuccess}: {isOpe
                             tokenData={tokenData}
                             balance={balance}
                         /> :
-                        <MetaDataForm formikProps={metaFormikProps} waitFn={waitFn} onSkip={handleClose} />
+                        <MetaDataForm formikProps={metaFormikProps} waitFn={waitFn} onSkip={() => {
+                            onInformationCanceled && onInformationCanceled()
+                            handleClose()
+                        }} />
                     }
                     
                 </ModalBody>
