@@ -50,7 +50,7 @@ export default function SaleForm({formikProps, address, approvals, writeFn, toke
     return (
         <div>
             <form ref={containerRef} onSubmit={formikProps.handleSubmit}>
-                <FormControl isInvalid={!!formikProps.errors.token && !!formikProps.touched.token}>
+                <FormControl isInvalid={!!formikProps.errors.templateName && !!formikProps.touched.templateName}>
                     <FormLabel htmlFor='token' alignItems={'baseline'}>Sale Template
                         <Tooltip hasArrow label={'TODO explanation'}><QuestionIcon mb={1} ml={1} /></Tooltip>
                     </FormLabel>
