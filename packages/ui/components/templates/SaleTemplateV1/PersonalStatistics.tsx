@@ -1,6 +1,6 @@
 import { WarningIcon } from "@chakra-ui/icons";
 import { chakra, BoxProps, Card, CardBody, Stack, StackDivider, Flex } from "@chakra-ui/react";
-import { getDecimalsForView, getExpectedAmount, tokenAmountFormat } from "lib/utils";
+import { etherAmountFormat, getDecimalsForView, getExpectedAmount, tokenAmountFormat } from "lib/utils";
 import Big, { add, multiply } from "lib/utils/bignumber";
 
 interface Props {
@@ -32,8 +32,8 @@ export default function PersonalStatistics({
   }: Props & BoxProps) {
     const inputValueInBig = multiply(Big(inputValue), Big(10).pow(providedTokenDecimal));
     const expectedAmount = tokenAmountFormat(getExpectedAmount(myTotalProvided, inputValueInBig, totalProvided, distributeAmount), distributedTokenDecimal, getDecimalsForView(distributeAmount, distributedTokenDecimal));
-    const sumOfProvidedAmount = tokenAmountFormat(add(myTotalProvided, inputValueInBig), providedTokenDecimal, 2);
-    const fixedProvidedAmount = tokenAmountFormat(myTotalProvided, providedTokenDecimal, 2);
+    const sumOfProvidedAmount = etherAmountFormat(add(myTotalProvided, inputValueInBig));
+    const fixedProvidedAmount = etherAmountFormat(myTotalProvided);
     const inputtingValueInFormat = tokenAmountFormat(inputValueInBig, providedTokenDecimal, 2);
 
     // if(isLoading) {
@@ -83,11 +83,6 @@ export default function PersonalStatistics({
                   )
                 </chakra.span>
                 }
-                {parseFloat(sumOfProvidedAmount) === 0 && (
-                  <chakra.p fontSize={'sm'} opacity={'.75'} color={'yellow.500'}>
-                    <WarningIcon /> Your contribution is too small so that it is shown as 0
-                  </chakra.p>
-                )}
               </chakra.div>
             </Flex>
           ) : (
@@ -101,11 +96,6 @@ export default function PersonalStatistics({
                   {fixedProvidedAmount}{' '}
                   {providedTokenSymbol.toUpperCase()}
                   </chakra.p>
-                  {parseFloat(fixedProvidedAmount) === 0 && (
-                    <chakra.p fontSize={'sm'} opacity={'.75'} color={'yellow.500'}>
-                      <WarningIcon /> Your contribution is too small so that it is shown as 0
-                    </chakra.p>
-                  )}
                 </chakra.div>
               </Flex>
             )
