@@ -51,7 +51,7 @@ export default function SaleForm({formikProps, address, approvals, writeFn, toke
             <form ref={containerRef} onSubmit={formikProps.handleSubmit}>
                 <FormControl isInvalid={!!formikProps.errors.templateName && !!formikProps.touched.templateName}>
                     <FormLabel htmlFor='token' alignItems={'baseline'}>Sale Template
-                        <Tooltip hasArrow label={'TODO explanation'}><QuestionIcon mb={1} ml={1} /></Tooltip>
+                        <Tooltip hasArrow label={'You can choose the type of token sale'}><QuestionIcon mb={1} ml={1} /></Tooltip>
                     </FormLabel>
                     <Select isDisabled={true} id="templateName" name="templateName" onBlur={formikProps.handleBlur} onChange={formikProps.handleChange} value={formikProps.values.templateName}>
                         { !data && <option value=""><Spinner /></option> }
@@ -64,7 +64,7 @@ export default function SaleForm({formikProps, address, approvals, writeFn, toke
 
                 <FormControl mt={4} isInvalid={!!formikProps.errors.token && !!formikProps.touched.token}>
                     <FormLabel htmlFor='token' alignItems={'baseline'}>Token address
-                        <Tooltip hasArrow label={'TODO explanation'}><QuestionIcon mb={1} ml={1} /></Tooltip>
+                        <Tooltip hasArrow label={'Input the address of the token you would like to distribute in this sale'}><QuestionIcon mb={1} ml={1} /></Tooltip>
                     </FormLabel>
                     <Input id="token" name="token" onBlur={formikProps.handleBlur} onChange={(event: React.ChangeEvent<any>) => {
                         formikProps.setFieldTouched('distributeAmount');
@@ -79,7 +79,7 @@ export default function SaleForm({formikProps, address, approvals, writeFn, toke
 
                 <FormControl mt={4} isInvalid={(!!formikProps.errors.startingAt && !!formikProps.touched.startingAt) || (!!formikProps.errors.eventDuration && !!formikProps.touched.eventDuration)}>
                     <FormLabel alignItems={'baseline'}>Start date - End date
-                        <Tooltip hasArrow label={'TODO explanation'}><QuestionIcon mb={1} ml={1} /></Tooltip>
+                        <Tooltip hasArrow label={'Input the duration of the token sale. If the sale is successful, the collected ETH can be withdrawn starting 3 days after the end of the sale. If the sale is unsuccessful, the tokens can be withdrawn immediately after the end of the sale.'}><QuestionIcon mb={1} ml={1} /></Tooltip>
                     </FormLabel>
                     <DateRangePicker
                         onEnter={() => {
@@ -123,7 +123,7 @@ export default function SaleForm({formikProps, address, approvals, writeFn, toke
                 <FormControl mt={4} isInvalid={!!formikProps.errors.distributeAmount && !!formikProps.touched.distributeAmount}>
                     <Flex justifyContent={'space-between'}>
                         <FormLabel alignItems={'baseline'}>Total distribute amount
-                            <Tooltip hasArrow label={'TODO explanation'}><QuestionIcon mb={1} ml={1} /></Tooltip>
+                            <Tooltip hasArrow label={'Input the amount of tokens to be distributed in this sale.'}><QuestionIcon mb={1} ml={1} /></Tooltip>
                         </FormLabel>
                     </Flex>
                     
@@ -153,7 +153,7 @@ export default function SaleForm({formikProps, address, approvals, writeFn, toke
 
                 <FormControl mt={4} isInvalid={!!formikProps.errors.minimalProvideAmount && !!formikProps.touched.minimalProvideAmount}>
                     <FormLabel alignItems={'baseline'}>Minimum provide amount
-                        <Tooltip hasArrow label={'If the bid amount falls below this value, the auction will be void, and the bid amount will be refunded.'}><QuestionIcon mb={1} ml={1} /></Tooltip>
+                        <Tooltip hasArrow label={'If the bid amount falls below this value, the sale will be void, and the bid amount will be refunded.'}><QuestionIcon mb={1} ml={1} /></Tooltip>
                     </FormLabel>
                     <Flex alignItems={'center'}>
                         <NumberInput flex="1" name="minimalProvideAmount" value={formikProps.values.minimalProvideAmount} step={0.01} min={0} max={10000000} onBlur={formikProps.handleBlur} onChange={(strVal: string, val: number) =>
