@@ -140,6 +140,8 @@ export default function SaleFormModal({isOpen, onClose, onDeploy, onDeployConfir
             onClose={handleClose}
             closeOnOverlayClick={false}
             size={step === 1 ? 'lg' : '4xl'}
+            blockScrollOnMount={false}
+            isCentered={true}
         >
             <ModalOverlay />
             <ModalContent>
