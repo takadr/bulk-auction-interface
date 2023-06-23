@@ -15,7 +15,7 @@ export default function Web() {
   return (
     <Layout>
       <Hero currentUser={currentUser} mutate={mutate} />
-      <Container maxW={'container.lg'}>
+      <Container maxW={'container.xl'}>
         <Heading>Active Sales</Heading>
         <Stack spacing={8} py={8}>
             {
