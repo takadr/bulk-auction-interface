@@ -12,14 +12,13 @@ function usePrevious(value: any) {
   return ref.current;
 }
 
-export default memo(function SignInButton({
+export default function SignInButton({
     onSuccess,
     onError,
     ...buttonProps
   }: {
     onSuccess: (args: { address: string }) => void
     onError: (args: { error: Error }) => void
-    nonce?: string
   } & ButtonProps) {
     const [state, setState] = useState<{
       loading?: boolean
@@ -27,28 +26,16 @@ export default memo(function SignInButton({
     const providersListDisclosure = useDisclosure();
     const [continueSignIn, setContinueSignIn] = useState(false);
     const fetchNonce = async () => {
-      try {
-        const nonceRes = await fetch('/api/nonce')
-        const nonce = await nonceRes.text()
-        return nonce
-      } catch (error) {
-        // setState((x) => ({ ...x, error: error as Error }))
-      }
+      const nonceRes = await fetch('/api/nonce')
+      const nonce = await nonceRes.text()
+      return nonce
     }
     const { address, isConnected } = useAccount({
       onConnect: async ({address, connector}) => {
-        console.log('On Connect', address, connector)
       }
     })
     const { chain } = useNetwork()
     const { signMessageAsync } = useSignMessage()
-   
-    // Pre-fetch random nonce when button is rendered
-    // to ensure deep linking works for WalletConnect
-    // users on iOS when signing the SIWE message
-    useEffect(() => {
-      // fetchNonce()
-    }, [])
 
     useEffect(() => {
       !prevIsConnected && isConnected && continueSignIn && signIn()
@@ -94,7 +81,6 @@ export default memo(function SignInButton({
       } catch (error) {
         setState((x) => ({ ...x, loading: false }))
         onError({ error: error as Error })
-        // fetchNonce()
       }
     }
    
@@ -112,7 +98,4 @@ export default memo(function SignInButton({
       </>
       
     )
-  }, (prevProps, nextProps) => {
-    if(prevProps.nonce === nextProps.nonce) { return true }
-    return false
-  })
+  }

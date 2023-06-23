@@ -4,7 +4,8 @@ import {
   Flex,
   Heading,
   Stack,
-  HStack
+  HStack,
+  useToast
 } from "@chakra-ui/react";
 import { KeyedMutator } from "swr";
 import { User } from "lib/types";
@@ -25,6 +26,8 @@ export default function Hero({
   mutate,
   ...rest
 }: HeroProps) {
+  const toast = useToast({position: 'top-right', isClosable: true,})
+  
   return (
     <Flex
       align="center"
@@ -78,6 +81,11 @@ export default function Hero({
                 onError={(args: any) => {
                     if ('error' in args) {
                         const error = args.error;
+                        toast({
+                          description: error.message,
+                          status: 'error',
+                          duration: 5000,
+                      })
                     }
                 }}
                 />
