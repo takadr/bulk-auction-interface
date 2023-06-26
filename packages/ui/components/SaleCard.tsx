@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react';
-import Link from 'next/link';
-import { chakra, Box, Divider, Skeleton, Tag, Heading, Card, CardBody, Progress, Text, Image, Stack, Flex, Button, useDisclosure, SkeletonText } from '@chakra-ui/react';
+import { chakra, Link, Box, Divider, Skeleton, Tag, Heading, Card, CardBody, Progress, Text, Image, Stack, Flex, Button, useDisclosure, SkeletonText } from '@chakra-ui/react';
 import { EditIcon } from '@chakra-ui/icons';
 import Big, { divideToNum, getBigNumber } from 'lib/utils/bignumber';
 import { Sale } from 'lib/types/Sale';
@@ -87,9 +86,9 @@ export default function SaleCard({ sale, editable=false }: { sale: Sale, editabl
             <Stack w={'full'}>
                 <CardBody>
                     <Flex flexDirection={{base: 'column', md: 'row'}}>
-                        <chakra.div flex={2} pr={4}>
+                        <chakra.div flex={10} pr={4}>
                             <Heading size='lg'>
-                                <Link href={`/sales/${sale.id}`}>{data?.metaData?.title ? data?.metaData?.title : 'Unnamed Sale'}</Link>
+                                <Link _hover={{opacity: .75}} href={`/sales/${sale.id}`}>{data?.metaData?.title ? data?.metaData?.title : 'Unnamed Sale'}</Link>
                                 { editable && <Button size={'sm'} ml={2} onClick={onOpen}><EditIcon mr={1} /> Edit</Button> }
                             </Heading>
                             <Text py='2'>
@@ -97,7 +96,7 @@ export default function SaleCard({ sale, editable=false }: { sale: Sale, editabl
                             </Text>
                             
                         </chakra.div>
-                        <chakra.div flex={1}>
+                        <chakra.div flex={7}>
                             <Flex justifyContent={'space-between'} alignItems={'baseline'}><chakra.span>Allocated to the sale</chakra.span>
                                 <chakra.span fontSize={'2xl'}>{tokenAmountFormat(sale.distributeAmount, sale.tokenDecimals, getDecimalsForView(getBigNumber(sale.distributeAmount), sale.tokenDecimals))}
                                     <chakra.span fontSize={'md'}> {sale.tokenSymbol}</chakra.span>
@@ -163,11 +162,11 @@ export const SaleCardSkeleton = () => {
         <Stack w={'full'}>
             <CardBody>
                 <Flex>
-                    <chakra.div flex={2} pr={4}>
+                    <chakra.div flex={10} pr={4}>
                         <Skeleton h={'20px'} />
                         <SkeletonText py='4' />
                     </chakra.div>
-                    <Stack flex={1} spacing={4}>
+                    <Stack flex={7} spacing={4}>
                         <Skeleton h={'20px'} borderRadius={'4px'} />
                         <Divider />
                         <Skeleton h={'20px'} borderRadius={'4px'} />

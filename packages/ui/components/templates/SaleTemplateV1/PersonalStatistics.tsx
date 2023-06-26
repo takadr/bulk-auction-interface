@@ -58,7 +58,7 @@ export default function PersonalStatistics({
                 </chakra.span>
                 {parseFloat(expectedAmount) === 0 && (
                   <chakra.p fontSize={'sm'} opacity={'.75'} color={'yellow.500'}>
-                    <WarningIcon /> Your contribution is too small so that it is shown as 0
+                    <WarningIcon /> The estimated token amount is less than the permitted number of decimals.
                   </chakra.p>
                 )}
               </chakra.div>

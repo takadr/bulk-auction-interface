@@ -68,7 +68,7 @@ export const validateMetaData = (metaData: MetaData, minimumProvided?: number) =
         errors.terms = 'Max length is 1000';
     }
     if(metaData.interimGoalAmount && metaData.finalGoalAmount && Number(metaData.interimGoalAmount) > Number(metaData.finalGoalAmount)) {
-        errors.finalGoalAmount = 'Final Goal Amount must be bigger than Interim Goal Amount';
+        errors.finalGoalAmount = 'Maximum total raised must be bigger than Target total raised';
     }
     if(metaData.projectURL && !URL_REGEX.test(metaData.projectURL)){
         errors.projectURL = 'Invalid URL format'
@@ -80,7 +80,7 @@ export const validateMetaData = (metaData: MetaData, minimumProvided?: number) =
         errors.otherURL = 'Invalid URL format'
     }
     if(minimumProvided && metaData.interimGoalAmount && Number(minimumProvided) > Number(metaData.interimGoalAmount)) {
-        errors.interimGoalAmount = `Interim Goal Amount must be bigger than or equal to Minimum provided (${minimumProvided} ETH)`
+        errors.interimGoalAmount = `Target total raised must be bigger than or equal to Minimum total raised (${minimumProvided} ETH)`
     }
     return errors;
 };
