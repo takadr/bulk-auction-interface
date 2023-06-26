@@ -228,8 +228,8 @@ export default function SaleForm({formikProps, address, approvals, writeFn, toke
                                         </div>
 
                                         <div>
-                                            <chakra.p>Total allocation to the sale</chakra.p>
-                                            <chakra.p fontWeight={'bold'} aria-label="Total allocation to the sale">
+                                            <chakra.p>Allocation to the sale</chakra.p>
+                                            <chakra.p fontWeight={'bold'} aria-label="Allocation to the sale">
                                                 {tokenData ? Number(formikProps.values.distributeAmount).toFixed(getDecimalsForView(getBigNumber(tokenData?.totalSupply.value.toString()), tokenData?.decimals)) : '-'} {tokenData?.symbol}
                                             </chakra.p>
                                         </div>
