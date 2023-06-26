@@ -79,7 +79,7 @@ describe('create-sale-spec', () => {
       const token = getToken()
       Promise.all([token.totalSupply(), token.decimals(), token.symbol()]).then(([totalSupply, decimals, symbol]) => {
         const tokenAmountWithFormat = tokenAmountFormat(multiply(Big(1000), Big(10).pow(decimals)), decimals, getDecimalsForView(getBigNumber(totalSupply.toString()), decimals))
-        cy.get('p[aria-label="Allocation to the sale"]').should('have.text', `${tokenAmountWithFormat} ${symbol}`).then(() => {
+        cy.get('p[aria-label="Allocated to the sale"]').should('have.text', `${tokenAmountWithFormat} ${symbol}`).then(() => {
           cy.get('p[aria-label="Sale Template"]').should('have.text', 'SaleTemplateV1');
           cy.get('p[aria-label="Token address"]').should('have.text', Cypress.env('TEST_TOKEN'));
           cy.get('p[aria-label="Start date - End date"]').should('have.text', `${format(start, 'yyyy/MM/dd HH:mm:ss')} - ${format(end, 'yyyy/MM/dd HH:mm:ss')}${' '}${format(new Date, '(z)')}`);
