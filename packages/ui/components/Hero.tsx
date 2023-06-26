@@ -21,7 +21,7 @@ type HeroProps = {
   
 export default function Hero({
   title="Bulksale maker(仮)",
-  subtitle="An inclusive and transparent token launchpad, offering a permissionless and fair launch model.",
+  subtitle="An inclusive and transparent token launchpad,\n offering a permissionless and fair launch model.",
   currentUser,
   mutate,
   ...rest
@@ -67,6 +67,7 @@ export default function Hero({
           fontWeight="normal"
           lineHeight={1.5}
           textAlign={'center'}
+          whiteSpace={'pre-line'}
         >
           {subtitle}
         </Heading>
