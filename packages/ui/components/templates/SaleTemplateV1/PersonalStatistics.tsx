@@ -67,7 +67,7 @@ export default function PersonalStatistics({
           {!isEnding ? (
             <Flex justifyContent={'space-between'}>
               <div>
-                Your total contribution:
+                Your contributed amount:
               </div>
               <chakra.div textAlign={'right'}>
                 <chakra.span fontWeight={'bold'} ml={2}>

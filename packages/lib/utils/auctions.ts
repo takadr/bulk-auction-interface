@@ -66,7 +66,7 @@ export async function batchFetchAuction(auctionIds: string[]): Promise<MetaData[
 }
 
 export async function addAuction(auction: MetaData): Promise<MetaData | undefined> {
-  // TODO Take Minimum provided into account
+  // TODO Take Minimum total raised into account
   // validateMetaData(auction, minimumProvided)
   const errors = validateMetaData(auction)
   if(Object.keys(errors).length > 0) {

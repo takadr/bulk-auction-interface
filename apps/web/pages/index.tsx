@@ -16,7 +16,7 @@ export default function Web() {
     <Layout>
       <Hero currentUser={currentUser} mutate={mutate} />
       <Container maxW={'container.xl'}>
-        <Heading>Active Sales</Heading>
+        <Heading>Live Sales</Heading>
         <Stack spacing={8} py={8}>
             {
                 activeSalesError && <Alert status={'error'}><AlertIcon />{activeSalesError.message}</Alert>
@@ -36,7 +36,7 @@ export default function Web() {
             }
         </Stack>
         <Flex alignItems={'center'} justifyContent={'center'} pb={8}>
-          <Button size={'lg'} onClick={() => Router.push('/sales')}>Browse Sales</Button>
+          <Button size={'lg'} onClick={() => Router.push('/sales')}>View All Sales</Button>
         </Flex>
       </Container>
     </Layout>

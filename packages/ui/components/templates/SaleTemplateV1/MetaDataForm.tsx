@@ -56,7 +56,7 @@ export default function MetaDataForm({formikProps, waitFn, onSkip}: {formikProps
                     </FormControl>
 
                     <FormControl mt={4} isInvalid={!!formikProps.errors.description && !!formikProps.touched.description}>
-                        <FormLabel alignItems={'baseline'}>Desctiption
+                        <FormLabel alignItems={'baseline'}>Description
                             <Tooltip hasArrow label={'Input the description of this sale'}><QuestionIcon mb={1} ml={1} /></Tooltip>
                         </FormLabel>
                         <Flex alignItems={'center'}>
@@ -68,8 +68,8 @@ export default function MetaDataForm({formikProps, waitFn, onSkip}: {formikProps
                     </FormControl>
 
                     <FormControl mt={4} isInvalid={!!formikProps.errors.terms && !!formikProps.touched.terms}>
-                        <FormLabel alignItems={'baseline'}>Disclaimers, Terms and Conditions
-                            <Tooltip hasArrow label={'Input the disclaimers and terms for this sale. You can click the "Use sample disclaimer text" button to input a standard disclaimer'}><QuestionIcon mb={1} ml={1} /></Tooltip>
+                        <FormLabel alignItems={'baseline'}>Disclaimers & Terms and Conditions
+                            <Tooltip hasArrow label={'Input the disclaimer and T&C for this sale, where applicable. You can click "Use sample disclaimer text" button to input a standard disclaimer.'}><QuestionIcon mb={1} ml={1} /></Tooltip>
                         </FormLabel>
                         <Textarea id="terms" name="terms" maxLength={1000} onBlur={formikProps.handleBlur} onChange={formikProps.handleChange} value={formikProps.values.terms} placeholder=''>
 
@@ -79,8 +79,8 @@ export default function MetaDataForm({formikProps, waitFn, onSkip}: {formikProps
                     </FormControl>
 
                     <FormControl mt={4} isInvalid={!!formikProps.errors.interimGoalAmount && !!formikProps.touched.interimGoalAmount}>
-                        <FormLabel alignItems={'baseline'}>Minimum Target Amount
-                            <Tooltip hasArrow label={'Set the target amount you wish to achieve in this sale. It will be displayed as the "Minimum target" to other users. You can change this value at any time, and it does not affect the success or failure of the sale itself'}><QuestionIcon mb={1} ml={1} /></Tooltip>
+                        <FormLabel alignItems={'baseline'}>Target total raised
+                            <Tooltip hasArrow label={'Set the target amount you wish to achieve in this sale. It will be displayed as the "Target total raised" to other users. You can change this value at any time, and it does not affect the success or failure of the sale itself'}><QuestionIcon mb={1} ml={1} /></Tooltip>
                         </FormLabel>
                         <Flex alignItems={'center'}>
                             <NumberInput flex="1" name="interimGoalAmount" value={formikProps.values.interimGoalAmount} step={0.01} precision={2} min={0} max={10000000} onBlur={formikProps.handleBlur} onChange={(strVal: string, val: number) =>
@@ -98,8 +98,8 @@ export default function MetaDataForm({formikProps, waitFn, onSkip}: {formikProps
                     </FormControl>
 
                     <FormControl mt={4} isInvalid={!!formikProps.errors.finalGoalAmount && !!formikProps.touched.finalGoalAmount}>
-                        <FormLabel alignItems={'baseline'}>Target Amount
-                            <Tooltip hasArrow label={'Set the target amount you wish to ideally achieve in this sale. This value will not be displayed to other users but regarded as the goal for the progress bar. You can change this value at any time, and it does not affect the success or failure of the sale itself. Also, users can put their ETH even after this target is achieved.'}><QuestionIcon mb={1} ml={1} /></Tooltip>
+                        <FormLabel alignItems={'baseline'}>Maximum total raised (for graphical use)
+                            <Tooltip hasArrow label={'Set the Maximum total raised, which will be solely used as the 100% value for the progress bar and won\'t be displayed elsewhere. You can change this value at any time, and it does not affect the success or failure of the sale itself. Also, users can buy even after this value is achieved.'}><QuestionIcon mb={1} ml={1} /></Tooltip>
                         </FormLabel>
                         <Flex alignItems={'center'}>
                             <NumberInput flex="1" name="finalGoalAmount" value={formikProps.values.finalGoalAmount} step={0.01} precision={2} min={0} max={10000000} onBlur={formikProps.handleBlur} onChange={(strVal: string, val: number) =>

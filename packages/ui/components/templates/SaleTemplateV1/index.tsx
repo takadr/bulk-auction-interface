@@ -176,15 +176,15 @@ export default function SaleTemplateV1({sale, refetchSale, metaData, refetchMeta
                 </Flex>
 
                 { metaData.terms && <Box mt={4} py={16}>
-                    <Heading size={'lg'} textAlign={'center'}>Disclaimers, Terms and Conditions</Heading>
+                    <Heading size={'lg'} textAlign={'center'}>Disclaimers & Terms and Conditions</Heading>
                     <chakra.p mt={2}>{metaData.terms}</chakra.p>
                 </Box> }
 
                 { started && !ended && <Box>
                     <form onSubmit={formikProps.handleSubmit}>
                         <FormControl flex={1} mt={4} isInvalid={!!formikProps.errors.amount && !!formikProps.touched.amount}>
-                            <FormLabel alignItems={'baseline'}>Donation amount
-                                <Tooltip hasArrow label={'TODO explanation'}><QuestionIcon mb={1} ml={1} /></Tooltip>
+                            <FormLabel alignItems={'baseline'}>Contribute
+                                <Tooltip hasArrow label={'Input the amount you wish to contribute'}><QuestionIcon mb={1} ml={1} /></Tooltip>
                             </FormLabel>
                             <Flex alignItems={'center'}>
                                 <NumberInput 
@@ -207,7 +207,7 @@ export default function SaleTemplateV1({sale, refetchSale, metaData, refetchMeta
                                 </NumberInput>
                                 <chakra.div px={2}>{providedTokenSymbol}</chakra.div>
                                 <Button isLoading={isLoadingWaitTX || isLoadingSendTX} isDisabled={!sendTransactionAsync || !started} type='submit' variant='solid' colorScheme={'green'}>
-                                    Donate
+                                    Contribute
                                 </Button>
                             </Flex>
                             <FormErrorMessage>{formikProps.errors.amount}</FormErrorMessage>

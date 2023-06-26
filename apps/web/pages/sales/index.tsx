@@ -15,10 +15,10 @@ export default function SalePage() {
             <Container maxW="container.xl" py={16}>
             <Tabs variant='soft-rounded' colorScheme='green'>
                 <TabList>
-                    <Tab fontSize={{base: 'sm', md: 'md'}}>Active & Upcomming Sales</Tab>
-                    {/* <Tab fontSize={{base: 'sm', md: 'md'}}>Active Sales</Tab>
-                    <Tab fontSize={{base: 'sm', md: 'md'}}>Upcomming Sales</Tab> */}
-                    <Tab fontSize={{base: 'sm', md: 'md'}}>Closed Sales</Tab>
+                    <Tab fontSize={{base: 'sm', md: 'md'}}>Live & Upcoming Sales</Tab>
+                    {/* <Tab fontSize={{base: 'sm', md: 'md'}}>Live Sales</Tab>
+                    <Tab fontSize={{base: 'sm', md: 'md'}}>Upcoming Sales</Tab> */}
+                    <Tab fontSize={{base: 'sm', md: 'md'}}>Ended Sales</Tab>
                 </TabList>
                 <TabPanels mt={4}>
                     <TabPanel p={{base: 0, md: 4}}>

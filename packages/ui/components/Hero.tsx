@@ -21,7 +21,7 @@ type HeroProps = {
   
 export default function Hero({
   title="Bulksale maker(仮)",
-  subtitle="A Great tool for starting your own token sale",
+  subtitle="An inclusive and transparent token launchpad, offering a permissionless and fair launch model.",
   currentUser,
   mutate,
   ...rest
@@ -90,7 +90,7 @@ export default function Hero({
                 }}
                 />
             }
-            <Button size={'lg'} onClick={() => Router.push('/sales')}>Browse Sales</Button>
+            <Button size={'lg'} onClick={() => Router.push('/sales')}>View All Sales</Button>
         </HStack>
       </Stack>
     </Flex>

@@ -50,7 +50,7 @@ export default function SaleForm({formikProps, address, approvals, writeFn, toke
         <div>
             <form ref={containerRef} onSubmit={formikProps.handleSubmit}>
                 <FormControl isInvalid={!!formikProps.errors.templateName && !!formikProps.touched.templateName}>
-                    <FormLabel htmlFor='token' alignItems={'baseline'}>Sale Template
+                    <FormLabel htmlFor='token' alignItems={'baseline'}>Select Sale Templete
                         <Tooltip hasArrow label={'You can choose the type of token sale'}><QuestionIcon mb={1} ml={1} /></Tooltip>
                     </FormLabel>
                     <Select isDisabled={true} id="templateName" name="templateName" onBlur={formikProps.handleBlur} onChange={formikProps.handleChange} value={formikProps.values.templateName}>
@@ -64,7 +64,7 @@ export default function SaleForm({formikProps, address, approvals, writeFn, toke
 
                 <FormControl mt={4} isInvalid={!!formikProps.errors.token && !!formikProps.touched.token}>
                     <FormLabel htmlFor='token' alignItems={'baseline'}>Token address
-                        <Tooltip hasArrow label={'Input the address of the token you would like to distribute in this sale'}><QuestionIcon mb={1} ml={1} /></Tooltip>
+                        <Tooltip hasArrow label={'Input the address of the token you would like to allocate to this sale'}><QuestionIcon mb={1} ml={1} /></Tooltip>
                     </FormLabel>
                     <Input id="token" name="token" onBlur={formikProps.handleBlur} onChange={(event: React.ChangeEvent<any>) => {
                         formikProps.setFieldTouched('distributeAmount');
@@ -74,12 +74,12 @@ export default function SaleForm({formikProps, address, approvals, writeFn, toke
                 </FormControl>
 
                 <chakra.p color={'gray.400'} fontSize={'sm'} mt={1}>
-                    Don&apos;t have token yet? <Link color={'gray.300'} href="https://www.smartcontracts.tools/token-generator/ethereum/" target="_blank">ETHEREUM Token Generator <ExternalLinkIcon /></Link>
+                    Don&apos;t have a token yet? <Link color={'gray.300'} href="https://www.smartcontracts.tools/token-generator/ethereum/" target="_blank">ETHEREUM Token Generator <ExternalLinkIcon /></Link>
                 </chakra.p>
 
                 <FormControl mt={4} isInvalid={(!!formikProps.errors.startingAt && !!formikProps.touched.startingAt) || (!!formikProps.errors.eventDuration && !!formikProps.touched.eventDuration)}>
                     <FormLabel alignItems={'baseline'}>Start date - End date
-                        <Tooltip hasArrow label={'Input the duration of the token sale. If the sale is successful, the collected ETH can be withdrawn starting 3 days after the end of the sale. If the sale is unsuccessful, the tokens can be withdrawn immediately after the end of the sale.'}><QuestionIcon mb={1} ml={1} /></Tooltip>
+                        <Tooltip hasArrow label={'Input the duration of the token sale. If the sale is successful, the total raised can be withdrawn starting 3 days after the end of the sale. If the sale doesn’t reach the preset minimum total raised, the token can be withdrawn immediately after the end of the sale.'}><QuestionIcon mb={1} ml={1} /></Tooltip>
                     </FormLabel>
                     <DateRangePicker
                         onEnter={() => {
@@ -123,7 +123,7 @@ export default function SaleForm({formikProps, address, approvals, writeFn, toke
                 <FormControl mt={4} isInvalid={!!formikProps.errors.distributeAmount && !!formikProps.touched.distributeAmount}>
                     <Flex justifyContent={'space-between'}>
                         <FormLabel alignItems={'baseline'}>Total distribute amount
-                            <Tooltip hasArrow label={'Input the amount of tokens to be distributed in this sale.'}><QuestionIcon mb={1} ml={1} /></Tooltip>
+                            <Tooltip hasArrow label={'Input the amount of tokens to be allocated in this sale.'}><QuestionIcon mb={1} ml={1} /></Tooltip>
                         </FormLabel>
                     </Flex>
                     
@@ -146,14 +146,14 @@ export default function SaleForm({formikProps, address, approvals, writeFn, toke
                     { !!Number(formikProps.values.distributeAmount) && !!tokenData && !!multiply(formikProps.values.distributeAmount, Big(10).pow(tokenData.decimals)).lt(1000) &&
                         <Alert status='warning' py={2} px={2}>
                             <AlertIcon />
-                            <chakra.span fontSize={'sm'}>Due to the small amount of distribution, there is a possibility that allocations cannot be made to all participants. Tokens that become unallocated cannot be refunded. Please consider increasing the distribution amount.</chakra.span>
+                            <chakra.span fontSize={'sm'}>The allocation is too small, and some participants may not be able to complete their claims. Unclaimed tokens cannot be withdrawn by you either. Please consider increasing the allocation amount.</chakra.span>
                         </Alert>
                     }
                 </FormControl>
 
                 <FormControl mt={4} isInvalid={!!formikProps.errors.minimalProvideAmount && !!formikProps.touched.minimalProvideAmount}>
-                    <FormLabel alignItems={'baseline'}>Minimum provide amount
-                        <Tooltip hasArrow label={'If the bid amount falls below this value, the sale will be void, and the bid amount will be refunded.'}><QuestionIcon mb={1} ml={1} /></Tooltip>
+                    <FormLabel alignItems={'baseline'}>Minimum total raised
+                        <Tooltip hasArrow label={'The sale will be void if the total raised is less than this threshold, and the total raised will be refunded.'}><QuestionIcon mb={1} ml={1} /></Tooltip>
                     </FormLabel>
                     <Flex alignItems={'center'}>
                         <NumberInput flex="1" name="minimalProvideAmount" value={formikProps.values.minimalProvideAmount} step={0.01} min={0} max={10000000} onBlur={formikProps.handleBlur} onChange={(strVal: string, val: number) =>
@@ -228,15 +228,15 @@ export default function SaleForm({formikProps, address, approvals, writeFn, toke
                                         </div>
 
                                         <div>
-                                            <chakra.p>Total distribute amount</chakra.p>
-                                            <chakra.p fontWeight={'bold'} aria-label="Total distribute amount">
+                                            <chakra.p>Total allocation to the sale</chakra.p>
+                                            <chakra.p fontWeight={'bold'} aria-label="Total allocation to the sale">
                                                 {tokenData ? Number(formikProps.values.distributeAmount).toFixed(getDecimalsForView(getBigNumber(tokenData?.totalSupply.value.toString()), tokenData?.decimals)) : '-'} {tokenData?.symbol}
                                             </chakra.p>
                                         </div>
 
                                         <div>
-                                            <chakra.p>Minimum provide amount</chakra.p>
-                                            <chakra.p fontWeight={'bold'} aria-label="Minimum provide amount">{Number(formikProps.values.minimalProvideAmount).toFixed(2)} ETH</chakra.p>
+                                            <chakra.p>Minimum total raised</chakra.p>
+                                            <chakra.p fontWeight={'bold'} aria-label="Minimum total raised">{Number(formikProps.values.minimalProvideAmount).toFixed(2)} ETH</chakra.p>
                                         </div>
                                     </Stack>
                                 </AlertDialogBody>

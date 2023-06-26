@@ -55,7 +55,7 @@ export default function StatisticsInCircle({
           />
         </Tooltip>
         <Tooltip hasArrow label={<chakra.p textAlign={'center'} p={1}>
-            Minimum Target: {etherAmountFormat(interimGoalAmount)}ETH
+          Target total raised: {etherAmountFormat(interimGoalAmount)}ETH
             { totalProvided.gte(interimGoalAmount) && <><br /> Achieved 🎉</>}
           </chakra.p>}>
           <TriangleUpIcon 
@@ -78,7 +78,7 @@ export default function StatisticsInCircle({
           />
           <chakra.div textAlign={'center'} position={'absolute'} margin={'auto'} top={0} bottom={0} left={0} right={0} display={'flex'} flexDirection={'column'} justifyContent={'center'}>
             <Heading as={'h3'} fontSize={'lg'}>
-              Total Provided
+              Total raised
             </Heading>
             <chakra.div>
               <>
@@ -99,7 +99,7 @@ export default function StatisticsInCircle({
             <div>
               {!!interimGoalAmount && 
                 <chakra.div textAlign={'center'}>
-                  Minimum Target {etherAmountFormat(interimGoalAmount)}
+                  Target total raised {etherAmountFormat(interimGoalAmount)}
                   {providedTokenSymbol.toUpperCase()}
                   { 
                     totalProvided.gte(interimGoalAmount) && started && 
