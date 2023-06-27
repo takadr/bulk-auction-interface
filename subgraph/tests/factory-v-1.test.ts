@@ -23,19 +23,19 @@ describe("Describe Deployed event", () => {
     )
     let tokenAddr = Address.fromString(USDT_ADDRESS)
     let owner = Address.fromString("0x0000000000000000000000000000000000000003")
-    let distributeAmount = BigInt.fromI32(234)
+    let allocatedAmount = BigInt.fromI32(234)
     let startingAt = BigInt.fromI32(234)
     let eventDuration = BigInt.fromI32(234)
-    let minimalProvideAmount = BigInt.fromI32(234)
+    let minRaisedAmount = BigInt.fromI32(234)
     let newDeployedEvent = createDeployedEvent(
       templateName,
       deployedAddr,
       tokenAddr,
       owner,
-      distributeAmount,
+      allocatedAmount,
       startingAt,
       eventDuration,
-      minimalProvideAmount
+      minRaisedAmount
     )
 
     // Mock function calls
@@ -81,7 +81,7 @@ describe("Describe Deployed event", () => {
     assert.fieldEquals(
       "Sale",
       "0x0000000000000000000000000000000000000001",
-      "distributeAmount",
+      "allocatedAmount",
       "234"
     )
     assert.fieldEquals(
@@ -99,13 +99,13 @@ describe("Describe Deployed event", () => {
     assert.fieldEquals(
       "Sale",
       "0x0000000000000000000000000000000000000001",
-      "minimalProvideAmount",
+      "minRaisedAmount",
       "234"
     )
     assert.fieldEquals(
       "Sale",
       "0x0000000000000000000000000000000000000001",
-      "totalProvided",
+      "totalRaised",
       "0"
     )
     assert.fieldEquals(

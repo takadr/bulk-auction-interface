@@ -11,10 +11,10 @@ export function createDeployedEvent(
   deployedAddr: Address,
   tokenAddr: Address,
   owner: Address,
-  distributeAmount: BigInt,
+  allocatedAmount: BigInt,
   startingAt: BigInt,
   eventDuration: BigInt,
-  minimalProvideAmount: BigInt
+  minRaisedAmount: BigInt
 ): Deployed {
   let deployedEvent = changetype<Deployed>(newMockEvent())
 
@@ -40,8 +40,8 @@ export function createDeployedEvent(
   )
   deployedEvent.parameters.push(
     new ethereum.EventParam(
-      "distributeAmount",
-      ethereum.Value.fromUnsignedBigInt(distributeAmount)
+      "allocatedAmount",
+      ethereum.Value.fromUnsignedBigInt(allocatedAmount)
     )
   )
   deployedEvent.parameters.push(
@@ -58,8 +58,8 @@ export function createDeployedEvent(
   )
   deployedEvent.parameters.push(
     new ethereum.EventParam(
-      "minimalProvideAmount",
-      ethereum.Value.fromUnsignedBigInt(minimalProvideAmount)
+      "minRaisedAmount",
+      ethereum.Value.fromUnsignedBigInt(minRaisedAmount)
     )
   )
 

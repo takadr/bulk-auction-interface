@@ -25,19 +25,19 @@ describe("Describe entity assertions", () => {
     let deployedAddr = Address.fromString("0xa16081f360e3847006db660bae1c6d1b2e17ec2a")
     let tokenAddr = Address.fromString(USDT_ADDRESS)
     let owner = Address.fromString("0x0000000000000000000000000000000000000003")
-    let distributeAmount = BigInt.fromI32(234)
+    let allocatedAmount = BigInt.fromI32(234)
     let startingAt = BigInt.fromI32(234)
     let eventDuration = BigInt.fromI32(234)
-    let minimalProvideAmount = BigInt.fromI32(234)
+    let minRaisedAmount = BigInt.fromI32(234)
     let newDeployedEvent = createDeployedEvent(
       templateName,
       deployedAddr,
       tokenAddr,
       owner,
-      distributeAmount,
+      allocatedAmount,
       startingAt,
       eventDuration,
-      minimalProvideAmount
+      minRaisedAmount
     )
 
     // Mock function calls
@@ -73,7 +73,7 @@ describe("Describe entity assertions", () => {
     assert.fieldEquals(
       "Sale",
       "0xa16081f360e3847006db660bae1c6d1b2e17ec2a",
-      "totalProvided",
+      "totalRaised",
       "234"
     )
   })

@@ -21,9 +21,9 @@ export function handleDeployed(event: DeployedEvent): void {
   sale.tokenDecimals = fetchTokenDecimals(event.params.tokenAddr)
   sale.startingAt = event.params.startingAt
   sale.closingAt = event.params.startingAt.plus(event.params.eventDuration)
-  sale.distributeAmount = event.params.distributeAmount
-  sale.minimalProvideAmount = event.params.minimalProvideAmount
-  sale.totalProvided = BigInt.fromI32(0)
+  sale.allocatedAmount = event.params.allocatedAmount
+  sale.minRaisedAmount = event.params.minRaisedAmount
+  sale.totalRaised = BigInt.fromI32(0)
   sale.blockNumber = event.block.number
   sale.save()
   SaleTemplateV1.create(event.params.deployedAddr)

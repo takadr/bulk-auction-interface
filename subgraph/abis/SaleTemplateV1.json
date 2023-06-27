@@ -44,6 +44,19 @@
     "type": "event"
   },
   {
+    "inputs": [],
+    "name": "allocatedAmount",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
     "inputs": [
       {
         "internalType": "address",
@@ -64,19 +77,6 @@
   {
     "inputs": [],
     "name": "closingAt",
-    "outputs": [
-      {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [],
-    "name": "distributeAmount",
     "outputs": [
       {
         "internalType": "uint256",
@@ -127,7 +127,7 @@
       },
       {
         "internalType": "uint256",
-        "name": "distributeAmount_",
+        "name": "allocatedAmount_",
         "type": "uint256"
       },
       {
@@ -142,7 +142,7 @@
       },
       {
         "internalType": "uint256",
-        "name": "minimalProvideAmount_",
+        "name": "minRaisedAmount_",
         "type": "uint256"
       }
     ],
@@ -159,7 +159,7 @@
   },
   {
     "inputs": [],
-    "name": "minimalProvideAmount",
+    "name": "minRaisedAmount",
     "outputs": [
       {
         "internalType": "uint256",
@@ -191,7 +191,7 @@
         "type": "address"
       }
     ],
-    "name": "provided",
+    "name": "raised",
     "outputs": [
       {
         "internalType": "uint256",
@@ -217,7 +217,7 @@
   },
   {
     "inputs": [],
-    "name": "totalProvided",
+    "name": "totalRaised",
     "outputs": [
       {
         "internalType": "uint256",
@@ -237,7 +237,7 @@
   },
   {
     "inputs": [],
-    "name": "withdrawProvidedETH",
+    "name": "withdrawRaisedETH",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"

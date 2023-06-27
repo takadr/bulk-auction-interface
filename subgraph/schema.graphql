@@ -18,11 +18,11 @@ type Sale @entity {
   # Sale end timestamp
   closingAt: BigInt!
   # Total amount of distribution for during the sale
-  distributeAmount: BigInt!
+  allocatedAmount: BigInt!
   # Minimum amount of ETH (in Wei) for the success of the sale
-  minimalProvideAmount: BigInt!
+  minRaisedAmount: BigInt!
   # The total ETH amount of bidding that the sale raised (in Wei)
-  totalProvided: BigInt!
+  totalRaised: BigInt!
   # Block number deployed
   blockNumber: BigInt!
 }
