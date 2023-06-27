@@ -94,7 +94,7 @@ export default function SaleFormModal({isOpen, onClose, onDeploy, onDeployConfir
 
     const { formikProps: metaFormikProps } = useMetaDataForm({
         contractId: contractAddress,
-        minimumProvided: formikProps.values.minimalProvideAmount,
+        minRaisedAmount: formikProps.values.minRaisedAmount,
         onSubmitSuccess: (response) => {
             handleClose();
             onInformationSaved && onInformationSaved();

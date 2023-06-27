@@ -12,9 +12,9 @@ export const LIST_ACTIVE_AND_UPCOMING_SALE_QUERY = gql`
       tokenDecimals
       startingAt
       closingAt
-      distributeAmount
-      minimalProvideAmount
-      totalProvided
+      allocatedAmount
+      minRaisedAmount
+      totalRaised
       blockNumber
     }
   }
@@ -32,9 +32,9 @@ export const LIST_ACTIVE_SALE_QUERY = gql`
       tokenDecimals
       startingAt
       closingAt
-      distributeAmount
-      minimalProvideAmount
-      totalProvided
+      allocatedAmount
+      minRaisedAmount
+      totalRaised
       blockNumber
     }
   }
@@ -52,9 +52,9 @@ export const LIST_UPCOMING_SALE_QUERY = gql`
       tokenDecimals
       startingAt
       closingAt
-      distributeAmount
-      minimalProvideAmount
-      totalProvided
+      allocatedAmount
+      minRaisedAmount
+      totalRaised
       blockNumber
     }
   }
@@ -72,9 +72,9 @@ export const LIST_CLOSED_SALE_QUERY = gql`
       tokenDecimals
       startingAt
       closingAt
-      distributeAmount
-      minimalProvideAmount
-      totalProvided
+      allocatedAmount
+      minRaisedAmount
+      totalRaised
       blockNumber
     }
   }
@@ -92,9 +92,9 @@ export const LIST_MY_SALE_QUERY = gql`
       tokenDecimals
       startingAt
       closingAt
-      distributeAmount
-      minimalProvideAmount
-      totalProvided
+      allocatedAmount
+      minRaisedAmount
+      totalRaised
       blockNumber
     }
   }
@@ -112,9 +112,9 @@ export const GET_SALE_QUERY = gql`
       tokenDecimals
       startingAt
       closingAt
-      distributeAmount
-      minimalProvideAmount
-      totalProvided
+      allocatedAmount
+      minRaisedAmount
+      totalRaised
       blockNumber
     }
   }

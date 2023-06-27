@@ -14,7 +14,7 @@ import MetaDataForm from './templates/SaleTemplateV1/MetaDataForm';
 import useMetaDataForm from '../hooks/SaleTemplateV1/useMetaDataForm';
 import { MetaData } from 'lib/types/Sale';
 
-export default function MetaDataFormModal({isOpen, onClose, existingContractAddress, saleMetaData, minimumProvided, onSubmitSuccess}: {isOpen: boolean, onClose: () => void, onSuccess?: () => void, existingContractAddress?: `0x${string}`, saleMetaData?: MetaData, minimumProvided: number, onSubmitSuccess?: () => void}) {
+export default function MetaDataFormModal({isOpen, onClose, existingContractAddress, saleMetaData, minRaisedAmount, onSubmitSuccess}: {isOpen: boolean, onClose: () => void, onSuccess?: () => void, existingContractAddress?: `0x${string}`, saleMetaData?: MetaData, minRaisedAmount: number, onSubmitSuccess?: () => void}) {
     const { address } = useAccount();
     const toast = useToast({position: 'top-right', isClosable: true,});
     const { colorMode, setColorMode, toggleColorMode } = useColorMode();
@@ -27,7 +27,7 @@ export default function MetaDataFormModal({isOpen, onClose, existingContractAddr
 
     const { formikProps } = useMetaDataForm({
         contractId: contractAddress,
-        minimumProvided: minimumProvided,
+        minRaisedAmount: minRaisedAmount,
         saleMetaData,
         onSubmitSuccess: (response) => {
             onSubmitSuccess && onSubmitSuccess();

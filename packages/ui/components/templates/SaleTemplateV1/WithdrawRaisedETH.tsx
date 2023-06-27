@@ -1,7 +1,7 @@
 import { QuestionIcon } from "@chakra-ui/icons";
 import { useToast, Box, Heading, chakra, Button, Tooltip, Flex } from "@chakra-ui/react";
 import { useBalance } from "wagmi";
-import useWithdrawProvidedETH from '../../../hooks/useWithdrawProvidedETH';
+import useWithdrawRaisedETH from '../../../hooks/useWithdrawRaisedETH';
 import { Sale } from "lib/types/Sale";
 import { tokenAmountFormat } from "lib/utils";
 import { getBigNumber } from "lib/utils/bignumber";
@@ -11,10 +11,10 @@ type Props = {
     sale: Sale;
     onSuccessConfirm?: (data: any) => void;
 }
-export default function WithdrawProvidedETH({sale, onSuccessConfirm}: Props) {
+export default function WithdrawRaisedETH({sale, onSuccessConfirm}: Props) {
     const toast = useToast({position: 'top-right', isClosable: true,})
     const { data: balanceData, isLoading: isLoadingBalance } = useBalance({address: sale.id as `0x${string}`});
-    const {prepareFn: withdrawETHPrepareFn, writeFn: withdrawETHWriteFn, waitFn: withdrawETHWaitFn} = useWithdrawProvidedETH({ 
+    const {prepareFn: withdrawETHPrepareFn, writeFn: withdrawETHWriteFn, waitFn: withdrawETHWaitFn} = useWithdrawRaisedETH({ 
         targetAddress: sale.id as `0x${string}`, 
         onSuccessWrite: (data) => {
             toast({

@@ -9,14 +9,14 @@ export type Sale = {
     tokenSymbol: string;
     tokenDecimals: number;
     owner?: `0x${string}`;
-    distributeAmount: Big;
+    allocatedAmount: Big;
     startingAt: number; //Timestamp
     closingAt: number; //Timestamp
-    minimalProvideAmount: Big;
+    minRaisedAmount: Big;
     lockDuration?: number; //In sec
     expirationDuration?: number; //In sec
     feeRatePerMil?: number;
-    totalProvided: Big;
+    totalRaised: Big;
     blockNumber: string; // Deployed block number
 }
 
@@ -24,10 +24,10 @@ export type SaleForm = {
     templateName: string;
     token: `0x${string}` | null;
     owner: `0x${string}`;
-    distributeAmount: number;
+    allocatedAmount: number;
     startingAt: number; //Timestamp
     eventDuration: number; //Timestamp
-    minimalProvideAmount: number;
+    minRaisedAmount: number;
 }
 
 export type MetaData = {
@@ -38,8 +38,8 @@ export type MetaData = {
     projectURL?: string;
     logoURL?: string;
     otherURL?: string;
-    interimGoalAmount?: number;
-    finalGoalAmount?: number;
+    targetTotalRaised?: number;
+    maximumTotalRaised?: number;
     tokenName?: string;
     tokenSymbol?: string;
     tokenDecimals?: number;
@@ -53,7 +53,7 @@ export type Template = {
     addedAt: Big; //Timestamp
 }
 
-export const validateMetaData = (metaData: MetaData, minimumProvided?: number) => {
+export const validateMetaData = (metaData: MetaData, minRaisedAmount?: number) => {
     const errors: any = {};
     if(!metaData.id) {
         errors.id = 'Contract address is required';
@@ -64,11 +64,11 @@ export const validateMetaData = (metaData: MetaData, minimumProvided?: number) =
     if(metaData.description && metaData.description.length > 1000) {
         errors.description = 'Max length is 1000';
     }
-    if(metaData.terms && metaData.terms.length > 1000) {
-        errors.terms = 'Max length is 1000';
+    if(metaData.terms && metaData.terms.length > 2000) {
+        errors.terms = 'Max length is 2000';
     }
-    if(metaData.interimGoalAmount && metaData.finalGoalAmount && Number(metaData.interimGoalAmount) > Number(metaData.finalGoalAmount)) {
-        errors.finalGoalAmount = 'Maximum total raised must be bigger than Target total raised';
+    if(metaData.targetTotalRaised && metaData.maximumTotalRaised && Number(metaData.targetTotalRaised) > Number(metaData.maximumTotalRaised)) {
+        errors.maximumTotalRaised = 'Maximum total raised must be bigger than Target total raised';
     }
     if(metaData.projectURL && !URL_REGEX.test(metaData.projectURL)){
         errors.projectURL = 'Invalid URL format'
@@ -79,8 +79,8 @@ export const validateMetaData = (metaData: MetaData, minimumProvided?: number) =
     if(metaData.otherURL && !URL_REGEX.test(metaData.otherURL)){
         errors.otherURL = 'Invalid URL format'
     }
-    if(minimumProvided && metaData.interimGoalAmount && Number(minimumProvided) > Number(metaData.interimGoalAmount)) {
-        errors.interimGoalAmount = `Target total raised must be bigger than or equal to Minimum total raised (${minimumProvided} ETH)`
+    if(minRaisedAmount && metaData.targetTotalRaised && Number(minRaisedAmount) > Number(metaData.targetTotalRaised)) {
+        errors.targetTotalRaised = `Target total raised must be bigger than or equal to Minimum total raised (${minRaisedAmount} ETH)`
     }
     return errors;
 };

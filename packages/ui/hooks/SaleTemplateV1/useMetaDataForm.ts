@@ -3,9 +3,9 @@ import { useFormik, FormikProps } from 'formik';
 import { MetaData, validateMetaData } from 'lib/types/Sale';
 import { URL_REGEX } from 'lib/constants';
 
-export default function useMetaDataForm({contractId, minimumProvided, onSubmitSuccess, onSubmitError, saleMetaData}: {
+export default function useMetaDataForm({contractId, minRaisedAmount, onSubmitSuccess, onSubmitError, saleMetaData}: {
     contractId?: `0x${string}`,
-    minimumProvided: number, // Numbers that take decimals into account. e.g. 10 
+    minRaisedAmount: number, // Numbers that take decimals into account. e.g. 10 
     onSubmitSuccess?: (result: Response) => void,
     onSubmitError?: (e: any) => void,
     saleMetaData?: MetaData,
@@ -25,8 +25,8 @@ export default function useMetaDataForm({contractId, minimumProvided, onSubmitSu
         projectURL: '',
         logoURL: '',
         otherURL: '',
-        interimGoalAmount: minimumProvided,
-        finalGoalAmount: minimumProvided
+        targetTotalRaised: minRaisedAmount,
+        maximumTotalRaised: minRaisedAmount
     };
 
 
@@ -53,7 +53,7 @@ export default function useMetaDataForm({contractId, minimumProvided, onSubmitSu
         enableReinitialize: true,
         initialValues: saleMetaData ? saleMetaData : initMetaData,
         onSubmit: handleSubmit,
-        validate: (value: MetaData) => validateMetaData(value, minimumProvided)
+        validate: (value: MetaData) => validateMetaData(value, minRaisedAmount)
     });
 
     return {

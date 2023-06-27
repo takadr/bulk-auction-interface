@@ -5,36 +5,36 @@ import Big, { add, multiply } from "lib/utils/bignumber";
 
 interface Props {
     inputValue: number;
-    myTotalProvided: Big;
-    totalProvided: Big;
-    distributeAmount: Big;
+    myContribution: Big;
+    totalRaised: Big;
+    allocatedAmount: Big;
     distributedTokenSymbol: string;
     distributedTokenDecimal: number;
-    providedTokenSymbol: string;
-    providedTokenDecimal: number;
+    raisedTokenSymbol: string;
+    raisedTokenDecimal: number;
     isEnding: boolean;
     isClaimed: boolean;
     isLodingTX: boolean;
 }
 export default function PersonalStatistics({
     inputValue,
-    myTotalProvided,
-    totalProvided,
-    distributeAmount,
+    myContribution,
+    totalRaised,
+    allocatedAmount,
     distributedTokenSymbol,
     distributedTokenDecimal,
-    providedTokenSymbol,
-    providedTokenDecimal,
+    raisedTokenSymbol,
+    raisedTokenDecimal,
     isEnding,
     isClaimed,
     isLodingTX,
     ...boxProps
   }: Props & BoxProps) {
-    const inputValueInBig = multiply(Big(inputValue), Big(10).pow(providedTokenDecimal));
-    const expectedAmount = tokenAmountFormat(getExpectedAmount(myTotalProvided, inputValueInBig, totalProvided, distributeAmount), distributedTokenDecimal, getDecimalsForView(distributeAmount, distributedTokenDecimal));
-    const sumOfProvidedAmount = etherAmountFormat(add(myTotalProvided, inputValueInBig));
-    const fixedProvidedAmount = etherAmountFormat(myTotalProvided);
-    const inputtingValueInFormat = tokenAmountFormat(inputValueInBig, providedTokenDecimal, 2);
+    const inputValueInBig = multiply(Big(inputValue), Big(10).pow(raisedTokenDecimal));
+    const expectedAmount = tokenAmountFormat(getExpectedAmount(myContribution, inputValueInBig, totalRaised, allocatedAmount), distributedTokenDecimal, getDecimalsForView(allocatedAmount, distributedTokenDecimal));
+    const sumOfContributionAmount = etherAmountFormat(add(myContribution, inputValueInBig));
+    const fixedContributionAmount = etherAmountFormat(myContribution);
+    const inputtingValueInFormat = tokenAmountFormat(inputValueInBig, raisedTokenDecimal, 2);
 
     // if(isLoading) {
     //     return <Card {...boxProps}>    
@@ -71,14 +71,14 @@ export default function PersonalStatistics({
               </div>
               <chakra.div textAlign={'right'}>
                 <chakra.span fontWeight={'bold'} ml={2}>
-                  {sumOfProvidedAmount}{' '}
-                  {providedTokenSymbol.toUpperCase()}
+                  {sumOfContributionAmount}{' '}
+                  {raisedTokenSymbol.toUpperCase()}
                 </chakra.span>
                 {inputValue > 0 && <chakra.span fontSize={'sm'} ml={1}>
                   (New contribution: 
                   <chakra.span fontWeight={'bold'} ml={2}>
                     {inputtingValueInFormat}{' '}
-                    {providedTokenSymbol.toUpperCase()}
+                    {raisedTokenSymbol.toUpperCase()}
                   </chakra.span>
                   )
                 </chakra.span>
@@ -93,8 +93,8 @@ export default function PersonalStatistics({
                 </div>
                 <chakra.div textAlign={'right'}>
                   <chakra.p fontWeight={'bold'}>
-                  {fixedProvidedAmount}{' '}
-                  {providedTokenSymbol.toUpperCase()}
+                  {fixedContributionAmount}{' '}
+                  {raisedTokenSymbol.toUpperCase()}
                   </chakra.p>
                 </chakra.div>
               </Flex>

@@ -6,12 +6,12 @@ import { CHAIN_NAMES } from 'lib/constants';
 import { TriangleUpIcon } from "@chakra-ui/icons";
 
 type Props = {
-  totalProvided: Big;
-  minimalProvideAmount: Big;
-  interimGoalAmount: Big;
-  finalGoalAmount: Big;
-  providedTokenSymbol: string;
-  providedTokenDecimal: number;
+  totalRaised: Big;
+  minRaisedAmount: Big;
+  targetTotalRaised: Big;
+  maximumTotalRaised: Big;
+  raisedTokenSymbol: string;
+  raisedTokenDecimal: number;
   fiatSymbol: string;
   fiatRate: number;
   contractAddress: string;
@@ -19,12 +19,12 @@ type Props = {
 };
 
 export default function StatisticsInCircle({
-  totalProvided,
-  minimalProvideAmount,
-  interimGoalAmount,
-  finalGoalAmount,
-  providedTokenSymbol,
-  providedTokenDecimal,
+  totalRaised,
+  minRaisedAmount,
+  targetTotalRaised,
+  maximumTotalRaised,
+  raisedTokenSymbol,
+  raisedTokenDecimal,
   fiatSymbol,
   fiatRate,
   contractAddress,
@@ -35,16 +35,16 @@ export default function StatisticsInCircle({
 
   const [gray600, green400] = useToken('colors', ['gray.600', 'green.400']);
 
-  const progressPercent = getTargetPercetage(totalProvided, finalGoalAmount);
-  const minimumPercent = getTargetPercetage(minimalProvideAmount, finalGoalAmount);
-  const interimGoalPercent = getTargetPercetage(interimGoalAmount, finalGoalAmount);
+  const progressPercent = getTargetPercetage(totalRaised, maximumTotalRaised);
+  const minimumPercent = getTargetPercetage(minRaisedAmount, maximumTotalRaised);
+  const targetTotalRaisedPercent = getTargetPercetage(targetTotalRaised, maximumTotalRaised);
 
   return (
     <chakra.div {...boxProps}>
       <chakra.div position={'relative'}>
         <Tooltip hasArrow label={<chakra.p textAlign={'center'} p={1}>
-          Minimum: {etherAmountFormat(minimalProvideAmount)}ETH
-          { totalProvided.gte(minimalProvideAmount) && <><br /> Achieved 🎉</>}
+          Minimum: {etherAmountFormat(minRaisedAmount)}ETH
+          { totalRaised.gte(minRaisedAmount) && <><br /> Achieved 🎉</>}
         </chakra.p>}>
           <TriangleUpIcon 
             position={'absolute'}
@@ -55,21 +55,21 @@ export default function StatisticsInCircle({
           />
         </Tooltip>
         <Tooltip hasArrow label={<chakra.p textAlign={'center'} p={1}>
-          Target total raised: {etherAmountFormat(interimGoalAmount)}ETH
-            { totalProvided.gte(interimGoalAmount) && <><br /> Achieved 🎉</>}
+          Target total raised: {etherAmountFormat(targetTotalRaised)}ETH
+            { totalRaised.gte(targetTotalRaised) && <><br /> Achieved 🎉</>}
           </chakra.p>}>
           <TriangleUpIcon 
             position={'absolute'}
             zIndex={100}
-            transform={`rotate(${interimGoalPercent * 360/100}deg)`}
-            left={`calc(${(Math.sin((interimGoalPercent/100)*(2*Math.PI))+1) * 100/2}% - 8px - ${Math.sin((interimGoalPercent/100)*(2*Math.PI)) * 5.1}%)`}
-            bottom={`calc(${(Math.cos((interimGoalPercent/100)*(2*Math.PI))+1) * 100/2}% - 8px - ${Math.cos((interimGoalPercent/100)*(2*Math.PI)) * 5.1}%)`}
+            transform={`rotate(${targetTotalRaisedPercent * 360/100}deg)`}
+            left={`calc(${(Math.sin((targetTotalRaisedPercent/100)*(2*Math.PI))+1) * 100/2}% - 8px - ${Math.sin((targetTotalRaisedPercent/100)*(2*Math.PI)) * 5.1}%)`}
+            bottom={`calc(${(Math.cos((targetTotalRaisedPercent/100)*(2*Math.PI))+1) * 100/2}% - 8px - ${Math.cos((targetTotalRaisedPercent/100)*(2*Math.PI)) * 5.1}%)`}
           />
         </Tooltip>
         <Link href={getEtherscanLink(chain, contractAddress, 'address')} target={'_blank'}>
           <Circle
             percent={progressPercent}
-            // percent={[getTargetPercetage(totalProvided, finalGoalAmount) / 3, getTargetPercetage(totalProvided, finalGoalAmount) / 3, getTargetPercetage(totalProvided, finalGoalAmount) / 3]}
+            // percent={[getTargetPercetage(totalRaised, maximumTotalRaised) / 3, getTargetPercetage(totalRaised, maximumTotalRaised) / 3, getTargetPercetage(totalRaised, maximumTotalRaised) / 3]}
             strokeWidth={4}
             trailWidth={4}
             // strokeLinecap="square"
@@ -82,8 +82,8 @@ export default function StatisticsInCircle({
             </Heading>
             <chakra.div>
               <>
-                <chakra.span fontSize={'2xl'}>{started ? etherAmountFormat(totalProvided) : '????'}{' '}</chakra.span>
-                {providedTokenSymbol.toUpperCase()}
+                <chakra.span fontSize={'2xl'}>{started ? etherAmountFormat(totalRaised) : '????'}{' '}</chakra.span>
+                {raisedTokenSymbol.toUpperCase()}
               </>
             </chakra.div>
             <span>
@@ -93,27 +93,27 @@ export default function StatisticsInCircle({
               }
               {started
                 ? '' +
-                  getFiatConversionAmount(Number(formatEther(totalProvided)), fiatRate).toFixed(2)
+                  getFiatConversionAmount(Number(formatEther(totalRaised)), fiatRate).toFixed(2)
                 : '????'}
             </span>
             <div>
-              {!!interimGoalAmount && 
+              {!!targetTotalRaised && 
                 <chakra.div textAlign={'center'}>
-                  Target total raised {etherAmountFormat(interimGoalAmount)}
-                  {providedTokenSymbol.toUpperCase()}
+                  Target total raised {etherAmountFormat(targetTotalRaised)}
+                  {raisedTokenSymbol.toUpperCase()}
                   { 
-                    totalProvided.gte(interimGoalAmount) && started && 
+                    totalRaised.gte(targetTotalRaised) && started && 
                     <chakra.span textAlign={'center'}> 🎉</chakra.span>
                   }
                 </chakra.div>
               }
               {/* {
-              !!finalGoalAmount && 
+              !!maximumTotalRaised && 
                 <chakra.div textAlign={'center'}>
-                  FINAL GOAL {tokenAmountFormat(finalGoalAmount, 18, 2)}
-                  {providedTokenSymbol.toUpperCase()}
+                  FINAL GOAL {tokenAmountFormat(maximumTotalRaised, 18, 2)}
+                  {raisedTokenSymbol.toUpperCase()}
                   { 
-                    totalProvided.gte(finalGoalAmount) && started && 
+                    totalRaised.gte(maximumTotalRaised) && started && 
                     <chakra.span textAlign={'center'}> 🎉</chakra.span>
                   }
                 </chakra.div>

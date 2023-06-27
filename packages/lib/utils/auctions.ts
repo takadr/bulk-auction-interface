@@ -19,8 +19,8 @@ const dynamoDBItemsToAuction = (item: any) => {
     projectURL: item.ProjectURL ? item.ProjectURL.S : undefined,
     logoURL: item.LogoURL ? item.LogoURL.S : undefined,
     otherURL: item.OtherURL ? item.OtherURL.S : undefined,
-    interimGoalAmount: item.InterimGoalAmount ? item.InterimGoalAmount.N : undefined,
-    finalGoalAmount: item.FinalGoalAmount ? item.FinalGoalAmount.N : undefined,
+    targetTotalRaised: item.TargetTotalRaised ? item.TargetTotalRaised.N : undefined,
+    maximumTotalRaised: item.MaximumTotalRaised ? item.MaximumTotalRaised.N : undefined,
     tokenName: item.TokenName ? item.TokenName.S : undefined,
     tokenSymbol: item.TokenSymbol ? item.TokenSymbol.S : undefined,
     tokenDecimals: item.TokenDecimals ? item.TokenDecimals.N : undefined,
@@ -67,7 +67,7 @@ export async function batchFetchAuction(auctionIds: string[]): Promise<MetaData[
 
 export async function addAuction(auction: MetaData): Promise<MetaData | undefined> {
   // TODO Take Minimum total raised into account
-  // validateMetaData(auction, minimumProvided)
+  // validateMetaData(auction, minRaisedAmount)
   const errors = validateMetaData(auction)
   if(Object.keys(errors).length > 0) {
     const errorMessage = Object.entries(errors).map(e => e[1]).join(', ')
@@ -81,8 +81,8 @@ export async function addAuction(auction: MetaData): Promise<MetaData | undefine
     ProjectURL: {S: auction.projectURL ? auction.projectURL : ''},
     LogoURL: {S: auction.logoURL ? auction.logoURL : ''},
     OtherURL: {S: auction.otherURL ? auction.otherURL : ''},
-    InterimGoalAmount: {N: auction.interimGoalAmount ? auction.interimGoalAmount.toString() : '0'},
-    FinalGoalAmount: {N: auction.finalGoalAmount ? auction.finalGoalAmount.toString() : '0'},
+    TargetTotalRaised: {N: auction.targetTotalRaised ? auction.targetTotalRaised.toString() : '0'},
+    MaximumTotalRaised: {N: auction.maximumTotalRaised ? auction.maximumTotalRaised.toString() : '0'},
     TokenName: {S: auction.tokenName ? auction.tokenName : ''},
     TokenSymbol: {S: auction.tokenSymbol ? auction.tokenSymbol : ''},
     TokenDecimals: {N: auction.tokenDecimals ? auction.tokenDecimals.toString() : '0'},
@@ -106,7 +106,7 @@ export async function updateAuction(auction: MetaData): Promise<MetaData | undef
   const command = new UpdateItemCommand({
     TableName: process.env.AWS_DYNAMO_TABLE_NAME,
     Key: { AuctionId : { S: (auction.id as string).toLowerCase() } },
-    UpdateExpression: 'set Title = :Title, Description=:Description, Terms = :Terms, ProjectURL = :ProjectURL, LogoURL = :LogoURL, OtherURL = :OtherURL, InterimGoalAmount = :InterimGoalAmount, FinalGoalAmount = :FinalGoalAmount, TokenName = :TokenName, TokenSymbol = :TokenSymbol, TokenDecimals = :TokenDecimals, TemplateName = :TemplateName',
+    UpdateExpression: 'set Title = :Title, Description=:Description, Terms = :Terms, ProjectURL = :ProjectURL, LogoURL = :LogoURL, OtherURL = :OtherURL, TargetTotalRaised = :TargetTotalRaised, MaximumTotalRaised = :MaximumTotalRaised, TokenName = :TokenName, TokenSymbol = :TokenSymbol, TokenDecimals = :TokenDecimals, TemplateName = :TemplateName',
     ExpressionAttributeValues: {
       ':Title': {S: auction.title ? auction.title : ''},
       ':Description': {S: auction.description ? auction.description : ''},
@@ -114,8 +114,8 @@ export async function updateAuction(auction: MetaData): Promise<MetaData | undef
       ':ProjectURL': {S: auction.projectURL ? auction.projectURL : ''},
       ':LogoURL': {S: auction.logoURL ? auction.logoURL : ''},
       ':OtherURL': {S: auction.otherURL ? auction.otherURL : ''},
-      ':InterimGoalAmount':  {N: auction.interimGoalAmount ? auction.interimGoalAmount.toString() : '0'},
-      ':FinalGoalAmount': {N: auction.finalGoalAmount ? auction.finalGoalAmount.toString() : '0'},
+      ':TargetTotalRaised':  {N: auction.targetTotalRaised ? auction.targetTotalRaised.toString() : '0'},
+      ':MaximumTotalRaised': {N: auction.maximumTotalRaised ? auction.maximumTotalRaised.toString() : '0'},
       ':TokenName': {S: auction.tokenName ? auction.tokenName : ''},
       ':TokenSymbol': {S: auction.tokenSymbol ? auction.tokenSymbol : ''},
       ':TokenDecimals': {N: auction.tokenDecimals ? auction.tokenDecimals.toString() : '0'},

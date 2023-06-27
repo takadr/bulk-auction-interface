@@ -72,8 +72,8 @@ describe('create-sale-spec', () => {
     cy.get(`[aria-label="${endString}"]`).first().click()
     cy.get('.rs-picker-toolbar-right > button').contains('OK').first().click()
     
-    cy.get('input[name="distributeAmount"]').clear().type(1000)
-    cy.get('input[name="minimalProvideAmount"]').clear().type(1)
+    cy.get('input[name="allocatedAmount"]').clear().type(1000)
+    cy.get('input[name="minRaisedAmount"]').clear().type(1)
 
     cy.get('button').contains('Deploy Sale Contract').first().click().then(() => {
       const token = getToken()

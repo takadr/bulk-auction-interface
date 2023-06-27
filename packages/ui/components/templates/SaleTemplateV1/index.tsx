@@ -9,14 +9,14 @@ import Big, { getBigNumber } from 'lib/utils/bignumber';
 import CalendarInCircle from './CalendarInCircle';
 import PersonalStatistics from './PersonalStatistics';
 import StatisticsInCircle from './StatisticsInCircle';
-import useProvided from '../../../hooks/SaleTemplateV1/useProvided';
+import useRaised from '../../../hooks/SaleTemplateV1/useRaised';
 import useRate from '../../../hooks/useRate';
 import { Sale, MetaData } from 'lib/types/Sale';
 import ExternalLinkTag from '../../ExternalLinkTag';
 import useIsClaimed from '../../../hooks/SaleTemplateV1/useIsClaimed';
 import ClaimButton from './ClaimButton';
 import TxSentToast from '../../TxSentToast';
-import WithdrawProvidedETH from './WithdrawProvidedETH';
+import WithdrawRaisedETH from './WithdrawRaisedETH';
 import WithdrawERC20 from './WithdrawERC20';
 import { getDecimalsForView, getEtherscanLink, tokenAmountFormat, parseEther } from 'lib/utils';
 import { CHAIN_NAMES } from 'lib/constants';
@@ -32,12 +32,12 @@ type SaleTemplateV1Params = {
 
 export default function SaleTemplateV1({sale, refetchSale, metaData, refetchMetaData, address, contractAddress}: SaleTemplateV1Params) {
     const toast = useToast({position: 'top-right', isClosable: true,});
-    const { provided, totalProvided, isLoading: isLoadingProvidedAmount, refetch: refetchProvided } = useProvided(contractAddress, address);
+    const { raised, totalRaised, isLoading: isLoadingRaisedAmount, refetch: refetchRaised } = useRaised(contractAddress, address);
     const { data: balanceData, isLoading: isLoadingBalance, refetch: refetchBalance } = useBalance({address, enabled: !!address});
     const { data: isClaimed, error: isClaimedError, mutate: mutateIsClaimed } = useIsClaimed(sale, address);
 
-    const providedTokenSymbol = 'ETH';
-    const providedTokenDecimal = 18;
+    const raisedTokenSymbol = 'ETH';
+    const raisedTokenDecimal = 18;
 
     const [started, setStarted] = useState<boolean>(false);
     const [ended, setEnded] = useState<boolean>(false);
@@ -54,7 +54,7 @@ export default function SaleTemplateV1({sale, refetchSale, metaData, refetchMeta
         updateRate();
         refetchSale();
         refetchMetaData();
-        refetchProvided();
+        refetchRaised();
     }, 10000);
 
     const handleSubmit = async (values: {[key: string]: number}) => {
@@ -122,7 +122,7 @@ export default function SaleTemplateV1({sale, refetchSale, metaData, refetchMeta
             formikProps.resetForm();
             setTimeout(() => {
                 refetchSale();
-                refetchProvided();
+                refetchRaised();
                 refetchBalance();
             }, 0)
             
@@ -143,7 +143,7 @@ export default function SaleTemplateV1({sale, refetchSale, metaData, refetchMeta
                     />
                     <Box px={8}>
                         <Heading>{metaData.title ? metaData.title : 'Unnamed Sale'}</Heading>
-                        <chakra.p>{tokenAmountFormat(sale.distributeAmount, sale.tokenDecimals, getDecimalsForView(getBigNumber(sale.distributeAmount), sale.tokenDecimals))} {sale.tokenSymbol} <Link href={getEtherscanLink(CHAIN_NAMES[process.env.NEXT_PUBLIC_CHAIN_ID!], sale.token as `0x${string}`, 'token')} target={'_blank'}><ExternalLinkIcon /></Link></chakra.p>
+                        <chakra.p>{tokenAmountFormat(sale.allocatedAmount, sale.tokenDecimals, getDecimalsForView(getBigNumber(sale.allocatedAmount), sale.tokenDecimals))} {sale.tokenSymbol} <Link href={getEtherscanLink(CHAIN_NAMES[process.env.NEXT_PUBLIC_CHAIN_ID!], sale.token as `0x${string}`, 'token')} target={'_blank'}><ExternalLinkIcon /></Link></chakra.p>
                         <HStack mt={4} spacing={4}>
                             { metaData.projectURL && <ExternalLinkTag url={metaData.projectURL} /> }
                             { metaData.otherURL && <ExternalLinkTag url={metaData.otherURL} /> }
@@ -154,12 +154,12 @@ export default function SaleTemplateV1({sale, refetchSale, metaData, refetchMeta
                 
                 <Flex mt={8} flexDirection={{base: 'column', md: 'row'}}>
                     <StatisticsInCircle
-                        totalProvided={totalProvided}
-                        minimalProvideAmount={sale.minimalProvideAmount ? getBigNumber(sale.minimalProvideAmount) : Big(0)}
-                        interimGoalAmount={getBigNumber(metaData.interimGoalAmount ? metaData.interimGoalAmount : 0).mul(Big(10).pow(providedTokenDecimal))}
-                        finalGoalAmount={getBigNumber(metaData.finalGoalAmount ? metaData.finalGoalAmount : 0).mul(Big(10).pow(providedTokenDecimal))}
-                        providedTokenSymbol={providedTokenSymbol}
-                        providedTokenDecimal={providedTokenDecimal}
+                        totalRaised={totalRaised}
+                        minRaisedAmount={sale.minRaisedAmount ? getBigNumber(sale.minRaisedAmount) : Big(0)}
+                        targetTotalRaised={getBigNumber(metaData.targetTotalRaised ? metaData.targetTotalRaised : 0).mul(Big(10).pow(raisedTokenDecimal))}
+                        maximumTotalRaised={getBigNumber(metaData.maximumTotalRaised ? metaData.maximumTotalRaised : 0).mul(Big(10).pow(raisedTokenDecimal))}
+                        raisedTokenSymbol={raisedTokenSymbol}
+                        raisedTokenDecimal={raisedTokenDecimal}
                         fiatSymbol={fiatSymbol}
                         fiatRate={rateDate && rateDate.usd ? rateDate.usd : 0}
                         contractAddress={contractAddress}
@@ -177,7 +177,7 @@ export default function SaleTemplateV1({sale, refetchSale, metaData, refetchMeta
 
                 { metaData.terms && <Box mt={4} py={16}>
                     <Heading size={'lg'} textAlign={'center'}>Disclaimers & Terms and Conditions</Heading>
-                    <chakra.p mt={2}>{metaData.terms}</chakra.p>
+                    <chakra.p whiteSpace={'pre-line'} mt={2}>{metaData.terms}</chakra.p>
                 </Box> }
 
                 { started && !ended && <Box>
@@ -205,7 +205,7 @@ export default function SaleTemplateV1({sale, refetchSale, metaData, refetchMeta
                                         <NumberDecrementStepper />
                                     </NumberInputStepper>
                                 </NumberInput>
-                                <chakra.div px={2}>{providedTokenSymbol}</chakra.div>
+                                <chakra.div px={2}>{raisedTokenSymbol}</chakra.div>
                                 <Button isLoading={isLoadingWaitTX || isLoadingSendTX} isDisabled={!sendTransactionAsync || !started} type='submit' variant='solid' colorScheme={'green'}>
                                     Contribute
                                 </Button>
@@ -223,13 +223,13 @@ export default function SaleTemplateV1({sale, refetchSale, metaData, refetchMeta
                 { address && started && <Box mt={1}>
                     <PersonalStatistics
                         inputValue={formikProps.values.amount}
-                        myTotalProvided={provided}
-                        totalProvided={totalProvided}
-                        distributeAmount={sale.distributeAmount}
+                        myContribution={raised}
+                        totalRaised={totalRaised}
+                        allocatedAmount={sale.allocatedAmount}
                         distributedTokenSymbol={sale.tokenSymbol ? sale.tokenSymbol : ''}
                         distributedTokenDecimal={sale.tokenDecimals ? sale.tokenDecimals : 0}
-                        providedTokenSymbol={providedTokenSymbol}
-                        providedTokenDecimal={providedTokenDecimal}
+                        raisedTokenSymbol={raisedTokenSymbol}
+                        raisedTokenDecimal={raisedTokenDecimal}
                         isEnding={ended}
                         isClaimed={!!isClaimed}
                         isLodingTX={isLoadingWaitTX || isLoadingSendTX}
@@ -241,7 +241,7 @@ export default function SaleTemplateV1({sale, refetchSale, metaData, refetchMeta
                         <ClaimButton
                             sale={sale}
                             address={address}
-                            myTotalProvided={provided}
+                            myContribution={raised}
                             isClaimed={!!isClaimed}
                             mutateIsClaimed={mutateIsClaimed}
                         />
@@ -263,7 +263,7 @@ export default function SaleTemplateV1({sale, refetchSale, metaData, refetchMeta
                                 </chakra.div>
 
                                 <chakra.div textAlign={'center'}>
-                                    <WithdrawProvidedETH  sale={sale} onSuccessConfirm={refetchSale} />
+                                    <WithdrawRaisedETH  sale={sale} onSuccessConfirm={refetchSale} />
                                 </chakra.div>
                             </Stack>
                         </CardBody>

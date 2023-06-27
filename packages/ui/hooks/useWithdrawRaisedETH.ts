@@ -1,7 +1,7 @@
 import { useNetwork, usePrepareContractWrite, useContractWrite, useWaitForTransaction } from 'wagmi';
 import Template from 'lib/constants/abis/SaleTemplateV1.json';
 
-export default function useWithdrawProvidedETH({
+export default function useWithdrawRaisedETH({
   targetAddress,
   onSuccessWrite,
   onErrorWrite,
@@ -27,7 +27,7 @@ export default function useWithdrawProvidedETH({
     chainId: chain?.id,
     address: targetAddress ? targetAddress : '0x00',
     abi: Template,
-    functionName: 'withdrawProvidedETH',
+    functionName: 'withdrawRaisedETH',
     enabled
   })
 

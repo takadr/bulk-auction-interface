@@ -46,8 +46,8 @@ export default function useSaleForm({
         token: null,
         startingAt: now + (60 * 60 * 24 * 7 * 1000),
         eventDuration: 60 * 60 * 24 * 7,
-        distributeAmount: 1,
-        minimalProvideAmount: 0,
+        allocatedAmount: 1,
+        minRaisedAmount: 0,
         owner: address,
     }
 
@@ -76,8 +76,8 @@ export default function useSaleForm({
             errors.eventDuration = `Sale duration must be less than or equal to 30 days`;
         }
 
-        if(balance && tokenData && Big(balance.toString()).lt(Big(formikProps.values.distributeAmount).mul(Big(10).pow(tokenData.decimals)))) {
-            errors.distributeAmount = `You need to have enough balance for distribution`;
+        if(balance && tokenData && Big(balance.toString()).lt(Big(formikProps.values.allocatedAmount).mul(Big(10).pow(tokenData.decimals)))) {
+            errors.allocatedAmount = `You need to have enough balance for allocation`;
         }
       
         return errors;
@@ -116,10 +116,10 @@ export default function useSaleForm({
             debouncedSale.templateName, //SALE_TEMPLATE_V1_NAME
             debouncedSale.token,
             debouncedSale.owner,
-            multiply(debouncedSale.distributeAmount, tokenData?.decimals ? Big(10).pow(tokenData.decimals) : 1).toString(),
+            multiply(debouncedSale.allocatedAmount, tokenData?.decimals ? Big(10).pow(tokenData.decimals) : 1).toString(),
             Math.round(debouncedSale.startingAt / 1000),
             debouncedSale.eventDuration,
-            multiply(debouncedSale.minimalProvideAmount, Big(10).pow(18)).toString(), // ETH
+            multiply(debouncedSale.minRaisedAmount, Big(10).pow(18)).toString(), // ETH
         ],
     })
     

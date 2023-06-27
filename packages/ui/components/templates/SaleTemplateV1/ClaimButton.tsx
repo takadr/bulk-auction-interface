@@ -9,14 +9,14 @@ import TxSentToast from "../../TxSentToast";
 interface Props {
     sale: Sale;
     address: `0x${string}`;
-    myTotalProvided: Big;
+    myContribution: Big;
     isClaimed: boolean;
     mutateIsClaimed: KeyedMutator<boolean | undefined>;
 }
 export default function ClaimButton({
     sale,
     address,
-    myTotalProvided,
+    myContribution,
     isClaimed,
     mutateIsClaimed,
     ...buttonProps
@@ -41,7 +41,7 @@ export default function ClaimButton({
             mutateIsClaimed()
         }
     });
-    const expectedAmount = getExpectedAmount(myTotalProvided, Big(0), sale.totalProvided, sale.distributeAmount);
+    const expectedAmount = getExpectedAmount(myContribution, Big(0), sale.totalRaised, sale.allocatedAmount);
     const toast = useToast({position: 'top-right', isClosable: true,});
     return <Button
         variant={'solid'}
@@ -52,6 +52,6 @@ export default function ClaimButton({
             await claimWriteFn.writeAsync();
         }}
     >
-        { isClaimed ? 'Claimed' : (expectedAmount.eq(0) && myTotalProvided.gt(0) ? 'Claim Refund' : 'Claim') }
+        { isClaimed ? 'Claimed' : (expectedAmount.eq(0) && myContribution.gt(0) ? 'Claim Refund' : 'Claim') }
     </Button>
   };

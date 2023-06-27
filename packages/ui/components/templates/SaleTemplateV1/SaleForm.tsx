@@ -67,7 +67,7 @@ export default function SaleForm({formikProps, address, approvals, writeFn, toke
                         <Tooltip hasArrow label={'Input the address of the token you would like to allocate to this sale'}><QuestionIcon mb={1} ml={1} /></Tooltip>
                     </FormLabel>
                     <Input id="token" name="token" onBlur={formikProps.handleBlur} onChange={(event: React.ChangeEvent<any>) => {
-                        formikProps.setFieldTouched('distributeAmount');
+                        formikProps.setFieldTouched('allocatedAmount');
                         formikProps.handleChange(event);
                     }} value={formikProps.values.token ? formikProps.values.token : ''} placeholder='e.g.) 0x0123456789012345678901234567890123456789' />
                     <FormErrorMessage>{formikProps.errors.token}</FormErrorMessage>
@@ -120,7 +120,7 @@ export default function SaleForm({formikProps, address, approvals, writeFn, toke
                     <FormErrorMessage>{formikProps.errors.eventDuration}</FormErrorMessage>
                 </FormControl>
 
-                <FormControl mt={4} isInvalid={!!formikProps.errors.distributeAmount && !!formikProps.touched.distributeAmount}>
+                <FormControl mt={4} isInvalid={!!formikProps.errors.allocatedAmount && !!formikProps.touched.allocatedAmount}>
                     <Flex justifyContent={'space-between'}>
                         <FormLabel alignItems={'baseline'}>Total distribute amount
                             <Tooltip hasArrow label={'Input the amount of tokens to be allocated in this sale.'}><QuestionIcon mb={1} ml={1} /></Tooltip>
@@ -128,8 +128,8 @@ export default function SaleForm({formikProps, address, approvals, writeFn, toke
                     </Flex>
                     
                     <Flex alignItems={'center'}>
-                        <NumberInput flex="1" name="distributeAmount" value={formikProps.values.distributeAmount} min={0} max={Number.MAX_SAFE_INTEGER} onBlur={formikProps.handleBlur} onChange={(strVal: string, val: number) => 
-                            formikProps.setFieldValue('distributeAmount', strVal && Number(strVal) === val ? strVal : (isNaN(val) ? 0 : val))
+                        <NumberInput flex="1" name="allocatedAmount" value={formikProps.values.allocatedAmount} min={0} max={Number.MAX_SAFE_INTEGER} onBlur={formikProps.handleBlur} onChange={(strVal: string, val: number) => 
+                            formikProps.setFieldValue('allocatedAmount', strVal && Number(strVal) === val ? strVal : (isNaN(val) ? 0 : val))
                         }>
                             <NumberInputField/>
                             <NumberInputStepper>
@@ -142,8 +142,8 @@ export default function SaleForm({formikProps, address, approvals, writeFn, toke
                     <chakra.p color={'gray.400'} fontSize={'sm'}>
                         Balance: {balance && tokenData ? tokenAmountFormat(Big(balance.toString()), tokenData.decimals, getDecimalsForView(getBigNumber(tokenData.totalSupply.value.toString()), tokenData.decimals)) : '-'} {tokenData?.symbol}
                     </chakra.p>
-                    <FormErrorMessage>{formikProps.errors.distributeAmount}</FormErrorMessage>
-                    { !!Number(formikProps.values.distributeAmount) && !!tokenData && !!multiply(formikProps.values.distributeAmount, Big(10).pow(tokenData.decimals)).lt(1000) &&
+                    <FormErrorMessage>{formikProps.errors.allocatedAmount}</FormErrorMessage>
+                    { !!Number(formikProps.values.allocatedAmount) && !!tokenData && !!multiply(formikProps.values.allocatedAmount, Big(10).pow(tokenData.decimals)).lt(1000) &&
                         <Alert status='warning' py={2} px={2}>
                             <AlertIcon />
                             <chakra.span fontSize={'sm'}>The allocation is too small, and some participants may not be able to complete their claims. Unclaimed tokens cannot be withdrawn by you either. Please consider increasing the allocation amount.</chakra.span>
@@ -151,13 +151,13 @@ export default function SaleForm({formikProps, address, approvals, writeFn, toke
                     }
                 </FormControl>
 
-                <FormControl mt={4} isInvalid={!!formikProps.errors.minimalProvideAmount && !!formikProps.touched.minimalProvideAmount}>
+                <FormControl mt={4} isInvalid={!!formikProps.errors.minRaisedAmount && !!formikProps.touched.minRaisedAmount}>
                     <FormLabel alignItems={'baseline'}>Minimum total raised
                         <Tooltip hasArrow label={'The sale will be void if the total raised is less than this threshold, and the total raised will be refunded.'}><QuestionIcon mb={1} ml={1} /></Tooltip>
                     </FormLabel>
                     <Flex alignItems={'center'}>
-                        <NumberInput flex="1" name="minimalProvideAmount" value={formikProps.values.minimalProvideAmount} step={0.01} min={0} max={10000000} onBlur={formikProps.handleBlur} onChange={(strVal: string, val: number) =>
-                            formikProps.setFieldValue('minimalProvideAmount', strVal && Number(strVal) === val ? strVal : (isNaN(val) ? 0 : val))
+                        <NumberInput flex="1" name="minRaisedAmount" value={formikProps.values.minRaisedAmount} step={0.01} min={0} max={10000000} onBlur={formikProps.handleBlur} onChange={(strVal: string, val: number) =>
+                            formikProps.setFieldValue('minRaisedAmount', strVal && Number(strVal) === val ? strVal : (isNaN(val) ? 0 : val))
                         }>
                             <NumberInputField/>
                             <NumberInputStepper>
@@ -167,10 +167,10 @@ export default function SaleForm({formikProps, address, approvals, writeFn, toke
                         </NumberInput>
                         <chakra.div px={2}>ETH</chakra.div>
                     </Flex>
-                    <FormErrorMessage>{formikProps.errors.minimalProvideAmount}</FormErrorMessage>
+                    <FormErrorMessage>{formikProps.errors.minRaisedAmount}</FormErrorMessage>
                 </FormControl>
                 {
-                    approvals.allowance && Big(approvals.allowance).gte(multiply(Big(formikProps.values.distributeAmount.toString()), Big(10).pow(tokenData ? tokenData.decimals : 0))) ?
+                    approvals.allowance && Big(approvals.allowance).gte(multiply(Big(formikProps.values.allocatedAmount.toString()), Big(10).pow(tokenData ? tokenData.decimals : 0))) ?
                     <>
                         <Button mt={8} 
                             w={'full'} 
@@ -230,13 +230,13 @@ export default function SaleForm({formikProps, address, approvals, writeFn, toke
                                         <div>
                                             <chakra.p>Allocated to the sale</chakra.p>
                                             <chakra.p fontWeight={'bold'} aria-label="Allocated to the sale">
-                                                {tokenData ? Number(formikProps.values.distributeAmount).toFixed(getDecimalsForView(getBigNumber(tokenData?.totalSupply.value.toString()), tokenData?.decimals)) : '-'} {tokenData?.symbol}
+                                                {tokenData ? Number(formikProps.values.allocatedAmount).toFixed(getDecimalsForView(getBigNumber(tokenData?.totalSupply.value.toString()), tokenData?.decimals)) : '-'} {tokenData?.symbol}
                                             </chakra.p>
                                         </div>
 
                                         <div>
                                             <chakra.p>Minimum total raised</chakra.p>
-                                            <chakra.p fontWeight={'bold'} aria-label="Minimum total raised">{Number(formikProps.values.minimalProvideAmount).toFixed(2)} ETH</chakra.p>
+                                            <chakra.p fontWeight={'bold'} aria-label="Minimum total raised">{Number(formikProps.values.minRaisedAmount).toFixed(2)} ETH</chakra.p>
                                         </div>
                                     </Stack>
                                 </AlertDialogBody>
