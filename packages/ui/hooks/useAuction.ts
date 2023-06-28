@@ -1,8 +1,8 @@
 import useSWR, {SWRResponse} from 'swr';
 import { MetaData } from 'lib/types/Sale';
-import { LOCK_DURATION, EXPIRATION_DURATION, FEE_RATE_PER_MIL, SALE_TEMPLATE_V1_NAME } from 'lib/constants';
+import { LOCK_DURATION, FEE_RATE_PER_MIL, SALE_TEMPLATE_V1_NAME } from 'lib/constants';
 
-type Constants = { lockDuration: number, expirationDuration: number, feeRatePerMil: number }
+type Constants = { lockDuration: number, feeRatePerMil: number }
 
 const useSWRAuction = (id: string): SWRResponse<{metaData: MetaData, constants: Constants}|undefined, Error> => {
     const fetcher = (url: string): Promise<{metaData: MetaData, constants: Constants}|undefined> => fetch(url)
@@ -15,7 +15,6 @@ const useSWRAuction = (id: string): SWRResponse<{metaData: MetaData, constants: 
             } as MetaData,
             constants: {
                 lockDuration: LOCK_DURATION[SALE_TEMPLATE_V1_NAME],
-                expirationDuration: EXPIRATION_DURATION[SALE_TEMPLATE_V1_NAME],
                 feeRatePerMil: FEE_RATE_PER_MIL[SALE_TEMPLATE_V1_NAME],
             }
         }
