@@ -27,14 +27,12 @@ import ProvidersList from './ProvidersList';
 import { CurrentUserContext } from './providers/CurrentUserProvider';
 import SignInButton from './SignInButton';
 import ProviderLogo from './ProviderLogo';
-import { useIsMounted } from '../hooks/useIsMounted';
 
 type HeaderProps = {
     title?: string;
 };
 
 export const Header: FC<HeaderProps> = ({title}) => {
-    const isMounted = useIsMounted();
     const { chain } = useNetwork();
     const providersListDisclosure = useDisclosure();
     const toast = useToast({position: 'top-right', isClosable: true,})
@@ -122,9 +120,6 @@ export const Header: FC<HeaderProps> = ({title}) => {
             </>
         )
     }
-    // To avoid hydration issues
-    // https://github.com/wagmi-dev/wagmi/issues/542#issuecomment-1144178142
-    if (!isMounted) return null
 
     return (
         <Box px={{base: 0, md: 4}}  position={'sticky'} top={'0'} zIndex={100} bg={'chakra-body-bg'} opacity={0.975}>

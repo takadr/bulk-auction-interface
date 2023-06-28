@@ -5,8 +5,10 @@ import { Header } from '../Header';
 import { CurrentUserContext } from '../providers/CurrentUserProvider';
 import { CHAIN_NAMES } from 'lib/constants';
 import { capitalize } from 'lib/utils';
+import { useIsMounted } from '../../hooks/useIsMounted';
 
 export default function Layout({title, children}: {title?: string, children: React.ReactNode}) {
+    const isMounted = useIsMounted();
     const { chain } = useNetwork();
     const { currentUser, mutate } = useContext(CurrentUserContext);
     const { address, isConnected, connector } = useAccount();
@@ -36,6 +38,10 @@ export default function Layout({title, children}: {title?: string, children: Rea
     useEffect(() => {
         if(colorMode === 'light') toggleColorMode()
     }, [colorMode])
+
+    // To avoid hydration issues
+    // https://github.com/wagmi-dev/wagmi/issues/542#issuecomment-1144178142
+    if (!isMounted) return null
 
     return <>
     <Header title={title ? title : 'DFGC Sale Maker(仮)'}/>
