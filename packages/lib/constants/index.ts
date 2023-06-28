@@ -1,10 +1,12 @@
-export const CHAIN_NAMES: {[key: string]: 'mainnet'|'sepolia'} = {
+export const CHAIN_NAMES: {[key: string]: 'mainnet'|'sepolia'|'goerli'} = {
     '1': 'mainnet',
+    '5': 'goerli',
     '11155111': 'sepolia',
 }
 
 export const CHAIN_IDS = {
     'mainnet': 1,
+    'goerli': 5,
     'sepolia': 11155111,
 }
 
