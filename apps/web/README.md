@@ -1,5 +1,5 @@
 ## Test
 
 ```bash
-npm run test:headless
+npx env-cmd -f ../../.env npm run test:headless
 ```
