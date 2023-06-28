@@ -1,6 +1,10 @@
-import { ethers } from 'ethers';
 import { ETHER_DECIMALS_FOR_VIEW } from '../constants';
 import Big, { BigNumberValueType, add, divide, multiply, getBigNumber } from './bignumber';
+
+export const capitalize = function(str: string) {
+	if (typeof str !== 'string' || !str) return str;
+	return str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
+};
 
 // From SaleTemplateV1
 export const calculateAllocation = (us: Big, tp: Big, tda: Big): Big => {

@@ -3,6 +3,8 @@ import { chakra, Alert, AlertIcon, useColorMode, useToast } from '@chakra-ui/rea
 import { useAccount, useDisconnect, useNetwork } from 'wagmi';
 import { Header } from '../Header';
 import { CurrentUserContext } from '../providers/CurrentUserProvider';
+import { CHAIN_NAMES } from 'lib/constants';
+import { capitalize } from 'lib/utils';
 
 export default function Layout({title, children}: {title?: string, children: React.ReactNode}) {
     const { chain } = useNetwork();
@@ -41,7 +43,7 @@ export default function Layout({title, children}: {title?: string, children: Rea
         chain && chain.unsupported && 
         <chakra.div px={{base: 0, md: 8}}>
             <Alert status='warning' mb={4}>
-                <AlertIcon /> Please connect to Sepolia
+                <AlertIcon /> Please connect to {capitalize(CHAIN_NAMES[process.env.NEXT_PUBLIC_CHAIN_ID!])}
             </Alert>
         </chakra.div>
     }
