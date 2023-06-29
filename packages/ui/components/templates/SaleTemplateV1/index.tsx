@@ -143,7 +143,16 @@ export default function SaleTemplateV1({sale, refetchSale, metaData, refetchMeta
                     />
                     <Box px={8}>
                         <Heading>{metaData.title ? metaData.title : 'Unnamed Sale'}</Heading>
-                        <chakra.p>{tokenAmountFormat(sale.allocatedAmount, sale.tokenDecimals, getDecimalsForView(getBigNumber(sale.allocatedAmount), sale.tokenDecimals))} {sale.tokenSymbol} <Link href={getEtherscanLink(CHAIN_NAMES[process.env.NEXT_PUBLIC_CHAIN_ID!], sale.token as `0x${string}`, 'token')} target={'_blank'}><ExternalLinkIcon /></Link></chakra.p>
+                        <HStack spacing={4}>
+                            <chakra.p>
+                                {tokenAmountFormat(sale.allocatedAmount, sale.tokenDecimals, getDecimalsForView(getBigNumber(sale.allocatedAmount), sale.tokenDecimals))} {sale.tokenSymbol} 
+                                <Link ml={1} href={getEtherscanLink(CHAIN_NAMES[process.env.NEXT_PUBLIC_CHAIN_ID!], sale.token as `0x${string}`, 'token')} target={'_blank'}><ExternalLinkIcon /></Link>
+                            </chakra.p>
+                            <chakra.p>
+                                {`${sale.id?.slice(0, 5)}...${sale.id?.slice(-4)}`}
+                                <Link ml={1} href={getEtherscanLink(CHAIN_NAMES[process.env.NEXT_PUBLIC_CHAIN_ID!], sale.id as `0x${string}`, 'address')} target={'_blank'}><ExternalLinkIcon /></Link>
+                            </chakra.p>
+                        </HStack>
                         <HStack mt={4} spacing={4}>
                             { metaData.projectURL && <ExternalLinkTag url={metaData.projectURL} /> }
                             { metaData.otherURL && <ExternalLinkTag url={metaData.otherURL} /> }
