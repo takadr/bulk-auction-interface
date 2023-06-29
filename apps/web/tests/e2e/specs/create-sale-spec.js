@@ -87,26 +87,32 @@ describe('create-sale-spec', () => {
     cy.get(`[aria-label="${startString}"]`).first().click()
     cy.get(`[aria-label="${endString}"]`).first().click()
 
-    cy.get('div[index="0"] .rs-calendar-header-title.rs-calendar-header-title-time.rs-btn.rs-btn-subtle.rs-btn-xs').first().click()
-    cy.get(`div[index="0"] [data-key="seconds-0"]`).first().click()
-    cy.get('div[index="0"] .rs-calendar-header-title.rs-calendar-header-title-time.rs-btn.rs-btn-subtle.rs-btn-xs').first().click()
-
-    cy.get('div[index="1"] .rs-calendar-header-title.rs-calendar-header-title-time.rs-btn.rs-btn-subtle.rs-btn-xs').first().click()
-    cy.get(`div[index="1"] [data-key="seconds-0"]`).first().click()
-    cy.get('div[index="1"] .rs-calendar-header-title.rs-calendar-header-title-time.rs-btn.rs-btn-subtle.rs-btn-xs').first().click()
+    // const timeButton1 = cy.get('div[index="0"] .rs-calendar-header-title.rs-calendar-header-title-time.rs-btn.rs-btn-subtle.rs-btn-xs')
+    cy.get('div[index="0"] .rs-calendar-header-title.rs-calendar-header-title-time.rs-btn.rs-btn-subtle.rs-btn-xs').click()
+    cy.get(`div[index="0"] [data-key="hours-5"]`).click()
+    cy.get(`div[index="0"] [data-key="minutes-10"]`).click()
+    cy.get(`div[index="0"] [data-key="seconds-0"]`).click()
+    cy.get('div[index="0"] .rs-calendar-header-title.rs-calendar-header-title-time.rs-btn.rs-btn-subtle.rs-btn-xs').click()
+    // cy.wait(1000)
+    // const timeButton2 = cy.get('div[index="1"] .rs-calendar-header-title.rs-calendar-header-title-time.rs-btn.rs-btn-subtle.rs-btn-xs')
+    cy.get('div[index="1"] .rs-calendar-header-title.rs-calendar-header-title-time.rs-btn.rs-btn-subtle.rs-btn-xs').click()
+    cy.get(`div[index="1"] [data-key="hours-15"]`).click()
+    cy.get(`div[index="1"] [data-key="minutes-43"]`).click()
+    cy.get(`div[index="1"] [data-key="seconds-0"]`).click()
+    cy.get('div[index="1"] .rs-calendar-header-title.rs-calendar-header-title-time.rs-btn.rs-btn-subtle.rs-btn-xs').click()
     
     cy.get('.rs-picker-toolbar-right > button').contains('OK').first().click()
 
-    cy.get('button').contains('Deploy Sale Contract').first().click()
-
-    const token = getToken()
-    Promise.all([token.totalSupply(), token.decimals(), token.symbol()]).then(([totalSupply, decimals, symbol]) => {
-      const tokenAmountWithFormat = tokenAmountFormat(multiply(Big(TOKEN_AMOUNT), Big(10).pow(decimals)), decimals, getDecimalsForView(getBigNumber(totalSupply.toString()), decimals))
-      cy.get('p[aria-label="Allocated to the sale"]').should('have.text', `${tokenAmountWithFormat} ${symbol}`).then(() => {
-        cy.get('p[aria-label="Sale Template"]').should('have.text', 'SaleTemplateV1');
-        cy.get('p[aria-label="Token address"]').should('have.text', Cypress.env('TEST_TOKEN'));
-        cy.get('p[aria-label="Start date - End date"]').should('have.text', `${format(start, 'yyyy/MM/dd HH:mm:')}00 - ${format(end, 'yyyy/MM/dd HH:mm:')}00${' '}${format(new Date, '(z)')}`);
-        cy.get('p[aria-label="Minimum total raised"]').should('have.text', '1.00 ETH');
+    cy.get('button').contains('Deploy Sale Contract').first().click().then(() => {
+      const token = getToken()
+      Promise.all([token.totalSupply(), token.decimals(), token.symbol()]).then(([totalSupply, decimals, symbol]) => {
+        const tokenAmountWithFormat = tokenAmountFormat(multiply(Big(TOKEN_AMOUNT), Big(10).pow(decimals)), decimals, getDecimalsForView(getBigNumber(totalSupply.toString()), decimals))
+        cy.get('p[aria-label="Allocated to the sale"]').should('have.text', `${tokenAmountWithFormat} ${symbol}`).then(() => {
+          cy.get('p[aria-label="Sale Template"]').should('have.text', 'SaleTemplateV1');
+          cy.get('p[aria-label="Token address"]').should('have.text', Cypress.env('TEST_TOKEN'));
+          cy.get('p[aria-label="Start date - End date"]').should('have.text', `${format(start, 'yyyy/MM/dd ')}05:10:00 - ${format(end, 'yyyy/MM/dd ')}15:43:00${' '}${format(new Date, '(z)')}`);
+          cy.get('p[aria-label="Minimum total raised"]').should('have.text', '1.00 ETH');
+        })
       })
     })
     cy.wait(5000)
