@@ -1,30 +1,38 @@
-import { WagmiConfig, createClient, configureChains, mainnet, goerli, sepolia, Chain } from 'wagmi';
-import { alchemyProvider } from 'wagmi/providers/alchemy'
-import { publicProvider } from 'wagmi/providers/public'
- 
-import { CoinbaseWalletConnector } from 'wagmi/connectors/coinbaseWallet'
-import { InjectedConnector } from 'wagmi/connectors/injected'
-import { MetaMaskConnector } from 'wagmi/connectors/metaMask'
-import { WalletConnectConnector } from 'wagmi/connectors/walletConnect'
+import {
+  WagmiConfig,
+  createClient,
+  configureChains,
+  mainnet,
+  goerli,
+  sepolia,
+  Chain,
+} from "wagmi";
+import { alchemyProvider } from "wagmi/providers/alchemy";
+import { publicProvider } from "wagmi/providers/public";
+
+import { CoinbaseWalletConnector } from "wagmi/connectors/coinbaseWallet";
+import { InjectedConnector } from "wagmi/connectors/injected";
+import { MetaMaskConnector } from "wagmi/connectors/metaMask";
+import { WalletConnectConnector } from "wagmi/connectors/walletConnect";
 
 const getSupportedChain = (): Chain[] => {
-  if(process.env.NEXT_PUBLIC_CHAIN_ID === '1') {
-    return [mainnet]
-  } else if(process.env.NEXT_PUBLIC_CHAIN_ID === '5') {
-    return [goerli]
-  } else if(process.env.NEXT_PUBLIC_CHAIN_ID === '11155111') {
-    return [sepolia]
+  if (process.env.NEXT_PUBLIC_CHAIN_ID === "1") {
+    return [mainnet];
+  } else if (process.env.NEXT_PUBLIC_CHAIN_ID === "5") {
+    return [goerli];
+  } else if (process.env.NEXT_PUBLIC_CHAIN_ID === "11155111") {
+    return [sepolia];
   }
-  return [sepolia]
-}
- 
+  return [sepolia];
+};
+
 // Configure chains & providers with the Alchemy provider.
 // Two popular providers are Alchemy (alchemy.com) and Infura (infura.io)
 const { chains, provider, webSocketProvider } = configureChains(
   [...getSupportedChain()],
-  [publicProvider()],
-)
- 
+  [publicProvider()]
+);
+
 // Set up client
 const client: any = createClient({
   autoConnect: true,
@@ -33,7 +41,7 @@ const client: any = createClient({
     new CoinbaseWalletConnector({
       chains,
       options: {
-        appName: 'DFGC Bulksale Maker',
+        appName: "DFGC Bulksale Maker",
       },
     }),
     new WalletConnectConnector({
@@ -42,11 +50,11 @@ const client: any = createClient({
         projectId: process.env.NEXT_PUBLIC_WALLET_CONNECT_ID!,
         qrModalOptions: {
           themeVariables: {
-            '--w3m-z-index': '2000'
+            "--w3m-z-index": "2000",
           },
           explorerAllowList: undefined,
-          explorerDenyList: undefined
-        }
+          explorerDenyList: undefined,
+        },
       },
     }),
     // new InjectedConnector({
@@ -59,6 +67,6 @@ const client: any = createClient({
   ],
   provider,
   webSocketProvider,
-})
+});
 
 export default client;

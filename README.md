@@ -25,11 +25,12 @@ cd apps/web
 npx env-cmd -f ../../.env npm run test:headless
 ```
 
-* Comment out BASIC_AUTH_USER and BASIC_AUTH_PASS in your .env while e2e test
+- Comment out BASIC_AUTH_USER and BASIC_AUTH_PASS in your .env while e2e test
 
 ## Subgraph
 
 ### deploy
+
 ```bash
 cd subgraph
 graph codegen && graph build
@@ -37,6 +38,7 @@ graph deploy --studio SUBGRAPH_NAME
 ```
 
 ### test
+
 ```bash
 cd subgraph
 graph test

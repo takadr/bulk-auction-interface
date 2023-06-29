@@ -1,5 +1,5 @@
-import Big from 'big.js';
-Big.PE = 100
+import Big from "big.js";
+Big.PE = 100;
 
 export default Big;
 export type BigNumberValueType = Big | number;

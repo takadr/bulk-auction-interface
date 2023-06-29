@@ -1,51 +1,56 @@
-import { useNetwork, usePrepareContractWrite, useContractWrite, useWaitForTransaction } from 'wagmi';
-import Template from 'lib/constants/abis/SaleTemplateV1.json';
+import {
+  useNetwork,
+  usePrepareContractWrite,
+  useContractWrite,
+  useWaitForTransaction,
+} from "wagmi";
+import Template from "lib/constants/abis/SaleTemplateV1.json";
 
 export default function useClaim({
   targetAddress,
   address,
   onSuccessWrite,
   onSuccessConfirm,
-} : {
-  targetAddress: `0x${string}` | null,
-  address: `0x${string}`|undefined,
-  onSuccessWrite?: (data: any) => void,
-  onSuccessConfirm?: (data: any) => void,
+}: {
+  targetAddress: `0x${string}` | null;
+  address: `0x${string}` | undefined;
+  onSuccessWrite?: (data: any) => void;
+  onSuccessConfirm?: (data: any) => void;
 }): {
-  prepareFn: any,
-  writeFn: any,
-  waitFn: ReturnType<typeof useWaitForTransaction>,
+  prepareFn: any;
+  writeFn: any;
+  waitFn: ReturnType<typeof useWaitForTransaction>;
 } {
   const { chain } = useNetwork();
-  const enabled: boolean = !!targetAddress && !!address && !!chain
+  const enabled: boolean = !!targetAddress && !!address && !!chain;
 
   const prepareFn = usePrepareContractWrite({
     chainId: chain?.id,
-    address: targetAddress ? targetAddress : '0x00',
+    address: targetAddress ? targetAddress : "0x00",
     abi: Template,
-    functionName: 'claim',
+    functionName: "claim",
     args: [address, address], // Contributer, Reciepient
-    enabled
-  })
+    enabled,
+  });
 
   const writeFn = useContractWrite({
     ...prepareFn.config,
     onSuccess(data) {
-      onSuccessWrite && onSuccessWrite(data)
-    }
-  })
+      onSuccessWrite && onSuccessWrite(data);
+    },
+  });
 
   const waitFn = useWaitForTransaction({
     chainId: chain?.id,
     hash: writeFn.data?.hash,
-    onSuccess(data){
-      onSuccessConfirm && onSuccessConfirm(data)
-    }
-  })
+    onSuccess(data) {
+      onSuccessConfirm && onSuccessConfirm(data);
+    },
+  });
 
   return {
     prepareFn,
     writeFn,
     waitFn,
-  }
+  };
 }

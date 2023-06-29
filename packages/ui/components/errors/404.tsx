@@ -1,17 +1,24 @@
-import { chakra, Heading, Divider, Card, CardBody, Container } from '@chakra-ui/react';
+import {
+  chakra,
+  Heading,
+  Divider,
+  Card,
+  CardBody,
+  Container,
+} from "@chakra-ui/react";
 
 export const Render404 = () => {
-    return <Container maxW={'container.md'} py={8}>
-    <Card p={8}>
+  return (
+    <Container maxW={"container.md"} py={8}>
+      <Card p={8}>
         <CardBody>
-            <Heading fontSize={'2xl'}>404 Not Found</Heading>
-            <Divider my={4} />
-            <chakra.p>
-                This page does not exist.
-            </chakra.p>
+          <Heading fontSize={"2xl"}>404 Not Found</Heading>
+          <Divider my={4} />
+          <chakra.p>This page does not exist.</chakra.p>
         </CardBody>
-    </Card>
+      </Card>
     </Container>
-}
+  );
+};
 
 export default Render404;

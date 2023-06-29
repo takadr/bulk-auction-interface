@@ -1,5 +1,10 @@
-import { useNetwork, usePrepareContractWrite, useContractWrite, useWaitForTransaction } from 'wagmi';
-import Template from 'lib/constants/abis/SaleTemplateV1.json';
+import {
+  useNetwork,
+  usePrepareContractWrite,
+  useContractWrite,
+  useWaitForTransaction,
+} from "wagmi";
+import Template from "lib/constants/abis/SaleTemplateV1.json";
 
 export default function useWithdrawERC20Onsale({
   targetAddress,
@@ -7,39 +12,39 @@ export default function useWithdrawERC20Onsale({
   onErrorWrite,
   onSuccessConfirm,
   onErrorConfirm,
-  isReady = true
-} : {
-  targetAddress: `0x${string}` | null,
-  onSuccessWrite?: (data: any) => void,
-  onErrorWrite?: (error: Error) => void,
-  onSuccessConfirm?: (data: any) => void,
-  onErrorConfirm?: (error: Error) => void,
-  isReady?: boolean
+  isReady = true,
+}: {
+  targetAddress: `0x${string}` | null;
+  onSuccessWrite?: (data: any) => void;
+  onErrorWrite?: (error: Error) => void;
+  onSuccessConfirm?: (data: any) => void;
+  onErrorConfirm?: (error: Error) => void;
+  isReady?: boolean;
 }): {
-    prepareFn: any,
-    writeFn: any,
-    waitFn: ReturnType<typeof useWaitForTransaction>
+  prepareFn: any;
+  writeFn: any;
+  waitFn: ReturnType<typeof useWaitForTransaction>;
 } {
   const { chain } = useNetwork();
-  const enabled: boolean = isReady && !!targetAddress && !!chain
+  const enabled: boolean = isReady && !!targetAddress && !!chain;
 
   const prepareFn = usePrepareContractWrite({
     chainId: chain?.id,
-    address: targetAddress ? targetAddress : '0x00',
+    address: targetAddress ? targetAddress : "0x00",
     abi: Template,
-    functionName: 'withdrawERC20Onsale',
-    enabled
-  })
+    functionName: "withdrawERC20Onsale",
+    enabled,
+  });
 
   const writeFn = useContractWrite({
     ...prepareFn.config,
     onSuccess(data) {
-        onSuccessWrite && onSuccessWrite(data);
+      onSuccessWrite && onSuccessWrite(data);
     },
     onError(e: Error) {
-      onErrorWrite && onErrorWrite(e)
-    }
-  })
+      onErrorWrite && onErrorWrite(e);
+    },
+  });
 
   const waitFn = useWaitForTransaction({
     chainId: chain?.id,
@@ -48,13 +53,13 @@ export default function useWithdrawERC20Onsale({
       onSuccessConfirm && onSuccessConfirm(data);
     },
     onError(e: Error) {
-      onErrorConfirm && onErrorConfirm(e)
-    }
-  })
+      onErrorConfirm && onErrorConfirm(e);
+    },
+  });
 
   return {
     prepareFn,
     writeFn,
     waitFn,
-  }
+  };
 }

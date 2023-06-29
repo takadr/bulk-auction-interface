@@ -1,5 +1,6 @@
 import { ethers } from "ethers";
 import FactoryABI from "lib/constants/abis/Factory.json";
+import SaleTemplateV1ABI from "lib/constants/abis/SaleTemplateV1.json";
 import MintableERC20 from 'lib/constants/abis/MintableERC20.json';
 import { SALE_TEMPLATE_V1_NAME } from "lib/constants";
 import Big, { getBigNumber, multiply } from 'lib/utils/bignumber';
@@ -12,6 +13,12 @@ function getFactoryContract() {
   const provider = ethers.getDefaultProvider(Cypress.env('NETWORK_NAME'));
   const account = new ethers.Wallet(Cypress.env('PRIVATE_KEY'), provider)
   const contract = new ethers.Contract(Cypress.env('FACTORY_ADDRESS'), FactoryABI, account);
+  return contract
+}
+
+function getSaleContract(address) {
+  const provider = ethers.getDefaultProvider(Cypress.env('NETWORK_NAME'));
+  const contract = new ethers.Contract(address, SaleTemplateV1ABI, provider);
   return contract
 }
 
@@ -118,10 +125,14 @@ describe('create-sale-spec', () => {
     cy.wait(5000)
   })
 
-  it('should deploy sale contract', () => {
+  it('should deploy sale contract with the same parameters as user\'s input', () => {
     cy.get('button[type="submit"]').contains('Deploy Sale Contract').first().click()
     cy.confirmMetamaskTransaction()
     cy.contains('Transaction sent!')
     cy.contains('Transaction confirmed!', {timeout: 60000})
+    // cy.get('input#id').invoke('val')
+    // .then((contractAddress) => {
+    //   const sale = getSaleContract(address);
+    // })
   })
 })
