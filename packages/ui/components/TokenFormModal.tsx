@@ -10,10 +10,7 @@ import {
   Input,
   FormControl,
   FormLabel,
-  FormErrorMessage,
-  FormHelperText,
-  Checkbox,
-  CheckboxGroup,
+  FormErrorMessage
 } from "@chakra-ui/react";
 import {
   NumberInput,
@@ -24,19 +21,16 @@ import {
 } from "@chakra-ui/react";
 import { Button, Tooltip, useToast } from "@chakra-ui/react";
 import { QuestionIcon } from "@chakra-ui/icons";
-import { Field, Form, Formik, useFormik, FieldProps } from "formik";
+import { useFormik } from "formik";
 import {
-  useProvider,
   useNetwork,
   useAccount,
-  useContract,
   usePrepareContractWrite,
   useContractWrite,
-  useWaitForTransaction,
-  erc20ABI,
+  useWaitForTransaction
 } from "wagmi";
 import { useDebounce } from "use-debounce";
-import { BigNumber, constants, utils } from "ethers";
+import { utils } from "ethers";
 import TxSentToast from "./TxSentToast";
 
 export default function TokenFormModal({

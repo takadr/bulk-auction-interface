@@ -1,5 +1,5 @@
 import { useConnect, useDisconnect } from "wagmi";
-import { Button, Stack, Image, Flex, useToast } from "@chakra-ui/react";
+import { Button, Stack, Flex, useToast } from "@chakra-ui/react";
 import {
   Modal,
   ModalOverlay,

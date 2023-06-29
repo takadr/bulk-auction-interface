@@ -1,6 +1,5 @@
-import Router, { useRouter } from "next/router";
-import { useAccount, useNetwork } from "wagmi";
-import { chakra, Spinner } from "@chakra-ui/react";
+import { useRouter } from "next/router";
+import { useAccount } from "wagmi";
 import SaleTemplateV1, {
   SkeletonSale,
 } from "ui/components/templates/SaleTemplateV1";

@@ -1,4 +1,4 @@
-import { chakra, ButtonProps, Button, useToast } from "@chakra-ui/react";
+import { ButtonProps, Button, useToast } from "@chakra-ui/react";
 import { KeyedMutator } from "swr";
 import useClaim from "../../../hooks/useClaim";
 import { Sale } from "lib/types/Sale";

@@ -1,6 +1,5 @@
 import {
   chakra,
-  Link,
   Heading,
   BoxProps,
   useToken,
@@ -11,8 +10,6 @@ import Big from "lib/utils/bignumber";
 import {
   getTargetPercetage,
   getFiatConversionAmount,
-  tokenAmountFormat,
-  getEtherscanLink,
   etherAmountFormat,
   formatEther,
 } from "lib/utils";

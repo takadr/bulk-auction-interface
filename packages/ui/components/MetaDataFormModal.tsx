@@ -7,7 +7,7 @@ import {
   ModalBody,
   ModalCloseButton,
 } from "@chakra-ui/react";
-import { Button, useToast, Flex, chakra, useColorMode } from "@chakra-ui/react";
+import { useToast, useColorMode } from "@chakra-ui/react";
 import { useAccount } from "wagmi";
 import { CustomProvider } from "rsuite";
 import MetaDataForm from "./templates/SaleTemplateV1/MetaDataForm";

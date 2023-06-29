@@ -1,4 +1,3 @@
-import { useState } from "react";
 import { ethers } from "ethers";
 import SaleTemplateV1ABI from "lib/constants/abis/SaleTemplateV1.json";
 import { CHAIN_NAMES } from "lib/constants";

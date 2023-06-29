@@ -29,14 +29,9 @@ import {
   StackDivider,
   SkeletonCircle,
   Skeleton,
-  SkeletonText,
-  Alert,
-  AlertIcon,
-  AlertTitle,
-  AlertDescription,
-  CloseButton,
+  SkeletonText
 } from "@chakra-ui/react";
-import { ExternalLinkIcon, InfoIcon, QuestionIcon } from "@chakra-ui/icons";
+import { ExternalLinkIcon, QuestionIcon } from "@chakra-ui/icons";
 import { useFormik } from "formik";
 import {
   useWaitForTransaction,

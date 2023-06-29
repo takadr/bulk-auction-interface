@@ -1,7 +1,7 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import { withIronSessionApiRoute } from "iron-session/next";
 import { erc20ABI } from "wagmi";
-import { ethers, utils } from "ethers";
+import { ethers } from "ethers";
 import { scanMetaData, addMetaData, updateSale } from "lib/dynamodb/metaData";
 import SaleTemplateV1ABI from "lib/constants/abis/SaleTemplateV1.json";
 import ironOptions from "lib/constants/ironOptions";
