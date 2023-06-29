@@ -5,7 +5,7 @@ import SaleTemplateV1, { SkeletonSale } from 'ui/components/templates/SaleTempla
 import Layout from 'ui/components/layouts/layout';
 import { useQuery } from '@apollo/client';
 import { GET_SALE_QUERY } from 'lib/apollo/query';
-import useSWRAuction from 'ui/hooks/useAuction';
+import useSWRMetaData from 'ui/hooks/useSWRMetaData';
 import Render500 from 'ui/components/errors/500';
 import Render404 from 'ui/components/errors/404';
 
@@ -18,7 +18,7 @@ export default function SalePage() {
     // TODO Get template address from contractAddress
     // Switch template by using template address
     const { data: saleData, loading, error: apolloError, refetch } = useQuery(GET_SALE_QUERY, {variables: { id: id as string } });
-    const { data: metaData, mutate, error: dynamodbError } = useSWRAuction(id as string);
+    const { data: metaData, mutate, error: dynamodbError } = useSWRMetaData(id as string);
 
     if(apolloError || dynamodbError) return <Layout><Render500 error={apolloError || dynamodbError} /></Layout>
 

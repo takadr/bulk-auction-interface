@@ -2,7 +2,7 @@ import { NextApiRequest, NextApiResponse } from 'next';
 import { withIronSessionApiRoute } from 'iron-session/next';
 import { erc20ABI } from 'wagmi';
 import { ethers, utils } from 'ethers';
-import { scanAuctions, addAuction, updateAuction } from 'lib/utils/auctions';
+import { scanMetaData, addMetaData, updateSale } from 'lib/dynamodb/metaData';
 import SaleTemplateV1ABI from 'lib/constants/abis/SaleTemplateV1.json';
 import ironOptions from 'lib/constants/ironOptions';
 import { CHAIN_IDS } from 'lib/constants';
@@ -13,12 +13,12 @@ const requireContractOwner = (req: NextApiRequest): Promise<any> => {
     return new Promise(async (resolve, reject) => {
         try {
             if(!req.session.siwe) return reject('Unauthorized');
-            const auction = req.body;
+            const metaData = req.body;
             const provider = ethers.getDefaultProvider(req.session.siwe.chainId);
-            const auctionContract = new ethers.Contract(auction.id, SaleTemplateV1ABI, provider);
-            const contractOwner = await auctionContract.owner()
+            const saleContract = new ethers.Contract(metaData.id, SaleTemplateV1ABI, provider);
+            const contractOwner = await saleContract.owner()
             if(contractOwner !== req.session.siwe.address) reject('You are not the owner of this contract');
-            resolve({auction, auctionContract, provider});
+            resolve({metaData, saleContract, provider});
         } catch (error) {
             reject(error.message);
         }
@@ -41,8 +41,8 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
         case 'GET':
         try {
             const { lastEvaluatedKeyId, lastEvaluatedKeyCreatedAt } = req.query;
-            const auctions = await scanAuctions(lastEvaluatedKeyId as string, lastEvaluatedKeyCreatedAt as string);
-            res.json({ auctions })
+            const metaData = await scanMetaData(lastEvaluatedKeyId as string, lastEvaluatedKeyCreatedAt as string);
+            res.json({ metaData })
         } catch (_error) {
             console.log(_error.message)
             res.status(500).end(_error.message);
@@ -50,11 +50,11 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
         break
         case 'POST':
         try {
-            const { auction, auctionContract, provider } = await requireContractOwner(req);
+            const { metaData, saleContract, provider } = await requireContractOwner(req);
             requireAvailableNetwork(req);
-            const tokenAddress = await auctionContract.erc20onsale()
+            const tokenAddress = await saleContract.erc20onsale()
             const {tokenName, tokenSymbol, tokenDecimal} = await getTokenInfo(tokenAddress, provider);
-            const result = await addAuction({...auction, tokenName, tokenSymbol, tokenDecimal});
+            const result = await addMetaData({...metaData, tokenName, tokenSymbol, tokenDecimal});
             res.json({ result })
         } catch (_error) {
             console.log(_error.message)
@@ -63,11 +63,11 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
         break
         case 'PUT':
         try {
-            const { auction, auctionContract, provider } = await requireContractOwner(req);
+            const { metaData, saleContract, provider } = await requireContractOwner(req);
             requireAvailableNetwork(req);
-            const tokenAddress = await auctionContract.erc20onsale()
+            const tokenAddress = await saleContract.erc20onsale()
             const {tokenName, tokenSymbol, tokenDecimal} = await getTokenInfo(tokenAddress, provider);
-            const result = await updateAuction({...auction, tokenName, tokenSymbol, tokenDecimal});
+            const result = await updateSale({...metaData, tokenName, tokenSymbol, tokenDecimal});
             res.json({ result })
         } catch (_error) {
             console.log(_error.message)

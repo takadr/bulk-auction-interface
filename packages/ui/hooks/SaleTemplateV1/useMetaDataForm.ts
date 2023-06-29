@@ -33,7 +33,7 @@ export default function useMetaDataForm({contractId, minRaisedAmount, onSubmitSu
     const handleSubmit = async (auctionData: MetaData) => {
         // console.log(Object.assign(auctionData, {id: auctionData.id}))
         try {
-            const result = await fetch('/api/auctions', {
+            const result = await fetch('/api/metadata', {
                 credentials: 'same-origin',
                 method: saleMetaData ? 'PUT' : 'POST',
                 headers: {

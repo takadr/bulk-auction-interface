@@ -1,6 +1,6 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import { withIronSessionApiRoute } from 'iron-session/next';
-import { fetchAuction } from 'lib/utils/auctions';
+import { fetchMetaData } from 'lib/dynamodb/metaData';
 import ironOptions from 'lib/constants/ironOptions';
 import { CHAIN_IDS } from 'lib/constants';
 
@@ -17,8 +17,8 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
         try {
             const { id } = req.query;
             // requireAvailableNetwork(chainId);
-            const auction = await fetchAuction(id as string);
-            res.json({ auction })
+            const metaData = await fetchMetaData(id as string);
+            res.json({ metaData })
         } catch (_error) {
             console.log(_error.message)
             res.status(500).end(_error.message);

@@ -3,7 +3,7 @@ import { chakra, Link, Box, Divider, Skeleton, Tag, Heading, Card, CardBody, Pro
 import { EditIcon } from '@chakra-ui/icons';
 import Big, { divideToNum, getBigNumber } from 'lib/utils/bignumber';
 import { Sale } from 'lib/types/Sale';
-import useSWRAuction from '../hooks/useAuction';
+import useSWRMetaData from '../hooks/useSWRMetaData';
 import MetaDataFormModal from './MetaDataFormModal';
 import { tokenAmountFormat, getCountdown, ellipsisText, getDecimalsForView, getTargetPercetage, etherAmountFormat, parseEtherInBig } from 'lib/utils';
 import { useNow } from '../hooks/useNow';
@@ -13,7 +13,7 @@ export default function SaleCard({ sale, editable=false }: { sale: Sale, editabl
     // 0-> not started, 1 -> started, 2 -> closed
     const [stage, setStage] = useState<'0'|'1'|'2'>('0');
     const { onOpen, isOpen, onClose } = useDisclosure();
-    const { data, mutate, error } = useSWRAuction(sale.id as string);
+    const { data, mutate, error } = useSWRMetaData(sale.id as string);
     const [countdown, setCountdown] = useState({
         days: '0',
         hours: '00',

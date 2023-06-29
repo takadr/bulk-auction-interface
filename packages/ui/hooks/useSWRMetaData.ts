@@ -4,12 +4,12 @@ import { LOCK_DURATION, FEE_RATE_PER_MIL, SALE_TEMPLATE_V1_NAME } from 'lib/cons
 
 type Constants = { lockDuration: number, feeRatePerMil: number }
 
-const useSWRAuction = (id: string): SWRResponse<{metaData: MetaData, constants: Constants}|undefined, Error> => {
+const useSWRMetaData = (id: string): SWRResponse<{metaData: MetaData, constants: Constants}|undefined, Error> => {
     const fetcher = (url: string): Promise<{metaData: MetaData, constants: Constants}|undefined> => fetch(url)
     .then(res => res.json())
     .then(data => { 
         return {
-            metaData: data.auction ? data.auction : {
+            metaData: data.metaData ? data.metaData : {
                 id,
                 title: 'Unnamed Sale',
             } as MetaData,
@@ -19,7 +19,7 @@ const useSWRAuction = (id: string): SWRResponse<{metaData: MetaData, constants: 
             }
         }
     })
-    return useSWR<{metaData: MetaData, constants: Constants}|undefined, Error>(`/api/auctions/${id}`, fetcher, {errorRetryCount: 2});
+    return useSWR<{metaData: MetaData, constants: Constants}|undefined, Error>(`/api/metadata/${id}`, fetcher, {errorRetryCount: 2});
 }
 
-export default useSWRAuction;
+export default useSWRMetaData;
