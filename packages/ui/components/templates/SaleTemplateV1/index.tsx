@@ -29,7 +29,7 @@ import {
   StackDivider,
   SkeletonCircle,
   Skeleton,
-  SkeletonText
+  SkeletonText,
 } from "@chakra-ui/react";
 import { ExternalLinkIcon, QuestionIcon } from "@chakra-ui/icons";
 import { useFormik } from "formik";

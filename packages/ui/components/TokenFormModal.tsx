@@ -10,7 +10,7 @@ import {
   Input,
   FormControl,
   FormLabel,
-  FormErrorMessage
+  FormErrorMessage,
 } from "@chakra-ui/react";
 import {
   NumberInput,
@@ -27,7 +27,7 @@ import {
   useAccount,
   usePrepareContractWrite,
   useContractWrite,
-  useWaitForTransaction
+  useWaitForTransaction,
 } from "wagmi";
 import { useDebounce } from "use-debounce";
 import { utils } from "ethers";

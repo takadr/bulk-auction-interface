@@ -1,10 +1,4 @@
-import {
-  chakra,
-  Heading,
-  BoxProps,
-  useToken,
-  Tooltip,
-} from "@chakra-ui/react";
+import { chakra, Heading, BoxProps, useToken, Tooltip } from "@chakra-ui/react";
 import { Circle } from "rc-progress";
 import Big from "lib/utils/bignumber";
 import {

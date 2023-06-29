@@ -4,6 +4,7 @@ import SaleTemplateV1, {
   SkeletonSale,
 } from "ui/components/templates/SaleTemplateV1";
 import Layout from "ui/components/layouts/layout";
+import MetaTags from "ui/components/MetaTags";
 import { useQuery } from "@apollo/client";
 import { GET_SALE_QUERY } from "lib/apollo/query";
 import useSWRMetaData from "ui/hooks/useSWRMetaData";
@@ -52,6 +53,17 @@ export default function SalePage() {
 
   return (
     <Layout>
+      <MetaTags
+        title={`${
+          metaData.metaData.title ? metaData.metaData.title : "Sale"
+        } | Bulksale maker(仮)`}
+        description={
+          metaData.metaData.description
+            ? metaData.metaData.description
+            : "An inclusive and transparent token launchpad"
+        }
+        image={metaData.metaData.logoURL && metaData.metaData.logoURL}
+      />
       <SaleTemplateV1
         sale={saleData.sale}
         refetchSale={refetch}
