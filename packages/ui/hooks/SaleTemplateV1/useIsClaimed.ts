@@ -9,7 +9,8 @@ export default function useSWRIsClaimed(
   address: `0x${string}` | undefined
 ): SWRResponse<boolean | undefined, Error> {
   const provider = ethers.getDefaultProvider(
-    CHAIN_NAMES[process.env.NEXT_PUBLIC_CHAIN_ID as string]
+    CHAIN_NAMES[process.env.NEXT_PUBLIC_CHAIN_ID as string],
+    { infura: process.env.NEXT_PUBLIC_INFURA_API_TOKEN }
   );
   const saleContract = new ethers.Contract(
     sale.id as string,

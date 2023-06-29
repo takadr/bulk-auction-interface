@@ -14,7 +14,9 @@ const requireContractOwner = (req: NextApiRequest): Promise<any> => {
     try {
       if (!req.session.siwe) return reject("Unauthorized");
       const metaData = req.body;
-      const provider = ethers.getDefaultProvider(req.session.siwe.chainId);
+      const provider = ethers.getDefaultProvider(req.session.siwe.chainId, {
+        infura: process.env.NEXT_PUBLIC_INFURA_API_TOKEN,
+      });
       const saleContract = new ethers.Contract(
         metaData.id,
         SaleTemplateV1ABI,
