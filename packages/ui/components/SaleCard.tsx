@@ -91,7 +91,7 @@ export default function SaleCard({
   //         <Image
   //         objectFit='contain'
   //         maxW={{ base: '100%', sm: '200px' }}
-  //         src={'https://dummyimage.com/200x200/bbb/fff.png&text=No+Image'}
+  //         src={'https://dummyimage.com/200x200/718096/fff.png&text=No+Image'}
   //         alt={''}
   //         />
 
@@ -112,7 +112,7 @@ export default function SaleCard({
         src={
           data?.metaData?.logoURL
             ? data?.metaData?.logoURL
-            : "https://dummyimage.com/200x200/bbb/fff.png&text=No+Image"
+            : "https://dummyimage.com/200x200/718096/fff.png&text=No+Image"
         }
         alt={data?.metaData?.title}
       />

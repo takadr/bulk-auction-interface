@@ -215,7 +215,7 @@ export default function SaleTemplateV1({
             src={
               metaData.logoURL
                 ? metaData.logoURL
-                : "https://dummyimage.com/200x200/bbb/fff.png&text=No+Image"
+                : "https://dummyimage.com/200x200/718096/fff.png&text=No+Image"
             }
             alt={metaData.title}
           />
