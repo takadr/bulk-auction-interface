@@ -17,6 +17,7 @@ export default function MetaTags({
   return (
     <Head>
       <title>{title}</title>
+      <meta name="robots" content="noindex" />
       <meta name="description" content={description} />
       <meta property="og:title" content={title} />
       <meta property="og:description" content={description} />
