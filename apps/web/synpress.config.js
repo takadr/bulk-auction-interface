@@ -1,4 +1,3 @@
-const { ethers } = require('hardhat'); 
 const log = require('debug')('synpress:config');
 const path = require('path');
 const packageJson = require('./package.json');
@@ -35,13 +34,6 @@ module.exports = defineConfig({
     testIsolation: false,
     setupNodeEvents(on, config) {
       setupNodeEvents(on, config)
-      on('task', {
-        async increaseEVMTime(time) {
-          await ethers.provider.send('evm_increaseTime', [time])
-          await ethers.provider.send("evm_mine", []);
-          return null
-        }
-      })
     },
     baseUrl: 'http://localhost:3000',
     specPattern: 'tests/e2e/specs/**/*.{js,jsx,ts,tsx}',
