@@ -38,7 +38,7 @@ type HeaderProps = {
   title?: string;
 };
 
-export const Header: FC<HeaderProps> = ({ title }) => {
+const Header: FC<HeaderProps> = ({ title }) => {
   const { chain } = useNetwork();
   const providersListDisclosure = useDisclosure();
   const toast = useToast({ position: "top-right", isClosable: true });

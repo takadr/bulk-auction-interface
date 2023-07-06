@@ -7,11 +7,11 @@ import {
   useToast,
 } from "@chakra-ui/react";
 import { useAccount, useDisconnect, useNetwork } from "wagmi";
-import { Header } from "../Header";
 import { CurrentUserContext } from "../providers/CurrentUserProvider";
 import { CHAIN_NAMES } from "lib/constants";
 import { capitalize } from "lib/utils";
 import { useIsMounted } from "../../hooks/useIsMounted";
+import Header from "../Header";
 
 export default function Layout({
   title,
