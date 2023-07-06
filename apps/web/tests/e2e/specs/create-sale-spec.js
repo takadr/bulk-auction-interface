@@ -9,6 +9,29 @@ import { differenceInSeconds, addSeconds, format } from 'date-fns';
 
 const TOKEN_AMOUNT = 10;
 
+Cypress.Commands.add('mintToken', () => {
+  const token = getToken();
+
+  return new Cypress.Promise(resolve => {
+    token.decimals().then(decimals => token.mint(multiply(Big(TOKEN_AMOUNT), Big(10).pow(decimals)).toString()).then(res => resolve(res)))
+  });
+});
+
+Cypress.Commands.add('revokeApproval', () => {
+  const token = getToken();
+
+  return new Cypress.Promise(resolve => {
+    token.approve(Cypress.env('FACTORY_ADDRESS'), 0).then(res => resolve(res))
+  });
+});
+
+function getToken() {
+  const provider = ethers.getDefaultProvider(Cypress.env('NETWORK_NAME'));
+  const account = new ethers.Wallet(Cypress.env('PRIVATE_KEY'), provider)
+  const contract = new ethers.Contract(Cypress.env('TEST_TOKEN'), MintableERC20, account);
+  return contract
+}
+
 function getFactoryContract() {
   const provider = ethers.getDefaultProvider(Cypress.env('NETWORK_NAME'));
   const account = new ethers.Wallet(Cypress.env('PRIVATE_KEY'), provider)
@@ -22,41 +45,18 @@ function getSaleContract(address) {
   return contract
 }
 
-function getToken() {
-  const provider = ethers.getDefaultProvider(Cypress.env('NETWORK_NAME'));
-  const account = new ethers.Wallet(Cypress.env('PRIVATE_KEY'), provider)
-  const contract = new ethers.Contract(Cypress.env('TEST_TOKEN'), MintableERC20, account);
-  return contract
-}
-
-function mintToken() {
-  const token = getToken();
-  return token.decimals().then(decimals => token.mint(multiply(Big(TOKEN_AMOUNT), Big(10).pow(decimals)).toString()))
-}
-
-function revokeApproval() {
-  const token = getToken();
-  return token.approve(Cypress.env('FACTORY_ADDRESS'), 0)
-}
-
 describe('create-sale-spec', () => {
   before(() => {
-    revokeApproval()
-    mintToken()
+    cy.revokeApproval()
+    cy.mintToken()
     cy.setupMetamask(Cypress.env('PRIVATE_KEY'), Cypress.env('NETWORK_NAME'), Math.random().toString(32).substring(2))
     cy.visit('/');
-    // cy.get('#sign-in-with-ethereum').click()
-    // cy.get('#metaMask').click()
-    // cy.acceptMetamaskAccess({ confirmSignatureRequest: true })
   });
+
   after(() => {
-    revokeApproval()
+    cy.revokeApproval()
   });
-    // before(async() => {
-    //   await cy.setupMetamask(Cypress.env('PRIVATE_KEY'), Cypress.env('NETWORK_NAME'), Math.random().toString(32).substring(2))
-    //   cy.visit('/');
-    //   cy.task('increaseEVMTime', 60*60*24)
-    // });
+
   it('should sign in with Ethereum', () => {
     cy.get('#sign-in-with-ethereum').click()
     cy.get('#metaMask').click()
@@ -75,10 +75,16 @@ describe('create-sale-spec', () => {
     cy.get('input[name="allocatedAmount"]').clear().type(TOKEN_AMOUNT)
     cy.get('input[name="minRaisedAmount"]').clear().type(1)
 
-    cy.get('button').contains('Approve token').first().click()
-    cy.confirmMetamaskPermissionToSpend(TOKEN_AMOUNT)
-    cy.contains('Transaction sent!')
-    cy.contains('Approval confirmed!', {timeout: 60000})
+    cy.get('button').contains('Approve token').first().click().then(res => {
+      // workaround https://github.com/Synthetixio/synpress/issues/795
+      cy.wait(10000)
+
+      cy.confirmMetamaskPermissionToSpend(TOKEN_AMOUNT).then(spend => {
+        cy.contains('Transaction sent!')
+        cy.contains('Approval confirmed!', {timeout: 60000})
+      })
+    })
+    
     cy.wait(1000)
   })
 
@@ -126,10 +132,15 @@ describe('create-sale-spec', () => {
   })
 
   it('should deploy sale contract with the same parameters as user\'s input', () => {
-    cy.get('button[type="submit"]').contains('Deploy Sale Contract').first().click()
-    cy.confirmMetamaskTransaction()
-    cy.contains('Transaction sent!')
-    cy.contains('Transaction confirmed!', {timeout: 60000})
+    cy.get('button[type="submit"]').contains('Deploy Sale Contract').first().click().then(res => {
+      // workaround https://github.com/Synthetixio/synpress/issues/795
+      cy.wait(10000)
+
+      cy.confirmMetamaskTransaction().then(res => {
+        cy.contains('Transaction sent!')
+        cy.contains('Transaction confirmed!', {timeout: 60000})
+      })
+    })
     // cy.get('input#id').invoke('val')
     // .then((contractAddress) => {
     //   const sale = getSaleContract(address);
