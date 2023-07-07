@@ -12,15 +12,8 @@ export const capitalize = function (str: string) {
   return str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
 };
 
-// From SaleTemplateV1
 export const calculateAllocation = (us: Big, tp: Big, tda: Big): Big => {
-  let al = Big(0);
-  if (tda.lt(tp)) {
-    al = us.mul(tda).div(tp);
-  } else {
-    /* sender's share is very tiny and so calculate tda/tp first */
-    al = us.mul(tda.div(tp));
-  }
+  let al = us.mul(tda).div(tp);
   return al.round(0, 0);
 };
 
