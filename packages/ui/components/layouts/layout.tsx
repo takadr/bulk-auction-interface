@@ -12,6 +12,7 @@ import { CHAIN_NAMES } from "lib/constants";
 import { capitalize } from "lib/utils";
 import { useIsMounted } from "../../hooks/useIsMounted";
 import Header from "../Header";
+import Footer from "../Footer";
 
 export default function Layout({
   title,
@@ -69,6 +70,7 @@ export default function Layout({
         </chakra.div>
       )}
       <>{children}</>
+      <Footer />
     </>
   );
 }
