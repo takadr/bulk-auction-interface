@@ -1,0 +1,66 @@
+name: Web app E2E tests
+on: 
+  push:
+    paths:
+      - 'apps/web/**'
+      - .github/workflows/web-e2e.yml
+  pull_request:
+    paths:
+      - 'apps/web/**'
+      - .github/workflows/web-e2e.yml
+jobs:
+  run-synpress:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v2
+        with:
+          version: 8.3.1
+        
+      - name: Setup Node.js environment
+        uses: actions/setup-node@v3
+        with:
+          node-version: 17
+          cache: 'pnpm'
+
+      # - name: Install Ubuntu dependencies
+      #   run: |
+      #       sudo apt update -y && sudo apt install --no-install-recommends -y \
+      #       fluxbox \
+      #       libgtk2.0-0 libgtk-3-0 libgbm-dev libnotify-dev libgconf-2-4 libnss3 libxss1 libasound2 libxtst6 xauth xvfb fonts-liberation libu2f-udev libvulkan1 xdg-utils
+
+      # - name: Install chrome
+      #   run: wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb && sudo dpkg -i google-chrome-stable_current_amd64.deb
+
+      - name: Install dependencies
+        run: pnpm install
+
+      # - name: Install cypress
+      #   run: pnpm add cypress -w
+        
+      # - name: Build
+      #   run: pnpm build
+
+      - name: Lint
+        run: pnpm lint
+
+      # - name: Run xvfb and fluxbox
+      #   run: |
+      #     Xvfb :0 -screen 0 1024x768x24 -listen tcp -ac &
+      #     fluxbox &
+      #   env:
+      #     DISPLAY: :0.0 
+
+      # - name: Run e2e test
+      #   run: cd apps/web && DEBUG=cypress:server:video npx env-cmd -f ../../.env npm run test:headless
+
+      # - name: Save video
+      #   uses: actions/upload-artifact@v3
+      #   if: always()
+      #   with:
+      #     name: Synpress E2E Videos
+      #     path: videos
+      #     if-no-files-found: ignore
