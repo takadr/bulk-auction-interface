@@ -36,7 +36,7 @@ const Footer: FC = () => {
             <HStack fontSize={"xs"} spacing={1}>
               <chakra.span>Current version: </chakra.span>
               <Link
-                href={`https://github.com/takadr/bulk-auction-interface/commit/${process.env.NEXT_PUBLIC_VERCEL_GIT_COMMIT_SHA}`}
+                href={`https://github.com/DeFiGeek-Community/bulk-auction-interface/commit/${process.env.NEXT_PUBLIC_VERCEL_GIT_COMMIT_SHA}`}
                 target={"_blank"}
               >
                 {process.env.NEXT_PUBLIC_VERCEL_GIT_COMMIT_SHA}
