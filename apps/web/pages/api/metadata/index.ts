@@ -1,28 +1,50 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import { withIronSessionApiRoute } from "iron-session/next";
 import { erc20ABI } from "wagmi";
-import { ethers } from "ethers";
+import { createPublicClient, http, fallback, getContract } from 'viem';
+import { mainnet, goerli, sepolia, local } from 'viem/chains';
 import { scanMetaData, addMetaData, updateSale } from "lib/dynamodb/metaData";
 import SaleTemplateV1ABI from "lib/constants/abis/SaleTemplateV1.json";
 import ironOptions from "lib/constants/ironOptions";
-import { CHAIN_IDS } from "lib/constants";
+import { CHAIN_IDS, CHAIN_NAMES } from "lib/constants";
 
 const availableNetwork = Object.values(CHAIN_IDS);
+
+const getViemChain = (chainName: string) => {
+    if(chainName === 'mainnet') {
+        return mainnet;
+    } else if(chainName === 'goerli') {
+        return goerli;
+    } else if(chainName === 'sepolia') {
+        return sepolia;
+    } else {
+        return local
+    }
+}
+
+const getViemProvider = (chainId: string) => {
+    const chainName = CHAIN_NAMES[chainId];
+    // const alchemy = http(`https://eth-${chainName}.g.alchemy.com/v2/${}`)
+    const infura = http(`https://${chainName}.infura.io/v3/${process.env.NEXT_PUBLIC_INFURA_API_TOKEN}`)
+    const client = createPublicClient({
+        chain: getViemChain(chainName),
+        transport: fallback([infura])
+    })
+    return client;
+}
 
 const requireContractOwner = (req: NextApiRequest): Promise<any> => {
   return new Promise(async (resolve, reject) => {
     try {
       if (!req.session.siwe) return reject("Unauthorized");
       const metaData = req.body;
-      const provider = ethers.getDefaultProvider(req.session.siwe.chainId, {
-        infura: process.env.NEXT_PUBLIC_INFURA_API_TOKEN,
-      });
-      const saleContract = new ethers.Contract(
-        metaData.id,
-        SaleTemplateV1ABI,
-        provider
-      );
-      const contractOwner = await saleContract.owner();
+      const provider = getViemProvider(req.session.siwe.chainId);
+      const saleContract = getContract({
+        address: metaData.id,
+        abi: SaleTemplateV1ABI,
+        publicClient: provider,
+      })
+      const contractOwner = await saleContract.read.owner();
       if (contractOwner !== req.session.siwe.address)
         reject("You are not the owner of this contract");
       resolve({ metaData, saleContract, provider });
@@ -38,11 +60,15 @@ const requireAvailableNetwork = (req: NextApiRequest) => {
 };
 
 const getTokenInfo = async (tokenAddress, provider) => {
-  const token = new ethers.Contract(tokenAddress, erc20ABI, provider);
+  const token = getContract({
+    address: tokenAddress,
+    abi: erc20ABI,
+    publicClient: provider,
+  })
   const result = await Promise.all([
-    token.name(),
-    token.symbol(),
-    token.decimals(),
+    token.read.name(),
+    token.read.symbol(),
+    token.read.decimals(),
   ]);
   return {
     tokenName: result[0],
@@ -73,11 +99,12 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
           req
         );
         requireAvailableNetwork(req);
-        const tokenAddress = await saleContract.erc20onsale();
+        const tokenAddress = await saleContract.read.erc20onsale();
         const { tokenName, tokenSymbol, tokenDecimal } = await getTokenInfo(
           tokenAddress,
           provider
         );
+        console.log(tokenName)
         const result = await addMetaData({
           ...metaData,
           tokenName,
@@ -96,7 +123,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
           req
         );
         requireAvailableNetwork(req);
-        const tokenAddress = await saleContract.erc20onsale();
+        const tokenAddress = await saleContract.read.erc20onsale();
         const { tokenName, tokenSymbol, tokenDecimal } = await getTokenInfo(
           tokenAddress,
           provider
