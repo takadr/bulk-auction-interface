@@ -134,7 +134,7 @@ export default function SaleFormModal({
     address: process.env.NEXT_PUBLIC_FACTORY_ADDRESS as `0x${string}`,
     abi: FactoryABI,
     eventName: "Deployed",
-    listener(templateName, deployedAddr, tokenAddr, owner) {
+    listener(templateName, deployedAddr, tokenAddr, baseToken, owner) {
       if (
         formikProps.values.token &&
         (owner as string).toLowerCase() === (address as string).toLowerCase() &&
