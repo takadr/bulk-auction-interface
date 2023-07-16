@@ -1,8 +1,8 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import { withIronSessionApiRoute } from "iron-session/next";
 import { erc20ABI } from "wagmi";
-import { createPublicClient, http, fallback, getContract } from "viem";
-import { mainnet, goerli, sepolia, localhost } from "viem/chains";
+import { createPublicClient, http, fallback, getContract, PublicClient, GetContractReturnType, Abi, Transport } from "viem";
+import { mainnet, goerli, sepolia, localhost, Chain } from "viem/chains";
 import { scanMetaData, addMetaData, updateSale } from "lib/dynamodb/metaData";
 import SaleTemplateV1ABI from "lib/constants/abis/SaleTemplateV1.json";
 import ironOptions from "lib/constants/ironOptions";
@@ -22,7 +22,7 @@ const getViemChain = (chainName: string) => {
   }
 };
 
-const getViemProvider = (chainId: string) => {
+const getViemProvider = (chainId: number) => {
   const chainName = CHAIN_NAMES[chainId];
   // const alchemy = http(`https://eth-${chainName}.g.alchemy.com/v2/${}`)
   const infura = http(
@@ -35,7 +35,11 @@ const getViemProvider = (chainId: string) => {
   return client;
 };
 
-const requireContractOwner = (req: NextApiRequest): Promise<any> => {
+const requireContractOwner = (req: NextApiRequest): Promise<{
+  metaData: any,
+  saleContract: GetContractReturnType<typeof SaleTemplateV1ABI, PublicClient>,
+  provider: PublicClient<Transport, Chain>
+}> => {
   return new Promise(async (resolve, reject) => {
     try {
       if (!req.session.siwe) return reject("Unauthorized");
@@ -61,7 +65,7 @@ const requireAvailableNetwork = (req: NextApiRequest) => {
     throw new Error("Wrong network");
 };
 
-const getTokenInfo = async (tokenAddress, provider) => {
+const getTokenInfo = async (tokenAddress: `0x${string}`, provider: PublicClient) => {
   const token = getContract({
     address: tokenAddress,
     abi: erc20ABI,
@@ -103,10 +107,9 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
         requireAvailableNetwork(req);
         const tokenAddress = await saleContract.read.erc20onsale();
         const { tokenName, tokenSymbol, tokenDecimal } = await getTokenInfo(
-          tokenAddress,
+          tokenAddress as `0x${string}`,
           provider
         );
-        console.log(tokenName);
         const result = await addMetaData({
           ...metaData,
           tokenName,
@@ -127,7 +130,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
         requireAvailableNetwork(req);
         const tokenAddress = await saleContract.read.erc20onsale();
         const { tokenName, tokenSymbol, tokenDecimal } = await getTokenInfo(
-          tokenAddress,
+          tokenAddress as `0x${string}`,
           provider
         );
         const result = await updateSale({
