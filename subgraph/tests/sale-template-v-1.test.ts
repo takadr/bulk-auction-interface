@@ -45,9 +45,7 @@ describe("Describe entity assertions", () => {
       templateName,
       deployedAddr,
       tokenAddr,
-      Address.fromString(
-        "0x0000000000000000000000000000000000000000"
-      ),
+      Address.fromString("0x0000000000000000000000000000000000000000"),
       owner,
       allocatedAmount,
       startingAt,

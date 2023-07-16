@@ -58,7 +58,11 @@ export default function TxSentToast(props: TxSentToast) {
         <AlertDescription display="block">
           {description}
           <Link
-            href={getEtherscanLink(CHAIN_NAMES[process.env.NEXT_PUBLIC_CHAIN_ID!], txid, "tx")}
+            href={getEtherscanLink(
+              CHAIN_NAMES[process.env.NEXT_PUBLIC_CHAIN_ID!],
+              txid,
+              "tx"
+            )}
             target={"_blank"}
           >
             Etherscan <ExternalLinkIcon ml={1} />

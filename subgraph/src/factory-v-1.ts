@@ -22,7 +22,7 @@ export function handleDeployed(event: DeployedEvent): void {
   sale.tokenDecimals = fetchTokenDecimals(event.params.tokenAddr);
   sale.baseToken = event.params.baseToken.toHex();
 
-  if(sale.baseToken == "0x0000000000000000000000000000000000000000") {
+  if (sale.baseToken == "0x0000000000000000000000000000000000000000") {
     sale.baseTokenSymbol = "ETH";
     sale.baseTokenName = "Ether";
     sale.baseTokenDecimals = BigInt.fromI32(18);
