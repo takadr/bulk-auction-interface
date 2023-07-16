@@ -14,7 +14,7 @@ import { CurrentUserContext } from "ui/components/providers/CurrentUserProvider"
 import Layout from "ui/components/layouts/layout";
 import Hero from "ui/components/Hero";
 import SaleCard, { SaleCardSkeleton } from "ui/components/SaleCard";
-import { useSWRSales } from "ui/hooks/useSales";
+import { useSWRSales, QueryType } from "ui/hooks/useSales";
 import { Sale } from "lib/types/Sale";
 
 export default function Web() {
@@ -26,7 +26,7 @@ export default function Web() {
     isValidating: isValidatingActiveSales,
     error: activeSalesError,
     loadMoreSales: loadMoreActiveSales,
-  } = useSWRSales({ first: 5, keySuffix: "top" });
+  } = useSWRSales({ first: 5, keySuffix: "top" }, QueryType.ACTIVE);
 
   return (
     <Layout>
@@ -54,7 +54,7 @@ export default function Web() {
           {!isLoadingActiveSales && activeSales.length === 0 && (
             <Flex minH={"25vh"} justifyContent="center" alignItems={"center"}>
               <Text fontSize={"lg"} opacity={".75"} textAlign={"center"}>
-                No sales
+                No live sales
               </Text>
             </Flex>
           )}
