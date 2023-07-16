@@ -15,7 +15,13 @@ import { createDeployedEvent } from "./factory-v-1-utils";
 
 // Tests structure (matchstick-as >=0.5.0)
 // https://thegraph.com/docs/en/developer/matchstick/#tests-structure-0-5-0
-const USDT_ADDRESS = "0x7169D38820dfd117C3FA1f22a697dBA58d90BA06";
+
+// Sepolia
+// const USDT_ADDRESS = "0x7169D38820dfd117C3FA1f22a697dBA58d90BA06";
+
+// Goerli
+const USDT_ADDRESS = "0xc2c527c0cacf457746bd31b2a698fe89de2b6d49";
+
 // 0xa16081f360e3847006db660bae1c6d1b2e17ec2a is the default address used in newMockEvent() function
 
 describe("Describe entity assertions", () => {
@@ -39,6 +45,9 @@ describe("Describe entity assertions", () => {
       templateName,
       deployedAddr,
       tokenAddr,
+      Address.fromString(
+        "0x0000000000000000000000000000000000000000"
+      ),
       owner,
       allocatedAmount,
       startingAt,

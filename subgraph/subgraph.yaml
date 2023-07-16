@@ -4,11 +4,11 @@ schema:
 dataSources:
   - kind: ethereum
     name: FactoryV1
-    network: sepolia
+    network: goerli
     source:
-      address: "0x9df4FEa0e015eB8110f984fca8ac43F1d713451C"
+      address: "0xC61Fdd9ed58f28293B7e5916F0131323F51af720"
       abi: FactoryV1
-      startBlock: 3770883
+      startBlock: 9353606
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.7
@@ -22,7 +22,7 @@ dataSources:
         - name: ERC20
           file: ./abis/ERC20.json
       eventHandlers:
-        - event: Deployed(bytes32,address,address,address,uint256,uint256,uint256,uint256)
+        - event: Deployed(bytes32,address,address,address,address,uint256,uint256,uint256,uint256)
           handler: handleDeployed
         - event: TemplateAdded(indexed bytes32,indexed address)
           handler: handleTemplateAdded
@@ -32,7 +32,7 @@ dataSources:
 templates:
   - kind: ethereum
     name: SaleTemplateV1
-    network: sepolia
+    network: goerli
     source:
       abi: SaleTemplateV1
     mapping:

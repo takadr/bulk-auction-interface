@@ -10,6 +10,7 @@ export function createDeployedEvent(
   templateName: Bytes,
   deployedAddr: Address,
   tokenAddr: Address,
+  baseToken: Address,
   owner: Address,
   allocatedAmount: BigInt,
   startingAt: BigInt,
@@ -34,6 +35,9 @@ export function createDeployedEvent(
   );
   deployedEvent.parameters.push(
     new ethereum.EventParam("tokenAddr", ethereum.Value.fromAddress(tokenAddr))
+  );
+  deployedEvent.parameters.push(
+    new ethereum.EventParam("baseToken", ethereum.Value.fromAddress(baseToken))
   );
   deployedEvent.parameters.push(
     new ethereum.EventParam("owner", ethereum.Value.fromAddress(owner))

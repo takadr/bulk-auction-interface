@@ -13,6 +13,14 @@ type Sale @entity {
   tokenSymbol: String! 
   # token decimals
   tokenDecimals: BigInt! 
+  # base token address
+  baseToken: String!
+  # base token name
+  baseTokenName: String! 
+  # base token symbol
+  baseTokenSymbol: String! 
+  # base token decimals
+  baseTokenDecimals: BigInt! 
   # Sale start timestamp
   startingAt: BigInt!
   # Sale end timestamp
