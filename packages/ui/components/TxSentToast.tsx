@@ -9,6 +9,7 @@ import {
   CloseButton,
   Link,
 } from "@chakra-ui/react";
+import { CHAIN_NAMES } from "lib/constants";
 import { getEtherscanLink } from "lib/utils";
 
 export interface TxSentToast extends ToastProps {
@@ -57,7 +58,7 @@ export default function TxSentToast(props: TxSentToast) {
         <AlertDescription display="block">
           {description}
           <Link
-            href={getEtherscanLink("sepolia", txid, "tx")}
+            href={getEtherscanLink(CHAIN_NAMES[process.env.NEXT_PUBLIC_CHAIN_ID!], txid, "tx")}
             target={"_blank"}
           >
             Etherscan <ExternalLinkIcon ml={1} />
