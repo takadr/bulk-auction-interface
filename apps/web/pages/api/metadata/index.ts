@@ -2,7 +2,7 @@ import { NextApiRequest, NextApiResponse } from "next";
 import { withIronSessionApiRoute } from "iron-session/next";
 import { erc20ABI } from "wagmi";
 import { createPublicClient, http, fallback, getContract } from "viem";
-import { mainnet, goerli, sepolia, local } from "viem/chains";
+import { mainnet, goerli, sepolia, localhost } from "viem/chains";
 import { scanMetaData, addMetaData, updateSale } from "lib/dynamodb/metaData";
 import SaleTemplateV1ABI from "lib/constants/abis/SaleTemplateV1.json";
 import ironOptions from "lib/constants/ironOptions";
@@ -18,7 +18,7 @@ const getViemChain = (chainName: string) => {
   } else if (chainName === "sepolia") {
     return sepolia;
   } else {
-    return local;
+    return localhost;
   }
 };
 
