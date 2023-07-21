@@ -218,7 +218,7 @@ export default function SaleForm({
         >
           <Flex justifyContent={"space-between"}>
             <FormLabel alignItems={"baseline"}>
-              Total distribute amount
+              Allocation to the sale
               <Tooltip
                 hasArrow
                 label={
@@ -276,22 +276,6 @@ export default function SaleForm({
           <FormErrorMessage>
             {formikProps.errors.allocatedAmount}
           </FormErrorMessage>
-          {!!Number(formikProps.values.allocatedAmount) &&
-            !!tokenData &&
-            !!multiply(
-              formikProps.values.allocatedAmount,
-              Big(10).pow(tokenData.decimals)
-            ).lt(1000) && (
-              <Alert status="warning" py={2} px={2}>
-                <AlertIcon />
-                <chakra.span fontSize={"sm"}>
-                  The allocation is too small, and some participants may not be
-                  able to complete their claims. Unclaimed tokens cannot be
-                  withdrawn by you either. Please consider increasing the
-                  allocation amount.
-                </chakra.span>
-              </Alert>
-            )}
         </FormControl>
 
         <FormControl
