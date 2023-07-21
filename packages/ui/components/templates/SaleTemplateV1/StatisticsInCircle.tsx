@@ -1,6 +1,6 @@
 import { chakra, Heading, BoxProps, useToken, Tooltip } from "@chakra-ui/react";
 import { Circle } from "rc-progress";
-import Big from "lib/utils/bignumber";
+import Big, { divide } from "lib/utils/bignumber";
 import {
   getTargetPercetage,
   getFiatConversionAmount,
@@ -12,11 +12,13 @@ import { TriangleUpIcon } from "@chakra-ui/icons";
 
 type Props = {
   totalRaised: Big;
+  allocatedAmount: Big;
   minRaisedAmount: Big;
   targetTotalRaised: Big;
   maximumTotalRaised: Big;
   raisedTokenSymbol: string;
   raisedTokenDecimal: number;
+  tokenSymbol: string;
   fiatSymbol: string;
   fiatRate: number;
   contractAddress: string;
@@ -25,11 +27,13 @@ type Props = {
 
 export default function StatisticsInCircle({
   totalRaised,
+  allocatedAmount,
   minRaisedAmount,
   targetTotalRaised,
   maximumTotalRaised,
   raisedTokenSymbol,
   raisedTokenDecimal,
+  tokenSymbol,
   fiatSymbol,
   fiatRate,
   contractAddress,
@@ -162,6 +166,13 @@ export default function StatisticsInCircle({
                 ).toFixed(2)
               : "????"}
           </span>
+          <div>
+            {`1 ${tokenSymbol} = ${divide(
+              totalRaised,
+              allocatedAmount
+              ).toString()} ETH`
+            }
+          </div>
           <div>
             {!!targetTotalRaised && (
               <chakra.div textAlign={"center"}>

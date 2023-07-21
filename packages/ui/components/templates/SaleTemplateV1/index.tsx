@@ -276,6 +276,7 @@ export default function SaleTemplateV1({
         <Flex mt={8} flexDirection={{ base: "column", md: "row" }}>
           <StatisticsInCircle
             totalRaised={totalRaised}
+            allocatedAmount={sale.allocatedAmount}
             minRaisedAmount={
               sale.minRaisedAmount ? getBigNumber(sale.minRaisedAmount) : Big(0)
             }
@@ -287,6 +288,7 @@ export default function SaleTemplateV1({
             ).mul(Big(10).pow(raisedTokenDecimal))}
             raisedTokenSymbol={raisedTokenSymbol}
             raisedTokenDecimal={raisedTokenDecimal}
+            tokenSymbol={sale.tokenSymbol}
             fiatSymbol={fiatSymbol}
             fiatRate={rateDate && rateDate.usd ? rateDate.usd : 0}
             contractAddress={contractAddress}

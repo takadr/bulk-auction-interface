@@ -39,7 +39,7 @@ import {
   getEtherscanLink,
   tokenAmountFormat,
 } from "lib/utils";
-import Big, { getBigNumber, multiply } from "lib/utils/bignumber";
+import Big, { divide, getBigNumber, multiply } from "lib/utils/bignumber";
 import { SaleForm, Template } from "lib/types/Sale";
 import { CHAIN_NAMES } from "lib/constants";
 import { LIST_TEMPLATE_QUERY } from "lib/apollo/query";
@@ -324,6 +324,14 @@ export default function SaleForm({
             </NumberInput>
             <chakra.div px={2}>ETH</chakra.div>
           </Flex>
+          <chakra.p color={"gray.400"} fontSize={"sm"}>
+            {!!tokenData && !!formikProps.values.minRaisedAmount && !!formikProps.values.allocatedAmount
+              && `1 ${tokenData.symbol} = ${divide(
+                formikProps.values.minRaisedAmount,
+                formikProps.values.allocatedAmount
+                ).toString()} ETH at Minimum total raised`
+              }
+          </chakra.p>
           <FormErrorMessage>
             {formikProps.errors.minRaisedAmount}
           </FormErrorMessage>
