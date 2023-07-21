@@ -128,8 +128,8 @@ export default function SaleTemplateV1({
 
   const validate = (values: { amount: number }) => {
     let errors: any = {};
-    if (values.amount === 0) {
-      errors.amount = "Amount must be more than 0";
+    if (values.amount < 0.001) {
+      errors.amount = "Amount must be greater than or equal to 0.001";
     }
     return errors;
   };
@@ -344,6 +344,7 @@ export default function SaleTemplateV1({
                     max={
                       balanceData ? Number(balanceData.formatted) : undefined
                     }
+                    min={0.001}
                     onBlur={formikProps.handleBlur}
                     onChange={(strVal: string, val: number) =>
                       formikProps.setFieldValue(
