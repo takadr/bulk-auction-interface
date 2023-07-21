@@ -63,7 +63,7 @@ export default function WithdrawRaisedETH({ sale, onSuccessConfirm }: Props) {
         <Tooltip
           hasArrow
           label={
-            "The total raised will be available 3 days after the end of the sale."
+            "The total raised will be available 3 days after the end of the sale. 1% fee will be subtracted from this amount."
           }
         >
           <QuestionIcon mb={1} ml={1} />
