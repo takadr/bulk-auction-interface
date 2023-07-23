@@ -10,11 +10,13 @@ import { GET_SALE_QUERY } from "lib/apollo/query";
 import useSWRMetaData from "ui/hooks/useSWRMetaData";
 import Render500 from "ui/components/errors/500";
 import Render404 from "ui/components/errors/404";
+import { useLocale } from "ui/hooks/useLocale";
 
 export default function SalePage() {
   const { address, isConnected, connector } = useAccount();
   const router = useRouter();
   const { id } = router.query;
+  const { t } = useLocale();
 
   // TODO Get template address from contractAddress
   // Switch template by using template address
@@ -55,12 +57,12 @@ export default function SalePage() {
     <Layout>
       <MetaTags
         title={`${
-          metaData.metaData.title ? metaData.metaData.title : "Sale"
-        } | Bulksale maker(仮)`}
+          metaData.metaData.title ? metaData.metaData.title : t('SALES')
+        } | ${t('APP_NAME')}`}
         description={
           metaData.metaData.description
             ? metaData.metaData.description
-            : "An inclusive and transparent token launchpad"
+            : t('AN_INCLUSIVE_AND_TRANSPARENT_TOKEN_LAUNCHPAD')
         }
         image={metaData.metaData.logoURL && metaData.metaData.logoURL}
       />

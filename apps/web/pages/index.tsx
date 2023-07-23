@@ -15,6 +15,7 @@ import Layout from "ui/components/layouts/layout";
 import Hero from "ui/components/Hero";
 import SaleCard, { SaleCardSkeleton } from "ui/components/SaleCard";
 import { useSWRSales, QueryType } from "ui/hooks/useSales";
+import { useLocale } from "ui/hooks/useLocale";
 import { Sale } from "lib/types/Sale";
 
 export default function Web() {
@@ -27,12 +28,13 @@ export default function Web() {
     error: activeSalesError,
     loadMoreSales: loadMoreActiveSales,
   } = useSWRSales({ first: 5, keySuffix: "top" }, QueryType.ACTIVE);
+  const { t } = useLocale();
 
   return (
     <Layout>
       <Hero currentUser={currentUser} mutate={mutate} />
       <Container maxW={"container.xl"}>
-        <Heading>Live Sales</Heading>
+        <Heading>{t('LIVE_SALES')}</Heading>
         <Stack spacing={8} py={8}>
           {activeSalesError && (
             <Alert status={"error"}>

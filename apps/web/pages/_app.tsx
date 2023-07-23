@@ -21,4 +21,4 @@ export default function MyApp({ Component, pageProps }: AppProps) {
       </WagmiConfig>
     </ChakraProvider>
   );
-}
+};

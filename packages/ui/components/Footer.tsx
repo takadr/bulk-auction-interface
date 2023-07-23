@@ -9,10 +9,13 @@ import {
   Link,
   VStack,
   chakra,
+  Select,
 } from "@chakra-ui/react";
 import { AiFillGithub } from "react-icons/ai";
+import { useLocale } from "../hooks/useLocale";
 
 const Footer: FC = () => {
+  const { t, setLocale, locale } = useLocale();
   return (
     <Box
       px={{ base: 0, md: 4 }}
@@ -22,7 +25,7 @@ const Footer: FC = () => {
       opacity={0.975}
     >
       <Container maxW="container.2xl" px={{ base: 2, md: 4 }}>
-        <Flex py="4" justifyContent="center" alignItems="center">
+        <Flex py="4" justifyContent="end" alignItems="top">
           <VStack>
             <Link
               href="https://github.com/DeFiGeek-Community/bulk-auction-interface"
@@ -43,6 +46,10 @@ const Footer: FC = () => {
               </Link>
             </HStack>
           </VStack>
+          <Select w={'100px'} size={'xs'} value={locale} onChange={(e) => setLocale(e.target.value as "ja" | "en")}>
+            <option value={'ja'}>Japanese</option>
+            <option value={'en'}>English</option>
+          </Select>
         </Flex>
       </Container>
     </Box>

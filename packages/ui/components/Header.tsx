@@ -29,6 +29,7 @@ import {
   useDisconnect,
   useNetwork,
 } from "wagmi";
+import { useLocale } from "../hooks/useLocale";
 import ProvidersList from "./ProvidersList";
 import { CurrentUserContext } from "./providers/CurrentUserProvider";
 import SignInButton from "./SignInButton";
@@ -54,6 +55,7 @@ const Header: FC<HeaderProps> = ({ title }) => {
   });
   const [addressString, setAddressString] = useState<string>("");
   const { disconnect } = useDisconnect();
+  const { t } = useLocale();
 
   useEffect(() => {
     const _address = currentUser ? currentUser.address : address;
@@ -131,14 +133,14 @@ const Header: FC<HeaderProps> = ({ title }) => {
                   display={{ base: "block", md: "none" }}
                   onClick={() => Router.push("/dashboard")}
                 >
-                  Dashboard
+                  {t('DASHBOARD')}
                 </MenuItem>
               )}
               <MenuItem
                 display={{ base: "block", md: "none" }}
                 onClick={() => Router.push("/sales")}
               >
-                Sales
+                {t('SALES')}
               </MenuItem>
               <Divider display={{ base: "block", md: "none" }} />
               {currentUser ? (
@@ -212,7 +214,7 @@ const Header: FC<HeaderProps> = ({ title }) => {
                 size={"md"}
                 onClick={() => Router.push("/dashboard")}
               >
-                Dashboard
+                {t('DASHBOARD')}
               </Button>
             )}
             <Button
@@ -221,7 +223,7 @@ const Header: FC<HeaderProps> = ({ title }) => {
               size={"md"}
               onClick={() => Router.push("/sales")}
             >
-              Sales
+              {t('SALES')}
             </Button>
             {!currentUser && (
               <SignInButton

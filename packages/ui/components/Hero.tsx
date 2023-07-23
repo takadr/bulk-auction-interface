@@ -10,6 +10,7 @@ import {
 import { KeyedMutator } from "swr";
 import { User } from "lib/types";
 import SignInButton from "./SignInButton";
+import { useLocale } from "../hooks/useLocale";
 import bgImage from "assets/images/background_sky-min.png";
 
 type HeroProps = {
@@ -27,6 +28,7 @@ export default function Hero({
   ...rest
 }: HeroProps) {
   const toast = useToast({ position: "top-right", isClosable: true });
+  const { t } = useLocale();
 
   return (
     <Flex
@@ -92,7 +94,7 @@ export default function Hero({
             />
           )}
           <Button size={"lg"} onClick={() => Router.push("/sales")}>
-            View All Sales
+            {t('VIEW_ALL_SALES')}
           </Button>
         </HStack>
       </Stack>
