@@ -87,4 +87,7 @@ export default {
     TRANSACTION_SENT: "トランザクションを送信しました",
     TRANSACTION_CONFIRMED: "トランザクションが承認されました",
     SALE_INFORMATION_SUCCESSFULLY_SAVED: "セール情報が正常に保存されました",
+    NO_LIVE_SALE: "開催中のセールはありません",
+    NO_SALE: "セールがありません",
+    LOAD_MORE_SALES: "セールをさらに読み込む",
 }

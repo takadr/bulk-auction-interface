@@ -56,14 +56,14 @@ export default function Web() {
           {!isLoadingActiveSales && activeSales.length === 0 && (
             <Flex minH={"25vh"} justifyContent="center" alignItems={"center"}>
               <Text fontSize={"lg"} opacity={".75"} textAlign={"center"}>
-                No live sales
+                {t('NO_LIVE_SALE')}
               </Text>
             </Flex>
           )}
         </Stack>
         <Flex alignItems={"center"} justifyContent={"center"} pb={8}>
           <Button size={"lg"} onClick={() => Router.push("/sales")}>
-            View All Sales
+            {t('VIEW_ALL_SALES')}
           </Button>
         </Flex>
       </Container>

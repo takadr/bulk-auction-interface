@@ -87,4 +87,7 @@ export default {
     TRANSACTION_SENT: "Transaction sent!",
     TRANSACTION_CONFIRMED: "Transaction confirmed!",
     SALE_INFORMATION_SUCCESSFULLY_SAVED: "Sale information successfully saved!",
+    NO_LIVE_SALE: "No live sales",
+    NO_SALE: "No sales",
+    LOAD_MORE_SALES: "Load more sale",
 }

@@ -33,6 +33,7 @@ import { LIST_MY_SALE_QUERY } from "lib/apollo/query";
 import { CurrentUserContext } from "ui/components/providers/CurrentUserProvider";
 import SaleFormModal from "ui/components/SaleFormModal";
 import SaleCard, { SaleCardSkeleton } from "ui/components/SaleCard";
+import { useLocale } from "ui/hooks/useLocale";
 import Render404 from "ui/components/errors/404";
 
 export default function DashboardPage() {
@@ -43,6 +44,7 @@ export default function DashboardPage() {
   const { data, loading, error, refetch } = useQuery(LIST_MY_SALE_QUERY, {
     variables: { id: String(address).toLowerCase() },
   });
+  const { t } = useLocale();
 
   if (typeof currentUser === "undefined") {
     return (
@@ -64,10 +66,10 @@ export default function DashboardPage() {
   return (
     <Layout>
       <Container maxW="container.xl" py={16}>
-        <Heading size={"lg"}>Dashboard</Heading>
+        <Heading size={"lg"}>{t('DASHBOARD')}</Heading>
         <Tabs mt={{ base: 4, md: 8 }}>
           <TabList>
-            <Tab>Your Sales</Tab>
+            <Tab>{t('YOUR_SALES')}</Tab>
           </TabList>
 
           <TabPanels>
@@ -75,7 +77,7 @@ export default function DashboardPage() {
               <chakra.div mt={4} textAlign={"right"}>
                 <Button onClick={saleFormModalDisclosure.onOpen}>
                   <AddIcon fontSize={"sm"} mr={2} />
-                  Create new sale
+                  {t('CREATE_NEW_SALE')}
                 </Button>
               </chakra.div>
               <SaleFormModal
@@ -103,7 +105,7 @@ export default function DashboardPage() {
                     alignItems={"center"}
                   >
                     <Text fontSize={"lg"} opacity={".75"} textAlign={"center"}>
-                      No sales
+                      {t('NO_SALE')}
                     </Text>
                   </Flex>
                 )}
