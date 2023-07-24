@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { chakra } from "@chakra-ui/react";
 import { getCountdown } from "lib/utils";
 import { useNow } from "../../../hooks/useNow";
+import { useLocale } from "../../../hooks/useLocale";
 
 type Props = {
   unixEndDate: number;
@@ -18,6 +19,7 @@ const initialCountdown = {
 export default function CountdownCalendar({ unixEndDate }: Props) {
   const [countdown, setCountdown] = useState(initialCountdown);
   const [now] = useNow();
+  const { t } = useLocale();
 
   useEffect(() => {
     if (!unixEndDate) {
@@ -31,7 +33,7 @@ export default function CountdownCalendar({ unixEndDate }: Props) {
   return (
     <chakra.div>
       <chakra.div textAlign={"center"}>
-        Until {format(unixEndDate * 1000, "yyyy/MM/dd HH:mm(z)")}
+        {t('UNTIL', {datetime: format(unixEndDate * 1000, "yyyy/MM/dd HH:mm(z)")})}
       </chakra.div>
 
       <chakra.div
@@ -62,7 +64,7 @@ export default function CountdownCalendar({ unixEndDate }: Props) {
 
       {unixEndDate * 1000 < Date.now() && (
         <chakra.div fontSize={"lg"} mt={2} textAlign={"center"}>
-          Finished 🎉
+          {t('FINISHED')}
         </chakra.div>
       )}
     </chakra.div>

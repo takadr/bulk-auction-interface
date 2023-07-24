@@ -33,6 +33,7 @@ import {
   parseEtherInBig,
 } from "lib/utils";
 import { useNow } from "../hooks/useNow";
+import { useLocale } from "../hooks/useLocale";
 
 export default function SaleCard({
   sale,
@@ -45,6 +46,7 @@ export default function SaleCard({
   // 0-> not started, 1 -> started, 2 -> closed
   const [stage, setStage] = useState<"0" | "1" | "2">("0");
   const { onOpen, isOpen, onClose } = useDisclosure();
+  const { t, locale } = useLocale();
   const { data, mutate, error } = useSWRMetaData(sale.id as string);
   const [countdown, setCountdown] = useState({
     days: "0",
@@ -129,7 +131,7 @@ export default function SaleCard({
                 </Link>
                 {editable && (
                   <Button size={"sm"} ml={2} onClick={onOpen}>
-                    <EditIcon mr={1} /> Edit
+                    <EditIcon mr={1} /> {t('EDIT')}
                   </Button>
                 )}
               </Heading>
@@ -140,7 +142,7 @@ export default function SaleCard({
             </chakra.div>
             <chakra.div flex={7}>
               <Flex justifyContent={"space-between"} alignItems={"baseline"}>
-                <chakra.span>Allocated to the sale</chakra.span>
+                <chakra.span>{t('ALLOCATED_TO_THE_SALE')}</chakra.span>
                 <chakra.span fontSize={"2xl"}>
                   {tokenAmountFormat(
                     sale.allocatedAmount,
@@ -159,7 +161,7 @@ export default function SaleCard({
                 justifyContent={"space-between"}
                 alignItems={"baseline"}
               >
-                <chakra.span>Total raised</chakra.span>{" "}
+                <chakra.span>{t('TOTAL_RAISED')}</chakra.span>{" "}
                 <chakra.span fontSize={"2xl"}>
                   {sale.totalRaised
                     ? etherAmountFormat(sale.totalRaised, 2)
@@ -184,7 +186,7 @@ export default function SaleCard({
                 justifyContent={"space-between"}
                 alignItems={"baseline"}
               >
-                <Text fontSize={"sm"}>Minimum total raised</Text>
+                <Text fontSize={"sm"}>{t('MINIMUM_TOTAL_RAISED')}</Text>
                 <Text fontSize={"lg"}>
                   {etherAmountFormat(sale.minRaisedAmount, 2)}{" "}
                   <chakra.span fontSize={"sm"}>ETH</chakra.span>
@@ -195,7 +197,7 @@ export default function SaleCard({
                 justifyContent={"space-between"}
                 alignItems={"baseline"}
               >
-                <Text fontSize={"sm"}>Target total raised</Text>
+                <Text fontSize={"sm"}>{t('TARGET_TOTAL_RAISED')}</Text>
                 <Text fontSize={"lg"}>
                   {data?.metaData?.targetTotalRaised
                     ? tokenAmountFormat(data.metaData.targetTotalRaised, 0, 2)
@@ -213,13 +215,20 @@ export default function SaleCard({
               <>
                 <Tag>
                   <Box boxSize="1em" bg="gray.500" borderRadius={"100%"} />{" "}
-                  <Text ml={1}>Not started</Text>
+                  <Text ml={1}>{t('NOT_STARTED')}</Text>
                 </Tag>
                 <Box ml={2}>
-                  <chakra.span fontSize={"sm"}>Starts in</chakra.span>{" "}
+                  <chakra.span fontSize={"sm"}>{t('STARTS_IN')}</chakra.span>{" "}
                   <chakra.span fontSize={"xl"}>
-                    {countdown.days} days + {countdown.hours}:{countdown.mins}:
-                    {countdown.secs}
+                    {
+                      t(
+                        'DAYS_AND_TIME', 
+                        {
+                          day: countdown.days,
+                          time: `${countdown.hours}:${countdown.mins}:${countdown.secs}`
+                        }
+                      )
+                    }
                   </chakra.span>
                 </Box>
               </>
@@ -228,13 +237,20 @@ export default function SaleCard({
               <>
                 <Tag>
                   <Box boxSize="1em" bg="green.300" borderRadius={"100%"} />{" "}
-                  <Text ml={1}>Live</Text>
+                  <Text ml={1}>{t('LIVE')}</Text>
                 </Tag>
                 <Box ml={2}>
-                  <chakra.span fontSize={"sm"}>Ends in</chakra.span>{" "}
+                  <chakra.span fontSize={"sm"}>{t('ENDS_IN')}</chakra.span>{" "}
                   <chakra.span fontSize={"xl"}>
-                    {countdown.days} days + {countdown.hours}:{countdown.mins}:
-                    {countdown.secs}
+                    {
+                      t(
+                        'DAYS_AND_TIME', 
+                        {
+                          day: countdown.days,
+                          time: `${countdown.hours}:${countdown.mins}:${countdown.secs}`
+                        }
+                      )
+                    }
                   </chakra.span>
                 </Box>
               </>
@@ -243,7 +259,7 @@ export default function SaleCard({
               <>
                 <Tag>
                   <Box boxSize="1em" bg="red.300" borderRadius={"100%"} />{" "}
-                  <Text ml={1}>Ended</Text>
+                  <Text ml={1}>{t('ENDED')}</Text>
                 </Tag>
               </>
             )}

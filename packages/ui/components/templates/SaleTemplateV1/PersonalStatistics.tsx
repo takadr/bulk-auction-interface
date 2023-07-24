@@ -15,6 +15,7 @@ import {
   tokenAmountFormat,
 } from "lib/utils";
 import Big, { add, multiply } from "lib/utils/bignumber";
+import { useLocale } from "../../../hooks/useLocale";
 
 interface Props {
   inputValue: number;
@@ -66,6 +67,7 @@ export default function PersonalStatistics({
     raisedTokenDecimal,
     2
   );
+  const { t } = useLocale();
 
   // if(isLoading) {
   //     return <Card {...boxProps}>
@@ -82,8 +84,8 @@ export default function PersonalStatistics({
           <Flex justifyContent={"space-between"}>
             <span>
               {!isClaimed
-                ? "Estimated amount you will receive"
-                : "Amount you received"}
+                ? t("ESTIMATED_AMOUNT_YOU_WILL_RECEIVE")
+                : t("ESTIMATED_AMOUNT_YOU_WILL_RECEIVE")}
               :
             </span>
             <chakra.div textAlign={"right"}>
@@ -92,15 +94,14 @@ export default function PersonalStatistics({
               </chakra.span>
               {parseFloat(expectedAmount) === 0 && (
                 <chakra.p fontSize={"sm"} opacity={".75"} color={"yellow.500"}>
-                  <WarningIcon /> The estimated token amount is less than the
-                  permitted number of decimals.
+                  <WarningIcon /> {t("THE_ESTIMATED_TOKEN_AMOUNT_IS_LESS_THAN_THE_PERMITTED_NUMBER_OF_DECIMALS")}
                 </chakra.p>
               )}
             </chakra.div>
           </Flex>
           {!isEnding ? (
             <Flex justifyContent={"space-between"}>
-              <div>Your contributed amount:</div>
+              <div>{t("YOUR_CONTRIBUTED_AMOUNT")}</div>
               <chakra.div textAlign={"right"}>
                 <chakra.span fontWeight={"bold"} ml={2}>
                   {sumOfContributionAmount} {raisedTokenSymbol.toUpperCase()}
@@ -119,7 +120,7 @@ export default function PersonalStatistics({
           ) : (
             !isClaimed && (
               <Flex justifyContent={"space-between"}>
-                <div>Your contribution:</div>
+                <div>{t("YOUR_CONTRIBUTED_AMOUNT")}</div>
                 <chakra.div textAlign={"right"}>
                   <chakra.p fontWeight={"bold"}>
                     {fixedContributionAmount} {raisedTokenSymbol.toUpperCase()}

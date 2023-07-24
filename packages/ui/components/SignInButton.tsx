@@ -2,6 +2,7 @@ import { useState, useEffect, useRef } from "react";
 import { useAccount, useNetwork, useSignMessage } from "wagmi";
 import { SiweMessage } from "siwe";
 import { Button, ButtonProps, useDisclosure, chakra } from "@chakra-ui/react";
+import { useLocale } from "../hooks/useLocale";
 import ProvidersList from "./ProvidersList";
 
 function usePrevious(value: any) {
@@ -35,6 +36,7 @@ export default function SignInButton({
   });
   const { chain } = useNetwork();
   const { signMessageAsync } = useSignMessage();
+  const { t } = useLocale();
 
   useEffect(() => {
     !prevIsConnected && isConnected && continueSignIn && signIn();
@@ -55,7 +57,7 @@ export default function SignInButton({
       const message = new SiweMessage({
         domain: window.location.host,
         address: address,
-        statement: "Sign in with Ethereum",
+        statement: buttonProps.title ? buttonProps.title : t('SIGN_IN_WITH_ETHEREUM'),
         uri: window.location.origin,
         version: "1",
         chainId,

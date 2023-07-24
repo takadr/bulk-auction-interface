@@ -14,6 +14,7 @@ import { Sale } from "lib/types/Sale";
 import { tokenAmountFormat } from "lib/utils";
 import { getBigNumber } from "lib/utils/bignumber";
 import TxSentToast from "../../TxSentToast";
+import { useLocale } from "../../../hooks/useLocale";
 
 type Props = {
   sale: Sale;
@@ -55,16 +56,15 @@ export default function WithdrawRaisedETH({ sale, onSuccessConfirm }: Props) {
     },
     isReady: balanceData && !balanceData.value.isZero(),
   });
+  const { t } = useLocale();
 
   return (
     <Box>
       <Heading fontSize={"lg"} textAlign={"left"}>
-        Total raised balance in Sale contract
+        {t("TOTAL_RAISED_BALANCE_IN_SALE_CONTRACT")}
         <Tooltip
           hasArrow
-          label={
-            "The total raised will be available 3 days after the end of the sale. 1% fee will be subtracted from this amount."
-          }
+          label={t("AFTER_THE_SALE_CLOSES")}
         >
           <QuestionIcon mb={1} ml={1} />
         </Tooltip>
@@ -92,7 +92,7 @@ export default function WithdrawRaisedETH({ sale, onSuccessConfirm }: Props) {
           }
           onClick={() => withdrawETHWriteFn.writeAsync()}
         >
-          Withdraw the total raised
+          {t("WITHDRAW_THE_TOTAL_RAISED")}
         </Button>
       </Flex>
     </Box>

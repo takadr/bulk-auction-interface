@@ -11,6 +11,7 @@ import { CurrentUserContext } from "../providers/CurrentUserProvider";
 import { CHAIN_NAMES } from "lib/constants";
 import { capitalize } from "lib/utils";
 import { useIsMounted } from "../../hooks/useIsMounted";
+import { useLocale } from "../../hooks/useLocale";
 import Header from "../Header";
 import Footer from "../Footer";
 
@@ -32,6 +33,7 @@ export default function Layout({
     disconnect();
     mutate && mutate();
   };
+  const { t } = useLocale();
 
   // Detect account change and sign out if SIWE user and account does not match
   useEffect(() => {
@@ -64,8 +66,7 @@ export default function Layout({
       {chain && chain.unsupported && (
         <chakra.div px={{ base: 0, md: 8 }}>
           <Alert status="warning" mb={4}>
-            <AlertIcon /> Please connect to{" "}
-            {capitalize(CHAIN_NAMES[process.env.NEXT_PUBLIC_CHAIN_ID!])}
+            <AlertIcon /> {t('PLEASE_CONNECT_TO', {network: capitalize(CHAIN_NAMES[process.env.NEXT_PUBLIC_CHAIN_ID!])})}
           </Alert>
         </chakra.div>
       )}

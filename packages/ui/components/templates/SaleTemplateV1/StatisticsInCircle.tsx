@@ -9,6 +9,7 @@ import {
 } from "lib/utils";
 import { CHAIN_NAMES } from "lib/constants";
 import { TriangleUpIcon } from "@chakra-ui/icons";
+import { useLocale } from "../../../hooks/useLocale";
 
 type Props = {
   totalRaised: Big;
@@ -53,6 +54,7 @@ export default function StatisticsInCircle({
     targetTotalRaised,
     maximumTotalRaised
   );
+  const { t } = useLocale();
 
   return (
     <chakra.div {...boxProps}>
@@ -64,7 +66,7 @@ export default function StatisticsInCircle({
               Minimum: {etherAmountFormat(minRaisedAmount)}ETH
               {totalRaised.gte(minRaisedAmount) && (
                 <>
-                  <br /> Achieved 🎉
+                  <br /> {t("ACHIEVED")}
                 </>
               )}
             </chakra.p>
@@ -90,10 +92,10 @@ export default function StatisticsInCircle({
           hasArrow
           label={
             <chakra.p textAlign={"center"} p={1}>
-              Target total raised: {etherAmountFormat(targetTotalRaised)}ETH
+              {t("TARGET_TOTAL_RAISED")}: {etherAmountFormat(targetTotalRaised)}ETH
               {totalRaised.gte(targetTotalRaised) && (
                 <>
-                  <br /> Achieved 🎉
+                  <br /> {t("ACHIEVED")}
                 </>
               )}
             </chakra.p>
@@ -143,7 +145,7 @@ export default function StatisticsInCircle({
           justifyContent={"center"}
         >
           <Heading as={"h3"} fontSize={"lg"}>
-            Total raised
+            {t("TOTAL_RAISED")}
           </Heading>
           <chakra.div>
             <>
@@ -176,7 +178,7 @@ export default function StatisticsInCircle({
           <div>
             {!!targetTotalRaised && (
               <chakra.div textAlign={"center"}>
-                Target total raised {etherAmountFormat(targetTotalRaised)}
+                {t("TARGET_TOTAL_RAISED")} {etherAmountFormat(targetTotalRaised)}
                 {raisedTokenSymbol.toUpperCase()}
                 {totalRaised.gte(targetTotalRaised) && started && (
                   <chakra.span textAlign={"center"}> 🎉</chakra.span>

@@ -28,7 +28,7 @@ export default function Hero({
   ...rest
 }: HeroProps) {
   const toast = useToast({ position: "top-right", isClosable: true });
-  const { t } = useLocale();
+  const { t, locale } = useLocale();
 
   return (
     <Flex

@@ -14,6 +14,7 @@ import { Sale } from "lib/types/Sale";
 import { getDecimalsForView, tokenAmountFormat } from "lib/utils";
 import { getBigNumber } from "lib/utils/bignumber";
 import TxSentToast from "../../TxSentToast";
+import { useLocale } from "../../../hooks/useLocale";
 
 type Props = {
   sale: Sale;
@@ -59,16 +60,15 @@ export default function WithdrawERC20({ sale, onSuccessConfirm }: Props) {
     },
     isReady: balance && !balance.isZero(),
   });
+  const { t } = useLocale();
 
   return (
     <Box>
       <Heading fontSize={"lg"} textAlign={"left"}>
-        Token balance in Sale contract
+        {t("TOKEN_BALANCE_IN_SALE_CONTRACT")}
         <Tooltip
           hasArrow
-          label={
-            "Token withdrawals will be available immediately after the end of the sale if the sale could not achieve the minimum total raised that is set in the contract."
-          }
+          label={t("TOKEN_WITHDRAWALS_WILL_BE_AVAILABLE_IMMEDIATELY_AFTER_THE_END_OF_THE_SALE")}
         >
           <QuestionIcon mb={1} ml={1} />
         </Tooltip>
@@ -97,7 +97,7 @@ export default function WithdrawERC20({ sale, onSuccessConfirm }: Props) {
           }
           onClick={() => withdrawERC20WriteFn.writeAsync()}
         >
-          Withdraw Token
+          {t("WITHDRAW_TOKEN")}
         </Button>
       </Flex>
     </Box>

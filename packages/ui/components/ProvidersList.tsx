@@ -9,6 +9,7 @@ import {
   ModalCloseButton,
 } from "@chakra-ui/react";
 import ProviderLogo from "./ProviderLogo";
+import { useLocale } from "../hooks/useLocale";
 
 export default function ProvidersList({
   isOpen,
@@ -34,12 +35,13 @@ export default function ProvidersList({
       },
     });
   const { disconnect } = useDisconnect();
+  const { t } = useLocale();  
 
   return (
     <Modal isOpen={isOpen} onClose={onClose} closeOnOverlayClick={false}>
       <ModalOverlay />
       <ModalContent>
-        <ModalHeader>Connect Wallet</ModalHeader>
+        <ModalHeader>{t('CONNECT_WALLET')}</ModalHeader>
         <ModalCloseButton />
         <ModalBody pb={6}>
           <Stack spacing={4}>

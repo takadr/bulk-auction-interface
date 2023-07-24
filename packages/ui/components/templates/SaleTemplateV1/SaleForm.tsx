@@ -43,6 +43,7 @@ import Big, { divide, getBigNumber, multiply } from "lib/utils/bignumber";
 import { SaleForm, Template } from "lib/types/Sale";
 import { CHAIN_NAMES } from "lib/constants";
 import { LIST_TEMPLATE_QUERY } from "lib/apollo/query";
+import { useLocale } from "../../../hooks/useLocale";
 
 export default function SaleForm({
   formikProps,
@@ -63,6 +64,7 @@ export default function SaleForm({
   const containerRef = useRef<HTMLFormElement>(null);
   const cancelRef = useRef<HTMLButtonElement>(null);
   const { data, loading, error, refetch } = useQuery(LIST_TEMPLATE_QUERY);
+  const { t } = useLocale();
 
   return (
     <div>
@@ -74,8 +76,8 @@ export default function SaleForm({
           }
         >
           <FormLabel htmlFor="token" alignItems={"baseline"}>
-            Select Sale Templete
-            <Tooltip hasArrow label={"You can choose the type of token sale"}>
+            {t("SELECT_SALE_TEMPLETE")}
+            <Tooltip hasArrow label={t("YOU_CAN_CHOOSE_THE_TYPE_OF_TOKEN_SALE")}>
               <QuestionIcon mb={1} ml={1} />
             </Tooltip>
           </FormLabel>
@@ -107,12 +109,10 @@ export default function SaleForm({
           isInvalid={!!formikProps.errors.token && !!formikProps.touched.token}
         >
           <FormLabel htmlFor="token" alignItems={"baseline"}>
-            Token address
+            {t("TOKEN_ADDRESS")}
             <Tooltip
               hasArrow
-              label={
-                "Input the address of the token you would like to allocate to this sale"
-              }
+              label={t("INPUT_THE_ADDRESS_OF_THE_TOKEN_YOU_WOULD_LIKE_TO_ALLOCATE_TO_THIS_SALE")}
             >
               <QuestionIcon mb={1} ml={1} />
             </Tooltip>
@@ -126,13 +126,13 @@ export default function SaleForm({
               formikProps.handleChange(event);
             }}
             value={formikProps.values.token ? formikProps.values.token : ""}
-            placeholder="e.g.) 0x0123456789012345678901234567890123456789"
+            placeholder="e.g. 0x0123456789012345678901234567890123456789"
           />
           <FormErrorMessage>{formikProps.errors.token}</FormErrorMessage>
         </FormControl>
 
         <chakra.p color={"gray.400"} fontSize={"sm"} mt={1}>
-          Don&apos;t have a token yet?{" "}
+          {t("DONT_HAVE_A_TOKEN_YET")}{" "}
           <Link
             color={"gray.300"}
             href="https://www.smartcontracts.tools/token-generator/ethereum/"
@@ -152,12 +152,10 @@ export default function SaleForm({
           }
         >
           <FormLabel alignItems={"baseline"}>
-            Start date - End date
+            {t("START_DATE_END_DATE")}
             <Tooltip
               hasArrow
-              label={
-                "Input the duration of the token sale. If the sale is successful, the total raised can be withdrawn starting 3 days after the end of the sale. If the sale doesn’t reach the preset minimum total raised, the token can be withdrawn immediately after the end of the sale."
-              }
+              label={t("INPUT_THE_DURATION_OF_THE_TOKEN_SALE")}
             >
               <QuestionIcon mb={1} ml={1} />
             </Tooltip>
@@ -218,12 +216,10 @@ export default function SaleForm({
         >
           <Flex justifyContent={"space-between"}>
             <FormLabel alignItems={"baseline"}>
-              Allocation to the sale
+              {t("ALLOCATION_TO_THE_SALE")}
               <Tooltip
                 hasArrow
-                label={
-                  "Input the amount of tokens to be allocated in this sale."
-                }
+                label={t("INPUT_THE_AMOUNT_OF_TOKENS_TO_BE_ALLOCATED")}
               >
                 <QuestionIcon mb={1} ml={1} />
               </Tooltip>
@@ -260,7 +256,7 @@ export default function SaleForm({
             </chakra.div>
           </Flex>
           <chakra.p color={"gray.400"} fontSize={"sm"}>
-            Balance:{" "}
+            {t("BALANCE")}:{" "}
             {balance && tokenData
               ? tokenAmountFormat(
                   Big(balance.toString()),
@@ -286,12 +282,10 @@ export default function SaleForm({
           }
         >
           <FormLabel alignItems={"baseline"}>
-            Minimum total raised
+            {t("MINIMUM_TOTAL_RAISED")}
             <Tooltip
               hasArrow
-              label={
-                "The sale will be void if the total raised is less than this threshold, and the total raised will be refunded."
-              }
+              label={t("THE_SALE_WILL_BE_VOID_IF_THE_TOTAL_RAISED_IS_LESS_THAN_THIS_THRESHOLD")}
             >
               <QuestionIcon mb={1} ml={1} />
             </Tooltip>
@@ -353,7 +347,7 @@ export default function SaleForm({
               isDisabled={!writeFn.writeAsync || !formikProps.isValid}
               onClick={onOpen}
             >
-              Deploy Sale Contract
+              {t("DEPLOY_SALE_CONTRACT")}
             </Button>
             <AlertDialog
               isOpen={isOpen}
@@ -366,13 +360,13 @@ export default function SaleForm({
               <AlertDialogOverlay>
                 <AlertDialogContent>
                   <AlertDialogHeader fontSize="lg" fontWeight="bold">
-                    Confirmation
+                    {t("CONFIRMATION")}
                   </AlertDialogHeader>
 
                   <AlertDialogBody>
                     <Stack spacing={4} divider={<Divider />}>
                       <div>
-                        <chakra.p>Sale Template</chakra.p>
+                        <chakra.p>{t("SELECT_SALE_TEMPLETE")}</chakra.p>
                         <chakra.p
                           fontWeight={"bold"}
                           aria-label="Sale Template"
@@ -384,7 +378,7 @@ export default function SaleForm({
                       </div>
 
                       <div>
-                        <chakra.p>Token address</chakra.p>
+                        <chakra.p>{t("TOKEN_ADDRESS")}</chakra.p>
                         <chakra.p
                           fontWeight={"bold"}
                           aria-label="Token address"
@@ -404,7 +398,7 @@ export default function SaleForm({
                       </div>
 
                       <div>
-                        <chakra.p>Start date - End date</chakra.p>
+                        <chakra.p>{t("START_DATE_END_DATE")}</chakra.p>
                         <chakra.p
                           fontWeight={"bold"}
                           aria-label="Start date - End date"
@@ -426,7 +420,7 @@ export default function SaleForm({
                       </div>
 
                       <div>
-                        <chakra.p>Allocated to the sale</chakra.p>
+                        <chakra.p>{t("ALLOCATED_TO_THE_SALE")}</chakra.p>
                         <chakra.p
                           fontWeight={"bold"}
                           aria-label="Allocated to the sale"
@@ -448,7 +442,7 @@ export default function SaleForm({
                       </div>
 
                       <div>
-                        <chakra.p>Minimum total raised</chakra.p>
+                        <chakra.p>{t("MINIMUM_TOTAL_RAISED")}</chakra.p>
                         <chakra.p
                           fontWeight={"bold"}
                           aria-label="Minimum total raised"
@@ -464,7 +458,7 @@ export default function SaleForm({
 
                   <AlertDialogFooter>
                     <Button ref={cancelRef} onClick={onClose}>
-                      Cancel
+                      {t("CANCEL")}
                     </Button>
                     <Button
                       ml={4}
@@ -474,7 +468,7 @@ export default function SaleForm({
                       isLoading={writeFn.isLoading}
                       isDisabled={!writeFn.writeAsync || !formikProps.isValid}
                     >
-                      Deploy Sale Contract
+                      {t("DEPLOY_SALE_CONTRACT")}
                     </Button>
                   </AlertDialogFooter>
                 </AlertDialogContent>
@@ -493,7 +487,7 @@ export default function SaleForm({
             }
             isDisabled={!approvals.writeFn.write || !formikProps.isValid}
           >
-            Approve token
+            {t("APPROVE_TOKEN")}
           </Button>
         )}
       </form>

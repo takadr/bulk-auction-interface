@@ -12,6 +12,7 @@ import { useAccount } from "wagmi";
 import { CustomProvider } from "rsuite";
 import MetaDataForm from "./templates/SaleTemplateV1/MetaDataForm";
 import useMetaDataForm from "../hooks/SaleTemplateV1/useMetaDataForm";
+import { useLocale } from "../hooks/useLocale";
 import { MetaData } from "lib/types/Sale";
 
 export default function MetaDataFormModal({
@@ -37,6 +38,7 @@ export default function MetaDataFormModal({
   const [contractAddress, setContractAddress] = useState<
     `0x${string}` | undefined
   >(existingContractAddress ? existingContractAddress : undefined);
+  const { t } = useLocale();
 
   const handleClose = () => {
     onClose();
@@ -50,7 +52,7 @@ export default function MetaDataFormModal({
       onSubmitSuccess && onSubmitSuccess();
       handleClose();
       toast({
-        title: `Sale information successfully saved!`,
+        title: t('SALE_INFORMATION_SUCCESSFULLY_SAVED'),
         status: "success",
         duration: 5000,
       });
@@ -74,7 +76,7 @@ export default function MetaDataFormModal({
       >
         <ModalOverlay />
         <ModalContent>
-          <ModalHeader>Update sale information</ModalHeader>
+          <ModalHeader>{t('UPDATE_SALE_INFORMATION')}</ModalHeader>
           <ModalCloseButton />
           <ModalBody pb={6}>
             <MetaDataForm formikProps={formikProps} />

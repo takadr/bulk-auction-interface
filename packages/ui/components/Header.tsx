@@ -55,7 +55,7 @@ const Header: FC<HeaderProps> = ({ title }) => {
   });
   const [addressString, setAddressString] = useState<string>("");
   const { disconnect } = useDisconnect();
-  const { t } = useLocale();
+  const { t, locale } = useLocale();
 
   useEffect(() => {
     const _address = currentUser ? currentUser.address : address;
@@ -71,7 +71,7 @@ const Header: FC<HeaderProps> = ({ title }) => {
           variant={"outline"}
           size={{ base: "xs", md: "sm" }}
         >
-          Connect wallet
+          {t('CONNECT_WALLET')}
         </Button>
         <ProvidersList
           isOpen={providersListDisclosure.isOpen}
@@ -108,10 +108,19 @@ const Header: FC<HeaderProps> = ({ title }) => {
                   ml="2"
                 >
                   <Text fontSize="sm" id="account">
-                    <chakra.span display={{ base: "none", md: "inline" }}>
-                      {currentUser ? "Signed in as " : ""}
-                    </chakra.span>
+                    {
+                      locale === "en" &&
+                      <chakra.span display={{ base: "none", md: "inline" }}>
+                        {currentUser ? "Signed in as " : ""}
+                      </chakra.span>
+                    }
                     {ensName ? `${ensName}` : `${addressString}`}
+                    {
+                      locale === "ja" &&
+                      <chakra.span display={{ base: "none", md: "inline" }}>
+                        {currentUser ? "でログイン中" : ""}
+                      </chakra.span>
+                    }
                   </Text>
                 </VStack>
                 <ChevronDownIcon />
@@ -160,10 +169,10 @@ const Header: FC<HeaderProps> = ({ title }) => {
                     mutate && mutate();
                   }}
                 >
-                  Sign out and Disconnect
+                  {t('SIGN_OUT_AND_DISCONNECT')}
                 </MenuItem>
               ) : (
-                <MenuItem onClick={() => disconnect()}>Disconnect</MenuItem>
+                <MenuItem onClick={() => disconnect()}>{t('DISCONNECT')}</MenuItem>
               )}
             </MenuList>
           </HStack>

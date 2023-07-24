@@ -1,10 +1,11 @@
 import { ButtonProps, Button, useToast } from "@chakra-ui/react";
 import { KeyedMutator } from "swr";
 import useClaim from "../../../hooks/useClaim";
+import TxSentToast from "../../TxSentToast";
+import { useLocale } from "../../../hooks/useLocale";
 import { Sale } from "lib/types/Sale";
 import { getExpectedAmount } from "lib/utils";
 import Big from "lib/utils/bignumber";
-import TxSentToast from "../../TxSentToast";
 
 interface Props {
   sale: Sale;
@@ -52,6 +53,7 @@ export default function ClaimButton({
     sale.allocatedAmount
   );
   const toast = useToast({ position: "top-right", isClosable: true });
+  const { t } = useLocale();
   return (
     <Button
       variant={"solid"}
@@ -63,10 +65,10 @@ export default function ClaimButton({
       }}
     >
       {isClaimed
-        ? "Claimed"
+        ? t("CLAIMED")
         : expectedAmount.eq(0) && myContribution.gt(0)
-        ? "Claim Refund"
-        : "Claim"}
+        ? t("CLAIM_REFUND")
+        : t("CLAIM")}
     </Button>
   );
 }

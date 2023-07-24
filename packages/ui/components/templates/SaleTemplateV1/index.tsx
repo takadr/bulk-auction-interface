@@ -54,6 +54,7 @@ import ClaimButton from "./ClaimButton";
 import TxSentToast from "../../TxSentToast";
 import WithdrawRaisedETH from "./WithdrawRaisedETH";
 import WithdrawERC20 from "./WithdrawERC20";
+import { useLocale } from "../../../hooks/useLocale";
 import {
   getDecimalsForView,
   getEtherscanLink,
@@ -199,6 +200,8 @@ export default function SaleTemplateV1({
     },
   });
 
+  const { t } = useLocale();
+
   return (
     <>
       <Container maxW={"container.md"} py={16}>
@@ -307,7 +310,7 @@ export default function SaleTemplateV1({
         {metaData.terms && (
           <Box mt={4} py={16}>
             <Heading size={"lg"} textAlign={"center"}>
-              Disclaimers & Terms and Conditions
+              {t('DISCLAIMERS_TERMS_AND_CONDITIONS')}
             </Heading>
             <chakra.p whiteSpace={"pre-line"} mt={2}>
               {metaData.terms}
@@ -326,7 +329,7 @@ export default function SaleTemplateV1({
                 }
               >
                 <FormLabel alignItems={"baseline"}>
-                  Contribute
+                  {t('CONTRIBUTE_AMOUNT')}
                   <Tooltip
                     hasArrow
                     label={"Input the amount you wish to contribute"}
@@ -371,7 +374,7 @@ export default function SaleTemplateV1({
                     variant="solid"
                     colorScheme={"green"}
                   >
-                    Contribute
+                    {t('CONTRIBUTE')}
                   </Button>
                 </Flex>
                 <FormErrorMessage>{formikProps.errors.amount}</FormErrorMessage>
@@ -383,7 +386,7 @@ export default function SaleTemplateV1({
               fontSize={"sm"}
               textAlign="right"
             >
-              Balance:{" "}
+              {t("BALANCE")}:{" "}
               {balanceData ? Number(balanceData.formatted).toFixed(2) : "-"} ETH
             </chakra.p>
           </Box>
@@ -426,7 +429,7 @@ export default function SaleTemplateV1({
             <Divider mt={8} />
             <Card mt={8}>
               <CardHeader>
-                <Heading size="md">Owner Menu</Heading>
+                <Heading size="md">{t("OWNER_MENU")}</Heading>
               </CardHeader>
 
               <CardBody>

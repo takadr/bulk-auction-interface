@@ -21,6 +21,7 @@ import { FormikProps } from "formik";
 import { useWaitForTransaction } from "wagmi";
 import { MetaData } from "lib/types/Sale";
 import { SAMPLE_DISCLAIMERS } from "lib/constants";
+import { useLocale } from "../../../hooks/useLocale";
 
 export default function MetaDataForm({
   formikProps,
@@ -31,6 +32,7 @@ export default function MetaDataForm({
   waitFn?: ReturnType<typeof useWaitForTransaction>;
   onSkip?: () => void;
 }) {
+  const { t } = useLocale();
   return (
     <div>
       <form onSubmit={formikProps.handleSubmit}>
@@ -40,8 +42,8 @@ export default function MetaDataForm({
               isInvalid={!!formikProps.errors.id && !!formikProps.touched.id}
             >
               <FormLabel htmlFor="id" alignItems={"baseline"}>
-                Sale Contract Address
-                <Tooltip hasArrow label={"The address of the sale contract"}>
+                {t("SALE_CONTRACT_ADDRESS")}
+                <Tooltip hasArrow label={t("THE_ADDRESS_OF_THE_SALE_CONTRACT")}>
                   <QuestionIcon mb={1} ml={1} />
                 </Tooltip>
               </FormLabel>
@@ -57,7 +59,7 @@ export default function MetaDataForm({
                   value={formikProps.values.id}
                   placeholder={
                     waitFn && waitFn.isLoading
-                      ? "Waiting for the transaction to be confirmed..."
+                      ? t("WAITING_FOR_THE_TRANSACTION_TO_BE_CONFIRMED")
                       : ""
                   }
                 />
@@ -73,8 +75,8 @@ export default function MetaDataForm({
               }
             >
               <FormLabel htmlFor="title" alignItems={"baseline"}>
-                Title
-                <Tooltip hasArrow label={"Input the title of this sale"}>
+                {t("TITLE")}
+                <Tooltip hasArrow label={t("INPUT_THE_TITLE_OF_THIS_SALE")}>
                   <QuestionIcon mb={1} ml={1} />
                 </Tooltip>
               </FormLabel>
@@ -85,7 +87,7 @@ export default function MetaDataForm({
                 onBlur={formikProps.handleBlur}
                 onChange={formikProps.handleChange}
                 value={formikProps.values.title}
-                placeholder="e.g. DFGC Donation Event"
+                placeholder={t("DFGC_DONATION_EVENT")}
               />
               <FormErrorMessage>{formikProps.errors.title}</FormErrorMessage>
             </FormControl>
@@ -98,8 +100,8 @@ export default function MetaDataForm({
               }
             >
               <FormLabel alignItems={"baseline"}>
-                Description
-                <Tooltip hasArrow label={"Input the description of this sale"}>
+                {t("DESCRIPTION")}
+                <Tooltip hasArrow label={t("INPUT_THE_DESCRIPTION_OF_THIS_SALE")}>
                   <QuestionIcon mb={1} ml={1} />
                 </Tooltip>
               </FormLabel>
@@ -126,12 +128,10 @@ export default function MetaDataForm({
               }
             >
               <FormLabel alignItems={"baseline"}>
-                Disclaimers & Terms and Conditions
+                {t("DISCLAIMERS_TERMS_AND_CONDITIONS")}
                 <Tooltip
                   hasArrow
-                  label={
-                    'Input the disclaimer and T&C for this sale, where applicable. You can click "Use sample disclaimer text" button to input a standard disclaimer.'
-                  }
+                  label={t("INPUT_THE_DISCLAIMER")}
                 >
                   <QuestionIcon mb={1} ml={1} />
                 </Tooltip>
@@ -153,7 +153,7 @@ export default function MetaDataForm({
                   formikProps.setFieldValue("terms", SAMPLE_DISCLAIMERS)
                 }
               >
-                Use sample disclaimer text
+                {t("USE_SAMPLE_DISCLAIMER_TEXT")}
               </Button>
               <FormErrorMessage>{formikProps.errors.terms}</FormErrorMessage>
             </FormControl>
@@ -166,12 +166,10 @@ export default function MetaDataForm({
               }
             >
               <FormLabel alignItems={"baseline"}>
-                Target total raised
+                {t("TARGET_TOTAL_RAISED")}
                 <Tooltip
                   hasArrow
-                  label={
-                    'Set the target amount you wish to achieve in this sale. It will be displayed as the "Target total raised" to other users. You can change this value at any time, and it does not affect the success or failure of the sale itself'
-                  }
+                  label={t("SET_THE_TARGET_AMOUNT")}
                 >
                   <QuestionIcon mb={1} ml={1} />
                 </Tooltip>
@@ -218,12 +216,10 @@ export default function MetaDataForm({
               }
             >
               <FormLabel alignItems={"baseline"}>
-                Maximum total raised (for graphical use)
+                {t("MAXIMUM_TOTAL_RAISED")}
                 <Tooltip
                   hasArrow
-                  label={
-                    "Set the Maximum total raised, which will be solely used as the 100% value for the progress bar and won't be displayed elsewhere. You can change this value at any time, and it does not affect the success or failure of the sale itself. Also, users can buy even after this value is achieved."
-                  }
+                  label={t("SET_THE_MAXIMUM_TOTAL_RAISED")}
                 >
                   <QuestionIcon mb={1} ml={1} />
                 </Tooltip>
@@ -272,10 +268,10 @@ export default function MetaDataForm({
               }
             >
               <FormLabel htmlFor="projectURL" alignItems={"baseline"}>
-                Project URL
+                {t("PROJECT_URL")}
                 <Tooltip
                   hasArrow
-                  label={"Input your project URL if you have it"}
+                  label={t("INPUT_YOUR_PROJECT_URL_IF_YOU_HAVE_IT")}
                 >
                   <QuestionIcon mb={1} ml={1} />
                 </Tooltip>
@@ -286,7 +282,7 @@ export default function MetaDataForm({
                 onBlur={formikProps.handleBlur}
                 onChange={formikProps.handleChange}
                 value={formikProps.values.projectURL}
-                placeholder="e.g.) https://xxx.xyz"
+                placeholder="e.g. https://xxx.xyz"
               />
               <FormErrorMessage>
                 {formikProps.errors.projectURL}
@@ -300,10 +296,10 @@ export default function MetaDataForm({
               }
             >
               <FormLabel htmlFor="logoURL" alignItems={"baseline"}>
-                Project Logo URL
+                {t("PROJECT_LOGO_URL")}
                 <Tooltip
                   hasArrow
-                  label={"Input your project logo URL if you have it"}
+                  label={t("INPUT_YOUR_PROJECT_LOGO_URL_IF_YOU_HAVE_IT")}
                 >
                   <QuestionIcon mb={1} ml={1} />
                 </Tooltip>
@@ -314,7 +310,7 @@ export default function MetaDataForm({
                 onBlur={formikProps.handleBlur}
                 onChange={formikProps.handleChange}
                 value={formikProps.values.logoURL}
-                placeholder="e.g.) https://xxx.xyz/logo.png"
+                placeholder="e.g. https://xxx.xyz/logo.png"
               />
               <FormErrorMessage>{formikProps.errors.logoURL}</FormErrorMessage>
             </FormControl>
@@ -326,10 +322,10 @@ export default function MetaDataForm({
               }
             >
               <FormLabel htmlFor="otherURL" alignItems={"baseline"}>
-                Other URL
+                {t("OTHER_URL")}
                 <Tooltip
                   hasArrow
-                  label={"Input any URL if you want to show something to users"}
+                  label={t("INPUT_ANY_URL_IF_YOU_WANT_TO_SHOW_SOMETHING_TO_USERS")}
                 >
                   <QuestionIcon mb={1} ml={1} />
                 </Tooltip>
@@ -340,7 +336,7 @@ export default function MetaDataForm({
                 onBlur={formikProps.handleBlur}
                 onChange={formikProps.handleChange}
                 value={formikProps.values.otherURL}
-                placeholder="e.g.) https://twitter.com/xxx"
+                placeholder="e.g. https://twitter.com/xxx"
               />
               <FormErrorMessage>{formikProps.errors.otherURL}</FormErrorMessage>
             </FormControl>
@@ -358,8 +354,8 @@ export default function MetaDataForm({
             leftIcon={waitFn && waitFn.isLoading ? <Spinner /> : undefined}
           >
             {waitFn && waitFn.isLoading
-              ? "Please wait for the transaction to be confirmed"
-              : "Save Sale Information"}
+              ? t("PLEASE_WAIT_FOR_THE_TRANSACTION_TO_BE_CONFIRMED")
+              : t("SAVE_SALE_INFORMATION")}
           </Button>
           {onSkip && (
             <Button
@@ -369,7 +365,7 @@ export default function MetaDataForm({
               onClick={onSkip}
               isDisabled={formikProps.isSubmitting}
             >
-              Skip (You can input this later)
+              {t("SKIP")}
             </Button>
           )}
         </HStack>

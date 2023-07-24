@@ -5,15 +5,17 @@ import {
   FEE_RATE_PER_MIL,
   SALE_TEMPLATE_V1_NAME,
 } from "lib/constants";
+import { useLocale } from "./useLocale";
 
 type Constants = { lockDuration: number; feeRatePerMil: number };
 
 const useSWRMetaData = (
-  id: string
+  id: string,
 ): SWRResponse<
   { metaData: MetaData; constants: Constants } | undefined,
   Error
 > => {
+  const { t } = useLocale();
   const fetcher = (
     url: string
   ): Promise<{ metaData: MetaData; constants: Constants } | undefined> =>
@@ -25,7 +27,7 @@ const useSWRMetaData = (
             ? data.metaData
             : ({
                 id,
-                title: "Unnamed Sale",
+                title: t('UNNAMED_SALE'),
               } as MetaData),
           constants: {
             lockDuration: LOCK_DURATION[SALE_TEMPLATE_V1_NAME],

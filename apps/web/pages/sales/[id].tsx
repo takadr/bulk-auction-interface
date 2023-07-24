@@ -16,7 +16,7 @@ export default function SalePage() {
   const { address, isConnected, connector } = useAccount();
   const router = useRouter();
   const { id } = router.query;
-  const { t } = useLocale();
+  const { t, locale } = useLocale();
 
   // TODO Get template address from contractAddress
   // Switch template by using template address

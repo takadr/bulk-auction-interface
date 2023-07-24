@@ -32,7 +32,11 @@ export default function Web() {
 
   return (
     <Layout>
-      <Hero currentUser={currentUser} mutate={mutate} />
+      <Hero 
+        currentUser={currentUser} 
+        mutate={mutate}
+        subtitle={t('AN_INCLUSIVE_AND_TRANSPARENT_TOKEN_LAUNCHPAD')}
+      />
       <Container maxW={"container.xl"}>
         <Heading>{t('LIVE_SALES')}</Heading>
         <Stack spacing={8} py={8}>
