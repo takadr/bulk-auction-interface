@@ -52,7 +52,7 @@ export default function MetaDataFormModal({
       onSubmitSuccess && onSubmitSuccess();
       handleClose();
       toast({
-        title: t('SALE_INFORMATION_SUCCESSFULLY_SAVED'),
+        title: t("SALE_INFORMATION_SUCCESSFULLY_SAVED"),
         status: "success",
         duration: 5000,
       });
@@ -76,7 +76,7 @@ export default function MetaDataFormModal({
       >
         <ModalOverlay />
         <ModalContent>
-          <ModalHeader>{t('UPDATE_SALE_INFORMATION')}</ModalHeader>
+          <ModalHeader>{t("UPDATE_SALE_INFORMATION")}</ModalHeader>
           <ModalCloseButton />
           <ModalBody pb={6}>
             <MetaDataForm formikProps={formikProps} />

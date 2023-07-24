@@ -32,13 +32,13 @@ export default function Web() {
 
   return (
     <Layout>
-      <Hero 
-        currentUser={currentUser} 
+      <Hero
+        currentUser={currentUser}
         mutate={mutate}
-        subtitle={t('AN_INCLUSIVE_AND_TRANSPARENT_TOKEN_LAUNCHPAD')}
+        subtitle={t("AN_INCLUSIVE_AND_TRANSPARENT_TOKEN_LAUNCHPAD")}
       />
       <Container maxW={"container.xl"}>
-        <Heading>{t('LIVE_SALES')}</Heading>
+        <Heading>{t("LIVE_SALES")}</Heading>
         <Stack spacing={8} py={8}>
           {activeSalesError && (
             <Alert status={"error"}>
@@ -60,14 +60,14 @@ export default function Web() {
           {!isLoadingActiveSales && activeSales.length === 0 && (
             <Flex minH={"25vh"} justifyContent="center" alignItems={"center"}>
               <Text fontSize={"lg"} opacity={".75"} textAlign={"center"}>
-                {t('NO_LIVE_SALE')}
+                {t("NO_LIVE_SALE")}
               </Text>
             </Flex>
           )}
         </Stack>
         <Flex alignItems={"center"} justifyContent={"center"} pb={8}>
           <Button size={"lg"} onClick={() => Router.push("/sales")}>
-            {t('VIEW_ALL_SALES')}
+            {t("VIEW_ALL_SALES")}
           </Button>
         </Flex>
       </Container>

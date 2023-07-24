@@ -35,13 +35,13 @@ export default function ProvidersList({
       },
     });
   const { disconnect } = useDisconnect();
-  const { t } = useLocale();  
+  const { t } = useLocale();
 
   return (
     <Modal isOpen={isOpen} onClose={onClose} closeOnOverlayClick={false}>
       <ModalOverlay />
       <ModalContent>
-        <ModalHeader>{t('CONNECT_WALLET')}</ModalHeader>
+        <ModalHeader>{t("CONNECT_WALLET")}</ModalHeader>
         <ModalCloseButton />
         <ModalBody pb={6}>
           <Stack spacing={4}>

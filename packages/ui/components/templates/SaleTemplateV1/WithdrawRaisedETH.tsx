@@ -62,10 +62,7 @@ export default function WithdrawRaisedETH({ sale, onSuccessConfirm }: Props) {
     <Box>
       <Heading fontSize={"lg"} textAlign={"left"}>
         {t("TOTAL_RAISED_BALANCE_IN_SALE_CONTRACT")}
-        <Tooltip
-          hasArrow
-          label={t("AFTER_THE_SALE_CLOSES")}
-        >
+        <Tooltip hasArrow label={t("AFTER_THE_SALE_CLOSES")}>
           <QuestionIcon mb={1} ml={1} />
         </Tooltip>
       </Heading>

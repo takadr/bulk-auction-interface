@@ -71,7 +71,7 @@ const Header: FC<HeaderProps> = ({ title }) => {
           variant={"outline"}
           size={{ base: "xs", md: "sm" }}
         >
-          {t('CONNECT_WALLET')}
+          {t("CONNECT_WALLET")}
         </Button>
         <ProvidersList
           isOpen={providersListDisclosure.isOpen}
@@ -108,19 +108,17 @@ const Header: FC<HeaderProps> = ({ title }) => {
                   ml="2"
                 >
                   <Text fontSize="sm" id="account">
-                    {
-                      locale === "en" &&
+                    {locale === "en" && (
                       <chakra.span display={{ base: "none", md: "inline" }}>
                         {currentUser ? "Signed in as " : ""}
                       </chakra.span>
-                    }
+                    )}
                     {ensName ? `${ensName}` : `${addressString}`}
-                    {
-                      locale === "ja" &&
+                    {locale === "ja" && (
                       <chakra.span display={{ base: "none", md: "inline" }}>
                         {currentUser ? "でログイン中" : ""}
                       </chakra.span>
-                    }
+                    )}
                   </Text>
                 </VStack>
                 <ChevronDownIcon />
@@ -142,14 +140,14 @@ const Header: FC<HeaderProps> = ({ title }) => {
                   display={{ base: "block", md: "none" }}
                   onClick={() => Router.push("/dashboard")}
                 >
-                  {t('DASHBOARD')}
+                  {t("DASHBOARD")}
                 </MenuItem>
               )}
               <MenuItem
                 display={{ base: "block", md: "none" }}
                 onClick={() => Router.push("/sales")}
               >
-                {t('SALES')}
+                {t("SALES")}
               </MenuItem>
               <Divider display={{ base: "block", md: "none" }} />
               {currentUser ? (
@@ -169,10 +167,12 @@ const Header: FC<HeaderProps> = ({ title }) => {
                     mutate && mutate();
                   }}
                 >
-                  {t('SIGN_OUT_AND_DISCONNECT')}
+                  {t("SIGN_OUT_AND_DISCONNECT")}
                 </MenuItem>
               ) : (
-                <MenuItem onClick={() => disconnect()}>{t('DISCONNECT')}</MenuItem>
+                <MenuItem onClick={() => disconnect()}>
+                  {t("DISCONNECT")}
+                </MenuItem>
               )}
             </MenuList>
           </HStack>
@@ -223,7 +223,7 @@ const Header: FC<HeaderProps> = ({ title }) => {
                 size={"md"}
                 onClick={() => Router.push("/dashboard")}
               >
-                {t('DASHBOARD')}
+                {t("DASHBOARD")}
               </Button>
             )}
             <Button
@@ -232,7 +232,7 @@ const Header: FC<HeaderProps> = ({ title }) => {
               size={"md"}
               onClick={() => Router.push("/sales")}
             >
-              {t('SALES')}
+              {t("SALES")}
             </Button>
             {!currentUser && (
               <SignInButton

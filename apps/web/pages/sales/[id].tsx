@@ -57,12 +57,12 @@ export default function SalePage() {
     <Layout>
       <MetaTags
         title={`${
-          metaData.metaData.title ? metaData.metaData.title : t('SALES')
-        } | ${t('APP_NAME')}`}
+          metaData.metaData.title ? metaData.metaData.title : t("SALES")
+        } | ${t("APP_NAME")}`}
         description={
           metaData.metaData.description
             ? metaData.metaData.description
-            : t('AN_INCLUSIVE_AND_TRANSPARENT_TOKEN_LAUNCHPAD')
+            : t("AN_INCLUSIVE_AND_TRANSPARENT_TOKEN_LAUNCHPAD")
         }
         image={metaData.metaData.logoURL && metaData.metaData.logoURL}
       />

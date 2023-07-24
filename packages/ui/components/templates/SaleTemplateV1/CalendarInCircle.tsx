@@ -22,7 +22,7 @@ export default function CalendarInCircle({
   }
 
   const [gray600, green400] = useToken("colors", ["gray.600", "green.400"]);
-  const { t } = useLocale();  
+  const { t } = useLocale();
 
   return (
     <chakra.div {...boxProps}>
@@ -49,7 +49,7 @@ export default function CalendarInCircle({
             flexDirection={"column"}
             justifyContent={"center"}
           >
-            <chakra.p>{t('STARTING_AT')}</chakra.p>
+            <chakra.p>{t("STARTING_AT")}</chakra.p>
             <chakra.p>
               {format(unixStartDate * 1000, "yyyy/MM/dd HH:mm(z)")}
             </chakra.p>

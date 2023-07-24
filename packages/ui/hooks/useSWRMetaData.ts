@@ -10,7 +10,7 @@ import { useLocale } from "./useLocale";
 type Constants = { lockDuration: number; feeRatePerMil: number };
 
 const useSWRMetaData = (
-  id: string,
+  id: string
 ): SWRResponse<
   { metaData: MetaData; constants: Constants } | undefined,
   Error
@@ -27,7 +27,7 @@ const useSWRMetaData = (
             ? data.metaData
             : ({
                 id,
-                title: t('UNNAMED_SALE'),
+                title: t("UNNAMED_SALE"),
               } as MetaData),
           constants: {
             lockDuration: LOCK_DURATION[SALE_TEMPLATE_V1_NAME],

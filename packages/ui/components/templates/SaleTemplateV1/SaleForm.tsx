@@ -77,7 +77,10 @@ export default function SaleForm({
         >
           <FormLabel htmlFor="token" alignItems={"baseline"}>
             {t("SELECT_SALE_TEMPLETE")}
-            <Tooltip hasArrow label={t("YOU_CAN_CHOOSE_THE_TYPE_OF_TOKEN_SALE")}>
+            <Tooltip
+              hasArrow
+              label={t("YOU_CAN_CHOOSE_THE_TYPE_OF_TOKEN_SALE")}
+            >
               <QuestionIcon mb={1} ml={1} />
             </Tooltip>
           </FormLabel>
@@ -112,7 +115,9 @@ export default function SaleForm({
             {t("TOKEN_ADDRESS")}
             <Tooltip
               hasArrow
-              label={t("INPUT_THE_ADDRESS_OF_THE_TOKEN_YOU_WOULD_LIKE_TO_ALLOCATE_TO_THIS_SALE")}
+              label={t(
+                "INPUT_THE_ADDRESS_OF_THE_TOKEN_YOU_WOULD_LIKE_TO_ALLOCATE_TO_THIS_SALE"
+              )}
             >
               <QuestionIcon mb={1} ml={1} />
             </Tooltip>
@@ -153,10 +158,7 @@ export default function SaleForm({
         >
           <FormLabel alignItems={"baseline"}>
             {t("START_DATE_END_DATE")}
-            <Tooltip
-              hasArrow
-              label={t("INPUT_THE_DURATION_OF_THE_TOKEN_SALE")}
-            >
+            <Tooltip hasArrow label={t("INPUT_THE_DURATION_OF_THE_TOKEN_SALE")}>
               <QuestionIcon mb={1} ml={1} />
             </Tooltip>
           </FormLabel>
@@ -285,7 +287,9 @@ export default function SaleForm({
             {t("MINIMUM_TOTAL_RAISED")}
             <Tooltip
               hasArrow
-              label={t("THE_SALE_WILL_BE_VOID_IF_THE_TOTAL_RAISED_IS_LESS_THAN_THIS_THRESHOLD")}
+              label={t(
+                "THE_SALE_WILL_BE_VOID_IF_THE_TOTAL_RAISED_IS_LESS_THAN_THIS_THRESHOLD"
+              )}
             >
               <QuestionIcon mb={1} ml={1} />
             </Tooltip>
@@ -319,12 +323,13 @@ export default function SaleForm({
             <chakra.div px={2}>ETH</chakra.div>
           </Flex>
           <chakra.p color={"gray.400"} fontSize={"sm"}>
-            {!!tokenData && !!formikProps.values.minRaisedAmount && !!formikProps.values.allocatedAmount
-              && `1 ${tokenData.symbol} = ${divide(
+            {!!tokenData &&
+              !!formikProps.values.minRaisedAmount &&
+              !!formikProps.values.allocatedAmount &&
+              `1 ${tokenData.symbol} = ${divide(
                 formikProps.values.minRaisedAmount,
                 formikProps.values.allocatedAmount
-                ).toString()} ETH at Minimum total raised`
-              }
+              ).toString()} ETH at Minimum total raised`}
           </chakra.p>
           <FormErrorMessage>
             {formikProps.errors.minRaisedAmount}

@@ -66,7 +66,12 @@ export default function Layout({
       {chain && chain.unsupported && (
         <chakra.div px={{ base: 0, md: 8 }}>
           <Alert status="warning" mb={4}>
-            <AlertIcon /> {t('PLEASE_CONNECT_TO', {network: capitalize(CHAIN_NAMES[process.env.NEXT_PUBLIC_CHAIN_ID!])})}
+            <AlertIcon />{" "}
+            {t("PLEASE_CONNECT_TO", {
+              network: capitalize(
+                CHAIN_NAMES[process.env.NEXT_PUBLIC_CHAIN_ID!]
+              ),
+            })}
           </Alert>
         </chakra.div>
       )}

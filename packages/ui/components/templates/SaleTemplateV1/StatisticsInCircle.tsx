@@ -92,7 +92,8 @@ export default function StatisticsInCircle({
           hasArrow
           label={
             <chakra.p textAlign={"center"} p={1}>
-              {t("TARGET_TOTAL_RAISED")}: {etherAmountFormat(targetTotalRaised)}ETH
+              {t("TARGET_TOTAL_RAISED")}: {etherAmountFormat(targetTotalRaised)}
+              ETH
               {totalRaised.gte(targetTotalRaised) && (
                 <>
                   <br /> {t("ACHIEVED")}
@@ -172,13 +173,13 @@ export default function StatisticsInCircle({
             {`1 ${tokenSymbol} = ${divide(
               totalRaised,
               allocatedAmount
-              ).toString()} ETH`
-            }
+            ).toString()} ETH`}
           </div>
           <div>
             {!!targetTotalRaised && (
               <chakra.div textAlign={"center"}>
-                {t("TARGET_TOTAL_RAISED")} {etherAmountFormat(targetTotalRaised)}
+                {t("TARGET_TOTAL_RAISED")}{" "}
+                {etherAmountFormat(targetTotalRaised)}
                 {raisedTokenSymbol.toUpperCase()}
                 {totalRaised.gte(targetTotalRaised) && started && (
                   <chakra.span textAlign={"center"}> 🎉</chakra.span>

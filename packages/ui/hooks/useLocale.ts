@@ -5,34 +5,38 @@ import en from "lib/locales/en/index";
 import ja from "lib/locales/ja/index";
 
 export const useLocale = () => {
-    const [locale, setLocale] = useAtom(localeAtom);
-    const [t, setT] = useState(en);
+  const [locale, setLocale] = useAtom(localeAtom);
+  const [t, setT] = useState(en);
 
-    const setStorageLocale = (locale: "ja"|"en") => {
-        localStorage.setItem("locale", locale);
-        setLocale(locale);
-    };
+  const setStorageLocale = (locale: "ja" | "en") => {
+    localStorage.setItem("locale", locale);
+    setLocale(locale);
+  };
 
-    const tWithReplaceText = (key: keyof typeof t, vals?: {[key: string]: string}): string => {
-        let s: string = t[key];
-        if(!s) return key;
-        if(vals) {
-            Object.entries(vals).forEach(([key, value]) => {
-                s = s.replace(`{{${key}}}`, value);
-            });
-        }
-        return s;
+  const tWithReplaceText = (
+    key: keyof typeof t,
+    vals?: { [key: string]: string }
+  ): string => {
+    let s: string = t[key];
+    if (!s) return key;
+    if (vals) {
+      Object.entries(vals).forEach(([key, value]) => {
+        s = s.replace(`{{${key}}}`, value);
+      });
     }
+    return s;
+  };
 
-    useEffect(() => {
-        const defaultLocale = new Date().getTimezoneOffset() === -540 ? 'ja' : 'en';
-        const value = localStorage.getItem("locale") as "ja"|"en" || defaultLocale;
-        setLocale(value);
-    }, []);
+  useEffect(() => {
+    const defaultLocale = new Date().getTimezoneOffset() === -540 ? "ja" : "en";
+    const value =
+      (localStorage.getItem("locale") as "ja" | "en") || defaultLocale;
+    setLocale(value);
+  }, []);
 
-    useEffect(() => {
-        setT(locale === "en" ? en : ja);
-    }, [locale]);
+  useEffect(() => {
+    setT(locale === "en" ? en : ja);
+  }, [locale]);
 
-    return { t: tWithReplaceText, setLocale: setStorageLocale, locale };
-}
+  return { t: tWithReplaceText, setLocale: setStorageLocale, locale };
+};

@@ -44,10 +44,12 @@ export default function SalePage() {
       <Container maxW="container.xl" py={16}>
         <Tabs variant="soft-rounded" colorScheme="green">
           <TabList>
-            <Tab fontSize={{ base: "sm", md: "md" }}>{t('LIVE_UPCOMING_SALES')}</Tab>
+            <Tab fontSize={{ base: "sm", md: "md" }}>
+              {t("LIVE_UPCOMING_SALES")}
+            </Tab>
             {/* <Tab fontSize={{base: 'sm', md: 'md'}}>Live Sales</Tab>
                     <Tab fontSize={{base: 'sm', md: 'md'}}>Upcoming Sales</Tab> */}
-            <Tab fontSize={{ base: "sm", md: "md" }}>{t('ENDED_SALES')}</Tab>
+            <Tab fontSize={{ base: "sm", md: "md" }}>{t("ENDED_SALES")}</Tab>
           </TabList>
           <TabPanels mt={4}>
             <TabPanel p={{ base: 0, md: 4 }}>
@@ -74,7 +76,7 @@ export default function SalePage() {
                     isLoading={isLoadingActiveSales || isValidatingActiveSales}
                     onClick={loadMoreActiveSales}
                   >
-                    {t('LOAD_MORE_SALES')}
+                    {t("LOAD_MORE_SALES")}
                   </Button>
                 )}
                 {!isLoadingActiveSales && activeSales.length === 0 && (
@@ -84,7 +86,7 @@ export default function SalePage() {
                     alignItems={"center"}
                   >
                     <Text fontSize={"lg"} opacity={".75"} textAlign={"center"}>
-                      {t('NO_SALE')}
+                      {t("NO_SALE")}
                     </Text>
                   </Flex>
                 )}
@@ -139,7 +141,7 @@ export default function SalePage() {
                     isLoading={isLoadingClosedSales || isValidatingClosedSales}
                     onClick={loadMoreClosedSales}
                   >
-                    {t('LOAD_MORE_SALES')}
+                    {t("LOAD_MORE_SALES")}
                   </Button>
                 )}
                 {!isLoadingClosedSales && closedSales.length === 0 && (
@@ -149,7 +151,7 @@ export default function SalePage() {
                     alignItems={"center"}
                   >
                     <Text fontSize={"lg"} opacity={".75"} textAlign={"center"}>
-                      {t('NO_SALE')}
+                      {t("NO_SALE")}
                     </Text>
                   </Flex>
                 )}

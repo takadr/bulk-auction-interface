@@ -310,7 +310,7 @@ export default function SaleTemplateV1({
         {metaData.terms && (
           <Box mt={4} py={16}>
             <Heading size={"lg"} textAlign={"center"}>
-              {t('DISCLAIMERS_TERMS_AND_CONDITIONS')}
+              {t("DISCLAIMERS_TERMS_AND_CONDITIONS")}
             </Heading>
             <chakra.p whiteSpace={"pre-line"} mt={2}>
               {metaData.terms}
@@ -329,7 +329,7 @@ export default function SaleTemplateV1({
                 }
               >
                 <FormLabel alignItems={"baseline"}>
-                  {t('CONTRIBUTE_AMOUNT')}
+                  {t("CONTRIBUTE_AMOUNT")}
                   <Tooltip
                     hasArrow
                     label={"Input the amount you wish to contribute"}
@@ -374,7 +374,7 @@ export default function SaleTemplateV1({
                     variant="solid"
                     colorScheme={"green"}
                   >
-                    {t('CONTRIBUTE')}
+                    {t("CONTRIBUTE")}
                   </Button>
                 </Flex>
                 <FormErrorMessage>{formikProps.errors.amount}</FormErrorMessage>

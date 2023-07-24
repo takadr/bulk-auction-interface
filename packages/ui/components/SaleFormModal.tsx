@@ -59,7 +59,7 @@ export default function SaleFormModal({
       setStep(2);
       onDeploy && onDeploy();
       toast({
-        title: t('TRANSACTION_SENT'),
+        title: t("TRANSACTION_SENT"),
         status: "success",
         duration: 5000,
         render: (props) => <TxSentToast txid={result.hash} {...props} />,
@@ -75,7 +75,7 @@ export default function SaleFormModal({
     onWaitForTransactionSuccess: (result: any) => {
       onDeployConfirmed && onDeployConfirmed();
       toast({
-        title: t('TRANSACTION_CONFIRMED'),
+        title: t("TRANSACTION_CONFIRMED"),
         status: "success",
         duration: 5000,
       });
@@ -89,7 +89,7 @@ export default function SaleFormModal({
     },
     onApprovalTxSent: (result: any) => {
       toast({
-        title: t('TRANSACTION_SENT'),
+        title: t("TRANSACTION_SENT"),
         status: "success",
         duration: 5000,
         render: (props) => <TxSentToast txid={result.hash} {...props} />,
@@ -97,7 +97,7 @@ export default function SaleFormModal({
     },
     onApprovalTxConfirmed: (result: any) => {
       toast({
-        title: t('APPROVAL_CONFIRMED'),
+        title: t("APPROVAL_CONFIRMED"),
         status: "success",
         duration: 5000,
       });
@@ -118,7 +118,7 @@ export default function SaleFormModal({
       handleClose();
       onInformationSaved && onInformationSaved();
       toast({
-        title: t('SALE_INFORMATION_SUCCESSFULLY_SAVED'),
+        title: t("SALE_INFORMATION_SUCCESSFULLY_SAVED"),
         status: "success",
         duration: 5000,
       });
@@ -149,8 +149,8 @@ export default function SaleFormModal({
   });
 
   const stepParams = [
-    { number: 1, label: t('DEPLOY_CONTRACT') },
-    { number: 2, label: t('INPUT_INFORMATION') },
+    { number: 1, label: t("DEPLOY_CONTRACT") },
+    { number: 2, label: t("INPUT_INFORMATION") },
   ];
 
   return (
@@ -165,7 +165,7 @@ export default function SaleFormModal({
       >
         <ModalOverlay />
         <ModalContent>
-          <ModalHeader>{t('CREATE_NEW_SALE')}</ModalHeader>
+          <ModalHeader>{t("CREATE_NEW_SALE")}</ModalHeader>
           <ModalCloseButton />
           <ModalBody pb={6}>
             <Steps

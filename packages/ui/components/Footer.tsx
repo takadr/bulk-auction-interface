@@ -46,9 +46,14 @@ const Footer: FC = () => {
               </Link>
             </HStack>
           </VStack>
-          <Select w={'100px'} size={'xs'} value={locale} onChange={(e) => setLocale(e.target.value as "ja" | "en")}>
-            <option value={'ja'}>Japanese</option>
-            <option value={'en'}>English</option>
+          <Select
+            w={"100px"}
+            size={"xs"}
+            value={locale}
+            onChange={(e) => setLocale(e.target.value as "ja" | "en")}
+          >
+            <option value={"ja"}>Japanese</option>
+            <option value={"en"}>English</option>
           </Select>
         </Flex>
       </Container>

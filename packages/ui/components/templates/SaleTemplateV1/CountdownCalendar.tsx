@@ -33,7 +33,9 @@ export default function CountdownCalendar({ unixEndDate }: Props) {
   return (
     <chakra.div>
       <chakra.div textAlign={"center"}>
-        {t('UNTIL', {datetime: format(unixEndDate * 1000, "yyyy/MM/dd HH:mm(z)")})}
+        {t("UNTIL", {
+          datetime: format(unixEndDate * 1000, "yyyy/MM/dd HH:mm(z)"),
+        })}
       </chakra.div>
 
       <chakra.div
@@ -64,7 +66,7 @@ export default function CountdownCalendar({ unixEndDate }: Props) {
 
       {unixEndDate * 1000 < Date.now() && (
         <chakra.div fontSize={"lg"} mt={2} textAlign={"center"}>
-          {t('FINISHED')}
+          {t("FINISHED")}
         </chakra.div>
       )}
     </chakra.div>

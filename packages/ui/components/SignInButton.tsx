@@ -57,7 +57,9 @@ export default function SignInButton({
       const message = new SiweMessage({
         domain: window.location.host,
         address: address,
-        statement: buttonProps.title ? buttonProps.title : t('SIGN_IN_WITH_ETHEREUM'),
+        statement: buttonProps.title
+          ? buttonProps.title
+          : t("SIGN_IN_WITH_ETHEREUM"),
         uri: window.location.origin,
         version: "1",
         chainId,

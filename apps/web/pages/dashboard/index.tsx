@@ -66,10 +66,10 @@ export default function DashboardPage() {
   return (
     <Layout>
       <Container maxW="container.xl" py={16}>
-        <Heading size={"lg"}>{t('DASHBOARD')}</Heading>
+        <Heading size={"lg"}>{t("DASHBOARD")}</Heading>
         <Tabs mt={{ base: 4, md: 8 }}>
           <TabList>
-            <Tab>{t('YOUR_SALES')}</Tab>
+            <Tab>{t("YOUR_SALES")}</Tab>
           </TabList>
 
           <TabPanels>
@@ -77,7 +77,7 @@ export default function DashboardPage() {
               <chakra.div mt={4} textAlign={"right"}>
                 <Button onClick={saleFormModalDisclosure.onOpen}>
                   <AddIcon fontSize={"sm"} mr={2} />
-                  {t('CREATE_NEW_SALE')}
+                  {t("CREATE_NEW_SALE")}
                 </Button>
               </chakra.div>
               <SaleFormModal
@@ -105,7 +105,7 @@ export default function DashboardPage() {
                     alignItems={"center"}
                   >
                     <Text fontSize={"lg"} opacity={".75"} textAlign={"center"}>
-                      {t('NO_SALE')}
+                      {t("NO_SALE")}
                     </Text>
                   </Flex>
                 )}

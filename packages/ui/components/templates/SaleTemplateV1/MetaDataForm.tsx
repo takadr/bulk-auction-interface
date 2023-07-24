@@ -101,7 +101,10 @@ export default function MetaDataForm({
             >
               <FormLabel alignItems={"baseline"}>
                 {t("DESCRIPTION")}
-                <Tooltip hasArrow label={t("INPUT_THE_DESCRIPTION_OF_THIS_SALE")}>
+                <Tooltip
+                  hasArrow
+                  label={t("INPUT_THE_DESCRIPTION_OF_THIS_SALE")}
+                >
                   <QuestionIcon mb={1} ml={1} />
                 </Tooltip>
               </FormLabel>
@@ -129,10 +132,7 @@ export default function MetaDataForm({
             >
               <FormLabel alignItems={"baseline"}>
                 {t("DISCLAIMERS_TERMS_AND_CONDITIONS")}
-                <Tooltip
-                  hasArrow
-                  label={t("INPUT_THE_DISCLAIMER")}
-                >
+                <Tooltip hasArrow label={t("INPUT_THE_DISCLAIMER")}>
                   <QuestionIcon mb={1} ml={1} />
                 </Tooltip>
               </FormLabel>
@@ -167,10 +167,7 @@ export default function MetaDataForm({
             >
               <FormLabel alignItems={"baseline"}>
                 {t("TARGET_TOTAL_RAISED")}
-                <Tooltip
-                  hasArrow
-                  label={t("SET_THE_TARGET_AMOUNT")}
-                >
+                <Tooltip hasArrow label={t("SET_THE_TARGET_AMOUNT")}>
                   <QuestionIcon mb={1} ml={1} />
                 </Tooltip>
               </FormLabel>
@@ -217,10 +214,7 @@ export default function MetaDataForm({
             >
               <FormLabel alignItems={"baseline"}>
                 {t("MAXIMUM_TOTAL_RAISED")}
-                <Tooltip
-                  hasArrow
-                  label={t("SET_THE_MAXIMUM_TOTAL_RAISED")}
-                >
+                <Tooltip hasArrow label={t("SET_THE_MAXIMUM_TOTAL_RAISED")}>
                   <QuestionIcon mb={1} ml={1} />
                 </Tooltip>
               </FormLabel>
@@ -325,7 +319,9 @@ export default function MetaDataForm({
                 {t("OTHER_URL")}
                 <Tooltip
                   hasArrow
-                  label={t("INPUT_ANY_URL_IF_YOU_WANT_TO_SHOW_SOMETHING_TO_USERS")}
+                  label={t(
+                    "INPUT_ANY_URL_IF_YOU_WANT_TO_SHOW_SOMETHING_TO_USERS"
+                  )}
                 >
                   <QuestionIcon mb={1} ml={1} />
                 </Tooltip>

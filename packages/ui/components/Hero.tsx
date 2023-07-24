@@ -94,7 +94,7 @@ export default function Hero({
             />
           )}
           <Button size={"lg"} onClick={() => Router.push("/sales")}>
-            {t('VIEW_ALL_SALES')}
+            {t("VIEW_ALL_SALES")}
           </Button>
         </HStack>
       </Stack>

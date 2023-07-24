@@ -1,7 +1,16 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import { withIronSessionApiRoute } from "iron-session/next";
 import { erc20ABI } from "wagmi";
-import { createPublicClient, http, fallback, getContract, PublicClient, GetContractReturnType, Abi, Transport } from "viem";
+import {
+  createPublicClient,
+  http,
+  fallback,
+  getContract,
+  PublicClient,
+  GetContractReturnType,
+  Abi,
+  Transport,
+} from "viem";
 import { mainnet, goerli, sepolia, localhost, Chain } from "viem/chains";
 import { scanMetaData, addMetaData, updateSale } from "lib/dynamodb/metaData";
 import SaleTemplateV1ABI from "lib/constants/abis/SaleTemplateV1.json";
@@ -35,10 +44,12 @@ const getViemProvider = (chainId: number) => {
   return client;
 };
 
-const requireContractOwner = (req: NextApiRequest): Promise<{
-  metaData: any,
-  saleContract: GetContractReturnType<typeof SaleTemplateV1ABI, PublicClient>,
-  provider: PublicClient<Transport, Chain>
+const requireContractOwner = (
+  req: NextApiRequest
+): Promise<{
+  metaData: any;
+  saleContract: GetContractReturnType<typeof SaleTemplateV1ABI, PublicClient>;
+  provider: PublicClient<Transport, Chain>;
 }> => {
   return new Promise(async (resolve, reject) => {
     try {
@@ -65,7 +76,10 @@ const requireAvailableNetwork = (req: NextApiRequest) => {
     throw new Error("Wrong network");
 };
 
-const getTokenInfo = async (tokenAddress: `0x${string}`, provider: PublicClient) => {
+const getTokenInfo = async (
+  tokenAddress: `0x${string}`,
+  provider: PublicClient
+) => {
   const token = getContract({
     address: tokenAddress,
     abi: erc20ABI,
