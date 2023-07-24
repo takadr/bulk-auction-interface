@@ -44,7 +44,7 @@ export default {
   WITHDRAW_TOKEN: "Withdraw Token",
   TOTAL_RAISED_BALANCE_IN_SALE_CONTRACT:
     "Total raised balance in Sale contract",
-  AFTER_THE_AUCTION_CLOSES:
+  AFTER_THE_SALE_CLOSES:
     "After the sale closes, each bidder's token allocation is determined. If the token allocation for some bidders is zero(less than token decimals), a 3-day refund window will start, and bidders with a zero allocation can initiate a refund request. After the window closes, you can withdraw the total raised (minus the refunds). Please note token allocation to each bidder is calculated by rounding down, and the aggregated amount of fraction tokens (less than token decimals) for each bidder will remain locked in the contract address forever(it cannot be withdrawn).",
   WITHDRAW_THE_TOTAL_RAISED: "Withdraw the total raised.",
   YOUR_SALES: "Your Sales",
