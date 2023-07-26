@@ -30,6 +30,7 @@ export default {
   CONTRIBUTE: "入札する",
   INPUT_THE_AMOUNT_YOU_WISH_TO_CONTRIBUTE: "希望入札額を入力してください",
   ESTIMATED_AMOUNT_YOU_WILL_RECEIVE: "推定割当トークン額",
+  AMOUNT_YOU_WILL_RECEIVE: "割当トークン額",
   YOUR_CONTRIBUTED_AMOUNT: "あなたの合計入札額",
   THE_ESTIMATED_TOKEN_AMOUNT_IS_LESS_THAN_THE_PERMITTED_NUMBER_OF_DECIMALS:
     "推定割当額が許容された最小桁より小さくなっています",

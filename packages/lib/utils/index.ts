@@ -1,4 +1,5 @@
 import { ETHER_DECIMALS_FOR_VIEW } from "../constants";
+import { Sale } from "../types/Sale";
 import Big, {
   BigNumberValueType,
   add,
@@ -16,6 +17,26 @@ export const calculateAllocation = (us: Big, tp: Big, tda: Big): Big => {
   let al = us.mul(tda).div(tp);
   return al.round(0, 0);
 };
+
+// Consider to migrate this into Class method -->
+export const getMinTokenPriceAgainstETH = (minRaisedAmount: Big, allocatedAmount: Big, tokenDecimals: number): Big => {
+  return divide(
+    divide(minRaisedAmount, Big(10).pow(18)),
+    divide(allocatedAmount, Big(10).pow(Number(tokenDecimals)))
+  );
+}
+export const getTokenPriceAgainstETH = (totalRaised: Big, allocatedAmount: Big, tokenDecimals: number): Big => {
+  return divide(
+    divide(totalRaised, Big(10).pow(18)),
+    divide(allocatedAmount, Big(10).pow(Number(tokenDecimals)))
+  );
+}
+export const getTokenPriceAgainstETHWithMinPrice = (minRaisedAmount:Big, allocatedAmount: Big, totalRaised: Big, tokenDecimals: number): Big => {
+  const minTokenPrice = getMinTokenPriceAgainstETH(minRaisedAmount, allocatedAmount, tokenDecimals);
+  const tokenPrice = getTokenPriceAgainstETH(totalRaised, allocatedAmount, tokenDecimals);
+  return minTokenPrice.gte(tokenPrice) ? minTokenPrice : tokenPrice;
+}
+// <--
 
 export const getExpectedAmount = (
   myTotalDonations: BigNumberValueType,

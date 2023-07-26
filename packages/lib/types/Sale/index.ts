@@ -18,7 +18,17 @@ export type Sale = {
   feeRatePerMil?: number;
   totalRaised: Big;
   blockNumber: string; // Deployed block number
+  contributions: Contribution[];
 };
+
+export type Contribution = {
+  id: string;
+  amount: Big;
+  from: `0x${string}`;
+  receivedAt: number;
+  totalRaised: Big;
+  blockNumber: string;
+}
 
 export type SaleForm = {
   templateName: string;

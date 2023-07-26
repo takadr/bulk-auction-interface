@@ -31,6 +31,7 @@ export default {
   INPUT_THE_AMOUNT_YOU_WISH_TO_CONTRIBUTE:
     "Input the amount you wish to contribute",
   ESTIMATED_AMOUNT_YOU_WILL_RECEIVE: "Estimated amount you will receive",
+  AMOUNT_YOU_WILL_RECEIVE: "Amount you will receive",
   YOUR_CONTRIBUTED_AMOUNT: "Your contributed amount",
   THE_ESTIMATED_TOKEN_AMOUNT_IS_LESS_THAN_THE_PERMITTED_NUMBER_OF_DECIMALS:
     "The estimated token amount is less than the permitted number of decimals.",
