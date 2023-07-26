@@ -30,8 +30,8 @@ export default {
   CONTRIBUTE: "Contribute",
   INPUT_THE_AMOUNT_YOU_WISH_TO_CONTRIBUTE:
     "Input the amount you wish to contribute",
-  ESTIMATED_AMOUNT_YOU_WILL_RECEIVE: "Estimated amount you will receive:",
-  YOUR_CONTRIBUTED_AMOUNT: "Your contributed amount:",
+  ESTIMATED_AMOUNT_YOU_WILL_RECEIVE: "Estimated amount you will receive",
+  YOUR_CONTRIBUTED_AMOUNT: "Your contributed amount",
   THE_ESTIMATED_TOKEN_AMOUNT_IS_LESS_THAN_THE_PERMITTED_NUMBER_OF_DECIMALS:
     "The estimated token amount is less than the permitted number of decimals.",
   CLAIM: "Claim",
@@ -119,4 +119,5 @@ export default {
   CANCEL: "Cancel",
   CONFIRMATION: "Confirmation",
   ACHIEVED: "Achieved 🎉",
+  PRICE_AGAINST_ETH: "Price against ETH",
 };
