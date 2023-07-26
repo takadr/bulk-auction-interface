@@ -319,7 +319,7 @@ export default function SaleTemplateV1({
           </Box>
         )}
 
-        <HStack mt={8} spacing={4} alignItems={'top'}>
+        <Flex mt={8} gridGap={4} alignItems={'top'} flexDirection={{ base: "column", md: "row" }}>
         <Box flex={1}>
         {address && started && 
         <Card>
@@ -444,7 +444,7 @@ export default function SaleTemplateV1({
               <PriceChart sale={sale} />
             </CardBody>
           </Card>
-        </HStack>
+        </Flex>
         
         {address && sale.owner?.toLowerCase() === address.toLowerCase() && (
           <>
