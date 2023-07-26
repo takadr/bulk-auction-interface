@@ -17,7 +17,8 @@ import SaleTemplateV1ABI from "lib/constants/abis/SaleTemplateV1.json";
 import ironOptions from "lib/constants/ironOptions";
 import { CHAIN_IDS, CHAIN_NAMES } from "lib/constants";
 
-const availableNetwork = Object.values(CHAIN_IDS);
+// const availableNetwork = Object.values(CHAIN_IDS);
+const availableNetwork = [Number(process.env.NEXT_PUBLIC_CHAIN_ID)];
 
 const getViemChain = (chainName: string) => {
   if (chainName === "mainnet") {
@@ -109,16 +110,16 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
         );
         res.json({ metaData });
       } catch (_error) {
-        console.log(_error.message);
-        res.status(500).end(_error.message);
+        console.log(_error);
+        res.status(500).end(String(_error));
       }
       break;
     case "POST":
       try {
+        requireAvailableNetwork(req);
         const { metaData, saleContract, provider } = await requireContractOwner(
           req
         );
-        requireAvailableNetwork(req);
         const tokenAddress = await saleContract.read.erc20onsale();
         const { tokenName, tokenSymbol, tokenDecimal } = await getTokenInfo(
           tokenAddress as `0x${string}`,
@@ -132,16 +133,16 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
         });
         res.json({ result });
       } catch (_error) {
-        console.log(_error.message);
-        res.status(500).end(_error.message);
+        console.log(_error);
+        res.status(500).end(String(_error));
       }
       break;
     case "PUT":
       try {
+        requireAvailableNetwork(req);
         const { metaData, saleContract, provider } = await requireContractOwner(
           req
         );
-        requireAvailableNetwork(req);
         const tokenAddress = await saleContract.read.erc20onsale();
         const { tokenName, tokenSymbol, tokenDecimal } = await getTokenInfo(
           tokenAddress as `0x${string}`,
@@ -155,8 +156,8 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
         });
         res.json({ result });
       } catch (_error) {
-        console.log(_error.message);
-        res.status(500).end(_error.message);
+        console.log(_error);
+        res.status(500).end(String(_error));
       }
       break;
     default:

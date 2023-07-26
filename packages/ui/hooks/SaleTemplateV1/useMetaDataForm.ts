@@ -44,9 +44,12 @@ export default function useMetaDataForm({
           "Content-Type": "application/json",
         },
         body: JSON.stringify(auctionData),
-        // body: JSON.stringify(Object.assign(auctionData, {id: contractId}))
       });
-      if (!result.ok) throw new Error(result.statusText);
+      if (!result.ok) {
+        const errorText = await result.text();
+        throw new Error(`${errorText}`);
+      }
+      // if (!result.ok) throw new Error(result.statusText);
       onSubmitSuccess && onSubmitSuccess(result);
     } catch (e: any) {
       onSubmitError && onSubmitError(e);
