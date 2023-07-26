@@ -170,12 +170,6 @@ export default function StatisticsInCircle({
               : "????"}
           </span>
           <div>
-            {`1 ${tokenSymbol} = ${divide(
-              totalRaised,
-              allocatedAmount
-            ).toString()} ETH`}
-          </div>
-          <div>
             {!!targetTotalRaised && (
               <chakra.div textAlign={"center"}>
                 {t("TARGET_TOTAL_RAISED")}{" "}
