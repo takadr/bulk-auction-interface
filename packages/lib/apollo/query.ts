@@ -31,7 +31,7 @@ export const LIST_ACTIVE_SALE_QUERY = gql`
       orderBy: startingAt
       skip: $skip
       first: $first
-      where: { startingAt_gte: $now, closingAt_lt: $now }
+      where: { startingAt_lte: $now, closingAt_gt: $now }
     ) {
       id
       templateName
@@ -135,6 +135,14 @@ export const GET_SALE_QUERY = gql`
       allocatedAmount
       minRaisedAmount
       totalRaised
+      contributions {
+        id
+        amount
+        from
+        receivedAt
+        totalRaised
+        blockNumber
+      }
       blockNumber
     }
   }
