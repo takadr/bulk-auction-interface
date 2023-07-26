@@ -18,20 +18,26 @@ export default function useSWRReceivedLog(
   );
   const filter = saleContract.filters.Received();
 
-  const getExpectedBlockNumberWithBuffer = (fromBlock: number, durationInSec: number) => {
+  const getExpectedBlockNumberWithBuffer = (
+    fromBlock: number,
+    durationInSec: number
+  ) => {
     return fromBlock + Math.ceil(durationInSec / 12);
-  }
+  };
 
-  const toBlock = getExpectedBlockNumberWithBuffer(parseInt(sale.blockNumber), sale.closingAt - sale.startingAt);
+  const toBlock = getExpectedBlockNumberWithBuffer(
+    parseInt(sale.blockNumber),
+    sale.closingAt - sale.startingAt
+  );
 
   const fetcher = (url: string): Promise<any[] | undefined> =>
     provider
-      .getLogs({ ...filter, fromBlock: parseInt(sale.blockNumber), toBlock: toBlock})
+      .getLogs({
+        ...filter,
+        fromBlock: parseInt(sale.blockNumber),
+        toBlock: toBlock,
+      })
       .then((log) => log);
 
-  return useSWR<any[] | undefined, Error>(
-    `received:${sale.id}`,
-    fetcher, 
-    {}
-  );
+  return useSWR<any[] | undefined, Error>(`received:${sale.id}`, fetcher, {});
 }

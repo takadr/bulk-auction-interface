@@ -319,122 +319,136 @@ export default function SaleTemplateV1({
           </Box>
         )}
 
-        <Flex mt={8} gridGap={4} alignItems={'top'} flexDirection={{ base: "column", md: "row" }}>
-        <Box flex={1}>
-        {address && started && 
-        <Card>
-          <CardHeader>
-            <Heading size="md">{t("CONTRIBUTE")}</Heading>
-          </CardHeader>
-          <CardBody>
-          {started && !ended && (
-            <Box>
-              <form onSubmit={formikProps.handleSubmit}>
-                <FormControl
-                  flex={1}
-                  mt={4}
-                  isInvalid={
-                    !!formikProps.errors.amount && !!formikProps.touched.amount
-                  }
-                >
-                  <FormLabel alignItems={"baseline"}>
-                    {t("CONTRIBUTE_AMOUNT")}
-                    <Tooltip
-                      hasArrow
-                      label={"Input the amount you wish to contribute"}
-                    >
-                      <QuestionIcon mb={1} ml={1} />
-                    </Tooltip>
-                  </FormLabel>
-                  <Flex alignItems={"center"}>
-                    <NumberInput
-                      isDisabled={!started}
-                      flex="1"
-                      name="amount"
-                      value={formikProps.values.amount}
-                      step={0.01}
-                      max={
-                        balanceData ? Number(balanceData.formatted) : undefined
+        <Flex
+          mt={8}
+          gridGap={4}
+          alignItems={"top"}
+          flexDirection={{ base: "column", md: "row" }}
+        >
+          <Box flex={1}>
+            {address && started && (
+              <Card>
+                <CardHeader>
+                  <Heading size="md">{t("CONTRIBUTE")}</Heading>
+                </CardHeader>
+                <CardBody>
+                  {started && !ended && (
+                    <Box>
+                      <form onSubmit={formikProps.handleSubmit}>
+                        <FormControl
+                          flex={1}
+                          mt={4}
+                          isInvalid={
+                            !!formikProps.errors.amount &&
+                            !!formikProps.touched.amount
+                          }
+                        >
+                          <FormLabel alignItems={"baseline"}>
+                            {t("CONTRIBUTE_AMOUNT")}
+                            <Tooltip
+                              hasArrow
+                              label={"Input the amount you wish to contribute"}
+                            >
+                              <QuestionIcon mb={1} ml={1} />
+                            </Tooltip>
+                          </FormLabel>
+                          <Flex alignItems={"center"}>
+                            <NumberInput
+                              isDisabled={!started}
+                              flex="1"
+                              name="amount"
+                              value={formikProps.values.amount}
+                              step={0.01}
+                              max={
+                                balanceData
+                                  ? Number(balanceData.formatted)
+                                  : undefined
+                              }
+                              min={0.001}
+                              onBlur={formikProps.handleBlur}
+                              onChange={(strVal: string, val: number) =>
+                                formikProps.setFieldValue(
+                                  "amount",
+                                  strVal && Number(strVal) === val
+                                    ? strVal
+                                    : isNaN(val)
+                                    ? 0
+                                    : val
+                                )
+                              }
+                            >
+                              <NumberInputField />
+                              <NumberInputStepper>
+                                <NumberIncrementStepper />
+                                <NumberDecrementStepper />
+                              </NumberInputStepper>
+                            </NumberInput>
+                            <chakra.div px={2}>{raisedTokenSymbol}</chakra.div>
+                            <Button
+                              isLoading={isLoadingWaitTX || isLoadingSendTX}
+                              isDisabled={!sendTransactionAsync || !started}
+                              type="submit"
+                              variant="solid"
+                              colorScheme={"green"}
+                            >
+                              {t("CONTRIBUTE")}
+                            </Button>
+                          </Flex>
+                          <FormErrorMessage>
+                            {formikProps.errors.amount}
+                          </FormErrorMessage>
+                        </FormControl>
+                      </form>
+                      <chakra.p
+                        mt={2}
+                        color={"gray.400"}
+                        fontSize={"sm"}
+                        textAlign="right"
+                      >
+                        {t("BALANCE")}:{" "}
+                        {balanceData
+                          ? Number(balanceData.formatted).toFixed(2)
+                          : "-"}{" "}
+                        ETH
+                      </chakra.p>
+                    </Box>
+                  )}
+                  <Box mt={4}>
+                    <PersonalStatistics
+                      inputValue={formikProps.values.amount}
+                      myContribution={raised}
+                      minRaisedAmount={sale.minRaisedAmount}
+                      totalRaised={totalRaised}
+                      allocatedAmount={sale.allocatedAmount}
+                      distributedTokenSymbol={
+                        sale.tokenSymbol ? sale.tokenSymbol : ""
                       }
-                      min={0.001}
-                      onBlur={formikProps.handleBlur}
-                      onChange={(strVal: string, val: number) =>
-                        formikProps.setFieldValue(
-                          "amount",
-                          strVal && Number(strVal) === val
-                            ? strVal
-                            : isNaN(val)
-                            ? 0
-                            : val
-                        )
+                      distributedTokenDecimal={
+                        sale.tokenDecimals ? sale.tokenDecimals : 0
                       }
-                    >
-                      <NumberInputField />
-                      <NumberInputStepper>
-                        <NumberIncrementStepper />
-                        <NumberDecrementStepper />
-                      </NumberInputStepper>
-                    </NumberInput>
-                    <chakra.div px={2}>{raisedTokenSymbol}</chakra.div>
-                    <Button
-                      isLoading={isLoadingWaitTX || isLoadingSendTX}
-                      isDisabled={!sendTransactionAsync || !started}
-                      type="submit"
-                      variant="solid"
-                      colorScheme={"green"}
-                    >
-                      {t("CONTRIBUTE")}
-                    </Button>
-                  </Flex>
-                  <FormErrorMessage>{formikProps.errors.amount}</FormErrorMessage>
-                </FormControl>
-              </form>
-              <chakra.p
-                mt={2}
-                color={"gray.400"}
-                fontSize={"sm"}
-                textAlign="right"
-              >
-                {t("BALANCE")}:{" "}
-                {balanceData ? Number(balanceData.formatted).toFixed(2) : "-"} ETH
-              </chakra.p>
-            </Box>
-          )}
-          <Box mt={4}>
-            <PersonalStatistics
-              inputValue={formikProps.values.amount}
-              myContribution={raised}
-              minRaisedAmount={sale.minRaisedAmount}
-              totalRaised={totalRaised}
-              allocatedAmount={sale.allocatedAmount}
-              distributedTokenSymbol={sale.tokenSymbol ? sale.tokenSymbol : ""}
-              distributedTokenDecimal={
-                sale.tokenDecimals ? sale.tokenDecimals : 0
-              }
-              raisedTokenSymbol={raisedTokenSymbol}
-              raisedTokenDecimal={raisedTokenDecimal}
-              isEnding={ended}
-              isClaimed={!!isClaimed}
-              isLodingTX={isLoadingWaitTX || isLoadingSendTX}
-            />
-          </Box>
-          </CardBody>
-        </Card>}
+                      raisedTokenSymbol={raisedTokenSymbol}
+                      raisedTokenDecimal={raisedTokenDecimal}
+                      isEnding={ended}
+                      isClaimed={!!isClaimed}
+                      isLodingTX={isLoadingWaitTX || isLoadingSendTX}
+                    />
+                  </Box>
+                </CardBody>
+              </Card>
+            )}
 
-        {address && ended && (
-          <chakra.div textAlign={"right"} mt={2}>
-            <ClaimButton
-              sale={sale}
-              address={address}
-              myContribution={raised}
-              isClaimed={!!isClaimed}
-              mutateIsClaimed={mutateIsClaimed}
-              colorScheme={"green"}
-            />
-          </chakra.div>
-        )}
-
-        
+            {address && ended && (
+              <chakra.div textAlign={"right"} mt={2}>
+                <ClaimButton
+                  sale={sale}
+                  address={address}
+                  myContribution={raised}
+                  isClaimed={!!isClaimed}
+                  mutateIsClaimed={mutateIsClaimed}
+                  colorScheme={"green"}
+                />
+              </chakra.div>
+            )}
           </Box>
           <Card flex={1}>
             <CardHeader>
@@ -445,7 +459,7 @@ export default function SaleTemplateV1({
             </CardBody>
           </Card>
         </Flex>
-        
+
         {address && sale.owner?.toLowerCase() === address.toLowerCase() && (
           <>
             <Divider mt={8} />

@@ -93,7 +93,7 @@ describe("Describe entity assertions", () => {
     );
 
     assert.entityCount("Contribution", 1);
-    const sale = Sale.load("0xa16081f360e3847006db660bae1c6d1b2e17ec2a")
+    const sale = Sale.load("0xa16081f360e3847006db660bae1c6d1b2e17ec2a");
     assert.assertTrue(sale!.contributions.length == 1);
   });
 });

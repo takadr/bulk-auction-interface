@@ -28,7 +28,7 @@ export type Contribution = {
   receivedAt: number;
   totalRaised: Big;
   blockNumber: string;
-}
+};
 
 export type SaleForm = {
   templateName: string;

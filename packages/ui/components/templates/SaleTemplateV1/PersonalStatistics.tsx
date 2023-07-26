@@ -12,7 +12,7 @@ import {
   getDecimalsForView,
   getExpectedAmount,
   tokenAmountFormat,
-  getTokenPriceAgainstETHWithMinPrice
+  getTokenPriceAgainstETHWithMinPrice,
 } from "lib/utils";
 import Big, { add, getBigNumber, multiply } from "lib/utils/bignumber";
 import { useLocale } from "../../../hooks/useLocale";
@@ -83,37 +83,42 @@ export default function PersonalStatistics({
     <Box {...boxProps}>
       <Stack divider={<StackDivider />} spacing="4">
         <Box>
-        <Flex justifyContent={"space-between"}>
-          <chakra.span fontSize={'sm'} color={"gray.400"}>
-            {!isEnding
-              ? t("ESTIMATED_AMOUNT_YOU_WILL_RECEIVE")
-              : t("AMOUNT_YOU_WILL_RECEIVE")}: 
-          </chakra.span>
-          <chakra.div textAlign={"right"}>
-            <chakra.span fontWeight={"bold"} ml={2}>
-              {expectedAmount} {distributedTokenSymbol.toUpperCase()}
+          <Flex justifyContent={"space-between"}>
+            <chakra.span fontSize={"sm"} color={"gray.400"}>
+              {!isEnding
+                ? t("ESTIMATED_AMOUNT_YOU_WILL_RECEIVE")
+                : t("AMOUNT_YOU_WILL_RECEIVE")}
+              :
             </chakra.span>
-            
-          </chakra.div>
-        </Flex>
-        {parseFloat(expectedAmount) === 0 ? (
-          <chakra.p fontSize={"xs"} opacity={".75"} color={"yellow.500"}>
-            <WarningIcon />{" "}
-            {t(
-              "THE_ESTIMATED_TOKEN_AMOUNT_IS_LESS_THAN_THE_PERMITTED_NUMBER_OF_DECIMALS"
-            )}
-          </chakra.p>
-        ) : (
-          <chakra.p textAlign={'right'} color={'gray.400'} fontSize={'xs'}>
-            {`1 ${distributedTokenSymbol.toUpperCase()} = ${
-              getTokenPriceAgainstETHWithMinPrice(minRaisedAmount, allocatedAmount, getBigNumber(totalRaised).add(inputValueInBig), distributedTokenDecimal).toFixed(8)
-              } ETH`}
-          </chakra.p>
-        )}
+            <chakra.div textAlign={"right"}>
+              <chakra.span fontWeight={"bold"} ml={2}>
+                {expectedAmount} {distributedTokenSymbol.toUpperCase()}
+              </chakra.span>
+            </chakra.div>
+          </Flex>
+          {parseFloat(expectedAmount) === 0 ? (
+            <chakra.p fontSize={"xs"} opacity={".75"} color={"yellow.500"}>
+              <WarningIcon />{" "}
+              {t(
+                "THE_ESTIMATED_TOKEN_AMOUNT_IS_LESS_THAN_THE_PERMITTED_NUMBER_OF_DECIMALS"
+              )}
+            </chakra.p>
+          ) : (
+            <chakra.p textAlign={"right"} color={"gray.400"} fontSize={"xs"}>
+              {`1 ${distributedTokenSymbol.toUpperCase()} = ${getTokenPriceAgainstETHWithMinPrice(
+                minRaisedAmount,
+                allocatedAmount,
+                getBigNumber(totalRaised).add(inputValueInBig),
+                distributedTokenDecimal
+              ).toFixed(8)} ETH`}
+            </chakra.p>
+          )}
         </Box>
         {!isEnding ? (
           <Flex justifyContent={"space-between"}>
-            <chakra.span fontSize={'sm'} color={"gray.400"}>{t("YOUR_CONTRIBUTED_AMOUNT")}: </chakra.span>
+            <chakra.span fontSize={"sm"} color={"gray.400"}>
+              {t("YOUR_CONTRIBUTED_AMOUNT")}:{" "}
+            </chakra.span>
             <chakra.div textAlign={"right"}>
               <chakra.span fontWeight={"bold"} ml={2}>
                 {sumOfContributionAmount} {raisedTokenSymbol.toUpperCase()}

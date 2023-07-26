@@ -7,10 +7,12 @@ export function handleReceived(event: ReceivedEvent): void {
   if (sale === null) return;
   const totalRaised = sale.totalRaised.plus(event.params.amount);
 
-  const contribution = new Contribution(event.transaction.hash.toHex() + "-" + event.logIndex.toString());
+  const contribution = new Contribution(
+    event.transaction.hash.toHex() + "-" + event.logIndex.toString()
+  );
   contribution.amount = event.params.amount;
   contribution.from = event.params.account.toHex();
-  contribution.totalRaised = totalRaised
+  contribution.totalRaised = totalRaised;
   contribution.receivedAt = event.block.timestamp;
   contribution.blockNumber = event.block.number;
   contribution.save();
