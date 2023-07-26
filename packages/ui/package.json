@@ -17,9 +17,12 @@
     "typescript": "^4.5.2"
   },
   "dependencies": {
+    "assets": "workspace:*",
+    "chart.js": "^4.3.0",
+    "chartjs-adapter-moment": "^1.0.1",
+    "lib": "workspace:*",
     "next": "^13.4.3",
     "rc-progress": "^3.4.1",
-    "lib": "workspace:*",
-    "assets": "workspace:*"
+    "react-chartjs-2": "^5.2.0"
   }
 }
