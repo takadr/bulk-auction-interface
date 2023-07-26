@@ -49,9 +49,10 @@ export default function CalendarInCircle({
             flexDirection={"column"}
             justifyContent={"center"}
           >
-            <chakra.p>{t("STARTING_AT")}</chakra.p>
             <chakra.p>
-              {format(unixStartDate * 1000, "yyyy/MM/dd HH:mm(z)")}
+              {t("STARTING_AT", {
+                datetime: format(unixStartDate * 1000, "yyyy/MM/dd HH:mm(z)"),
+              })}
             </chakra.p>
           </chakra.div>
         ) : (

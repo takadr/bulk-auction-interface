@@ -325,8 +325,8 @@ export default function SaleTemplateV1({
           alignItems={"top"}
           flexDirection={{ base: "column", md: "row" }}
         >
-          <Box flex={1}>
-            {address && started && (
+          {address && started && (
+            <Box flex={1}>
               <Card>
                 <CardHeader>
                   <Heading size="md">{t("CONTRIBUTE")}</Heading>
@@ -435,29 +435,30 @@ export default function SaleTemplateV1({
                   </Box>
                 </CardBody>
               </Card>
-            )}
-
-            {address && ended && (
-              <chakra.div textAlign={"right"} mt={2}>
-                <ClaimButton
-                  sale={sale}
-                  address={address}
-                  myContribution={raised}
-                  isClaimed={!!isClaimed}
-                  mutateIsClaimed={mutateIsClaimed}
-                  colorScheme={"green"}
-                />
-              </chakra.div>
-            )}
-          </Box>
-          <Card flex={1}>
-            <CardHeader>
-              <Heading size="md">{t("PRICE_AGAINST_ETH")}</Heading>
-            </CardHeader>
-            <CardBody>
-              <PriceChart sale={sale} />
-            </CardBody>
-          </Card>
+              {address && ended && (
+                <chakra.div textAlign={"right"} mt={2}>
+                  <ClaimButton
+                    sale={sale}
+                    address={address}
+                    myContribution={raised}
+                    isClaimed={!!isClaimed}
+                    mutateIsClaimed={mutateIsClaimed}
+                    colorScheme={"green"}
+                  />
+                </chakra.div>
+              )}
+            </Box>
+          )}
+          {address && started && (
+            <Card flex={1}>
+              <CardHeader>
+                <Heading size="md">{t("PRICE_AGAINST_ETH")}</Heading>
+              </CardHeader>
+              <CardBody>
+                <PriceChart sale={sale} />
+              </CardBody>
+            </Card>
+          )}
         </Flex>
 
         {address && sale.owner?.toLowerCase() === address.toLowerCase() && (
