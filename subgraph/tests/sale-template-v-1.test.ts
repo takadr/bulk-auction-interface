@@ -7,11 +7,13 @@ import {
   afterAll,
   createMockedFunction,
 } from "matchstick-as/assembly/index";
-import { Address, BigInt, Bytes, ethereum } from "@graphprotocol/graph-ts";
+import { Address, BigInt, Bytes, ethereum, log } from "@graphprotocol/graph-ts";
 import { handleReceived } from "../src/sale-template-v-1";
 import { createReceivedEvent } from "./sale-template-v-1-utils";
 import { handleDeployed } from "../src/factory-v-1";
 import { createDeployedEvent } from "./factory-v-1-utils";
+import { Contribution, Sale } from "../generated/schema";
+import { Received } from "../generated/SaleTemplateV1/SaleTemplateV1";
 
 // Tests structure (matchstick-as >=0.5.0)
 // https://thegraph.com/docs/en/developer/matchstick/#tests-structure-0-5-0
@@ -89,5 +91,9 @@ describe("Describe entity assertions", () => {
       "totalRaised",
       "234"
     );
+
+    assert.entityCount("Contribution", 1);
+    const sale = Sale.load("0xa16081f360e3847006db660bae1c6d1b2e17ec2a")
+    assert.assertTrue(sale!.contributions.length == 1);
   });
 });

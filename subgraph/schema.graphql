@@ -31,6 +31,8 @@ type Sale @entity {
   minRaisedAmount: BigInt!
   # The total ETH amount of bidding that the sale raised (in Wei)
   totalRaised: BigInt!
+  # Received amount and related information
+  contributions: [Contribution!]!
   # Block number deployed
   blockNumber: BigInt!
 }
@@ -40,4 +42,19 @@ type Template @entity {
   id: ID!
   templateName: Bytes!
   addedAt: BigInt!
+}
+
+type Contribution @entity {
+  # event.transaction.hash.toHex() + "-" + event.logIndex.toString()
+  id: ID!
+  # Amount received
+  amount: BigInt!
+  # Sender address
+  from: String!
+  # totalRaised after received
+  totalRaised: BigInt!
+  # Timestamp
+  receivedAt: BigInt!
+  # Block number
+  blockNumber: BigInt!
 }
