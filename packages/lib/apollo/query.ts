@@ -135,7 +135,7 @@ export const GET_SALE_QUERY = gql`
       allocatedAmount
       minRaisedAmount
       totalRaised
-      contributions {
+      contributions(last: 1000) {
         id
         amount
         from
