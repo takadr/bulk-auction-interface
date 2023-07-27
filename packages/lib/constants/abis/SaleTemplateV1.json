@@ -5,7 +5,13 @@
       {
         "indexed": true,
         "internalType": "address",
-        "name": "account",
+        "name": "contributor",
+        "type": "address"
+      },
+      {
+        "indexed": true,
+        "internalType": "address",
+        "name": "recipient",
         "type": "address"
       },
       {
