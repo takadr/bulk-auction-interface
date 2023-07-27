@@ -1,6 +1,6 @@
 import { newMockEvent } from "matchstick-as";
 import { ethereum, Address, BigInt } from "@graphprotocol/graph-ts";
-import { Received } from "../generated/SaleTemplateV1/SaleTemplateV1";
+import { Received, Claimed } from "../generated/templates/SaleTemplateV1/SaleTemplateV1";
 
 export function createReceivedEvent(
   account: Address,
@@ -18,4 +18,30 @@ export function createReceivedEvent(
   );
 
   return receivedEvent;
+}
+
+export function createClaimedEvent(
+  contributor: Address,
+  recipient: Address,
+  userShare: BigInt,
+  allocation: BigInt
+): Claimed {
+  let claimedEvent = changetype<Claimed>(newMockEvent());
+
+  claimedEvent.parameters = new Array();
+
+  claimedEvent.parameters.push(
+    new ethereum.EventParam("contributor", ethereum.Value.fromAddress(contributor))
+  );
+  claimedEvent.parameters.push(
+    new ethereum.EventParam("recipient", ethereum.Value.fromAddress(recipient))
+  );
+  claimedEvent.parameters.push(
+    new ethereum.EventParam("userShare", ethereum.Value.fromUnsignedBigInt(userShare))
+  );
+  claimedEvent.parameters.push(
+    new ethereum.EventParam("allocation", ethereum.Value.fromUnsignedBigInt(allocation))
+  );
+
+  return claimedEvent;
 }

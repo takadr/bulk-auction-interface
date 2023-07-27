@@ -33,6 +33,8 @@ type Sale @entity {
   totalRaised: BigInt!
   # Received amount and related information
   contributions: [Contribution!]!
+  # Claim information
+  claims: [Claim!]!
   # Block number deployed
   blockNumber: BigInt!
 }
@@ -55,6 +57,23 @@ type Contribution @entity {
   totalRaised: BigInt!
   # Timestamp
   receivedAt: BigInt!
+  # Block number
+  blockNumber: BigInt!
+}
+
+type Claim @entity {
+  # event.transaction.hash.toHex() + "-" + event.logIndex.toString()
+  id: ID!
+  # Contributor address
+  contributor: String!
+  # Receipient address
+  recipient: String!
+  # Total contribution by user
+  userShare: BigInt!
+  # Token allocation
+  erc20allocation: BigInt!
+  # Timestamp
+  claimedAt: BigInt!
   # Block number
   blockNumber: BigInt!
 }

@@ -6,9 +6,9 @@ dataSources:
     name: FactoryV1
     network: goerli
     source:
-      address: "0xe0B9683382cc86e01158514BE75EF10391CEdb03"
+      address: "0x1a44dCfbEFefD756503f3B9F416e78901afFeC28"
       abi: FactoryV1
-      startBlock: 9354209
+      startBlock: 9415664
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.7
@@ -47,4 +47,6 @@ templates:
       eventHandlers:
         - event: Received(indexed address,uint256)
           handler: handleReceived
+        - event: Claimed(indexed address,indexed address,uint256,uint256)
+          handler: handleClaimed
       file: ./src/sale-template-v-1.ts
