@@ -86,12 +86,7 @@ export default function SaleTemplateV1({
     totalRaised,
     isLoading: isLoadingRaisedAmount,
     refetch: refetchRaised,
-  } = address ? useRaised(contractAddress, address) : {
-    raised: Big(0),
-    totalRaised: getBigNumber(sale.totalRaised),
-    isLoading: false,
-    refetch: () => {}
-  };
+  } = useRaised(sale, address);
   const {
     data: balanceData,
     isLoading: isLoadingBalance,
