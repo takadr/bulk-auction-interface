@@ -50,7 +50,6 @@ import useRaised from "../../../hooks/SaleTemplateV1/useRaised";
 import useRate from "../../../hooks/useRate";
 import { Sale, MetaData } from "lib/types/Sale";
 import ExternalLinkTag from "../../ExternalLinkTag";
-import useIsClaimed from "../../../hooks/SaleTemplateV1/useIsClaimed";
 import ClaimButton from "./ClaimButton";
 import TxSentToast from "../../TxSentToast";
 import WithdrawRaisedETH from "./WithdrawRaisedETH";
@@ -87,7 +86,12 @@ export default function SaleTemplateV1({
     totalRaised,
     isLoading: isLoadingRaisedAmount,
     refetch: refetchRaised,
-  } = useRaised(contractAddress, address);
+  } = address ? useRaised(contractAddress, address) : {
+    raised: Big(0),
+    totalRaised: getBigNumber(sale.totalRaised),
+    isLoading: false,
+    refetch: () => {}
+  };
   const {
     data: balanceData,
     isLoading: isLoadingBalance,
@@ -117,7 +121,7 @@ export default function SaleTemplateV1({
     refetchSale();
     refetchMetaData();
     refetchRaised();
-  }, 10000);
+  }, 30000);
 
   const handleSubmit = async (values: { [key: string]: number }) => {
     const result = await sendTransactionAsync?.();
