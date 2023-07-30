@@ -262,10 +262,10 @@ export default function SaleForm({
             {balance && tokenData
               ? tokenAmountFormat(
                   Big(balance.toString()),
-                  tokenData.decimals,
+                  Number(tokenData.decimals),
                   getDecimalsForView(
                     getBigNumber(tokenData.totalSupply.value.toString()),
-                    tokenData.decimals
+                    Number(tokenData.decimals)
                   )
                 )
               : "-"}{" "}

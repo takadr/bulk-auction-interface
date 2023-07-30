@@ -146,10 +146,10 @@ export default function SaleCard({
                 <chakra.span fontSize={"2xl"}>
                   {tokenAmountFormat(
                     sale.allocatedAmount,
-                    sale.tokenDecimals,
+                    Number(sale.tokenDecimals),
                     getDecimalsForView(
                       getBigNumber(sale.allocatedAmount),
-                      sale.tokenDecimals
+                      Number(sale.tokenDecimals)
                     )
                   )}
                   <chakra.span fontSize={"md"}> {sale.tokenSymbol}</chakra.span>

@@ -80,10 +80,10 @@ export default function WithdrawERC20({ sale, onSuccessConfirm }: Props) {
           {typeof balance !== "undefined"
             ? tokenAmountFormat(
                 getBigNumber(balance.toString()),
-                sale.tokenDecimals,
+                Number(sale.tokenDecimals),
                 getDecimalsForView(
                   getBigNumber(sale.allocatedAmount),
-                  sale.tokenDecimals
+                  Number(sale.tokenDecimals)
                 )
               )
             : "-"}{" "}

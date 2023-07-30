@@ -93,11 +93,6 @@ export default function SaleTemplateV1({
     isLoading: isLoadingBalance,
     refetch: refetchBalance,
   } = useBalance({ address, enabled: !!address });
-  const {
-    data: isClaimed,
-    error: isClaimedError,
-    mutate: mutateIsClaimed,
-  } = useIsClaimed(sale, address);
 
   const raisedTokenSymbol = "ETH";
   const raisedTokenDecimal = 18;
@@ -231,10 +226,10 @@ export default function SaleTemplateV1({
               <chakra.p>
                 {tokenAmountFormat(
                   sale.allocatedAmount,
-                  sale.tokenDecimals,
+                  parseInt(sale.tokenDecimals),
                   getDecimalsForView(
                     getBigNumber(sale.allocatedAmount),
-                    sale.tokenDecimals
+                    parseInt(sale.tokenDecimals)
                   )
                 )}{" "}
                 {sale.tokenSymbol}
@@ -277,10 +272,10 @@ export default function SaleTemplateV1({
           {metaData.description}
         </chakra.p>
 
-        <Flex mt={8} flexDirection={{ base: "column", md: "row" }}>
+        <Flex mt={8} gridGap={4} flexDirection={{ base: "column", md: "row" }}>
           <StatisticsInCircle
             totalRaised={totalRaised}
-            allocatedAmount={sale.allocatedAmount}
+            allocatedAmount={getBigNumber(sale.allocatedAmount)}
             minRaisedAmount={
               sale.minRaisedAmount ? getBigNumber(sale.minRaisedAmount) : Big(0)
             }
@@ -325,7 +320,7 @@ export default function SaleTemplateV1({
           alignItems={"top"}
           flexDirection={{ base: "column", md: "row" }}
         >
-          {address && started && (
+          {started && (
             <Box flex={1}>
               <Card>
                 <CardHeader>
@@ -417,19 +412,19 @@ export default function SaleTemplateV1({
                     <PersonalStatistics
                       inputValue={formikProps.values.amount}
                       myContribution={raised}
-                      minRaisedAmount={sale.minRaisedAmount}
+                      minRaisedAmount={getBigNumber(sale.minRaisedAmount)}
                       totalRaised={totalRaised}
-                      allocatedAmount={sale.allocatedAmount}
+                      allocatedAmount={getBigNumber(sale.allocatedAmount)}
                       distributedTokenSymbol={
                         sale.tokenSymbol ? sale.tokenSymbol : ""
                       }
                       distributedTokenDecimal={
-                        sale.tokenDecimals ? sale.tokenDecimals : 0
+                        sale.tokenDecimals ? Number(sale.tokenDecimals) : 0
                       }
                       raisedTokenSymbol={raisedTokenSymbol}
                       raisedTokenDecimal={raisedTokenDecimal}
                       isEnding={ended}
-                      isClaimed={!!isClaimed}
+                      isClaimed={sale.claims.length > 0}
                       isLodingTX={isLoadingWaitTX || isLoadingSendTX}
                     />
                   </Box>
@@ -441,15 +436,15 @@ export default function SaleTemplateV1({
                     sale={sale}
                     address={address}
                     myContribution={raised}
-                    isClaimed={!!isClaimed}
-                    mutateIsClaimed={mutateIsClaimed}
+                    isClaimed={sale.claims.length > 0}
+                    mutateIsClaimed={refetchSale}
                     colorScheme={"green"}
                   />
                 </chakra.div>
               )}
             </Box>
           )}
-          {address && started && (
+          {started && (
             <Card flex={1}>
               <CardHeader>
                 <Heading size="md">{t("PRICE_AGAINST_ETH")}</Heading>
@@ -493,7 +488,7 @@ export default function SaleTemplateV1({
 
 export const SkeletonSale = () => {
   return (
-    <Container maxW={"container.md"} py={16}>
+    <Container maxW={"container.lg"} py={16}>
       <Flex alignItems={"center"} minH={"150px"}>
         <SkeletonCircle w={"150px"} h={"150px"} />
         <Box px={8}>

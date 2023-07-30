@@ -121,7 +121,7 @@ export const LIST_MY_SALE_QUERY = gql`
 `;
 
 export const GET_SALE_QUERY = gql`
-  query GetSale($id: ID!) {
+  query GetSale($id: ID!, $address: String!) {
     sale(id: $id) {
       id
       templateName
@@ -142,6 +142,9 @@ export const GET_SALE_QUERY = gql`
         receivedAt
         totalRaised
         blockNumber
+      }
+      claims(where: { contributor: $address }) {
+        id
       }
       blockNumber
     }

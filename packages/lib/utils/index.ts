@@ -20,8 +20,8 @@ export const calculateAllocation = (us: Big, tp: Big, tda: Big): Big => {
 
 // Consider to migrate this into Class method -->
 export const getMinTokenPriceAgainstETH = (
-  minRaisedAmount: Big,
-  allocatedAmount: Big,
+  minRaisedAmount: BigNumberValueType,
+  allocatedAmount: BigNumberValueType,
   tokenDecimals: number
 ): Big => {
   return divide(
@@ -30,19 +30,19 @@ export const getMinTokenPriceAgainstETH = (
   );
 };
 export const getTokenPriceAgainstETH = (
-  totalRaised: Big,
-  allocatedAmount: Big,
+  totalRaised: BigNumberValueType,
+  allocatedAmount: BigNumberValueType,
   tokenDecimals: number
 ): Big => {
   return divide(
     divide(totalRaised, Big(10).pow(18)),
-    divide(allocatedAmount, Big(10).pow(Number(tokenDecimals)))
+    divide(allocatedAmount, Big(10).pow(tokenDecimals))
   );
 };
 export const getTokenPriceAgainstETHWithMinPrice = (
-  minRaisedAmount: Big,
-  allocatedAmount: Big,
-  totalRaised: Big,
+  minRaisedAmount: BigNumberValueType,
+  allocatedAmount: BigNumberValueType,
+  totalRaised: BigNumberValueType,
   tokenDecimals: number
 ): Big => {
   const minTokenPrice = getMinTokenPriceAgainstETH(

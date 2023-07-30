@@ -6,13 +6,14 @@ import { useLocale } from "../../../hooks/useLocale";
 import { Sale } from "lib/types/Sale";
 import { getExpectedAmount } from "lib/utils";
 import Big from "lib/utils/bignumber";
+import { ApolloQueryResult } from "@apollo/client/core/types";
 
 interface Props {
   sale: Sale;
   address: `0x${string}`;
   myContribution: Big;
   isClaimed: boolean;
-  mutateIsClaimed: KeyedMutator<boolean | undefined>;
+  mutateIsClaimed: () => Promise<ApolloQueryResult<any>>;
 }
 export default function ClaimButton({
   sale,

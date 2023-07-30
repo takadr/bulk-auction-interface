@@ -2,7 +2,7 @@ import Big from "big.js";
 Big.PE = 100;
 
 export default Big;
-export type BigNumberValueType = Big | number;
+export type BigNumberValueType = Big | number | string;
 
 export function add(v1: BigNumberValueType, v2: BigNumberValueType): Big {
   const a = getBigNumber(v1);

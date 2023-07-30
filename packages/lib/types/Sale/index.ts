@@ -7,26 +7,37 @@ export type Sale = {
   token: `0x${string}` | null;
   tokenName: string;
   tokenSymbol: string;
-  tokenDecimals: number;
+  tokenDecimals: string;
   owner?: `0x${string}`;
-  allocatedAmount: Big;
+  allocatedAmount: string;
   startingAt: number; //Timestamp
   closingAt: number; //Timestamp
-  minRaisedAmount: Big;
+  minRaisedAmount: string;
   lockDuration?: number; //In sec
   expirationDuration?: number; //In sec
   feeRatePerMil?: number;
-  totalRaised: Big;
+  totalRaised: string;
   blockNumber: string; // Deployed block number
   contributions: Contribution[];
+  claims: Claim[];
 };
 
 export type Contribution = {
   id: string;
-  amount: Big;
+  amount: string;
   from: `0x${string}`;
   receivedAt: number;
-  totalRaised: Big;
+  totalRaised: string;
+  blockNumber: string;
+};
+
+export type Claim = {
+  id: string;
+  contributor: `0x${string}`;
+  recipient: `0x${string}`;
+  userShare: string;
+  erc20allocation: string;
+  claimedAt: string;
   blockNumber: string;
 };
 
@@ -60,7 +71,7 @@ export type MetaData = {
 export type Template = {
   id: string;
   templateName: `0x${string}`;
-  addedAt: Big; //Timestamp
+  addedAt: string; //Timestamp
 };
 
 export const validateMetaData = (
