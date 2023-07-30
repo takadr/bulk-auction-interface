@@ -9,7 +9,10 @@ import {
 } from "matchstick-as/assembly/index";
 import { Address, BigInt, Bytes, ethereum, log } from "@graphprotocol/graph-ts";
 import { handleReceived, handleClaimed } from "../src/sale-template-v-1";
-import { createReceivedEvent, createClaimedEvent } from "./sale-template-v-1-utils";
+import {
+  createReceivedEvent,
+  createClaimedEvent,
+} from "./sale-template-v-1-utils";
 import { handleDeployed } from "../src/factory-v-1";
 import { createDeployedEvent } from "./factory-v-1-utils";
 import { Contribution, Sale } from "../generated/schema";
@@ -106,7 +109,12 @@ describe("Describe entity assertions", () => {
     );
     let userShare = BigInt.fromI32(234);
     let allocation = BigInt.fromI32(345);
-    let newClaimedEvent = createClaimedEvent(contributor, recipient, userShare, allocation);
+    let newClaimedEvent = createClaimedEvent(
+      contributor,
+      recipient,
+      userShare,
+      allocation
+    );
     handleClaimed(newClaimedEvent);
 
     assert.entityCount("Claim", 1);

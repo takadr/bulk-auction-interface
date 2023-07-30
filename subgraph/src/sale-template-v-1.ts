@@ -1,5 +1,8 @@
 import { log } from "@graphprotocol/graph-ts";
-import { Received as ReceivedEvent, Claimed as ClaimedEvent } from "../generated/templates/SaleTemplateV1/SaleTemplateV1";
+import {
+  Received as ReceivedEvent,
+  Claimed as ClaimedEvent,
+} from "../generated/templates/SaleTemplateV1/SaleTemplateV1";
 import { Sale, Contribution, Claim } from "../generated/schema";
 
 export function handleReceived(event: ReceivedEvent): void {

@@ -28,7 +28,13 @@ const Footer: FC = () => {
       <Container maxW="container.2xl" px={{ base: 2, md: 4 }}>
         <Flex py="4" justifyContent="space-between" alignItems="center">
           <chakra.div flex={1}></chakra.div>
-          <Flex flex={2} py="4" gridGap={4} justifyContent="center" alignItems="center">
+          <Flex
+            flex={2}
+            py="4"
+            gridGap={4}
+            justifyContent="center"
+            alignItems="center"
+          >
             <Link
               href="https://defigeek.xyz/"
               target={"_blank"}
@@ -53,25 +59,28 @@ const Footer: FC = () => {
               size={"xs"}
               value={locale}
               onChange={(e) => setLocale(e.target.value as "ja" | "en")}
-              float={'right'}
+              float={"right"}
             >
               <option value={"ja"}>Japanese</option>
               <option value={"en"}>English</option>
             </Select>
           </chakra.div>
         </Flex>
-        <Flex justifyContent={'center'}>
-          <HStack fontSize={"xs"} spacing={1} color={'gray.400'}>
+        <Flex justifyContent={"center"}>
+          <HStack fontSize={"xs"} spacing={1} color={"gray.400"}>
             <chakra.span>Current interface version: </chakra.span>
             <Link
               href={`https://github.com/DeFiGeek-Community/bulk-auction-interface/commit/${process.env.NEXT_PUBLIC_VERCEL_GIT_COMMIT_SHA}`}
               target={"_blank"}
             >
-              {`${process.env.NEXT_PUBLIC_VERCEL_GIT_COMMIT_SHA?.substring(0, 7)}`}
+              {`${process.env.NEXT_PUBLIC_VERCEL_GIT_COMMIT_SHA?.substring(
+                0,
+                7
+              )}`}
             </Link>
           </HStack>
         </Flex>
-        <Flex justifyContent={'center'} fontSize={"sm"} color={'gray.400'}>
+        <Flex justifyContent={"center"} fontSize={"sm"} color={"gray.400"}>
           © DeFiGeek Community JAPAN
         </Flex>
       </Container>

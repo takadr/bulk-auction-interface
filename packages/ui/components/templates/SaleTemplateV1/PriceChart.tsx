@@ -101,81 +101,81 @@ export default function PriceChart({ sale }: { sale: Sale }) {
     });
     newData.sort((a, b) => a.x - b.x);
     setOptions({
-        responsive: true,
-        plugins: {
-            legend: {
-            display: false,
-            position: "top" as const,
-            },
-            title: {
-            display: true,
-            text: `1 ${sale.tokenSymbol.toUpperCase()} = ${getTokenPriceAgainstETHWithMinPrice(
-                sale.minRaisedAmount,
-                sale.allocatedAmount,
-                sale.totalRaised,
-                Number(sale.tokenDecimals)
-            ).toFixed(8)} ETH`,
-            font: { weight: "bold", size: 18 },
-            color: "white",
-            },
-            tooltip: {
-            callbacks: {
-                label: function (context: any) {
-                return `${context.raw.y.toFixed(8)} ETH`;
-                },
-            },
-            },
+      responsive: true,
+      plugins: {
+        legend: {
+          display: false,
+          position: "top" as const,
         },
-        scales: {
-            x: {
-            display: true,
-            type: "time" as const,
-            time: {
-                unit: "day" as const,
-                displayFormats: {
-                day: "YYYY/MM/DD",
-                },
-            },
-            // min: new Date(sale.startingAt * 1000).getTime(),
-            max: new Date(sale.closingAt * 1000).getTime(),
-            ticks: {
-                autoSkip: true,
-                maxTicksLimit: 5,
-            },
-            },
-            y: {
-            position: "right" as const,
-            // min: getMinTokenPriceAgainstETH(sale.minRaisedAmount, sale.allocatedAmount, sale.tokenDecimals).toNumber(),
-            // max: getTokenPriceAgainstETHWithMinPrice(sale.minRaisedAmount, sale.allocatedAmount, sale.totalRaised, sale.tokenDecimals).times(1.2).toNumber(),
-            ticks: {
-                callback: function (value: string | number) {
-                return `${Number(value).toFixed(8)}`;
-                },
-            },
-            },
+        title: {
+          display: true,
+          text: `1 ${sale.tokenSymbol.toUpperCase()} = ${getTokenPriceAgainstETHWithMinPrice(
+            sale.minRaisedAmount,
+            sale.allocatedAmount,
+            sale.totalRaised,
+            Number(sale.tokenDecimals)
+          ).toFixed(8)} ETH`,
+          font: { weight: "bold", size: 18 },
+          color: "white",
         },
+        tooltip: {
+          callbacks: {
+            label: function (context: any) {
+              return `${context.raw.y.toFixed(8)} ETH`;
+            },
+          },
+        },
+      },
+      scales: {
+        x: {
+          display: true,
+          type: "time" as const,
+          time: {
+            unit: "day" as const,
+            displayFormats: {
+              day: "YYYY/MM/DD",
+            },
+          },
+          // min: new Date(sale.startingAt * 1000).getTime(),
+          max: new Date(sale.closingAt * 1000).getTime(),
+          ticks: {
+            autoSkip: true,
+            maxTicksLimit: 5,
+          },
+        },
+        y: {
+          position: "right" as const,
+          // min: getMinTokenPriceAgainstETH(sale.minRaisedAmount, sale.allocatedAmount, sale.tokenDecimals).toNumber(),
+          // max: getTokenPriceAgainstETHWithMinPrice(sale.minRaisedAmount, sale.allocatedAmount, sale.totalRaised, sale.tokenDecimals).times(1.2).toNumber(),
+          ticks: {
+            callback: function (value: string | number) {
+              return `${Number(value).toFixed(8)}`;
+            },
+          },
+        },
+      },
     });
     setData({
-        datasets: [
-          {
-            data: [],
-            fill: false,
-            pointRadius: 0,
-            showLine: false,
-            borderDash: [5, 5],
-            pointBackgroundColor: "rgb(0, 0, 0, 0.8)",
-            borderColor: "rgb(0, 0, 0, 0.6)",
-            backgroundColor: "rgba(255, 99, 132, 0.5)",
-          },
-          {
-            data: newData,
-            fill: true,
-            pointRadius: 2,
-            borderColor: "rgb(255, 99, 132)",
-            backgroundColor: "rgba(255, 99, 132, 0.5)",
-          },
-        ],
-      });
+      datasets: [
+        {
+          data: [],
+          fill: false,
+          pointRadius: 0,
+          showLine: false,
+          borderDash: [5, 5],
+          pointBackgroundColor: "rgb(0, 0, 0, 0.8)",
+          borderColor: "rgb(0, 0, 0, 0.6)",
+          backgroundColor: "rgba(255, 99, 132, 0.5)",
+        },
+        {
+          data: newData,
+          fill: true,
+          pointRadius: 2,
+          borderColor: "rgb(255, 99, 132)",
+          backgroundColor: "rgba(255, 99, 132, 0.5)",
+        },
+      ],
+    });
   }, [sale]);
 
   return <Line options={options} data={data} />;
