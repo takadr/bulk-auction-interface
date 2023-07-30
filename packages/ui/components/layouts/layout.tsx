@@ -75,7 +75,7 @@ export default function Layout({
           </Alert>
         </chakra.div>
       )}
-      <>{children}</>
+      <chakra.div bg={'gray.800'}>{children}</chakra.div>
       <Footer />
     </>
   );
