@@ -11,7 +11,7 @@ import {
   TimeScale,
   ChartData,
 } from "chart.js";
-import { Line, Scatter } from "react-chartjs-2";
+import { Line } from "react-chartjs-2";
 import "chartjs-adapter-moment";
 import { Sale } from "lib/types/Sale";
 import { useEffect, useState } from "react";
@@ -19,7 +19,6 @@ import {
   getMinTokenPriceAgainstETH,
   getTokenPriceAgainstETHWithMinPrice,
 } from "lib/utils";
-// import useSWRReceivedLog from "../../../hooks/SaleTemplateV1/useReceivedLog";
 
 ChartJS.register(
   LinearScale,
@@ -34,7 +33,6 @@ ChartJS.register(
 );
 
 export default function PriceChart({ sale }: { sale: Sale }) {
-  // const { data: receivedLog } = useSWRReceivedLog(sale);
   const [options, setOptions] = useState({});
   let defaultData = {
     datasets: [
@@ -139,7 +137,7 @@ export default function PriceChart({ sale }: { sale: Sale }) {
                 },
             },
             // min: new Date(sale.startingAt * 1000).getTime(),
-            // max: new Date(sale.closingAt * 1000).getTime(),
+            max: new Date(sale.closingAt * 1000).getTime(),
             ticks: {
                 autoSkip: true,
                 maxTicksLimit: 5,
