@@ -28,7 +28,10 @@ export default function SalePage() {
     error: apolloError,
     refetch,
   } = useQuery(GET_SALE_QUERY, {
-    variables: { id: id as string, address: address ? address : zeroAddress },
+    variables: {
+      id: id as string,
+      address: address ? address.toLowerCase() : zeroAddress,
+    },
   });
   const {
     data: metaData,
