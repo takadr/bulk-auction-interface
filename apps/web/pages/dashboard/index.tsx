@@ -7,23 +7,15 @@ import {
   Container,
   Flex,
   Heading,
-  Box,
   Button,
   Tabs,
   TabList,
   TabPanels,
   Tab,
   TabPanel,
-  Card,
-  CardBody,
-  CardFooter,
-  Progress,
   Text,
-  Image,
   Stack,
-  Link,
   useDisclosure,
-  useInterval,
 } from "@chakra-ui/react";
 import { AddIcon } from "@chakra-ui/icons";
 import { useQuery } from "@apollo/client";
@@ -35,6 +27,7 @@ import SaleFormModal from "ui/components/SaleFormModal";
 import SaleCard, { SaleCardSkeleton } from "ui/components/SaleCard";
 import { useLocale } from "ui/hooks/useLocale";
 import Render404 from "ui/components/errors/404";
+import CustomError from "../_error";
 
 export default function DashboardPage() {
   const { chain } = useNetwork();
@@ -56,11 +49,7 @@ export default function DashboardPage() {
     );
   } else if (currentUser === null) {
     Router.push("/");
-    return (
-      <Layout>
-        <Render404 />
-      </Layout>
-    );
+    return <CustomError statusCode={404} />;
   }
 
   return (
@@ -84,7 +73,7 @@ export default function DashboardPage() {
                 isOpen={saleFormModalDisclosure.isOpen}
                 onClose={saleFormModalDisclosure.onClose}
                 onDeployConfirmed={refetch}
-                onInformationSaved={refetch}
+                onInformationSaved={() => setTimeout(refetch, 1000)}
               />
               <Stack mt={4} spacing={8}>
                 {loading || !data ? (

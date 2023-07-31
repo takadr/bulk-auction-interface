@@ -1,12 +1,12 @@
+import { useState } from "react";
 import { ButtonProps, Button, useToast } from "@chakra-ui/react";
-import { KeyedMutator } from "swr";
-import useClaim from "../../../hooks/useClaim";
-import TxSentToast from "../../TxSentToast";
-import { useLocale } from "../../../hooks/useLocale";
+import { ApolloQueryResult } from "@apollo/client/core/types";
 import { Sale } from "lib/types/Sale";
 import { getExpectedAmount } from "lib/utils";
 import Big from "lib/utils/bignumber";
-import { ApolloQueryResult } from "@apollo/client/core/types";
+import useClaim from "../../../hooks/useClaim";
+import TxSentToast from "../../TxSentToast";
+import { useLocale } from "../../../hooks/useLocale";
 
 interface Props {
   sale: Sale;
@@ -23,6 +23,11 @@ export default function ClaimButton({
   mutateIsClaimed,
   ...buttonProps
 }: Props & ButtonProps) {
+  // Local state to change the claim button state after claim
+  const [claimSucceeded, setClaimSucceeded] = useState<boolean>(false);
+  // Local state to show that it is waiting for updateed subgraph data after the claim tx is confirmed
+  const [waitForSubgraphUpdate, setWaitForSubgraphUpdate] = useState<boolean>(false);
+
   const {
     prepareFn: claimPrepareFn,
     writeFn: claimWriteFn,
@@ -44,7 +49,13 @@ export default function ClaimButton({
         status: "success",
         duration: 5000,
       });
-      mutateIsClaimed();
+      setClaimSucceeded(true);
+      setWaitForSubgraphUpdate(true);
+      // Wait for 5 sec to make sure that the subgraph data is updated
+      setTimeout(() => {
+        mutateIsClaimed();
+        setWaitForSubgraphUpdate(false);
+      }, 5000)
     },
   });
   const expectedAmount = getExpectedAmount(
@@ -58,14 +69,14 @@ export default function ClaimButton({
   return (
     <Button
       variant={"solid"}
-      isDisabled={isClaimed || !claimWriteFn.writeAsync}
-      isLoading={claimWriteFn?.isLoading || claimWaitFn?.isLoading}
+      isDisabled={(isClaimed || claimSucceeded) || !claimWriteFn.writeAsync}
+      isLoading={claimWriteFn?.isLoading || claimWaitFn?.isLoading || waitForSubgraphUpdate}
       {...buttonProps}
       onClick={async () => {
         await claimWriteFn.writeAsync();
       }}
     >
-      {isClaimed
+      {(isClaimed || claimSucceeded)
         ? t("CLAIMED")
         : expectedAmount.eq(0) && myContribution.gt(0)
         ? t("CLAIM_REFUND")
