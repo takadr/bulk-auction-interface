@@ -14,6 +14,7 @@ export const Render500 = ({ error }: { error: Error }) => {
         <CardBody>
           <Heading fontSize={"2xl"}>500 Internal Server Error</Heading>
           <Divider my={4} />
+          <chakra.p>{error.message}</chakra.p>
           <chakra.p>Please retry later.</chakra.p>
         </CardBody>
       </Card>

@@ -9,10 +9,9 @@ import MetaTags from "ui/components/MetaTags";
 import { useQuery } from "@apollo/client";
 import { GET_SALE_QUERY } from "lib/apollo/query";
 import useSWRMetaData from "ui/hooks/useSWRMetaData";
-import Render500 from "ui/components/errors/500";
-import Render404 from "ui/components/errors/404";
 import { useLocale } from "ui/hooks/useLocale";
 import { zeroAddress } from "viem";
+import CustomError from "../_error";
 
 export default function SalePage() {
   const { address, isConnected, connector } = useAccount();
@@ -52,11 +51,7 @@ export default function SalePage() {
     );
 
   if (!saleData || !saleData.sale)
-    return (
-      <Layout>
-        <Render404 />
-      </Layout>
-    );
+    return <CustomError statusCode={404} />;
 
   return (
     <Layout>
