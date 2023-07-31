@@ -50,8 +50,7 @@ export default function SalePage() {
       </Layout>
     );
 
-  if (!saleData || !saleData.sale)
-    return <CustomError statusCode={404} />;
+  if (!saleData || !saleData.sale) return <CustomError statusCode={404} />;
 
   return (
     <Layout>
