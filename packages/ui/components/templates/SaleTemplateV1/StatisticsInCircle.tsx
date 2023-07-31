@@ -150,16 +150,16 @@ export default function StatisticsInCircle({
           </Heading>
           <chakra.div>
             <>
-              <chakra.span fontSize={"2xl"}>
+              <chakra.span fontSize={"3xl"}>
                 {started ? etherAmountFormat(totalRaised) : "????"}{" "}
               </chakra.span>
               {raisedTokenSymbol.toUpperCase()}
             </>
           </chakra.div>
-          <span>
-            {
+          <chakra.span mt={"-1"} color={"gray.400"}>
+            ≒{
               // TODO Fiat symbol ($, ¥)
-              "$"
+              " $"
             }
             {started
               ? "" +
@@ -168,10 +168,10 @@ export default function StatisticsInCircle({
                   fiatRate
                 ).toFixed(2)
               : "????"}
-          </span>
+          </chakra.span>
           <div>
             {!!targetTotalRaised && (
-              <chakra.div textAlign={"center"}>
+              <chakra.div textAlign={"center"} mt={2} color={"gray.400"}>
                 {t("TARGET_TOTAL_RAISED")}{" "}
                 {etherAmountFormat(targetTotalRaised)}
                 {raisedTokenSymbol.toUpperCase()}

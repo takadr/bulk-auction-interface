@@ -32,7 +32,7 @@ export default function CountdownCalendar({ unixEndDate }: Props) {
 
   return (
     <chakra.div>
-      <chakra.div textAlign={"center"}>
+      <chakra.div textAlign={"center"} fontSize={"sm"} color={"gray.400"}>
         {t("UNTIL", {
           datetime: format(unixEndDate * 1000, "yyyy/MM/dd HH:mm(z)"),
         })}
@@ -42,6 +42,8 @@ export default function CountdownCalendar({ unixEndDate }: Props) {
         display={"flex"}
         alignItems={"center"}
         justifyContent={"center"}
+        maxW={"300px"}
+        margin={"auto"}
       >
         <chakra.div w={"25%"} textAlign={"center"}>
           <chakra.div fontSize={"2xl"}>{countdown.days}</chakra.div>

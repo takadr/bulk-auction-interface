@@ -222,7 +222,8 @@ export default function SaleTemplateV1({
               {metaData.title ? metaData.title : "Unnamed Sale"}
             </Heading>
             <HStack spacing={4}>
-              <chakra.p>
+              <chakra.p fontSize={'sm'}>
+                <Tag mr={1} verticalAlign={"top"} size="sm">Token</Tag>
                 {tokenAmountFormat(
                   sale.allocatedAmount,
                   parseInt(sale.tokenDecimals),
@@ -244,7 +245,8 @@ export default function SaleTemplateV1({
                   <ExternalLinkIcon />
                 </Link>
               </chakra.p>
-              <chakra.p>
+              <chakra.p fontSize={'sm'}>
+                <Tag mr={1} verticalAlign={"top"} size="sm">Contract</Tag>
                 {`${sale.id?.slice(0, 5)}...${sale.id?.slice(-4)}`}
                 <Link
                   ml={1}
