@@ -1,4 +1,4 @@
-import { QuestionIcon } from "@chakra-ui/icons";
+import { InfoIcon, QuestionIcon } from "@chakra-ui/icons";
 import {
   useToast,
   Box,
@@ -92,6 +92,11 @@ export default function WithdrawRaisedETH({ sale, onSuccessConfirm }: Props) {
           {t("WITHDRAW_THE_TOTAL_RAISED")}
         </Button>
       </Flex>
+      <chakra.p textAlign={'left'} fontSize={"sm"} color={"gray.400"}>
+        <InfoIcon />{" "}
+        {t("ONE_PERCENT_FEE_WILL_BE_SUBTRACTED")}
+      </chakra.p>
+      
     </Box>
   );
 }

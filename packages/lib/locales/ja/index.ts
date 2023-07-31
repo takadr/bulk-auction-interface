@@ -45,6 +45,7 @@ export default {
   TOTAL_RAISED_BALANCE_IN_SALE_CONTRACT: "セールコントラクトのETH残高",
   AFTER_THE_SALE_CLOSES:
     "セール終了時、トークン割当が0になる入札者がいる場合、入札資金の回収に三日間の待機期間が発生します。（割当0の入札者は三日以内で返金請求が可能です）",
+  ONE_PERCENT_FEE_WILL_BE_SUBTRACTED: "1%の手数料が差し引かれます",
   WITHDRAW_THE_TOTAL_RAISED: "ETHを回収する",
   YOUR_SALES: "あなたのセール",
   CREATE_NEW_SALE: "セールの作成",
