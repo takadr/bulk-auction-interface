@@ -54,10 +54,8 @@ const client: any = createClient({
         projectId: process.env.NEXT_PUBLIC_WALLET_CONNECT_ID!,
         qrModalOptions: {
           themeVariables: {
-            "--w3m-z-index": "2000",
+            "--wcm-z-index": "2000",
           },
-          explorerAllowList: undefined,
-          explorerDenyList: undefined,
         },
       },
     }),
