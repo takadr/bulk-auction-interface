@@ -6,7 +6,6 @@ import {
   useContractRead,
   erc20ABI,
 } from "wagmi";
-import { BigNumber, constants } from "ethers";
 import { useState } from "react";
 
 export default function useApprove({
@@ -29,14 +28,15 @@ export default function useApprove({
   prepareFn: any;
   writeFn: any;
   waitFn: ReturnType<typeof useWaitForTransaction>;
-  allowance: BigNumber;
+  allowance: bigint;
   refetchAllowance: () => Promise<any>;
 } {
+  const MaxUint256 = 2n ** 256n - 1n;
   const { chain } = useNetwork();
-  const [allowance, setAllowance] = useState<BigNumber>(BigNumber.from(0));
-  const approveArgs: [`0x${string}`, BigNumber] = [
+  const [allowance, setAllowance] = useState<bigint>(BigInt(0));
+  const approveArgs: [`0x${string}`, bigint] = [
     spender,
-    BigNumber.from(constants.MaxUint256),
+    BigInt(MaxUint256.toString()),
   ];
   const allowanceArgs: [`0x${string}`, `0x${string}`] = [owner, spender];
   const enabled: boolean = !!targetAddress && !!owner && !!spender && !!chain;

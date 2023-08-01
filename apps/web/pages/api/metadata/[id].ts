@@ -6,7 +6,7 @@ import { CHAIN_IDS } from "lib/constants";
 
 const availableNetwork = Object.values(CHAIN_IDS);
 
-const requireAvailableNetwork = (chainId) => {
+const requireAvailableNetwork = (chainId: number) => {
   if (!availableNetwork.includes(chainId)) throw new Error("Wrong network");
 };
 
@@ -19,7 +19,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
         // requireAvailableNetwork(chainId);
         const metaData = await fetchMetaData(id as string);
         res.json({ metaData });
-      } catch (_error) {
+      } catch (_error: any) {
         console.log(_error.message);
         res.status(500).end(_error.message);
       }

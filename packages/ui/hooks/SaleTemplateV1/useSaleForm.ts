@@ -13,7 +13,6 @@ import { SaleForm } from "lib/types/Sale";
 import Big, { multiply } from "lib/utils/bignumber";
 import FactoryABI from "lib/constants/abis/Factory.json";
 import { SALE_TEMPLATE_V1_NAME } from "lib/constants";
-import { BigNumber } from "ethers";
 import "rsuite/dist/rsuite-no-reset.min.css";
 import "assets/css/rsuite-override.css";
 
@@ -45,7 +44,7 @@ export default function useSaleForm({
   writeFn: ReturnType<typeof useContractWrite>;
   waitFn: ReturnType<typeof useWaitForTransaction>;
   tokenData: any;
-  balance: BigNumber | undefined;
+  balance: bigint | undefined;
 } {
   const emptySale: SaleForm = {
     templateName: SALE_TEMPLATE_V1_NAME,

@@ -58,7 +58,7 @@ export default function WithdrawERC20({ sale, onSuccessConfirm }: Props) {
       });
       onSuccessConfirm && onSuccessConfirm(data);
     },
-    isReady: balance && !balance.isZero(),
+    isReady: typeof balance !== "undefined" && balance !== 0n,
   });
   const { t } = useLocale();
 
@@ -92,7 +92,7 @@ export default function WithdrawERC20({ sale, onSuccessConfirm }: Props) {
         <Button
           variant={"solid"}
           isDisabled={
-            !balance || balance.isZero() || !withdrawERC20WriteFn.writeAsync
+            !balance || balance === 0n || !withdrawERC20WriteFn.writeAsync
           }
           isLoading={
             withdrawERC20WriteFn.isLoading || withdrawERC20WaitFn.isLoading

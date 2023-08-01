@@ -93,7 +93,7 @@ export default function WithdrawUnclaimedToken({
           variant={"solid"}
           isDisabled={
             !balance ||
-            balance.isZero() ||
+            balance === BigInt(0) ||
             !withdrawUnclaimedERC20WriteFn.writeAsync
           }
           isLoading={

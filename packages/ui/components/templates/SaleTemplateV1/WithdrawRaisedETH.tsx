@@ -54,7 +54,7 @@ export default function WithdrawRaisedETH({ sale, onSuccessConfirm }: Props) {
       });
       onSuccessConfirm && onSuccessConfirm(data);
     },
-    isReady: balanceData && !balanceData.value.isZero(),
+    isReady: !!balanceData && balanceData.value !== BigInt(0),
   });
   const { t } = useLocale();
 
@@ -81,7 +81,7 @@ export default function WithdrawRaisedETH({ sale, onSuccessConfirm }: Props) {
           variant={"solid"}
           isDisabled={
             !balanceData ||
-            balanceData.value.isZero() ||
+            balanceData.value === BigInt(0) ||
             !withdrawETHWriteFn.writeAsync
           }
           isLoading={

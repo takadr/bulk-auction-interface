@@ -1,8 +1,8 @@
 import { useContractReads } from "wagmi";
-import { NULL_ADDRESS } from "lib/constants";
 import SaleTemplateV1ABI from "lib/constants/abis/SaleTemplateV1.json";
 import Big, { getBigNumber } from "lib/utils/bignumber";
 import { Sale } from "lib/types/Sale";
+import { ContractFunctionConfig, Abi } from "viem";
 
 export default function useRaised(
   sale: Sale,
@@ -14,18 +14,23 @@ export default function useRaised(
   isError: boolean;
   refetch: (() => Promise<any>) | (() => void);
 } {
+  
   const saleContractConfig = {
     address: sale.id as `0x${string}`,
-    abi: SaleTemplateV1ABI,
+    abi: SaleTemplateV1ABI as Abi
   };
 
-  const { data, isError, refetch, isLoading } = useContractReads({
+  const { data, isError, refetch, isLoading } = useContractReads<ContractFunctionConfig<Abi, string>[], boolean, any>({
     contracts: [
       {
         ...saleContractConfig,
         functionName: "raised",
+        // TODO
+        // @ts-ignore
         args: [address],
       },
+      // TODO
+      // @ts-ignore
       {
         ...saleContractConfig,
         functionName: "totalRaised",
@@ -47,9 +52,10 @@ export default function useRaised(
     };
   }
 
+  console.log(data)
   return {
-    raised: data && data[0] ? getBigNumber(String(data[0])) : Big(0),
-    totalRaised: data && data[1] ? getBigNumber(String(data[1])) : Big(0),
+    raised: data && data[0] ? getBigNumber(BigInt(data[0].result).toString()) : Big(0),
+    totalRaised: data && data[1] ? getBigNumber(BigInt(data[1].result).toString()) : Big(0),
     isLoading,
     isError,
     refetch,

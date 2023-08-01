@@ -66,13 +66,15 @@ const requireContractOwner = (
       if (contractOwner !== req.session.siwe.address)
         reject("You are not the owner of this contract");
       resolve({ metaData, saleContract, provider });
-    } catch (error) {
+    } catch (error: any) {
       reject(error.message);
     }
   });
 };
 
 const requireAvailableNetwork = (req: NextApiRequest) => {
+  if (!req.session.siwe)
+    throw new Error("Sign in required");
   if (!availableNetwork.includes(req.session.siwe.chainId))
     throw new Error("Wrong network");
 };
@@ -109,7 +111,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
           lastEvaluatedKeyCreatedAt as string
         );
         res.json({ metaData });
-      } catch (_error) {
+      } catch (_error: any) {
         console.log(_error);
         res.status(500).end(String(_error));
       }
@@ -155,7 +157,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
           tokenDecimal,
         });
         res.json({ result });
-      } catch (_error) {
+      } catch (_error: any) {
         console.log(_error);
         res.status(500).end(String(_error));
       }

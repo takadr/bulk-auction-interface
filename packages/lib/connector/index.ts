@@ -1,20 +1,13 @@
-import {
-  WagmiConfig,
-  createClient,
-  configureChains,
-  mainnet,
-  goerli,
-  sepolia,
-  Chain,
-} from "wagmi";
+import { Chain, configureChains, createConfig, mainnet, sepolia } from 'wagmi';
+import { goerli } from "wagmi/chains";
 import { alchemyProvider } from "wagmi/providers/alchemy";
 import { infuraProvider } from "wagmi/providers/infura";
-import { publicProvider } from "wagmi/providers/public";
+import { publicProvider } from 'wagmi/providers/public';
 
-import { CoinbaseWalletConnector } from "wagmi/connectors/coinbaseWallet";
-import { InjectedConnector } from "wagmi/connectors/injected";
-import { MetaMaskConnector } from "wagmi/connectors/metaMask";
-import { WalletConnectConnector } from "wagmi/connectors/walletConnect";
+import { CoinbaseWalletConnector } from "@wagmi/core/connectors/coinbaseWallet";
+import { InjectedConnector } from "@wagmi/core/connectors/injected";
+import { MetaMaskConnector } from "@wagmi/core/connectors/metaMask";
+import { WalletConnectConnector } from "@wagmi/core/connectors/walletConnect";
 
 const getSupportedChain = (): Chain[] => {
   if (process.env.NEXT_PUBLIC_CHAIN_ID === "1") {
@@ -27,18 +20,16 @@ const getSupportedChain = (): Chain[] => {
   return [sepolia];
 };
 
-// Configure chains & providers with the Alchemy provider.
-// Two popular providers are Alchemy (alchemy.com) and Infura (infura.io)
-const { chains, provider, webSocketProvider } = configureChains(
-  [...getSupportedChain()],
+const { chains, publicClient, webSocketPublicClient } = configureChains<Chain>(
+  getSupportedChain(),
   [
     infuraProvider({ apiKey: process.env.NEXT_PUBLIC_INFURA_API_TOKEN! }),
-    publicProvider(),
-  ]
-);
+    alchemyProvider({ apiKey: process.env.NEXT_PUBLIC_ALCHEMY_API_KEY!}),
+    publicProvider()
+  ],
+)
 
-// Set up client
-const client: any = createClient({
+const config: any = createConfig({
   autoConnect: true,
   connectors: [
     new MetaMaskConnector({ chains }),
@@ -63,12 +54,12 @@ const client: any = createClient({
     //   chains,
     //   options: {
     //     name: 'Injected',
-    //     shimDisconnect: true,
+    //     shimDisconnect: false,
     //   },
     // }),
   ],
-  provider,
-  webSocketProvider,
-});
+  publicClient,
+  webSocketPublicClient,
+})
 
-export default client;
+export default config;

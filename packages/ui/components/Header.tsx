@@ -45,12 +45,12 @@ const Header: FC<HeaderProps> = ({ title }) => {
   const toast = useToast({ position: "top-right", isClosable: true });
   const { currentUser, mutate } = useContext(CurrentUserContext);
   const { address, isConnected, connector } = useAccount();
-  const { data: ensAvatar } = useEnsAvatar({
+  const { data: ensName } = useEnsName({
     address: currentUser ? currentUser.address : address,
     staleTime: 1000 * 60 * 60 * 1,
   });
-  const { data: ensName } = useEnsName({
-    address: currentUser ? currentUser.address : address,
+  const { data: ensAvatar } = useEnsAvatar({
+    name: ensName,
     staleTime: 1000 * 60 * 60 * 1,
   });
   const [addressString, setAddressString] = useState<string>("");

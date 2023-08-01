@@ -4,16 +4,15 @@
   "extends": "./base.json",
   "compilerOptions": {
     "allowJs": true,
-    "declaration": false,
-    "declarationMap": false,
+    "declaration": true,
+    "declarationMap": true,
     "incremental": true,
     "jsx": "preserve",
     "lib": ["dom", "dom.iterable", "esnext"],
     "module": "esnext",
     "noEmit": true,
     "resolveJsonModule": true,
-    "strict": false,
-    "target": "ES2019"
+    "strict": true
   },
   "include": ["src", "next-env.d.ts"],
   "exclude": ["node_modules"]

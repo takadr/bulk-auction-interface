@@ -33,7 +33,7 @@ import { useQuery } from "@apollo/client";
 import { DateRangePicker } from "rsuite";
 import { FormikProps } from "formik";
 import { differenceInSeconds, format } from "date-fns";
-import { BigNumber, ethers } from "ethers";
+import { ethers } from "ethers";
 import {
   getDecimalsForView,
   getEtherscanLink,
@@ -58,7 +58,7 @@ export default function SaleForm({
   approvals: any;
   writeFn: any;
   tokenData: any;
-  balance?: BigNumber | undefined;
+  balance?: bigint | undefined;
 }) {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const containerRef = useRef<HTMLFormElement>(null);
@@ -100,7 +100,7 @@ export default function SaleForm({
             {data &&
               data.templates.map((template: Template) => (
                 <option key={template.id} value={template.templateName}>
-                  {ethers.utils.parseBytes32String(template.templateName)}
+                  {ethers.decodeBytes32String(template.templateName)}
                 </option>
               ))}
           </Select>
@@ -376,7 +376,7 @@ export default function SaleForm({
                           fontWeight={"bold"}
                           aria-label="Sale Template"
                         >
-                          {ethers.utils.parseBytes32String(
+                          {ethers.decodeBytes32String(
                             formikProps.values.templateName
                           )}
                         </chakra.p>

@@ -13,5 +13,5 @@ export default function ProviderLogo({
   connectorId,
   ...props
 }: { connectorId: string } & ImageProps) {
-  return <Image {...props} alt={connectorId} src={logoMap[connectorId].src} />;
+  return <Image {...props} alt={connectorId} src={logoMap[connectorId] ? logoMap[connectorId].src : ""} />;
 }

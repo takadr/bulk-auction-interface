@@ -138,12 +138,10 @@ export default function SaleTemplateV1({
   });
 
   const { config, isError } = usePrepareSendTransaction({
-    request: {
-      to: contractAddress,
-      value: formikProps.values.amount
-        ? parseEther(formikProps.values.amount)
-        : undefined,
-    },
+    to: contractAddress,
+    value: formikProps.values.amount
+      ? BigInt(parseEther(formikProps.values.amount))
+      : undefined,
     enabled: started && !ended,
   });
 
