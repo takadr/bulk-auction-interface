@@ -14,7 +14,7 @@ interface SWRMetaDataStore {
 const LIMIT = 10;
 
 export const useSWRMetaDataList = (
-  config: SWRConfiguration
+  config: SWRConfiguration,
 ): SWRMetaDataStore => {
   const getKey = (pageIndex: number, previousPageData: MetaData[]) => {
     if (previousPageData && !previousPageData.length) return null;
@@ -26,7 +26,7 @@ export const useSWRMetaDataList = (
   };
 
   const fetcher = async (
-    lastEvaluatedKey: [MetaData, number]
+    lastEvaluatedKey: [MetaData, number],
   ): Promise<MetaData[]> => {
     const url = lastEvaluatedKey[0]
       ? `/api/metadata?lastEvaluatedKeyId=${lastEvaluatedKey[0].id}&lastEvaluatedKeyCreatedAt=${lastEvaluatedKey[0].createdAt}`

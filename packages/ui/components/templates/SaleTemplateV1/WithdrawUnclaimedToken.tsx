@@ -83,8 +83,8 @@ export default function WithdrawUnclaimedToken({
                 Number(sale.tokenDecimals),
                 getDecimalsForView(
                   getBigNumber(sale.allocatedAmount),
-                  Number(sale.tokenDecimals)
-                )
+                  Number(sale.tokenDecimals),
+                ),
               )
             : "-"}{" "}
           {sale.tokenSymbol}

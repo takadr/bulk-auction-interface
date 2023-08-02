@@ -61,7 +61,7 @@ export default function TxSentToast(props: TxSentToast) {
             href={getEtherscanLink(
               CHAIN_NAMES[process.env.NEXT_PUBLIC_CHAIN_ID!],
               txid,
-              "tx"
+              "tx",
             )}
             target={"_blank"}
           >

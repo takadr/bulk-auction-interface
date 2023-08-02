@@ -22,38 +22,38 @@ export const calculateAllocation = (us: Big, tp: Big, tda: Big): Big => {
 export const getMinTokenPriceAgainstETH = (
   minRaisedAmount: BigNumberValueType,
   allocatedAmount: BigNumberValueType,
-  tokenDecimals: number
+  tokenDecimals: number,
 ): Big => {
   return divide(
     divide(minRaisedAmount, Big(10).pow(18)),
-    divide(allocatedAmount, Big(10).pow(Number(tokenDecimals)))
+    divide(allocatedAmount, Big(10).pow(Number(tokenDecimals))),
   );
 };
 export const getTokenPriceAgainstETH = (
   totalRaised: BigNumberValueType,
   allocatedAmount: BigNumberValueType,
-  tokenDecimals: number
+  tokenDecimals: number,
 ): Big => {
   return divide(
     divide(totalRaised, Big(10).pow(18)),
-    divide(allocatedAmount, Big(10).pow(tokenDecimals))
+    divide(allocatedAmount, Big(10).pow(tokenDecimals)),
   );
 };
 export const getTokenPriceAgainstETHWithMinPrice = (
   minRaisedAmount: BigNumberValueType,
   allocatedAmount: BigNumberValueType,
   totalRaised: BigNumberValueType,
-  tokenDecimals: number
+  tokenDecimals: number,
 ): Big => {
   const minTokenPrice = getMinTokenPriceAgainstETH(
     minRaisedAmount,
     allocatedAmount,
-    tokenDecimals
+    tokenDecimals,
   );
   const tokenPrice = getTokenPriceAgainstETH(
     totalRaised,
     allocatedAmount,
-    tokenDecimals
+    tokenDecimals,
   );
   return minTokenPrice.gte(tokenPrice) ? minTokenPrice : tokenPrice;
 };
@@ -63,7 +63,7 @@ export const getExpectedAmount = (
   myTotalDonations: BigNumberValueType,
   inputtingValue: BigNumberValueType,
   totalRaised: BigNumberValueType,
-  allocatedAmount: BigNumberValueType
+  allocatedAmount: BigNumberValueType,
 ): Big => {
   const donations = add(myTotalDonations, inputtingValue);
   const totalDonations = add(totalRaised, inputtingValue);
@@ -73,20 +73,20 @@ export const getExpectedAmount = (
   return calculateAllocation(
     donations,
     totalDonations,
-    getBigNumber(allocatedAmount)
+    getBigNumber(allocatedAmount),
   );
 };
 
 export const getTargetPercetage = (
   totalRaised: BigNumberValueType,
-  maximumTotalRaised: BigNumberValueType
+  maximumTotalRaised: BigNumberValueType,
 ): number => {
   if (getBigNumber(maximumTotalRaised).lte(Big(0))) {
     return 0;
   }
   return Math.min(
     100,
-    multiply(divide(totalRaised, maximumTotalRaised), 100).toNumber()
+    multiply(divide(totalRaised, maximumTotalRaised), 100).toNumber(),
   );
 };
 
@@ -113,10 +113,10 @@ export function formatEtherInBig(wei: BigNumberValueType): Big {
 export const tokenAmountFormat = (
   amount: BigNumberValueType,
   decimals: number,
-  precision: number
+  precision: number,
 ): string => {
   const numerator = Big(10).pow(
-    typeof decimals !== "number" ? parseInt(decimals) : decimals
+    typeof decimals !== "number" ? parseInt(decimals) : decimals,
   );
   return divide(amount, numerator).toFixed(precision);
 };
@@ -124,7 +124,7 @@ export const tokenAmountFormat = (
 export const etherAmountFormat = (
   amount: BigNumberValueType,
   precision: number = ETHER_DECIMALS_FOR_VIEW,
-  smallValueNotation: boolean = true
+  smallValueNotation: boolean = true,
 ): string => {
   const amountInBig = formatEtherInBig(amount);
   if (smallValueNotation && amountInBig.gt(0) && amountInBig.lt(0.01)) {
@@ -137,7 +137,7 @@ export const etherAmountFormat = (
 export const getEtherscanLink = (
   chain: string,
   hash: string,
-  type: "tx" | "token" | "address" | "block"
+  type: "tx" | "token" | "address" | "block",
 ): string => {
   return `https://${
     chain === "mainnet" ? "" : `${chain}.`
@@ -182,7 +182,7 @@ export const getDomainFromURL = (url: string) => {
 export const ellipsisText = (
   text: string,
   maxLength: number,
-  ellipsis = "..."
+  ellipsis = "...",
 ): string => {
   return text.length >= maxLength
     ? text.slice(0, maxLength - ellipsis.length) + ellipsis

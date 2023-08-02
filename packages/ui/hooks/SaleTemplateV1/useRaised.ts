@@ -6,7 +6,7 @@ import { ContractFunctionConfig, Abi } from "viem";
 
 export default function useRaised(
   sale: Sale,
-  address: `0x${string}` | undefined
+  address: `0x${string}` | undefined,
 ): {
   raised: Big;
   totalRaised: Big;
@@ -14,13 +14,16 @@ export default function useRaised(
   isError: boolean;
   refetch: (() => Promise<any>) | (() => void);
 } {
-  
   const saleContractConfig = {
     address: sale.id as `0x${string}`,
-    abi: SaleTemplateV1ABI as Abi
+    abi: SaleTemplateV1ABI as Abi,
   };
 
-  const { data, isError, refetch, isLoading } = useContractReads<ContractFunctionConfig<Abi, string>[], boolean, any>({
+  const { data, isError, refetch, isLoading } = useContractReads<
+    ContractFunctionConfig<Abi, string>[],
+    boolean,
+    any
+  >({
     contracts: [
       {
         ...saleContractConfig,
@@ -53,8 +56,14 @@ export default function useRaised(
   }
 
   return {
-    raised: data && data[0] ? getBigNumber(BigInt(data[0].result).toString()) : Big(0),
-    totalRaised: data && data[1] ? getBigNumber(BigInt(data[1].result).toString()) : Big(0),
+    raised:
+      data && data[0]
+        ? getBigNumber(BigInt(data[0].result).toString())
+        : Big(0),
+    totalRaised:
+      data && data[1]
+        ? getBigNumber(BigInt(data[1].result).toString())
+        : Big(0),
     isLoading,
     isError,
     refetch,

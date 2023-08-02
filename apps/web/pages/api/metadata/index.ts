@@ -36,7 +36,7 @@ const getViemProvider = (chainId: number) => {
   const chainName = CHAIN_NAMES[chainId];
   // const alchemy = http(`https://eth-${chainName}.g.alchemy.com/v2/${}`)
   const infura = http(
-    `https://${chainName}.infura.io/v3/${process.env.NEXT_PUBLIC_INFURA_API_TOKEN}`
+    `https://${chainName}.infura.io/v3/${process.env.NEXT_PUBLIC_INFURA_API_TOKEN}`,
   );
   const client = createPublicClient({
     chain: getViemChain(chainName),
@@ -46,7 +46,7 @@ const getViemProvider = (chainId: number) => {
 };
 
 const requireContractOwner = (
-  req: NextApiRequest
+  req: NextApiRequest,
 ): Promise<{
   metaData: any;
   saleContract: GetContractReturnType<typeof SaleTemplateV1ABI, PublicClient>;
@@ -73,15 +73,14 @@ const requireContractOwner = (
 };
 
 const requireAvailableNetwork = (req: NextApiRequest) => {
-  if (!req.session.siwe)
-    throw new Error("Sign in required");
+  if (!req.session.siwe) throw new Error("Sign in required");
   if (!availableNetwork.includes(req.session.siwe.chainId))
     throw new Error("Wrong network");
 };
 
 const getTokenInfo = async (
   tokenAddress: `0x${string}`,
-  provider: PublicClient
+  provider: PublicClient,
 ) => {
   const token = getContract({
     address: tokenAddress,
@@ -108,7 +107,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
         const { lastEvaluatedKeyId, lastEvaluatedKeyCreatedAt } = req.query;
         const metaData = await scanMetaData(
           lastEvaluatedKeyId as string,
-          lastEvaluatedKeyCreatedAt as string
+          lastEvaluatedKeyCreatedAt as string,
         );
         res.json({ metaData });
       } catch (_error: any) {
@@ -120,12 +119,12 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
       try {
         requireAvailableNetwork(req);
         const { metaData, saleContract, provider } = await requireContractOwner(
-          req
+          req,
         );
         const tokenAddress = await saleContract.read.erc20onsale();
         const { tokenName, tokenSymbol, tokenDecimal } = await getTokenInfo(
           tokenAddress as `0x${string}`,
-          provider
+          provider,
         );
         const result = await addMetaData({
           ...metaData,
@@ -143,12 +142,12 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
       try {
         requireAvailableNetwork(req);
         const { metaData, saleContract, provider } = await requireContractOwner(
-          req
+          req,
         );
         const tokenAddress = await saleContract.read.erc20onsale();
         const { tokenName, tokenSymbol, tokenDecimal } = await getTokenInfo(
           tokenAddress as `0x${string}`,
-          provider
+          provider,
         );
         const result = await updateSale({
           ...metaData,

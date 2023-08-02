@@ -69,7 +69,7 @@ export default function Layout({
             <AlertIcon />{" "}
             {t("PLEASE_CONNECT_TO", {
               network: capitalize(
-                CHAIN_NAMES[process.env.NEXT_PUBLIC_CHAIN_ID!]
+                CHAIN_NAMES[process.env.NEXT_PUBLIC_CHAIN_ID!],
               ),
             })}
           </Alert>

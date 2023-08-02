@@ -10,14 +10,14 @@ import { useLocale } from "./useLocale";
 type Constants = { lockDuration: number; feeRatePerMil: number };
 
 const useSWRMetaData = (
-  id: string
+  id: string,
 ): SWRResponse<
   { metaData: MetaData; constants: Constants } | undefined,
   Error
 > => {
   const { t } = useLocale();
   const fetcher = (
-    url: string
+    url: string,
   ): Promise<{ metaData: MetaData; constants: Constants } | undefined> =>
     fetch(url)
       .then((res) => res.json())

@@ -188,7 +188,7 @@ export default function MetaDataForm({
                         ? strVal
                         : isNaN(val)
                         ? 0
-                        : val
+                        : val,
                     )
                   }
                 >
@@ -235,7 +235,7 @@ export default function MetaDataForm({
                         ? strVal
                         : isNaN(val)
                         ? 0
-                        : val
+                        : val,
                     )
                   }
                 >
@@ -320,7 +320,7 @@ export default function MetaDataForm({
                 <Tooltip
                   hasArrow
                   label={t(
-                    "INPUT_ANY_URL_IF_YOU_WANT_TO_SHOW_SOMETHING_TO_USERS"
+                    "INPUT_ANY_URL_IF_YOU_WANT_TO_SHOW_SOMETHING_TO_USERS",
                   )}
                 >
                   <QuestionIcon mb={1} ml={1} />

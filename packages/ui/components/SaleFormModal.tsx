@@ -139,12 +139,13 @@ export default function SaleFormModal({
     listener: (logs: any[]) => {
       const { args } = logs[0];
       if (
-        (args.owner as string).toLowerCase() === (address as string).toLowerCase()
+        (args.owner as string).toLowerCase() ===
+        (address as string).toLowerCase()
       ) {
         setContractAddress(args.deployedAddr as `0x${string}`);
         unwatch && unwatch();
       }
-    }
+    },
   });
 
   const stepParams = [

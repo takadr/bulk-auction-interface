@@ -76,7 +76,7 @@ export type Template = {
 
 export const validateMetaData = (
   metaData: MetaData,
-  minRaisedAmount?: number
+  minRaisedAmount?: number,
 ) => {
   const errors: any = {};
   if (!metaData.id) {

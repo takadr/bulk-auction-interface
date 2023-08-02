@@ -69,7 +69,7 @@ export default function WithdrawERC20({ sale, onSuccessConfirm }: Props) {
         <Tooltip
           hasArrow
           label={t(
-            "TOKEN_WITHDRAWALS_WILL_BE_AVAILABLE_IMMEDIATELY_AFTER_THE_END_OF_THE_SALE"
+            "TOKEN_WITHDRAWALS_WILL_BE_AVAILABLE_IMMEDIATELY_AFTER_THE_END_OF_THE_SALE",
           )}
         >
           <QuestionIcon mb={1} ml={1} />
@@ -83,8 +83,8 @@ export default function WithdrawERC20({ sale, onSuccessConfirm }: Props) {
                 Number(sale.tokenDecimals),
                 getDecimalsForView(
                   getBigNumber(sale.allocatedAmount),
-                  Number(sale.tokenDecimals)
-                )
+                  Number(sale.tokenDecimals),
+                ),
               )
             : "-"}{" "}
           {sale.tokenSymbol}

@@ -75,7 +75,7 @@ const Footer: FC = () => {
             >
               {`${process.env.NEXT_PUBLIC_VERCEL_GIT_COMMIT_SHA?.substring(
                 0,
-                7
+                7,
               )}`}
             </Link>
           </HStack>

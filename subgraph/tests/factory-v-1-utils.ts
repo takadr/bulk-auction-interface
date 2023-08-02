@@ -15,7 +15,7 @@ export function createDeployedEvent(
   allocatedAmount: BigInt,
   startingAt: BigInt,
   eventDuration: BigInt,
-  minRaisedAmount: BigInt
+  minRaisedAmount: BigInt,
 ): Deployed {
   let deployedEvent = changetype<Deployed>(newMockEvent());
 
@@ -24,47 +24,47 @@ export function createDeployedEvent(
   deployedEvent.parameters.push(
     new ethereum.EventParam(
       "templateName",
-      ethereum.Value.fromFixedBytes(templateName)
-    )
+      ethereum.Value.fromFixedBytes(templateName),
+    ),
   );
   deployedEvent.parameters.push(
     new ethereum.EventParam(
       "deployedAddr",
-      ethereum.Value.fromAddress(deployedAddr)
-    )
+      ethereum.Value.fromAddress(deployedAddr),
+    ),
   );
   deployedEvent.parameters.push(
-    new ethereum.EventParam("tokenAddr", ethereum.Value.fromAddress(tokenAddr))
+    new ethereum.EventParam("tokenAddr", ethereum.Value.fromAddress(tokenAddr)),
   );
   deployedEvent.parameters.push(
-    new ethereum.EventParam("baseToken", ethereum.Value.fromAddress(baseToken))
+    new ethereum.EventParam("baseToken", ethereum.Value.fromAddress(baseToken)),
   );
   deployedEvent.parameters.push(
-    new ethereum.EventParam("owner", ethereum.Value.fromAddress(owner))
+    new ethereum.EventParam("owner", ethereum.Value.fromAddress(owner)),
   );
   deployedEvent.parameters.push(
     new ethereum.EventParam(
       "allocatedAmount",
-      ethereum.Value.fromUnsignedBigInt(allocatedAmount)
-    )
+      ethereum.Value.fromUnsignedBigInt(allocatedAmount),
+    ),
   );
   deployedEvent.parameters.push(
     new ethereum.EventParam(
       "startingAt",
-      ethereum.Value.fromUnsignedBigInt(startingAt)
-    )
+      ethereum.Value.fromUnsignedBigInt(startingAt),
+    ),
   );
   deployedEvent.parameters.push(
     new ethereum.EventParam(
       "eventDuration",
-      ethereum.Value.fromUnsignedBigInt(eventDuration)
-    )
+      ethereum.Value.fromUnsignedBigInt(eventDuration),
+    ),
   );
   deployedEvent.parameters.push(
     new ethereum.EventParam(
       "minRaisedAmount",
-      ethereum.Value.fromUnsignedBigInt(minRaisedAmount)
-    )
+      ethereum.Value.fromUnsignedBigInt(minRaisedAmount),
+    ),
   );
 
   return deployedEvent;
@@ -72,7 +72,7 @@ export function createDeployedEvent(
 
 export function createTemplateAddedEvent(
   templateName: Bytes,
-  templateAddr: Address
+  templateAddr: Address,
 ): TemplateAdded {
   let templateAddedEvent = changetype<TemplateAdded>(newMockEvent());
 
@@ -81,14 +81,14 @@ export function createTemplateAddedEvent(
   templateAddedEvent.parameters.push(
     new ethereum.EventParam(
       "templateName",
-      ethereum.Value.fromFixedBytes(templateName)
-    )
+      ethereum.Value.fromFixedBytes(templateName),
+    ),
   );
   templateAddedEvent.parameters.push(
     new ethereum.EventParam(
       "templateAddr",
-      ethereum.Value.fromAddress(templateAddr)
-    )
+      ethereum.Value.fromAddress(templateAddr),
+    ),
   );
 
   return templateAddedEvent;
@@ -96,7 +96,7 @@ export function createTemplateAddedEvent(
 
 export function createTemplateDeletedEvent(
   templateName: Bytes,
-  templateAddr: Address
+  templateAddr: Address,
 ): TemplateDeleted {
   let templateDeletedEvent = changetype<TemplateDeleted>(newMockEvent());
 
@@ -105,14 +105,14 @@ export function createTemplateDeletedEvent(
   templateDeletedEvent.parameters.push(
     new ethereum.EventParam(
       "templateName",
-      ethereum.Value.fromFixedBytes(templateName)
-    )
+      ethereum.Value.fromFixedBytes(templateName),
+    ),
   );
   templateDeletedEvent.parameters.push(
     new ethereum.EventParam(
       "templateAddr",
-      ethereum.Value.fromAddress(templateAddr)
-    )
+      ethereum.Value.fromAddress(templateAddr),
+    ),
   );
 
   return templateDeletedEvent;

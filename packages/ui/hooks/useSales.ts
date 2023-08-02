@@ -55,7 +55,7 @@ const getQuery = (queryType: QueryType): DocumentNode => {
 
 export const useSWRSales = (
   config: SalesParams & SWRConfiguration,
-  queryType: QueryType = QueryType.ACTIVE_AND_UPCOMING
+  queryType: QueryType = QueryType.ACTIVE_AND_UPCOMING,
 ): SWRSaleStore => {
   const getKey = (pageIndex: number, previousPageData: Sale[]) => {
     if (previousPageData && !previousPageData.length) return null;

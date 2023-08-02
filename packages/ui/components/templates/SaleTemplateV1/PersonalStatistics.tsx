@@ -48,26 +48,26 @@ export default function PersonalStatistics({
 }: Props & BoxProps) {
   const inputValueInBig = multiply(
     Big(inputValue),
-    Big(10).pow(raisedTokenDecimal)
+    Big(10).pow(raisedTokenDecimal),
   );
   const expectedAmount = tokenAmountFormat(
     getExpectedAmount(
       myContribution,
       inputValueInBig,
       totalRaised,
-      allocatedAmount
+      allocatedAmount,
     ),
     distributedTokenDecimal,
-    getDecimalsForView(allocatedAmount, distributedTokenDecimal)
+    getDecimalsForView(allocatedAmount, distributedTokenDecimal),
   );
   const sumOfContributionAmount = etherAmountFormat(
-    add(myContribution, inputValueInBig)
+    add(myContribution, inputValueInBig),
   );
   const fixedContributionAmount = etherAmountFormat(myContribution);
   const inputtingValueInFormat = tokenAmountFormat(
     inputValueInBig,
     raisedTokenDecimal,
-    2
+    2,
   );
   const { t } = useLocale();
 
@@ -100,7 +100,7 @@ export default function PersonalStatistics({
             <chakra.p fontSize={"xs"} opacity={".75"} color={"yellow.500"}>
               <WarningIcon />{" "}
               {t(
-                "THE_ESTIMATED_TOKEN_AMOUNT_IS_LESS_THAN_THE_PERMITTED_NUMBER_OF_DECIMALS"
+                "THE_ESTIMATED_TOKEN_AMOUNT_IS_LESS_THAN_THE_PERMITTED_NUMBER_OF_DECIMALS",
               )}
             </chakra.p>
           ) : (
@@ -109,7 +109,7 @@ export default function PersonalStatistics({
                 minRaisedAmount,
                 allocatedAmount,
                 getBigNumber(totalRaised).add(inputValueInBig),
-                distributedTokenDecimal
+                distributedTokenDecimal,
               ).toFixed(8)} ETH`}
             </chakra.p>
           )}

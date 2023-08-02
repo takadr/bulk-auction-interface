@@ -48,11 +48,11 @@ export default function StatisticsInCircle({
   const progressPercent = getTargetPercetage(totalRaised, maximumTotalRaised);
   const minimumPercent = getTargetPercetage(
     minRaisedAmount,
-    maximumTotalRaised
+    maximumTotalRaised,
   );
   const targetTotalRaisedPercent = getTargetPercetage(
     targetTotalRaised,
-    maximumTotalRaised
+    maximumTotalRaised,
   );
   const { t } = useLocale();
 
@@ -157,7 +157,8 @@ export default function StatisticsInCircle({
             </>
           </chakra.div>
           <chakra.span mt={"-1"} color={"gray.400"}>
-            ≒{
+            ≒
+            {
               // TODO Fiat symbol ($, ¥)
               " $"
             }
@@ -165,7 +166,7 @@ export default function StatisticsInCircle({
               ? "" +
                 getFiatConversionAmount(
                   Number(formatEther(totalRaised)),
-                  fiatRate
+                  fiatRate,
                 ).toFixed(2)
               : "????"}
           </chakra.span>

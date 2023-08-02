@@ -87,8 +87,8 @@ export default function useSaleForm({
       tokenData &&
       Big(balance.toString()).lt(
         Big(formikProps.values.allocatedAmount).mul(
-          Big(10).pow(tokenData.decimals)
-        )
+          Big(10).pow(tokenData.decimals),
+        ),
       )
     ) {
       errors.allocatedAmount = `You need to have enough balance for allocation`;
@@ -98,7 +98,7 @@ export default function useSaleForm({
       tokenData &&
       !!multiply(
         formikProps.values.allocatedAmount,
-        Big(10).pow(tokenData.decimals)
+        Big(10).pow(tokenData.decimals),
       ).lt(Big(10).pow(6))
     ) {
       errors.allocatedAmount = `The allocation is too small, and some participants may not be
@@ -133,16 +133,16 @@ export default function useSaleForm({
     functionName: "balanceOf",
     args: [address],
     watch: true,
-    enabled: !!debouncedSale.token && isAddress(debouncedSale.token)
+    enabled: !!debouncedSale.token && isAddress(debouncedSale.token),
   });
 
   const {
     data: tokenData,
     isLoading: tokenLoading,
     isFetched: tokenFetched,
-  } = useToken({ 
+  } = useToken({
     address: debouncedSale.token as `0x${string}`,
-    enabled: !!debouncedSale.token && isAddress(debouncedSale.token)
+    enabled: !!debouncedSale.token && isAddress(debouncedSale.token),
   });
   const prepareFn = usePrepareContractWrite({
     address: process.env.NEXT_PUBLIC_FACTORY_ADDRESS as `0x${string}`, //factory
@@ -154,13 +154,13 @@ export default function useSaleForm({
       debouncedSale.owner,
       multiply(
         debouncedSale.allocatedAmount,
-        tokenData?.decimals ? Big(10).pow(tokenData.decimals) : 1
+        tokenData?.decimals ? Big(10).pow(tokenData.decimals) : 1,
       ).toString(),
       Math.round(debouncedSale.startingAt / 1000),
       debouncedSale.eventDuration,
       multiply(debouncedSale.minRaisedAmount, Big(10).pow(18)).toString(), // ETH
     ],
-    enabled: !!debouncedSale.token && isAddress(debouncedSale.token)
+    enabled: !!debouncedSale.token && isAddress(debouncedSale.token),
   });
 
   const writeFn = useContractWrite({
@@ -196,7 +196,7 @@ export default function useSaleForm({
       onApprovalTxConfirmed && onApprovalTxConfirmed(data);
       prepareFn.refetch();
     },
-    enabled: !!debouncedSale.token && isAddress(debouncedSale.token)
+    enabled: !!debouncedSale.token && isAddress(debouncedSale.token),
   });
 
   return {

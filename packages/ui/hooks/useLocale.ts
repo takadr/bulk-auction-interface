@@ -15,7 +15,7 @@ export const useLocale = () => {
 
   const tWithReplaceText = (
     key: keyof typeof t,
-    vals?: { [key: string]: string }
+    vals?: { [key: string]: string },
   ): string => {
     let s: string = t[key];
     if (!s) return key;

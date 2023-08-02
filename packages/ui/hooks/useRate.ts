@@ -3,7 +3,7 @@ import { COINGECKO_URL } from "lib/constants";
 
 const useRate = (
   tokenName: string,
-  fiatSymbol: string
+  fiatSymbol: string,
 ): SWRResponse<any, Error> => {
   const url = `${COINGECKO_URL}?ids=${tokenName}&vs_currencies=${fiatSymbol}`;
   const fetcher = (url: string): Promise<any> =>

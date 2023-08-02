@@ -116,7 +116,7 @@ export default function SaleForm({
             <Tooltip
               hasArrow
               label={t(
-                "INPUT_THE_ADDRESS_OF_THE_TOKEN_YOU_WOULD_LIKE_TO_ALLOCATE_TO_THIS_SALE"
+                "INPUT_THE_ADDRESS_OF_THE_TOKEN_YOU_WOULD_LIKE_TO_ALLOCATE_TO_THIS_SALE",
               )}
             >
               <QuestionIcon mb={1} ml={1} />
@@ -196,7 +196,7 @@ export default function SaleForm({
               new Date(formikProps.values.startingAt),
               new Date(
                 formikProps.values.startingAt +
-                  formikProps.values.eventDuration * 1000
+                  formikProps.values.eventDuration * 1000,
               ),
             ]}
           />
@@ -243,7 +243,7 @@ export default function SaleForm({
                     ? strVal
                     : isNaN(val)
                     ? 0
-                    : val
+                    : val,
                 )
               }
             >
@@ -265,8 +265,8 @@ export default function SaleForm({
                   Number(tokenData.decimals),
                   getDecimalsForView(
                     getBigNumber(tokenData.totalSupply.value.toString()),
-                    Number(tokenData.decimals)
-                  )
+                    Number(tokenData.decimals),
+                  ),
                 )
               : "-"}{" "}
             {tokenData?.symbol}
@@ -288,7 +288,7 @@ export default function SaleForm({
             <Tooltip
               hasArrow
               label={t(
-                "THE_SALE_WILL_BE_VOID_IF_THE_TOTAL_RAISED_IS_LESS_THAN_THIS_THRESHOLD"
+                "THE_SALE_WILL_BE_VOID_IF_THE_TOTAL_RAISED_IS_LESS_THAN_THIS_THRESHOLD",
               )}
             >
               <QuestionIcon mb={1} ml={1} />
@@ -310,7 +310,7 @@ export default function SaleForm({
                     ? strVal
                     : isNaN(val)
                     ? 0
-                    : val
+                    : val,
                 )
               }
             >
@@ -328,7 +328,7 @@ export default function SaleForm({
               !!formikProps.values.allocatedAmount &&
               `1 ${tokenData.symbol} = ${divide(
                 formikProps.values.minRaisedAmount,
-                formikProps.values.allocatedAmount
+                formikProps.values.allocatedAmount,
               ).toString()} ETH at Minimum total raised`}
           </chakra.p>
           <FormErrorMessage>
@@ -339,8 +339,8 @@ export default function SaleForm({
         Big(approvals.allowance).gte(
           multiply(
             Big(formikProps.values.allocatedAmount.toString()),
-            Big(10).pow(tokenData ? tokenData.decimals : 0)
-          )
+            Big(10).pow(tokenData ? tokenData.decimals : 0),
+          ),
         ) ? (
           <>
             <Button
@@ -377,7 +377,7 @@ export default function SaleForm({
                           aria-label="Sale Template"
                         >
                           {ethers.decodeBytes32String(
-                            formikProps.values.templateName
+                            formikProps.values.templateName,
                           )}
                         </chakra.p>
                       </div>
@@ -392,7 +392,7 @@ export default function SaleForm({
                             href={getEtherscanLink(
                               CHAIN_NAMES[process.env.NEXT_PUBLIC_CHAIN_ID!],
                               formikProps.values.token as `0x${string}`,
-                              "token"
+                              "token",
                             )}
                             target={"_blank"}
                           >
@@ -411,13 +411,13 @@ export default function SaleForm({
                           <>
                             {format(
                               formikProps.values.startingAt,
-                              "yyyy/MM/dd HH:mm:ss"
+                              "yyyy/MM/dd HH:mm:ss",
                             )}
                             {` - `}
                             {format(
                               formikProps.values.startingAt +
                                 formikProps.values.eventDuration * 1000,
-                              "yyyy/MM/dd HH:mm:ss"
+                              "yyyy/MM/dd HH:mm:ss",
                             )}{" "}
                             {format(new Date(), "(z)")}
                           </>
@@ -432,14 +432,14 @@ export default function SaleForm({
                         >
                           {tokenData
                             ? Number(
-                                formikProps.values.allocatedAmount
+                                formikProps.values.allocatedAmount,
                               ).toFixed(
                                 getDecimalsForView(
                                   getBigNumber(
-                                    tokenData?.totalSupply.value.toString()
+                                    tokenData?.totalSupply.value.toString(),
                                   ),
-                                  tokenData?.decimals
-                                )
+                                  tokenData?.decimals,
+                                ),
                               )
                             : "-"}{" "}
                           {tokenData?.symbol}
@@ -453,7 +453,7 @@ export default function SaleForm({
                           aria-label="Minimum total raised"
                         >
                           {Number(formikProps.values.minRaisedAmount).toFixed(
-                            2
+                            2,
                           )}{" "}
                           ETH
                         </chakra.p>

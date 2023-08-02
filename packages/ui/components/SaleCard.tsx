@@ -149,8 +149,8 @@ export default function SaleCard({
                     Number(sale.tokenDecimals),
                     getDecimalsForView(
                       getBigNumber(sale.allocatedAmount),
-                      Number(sale.tokenDecimals)
-                    )
+                      Number(sale.tokenDecimals),
+                    ),
                   )}
                   <chakra.span fontSize={"md"}> {sale.tokenSymbol}</chakra.span>
                 </chakra.span>
@@ -176,7 +176,7 @@ export default function SaleCard({
                   data?.metaData?.maximumTotalRaised
                     ? getTargetPercetage(
                         sale.totalRaised,
-                        parseEtherInBig(data.metaData.maximumTotalRaised)
+                        parseEtherInBig(data.metaData.maximumTotalRaised),
                       )
                     : 0
                 }

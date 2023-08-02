@@ -220,15 +220,17 @@ export default function SaleTemplateV1({
               {metaData.title ? metaData.title : "Unnamed Sale"}
             </Heading>
             <HStack spacing={4}>
-              <chakra.p fontSize={'sm'}>
-                <Tag mr={1} verticalAlign={"top"} size="sm">Token</Tag>
+              <chakra.p fontSize={"sm"}>
+                <Tag mr={1} verticalAlign={"top"} size="sm">
+                  Token
+                </Tag>
                 {tokenAmountFormat(
                   sale.allocatedAmount,
                   parseInt(sale.tokenDecimals),
                   getDecimalsForView(
                     getBigNumber(sale.allocatedAmount),
-                    parseInt(sale.tokenDecimals)
-                  )
+                    parseInt(sale.tokenDecimals),
+                  ),
                 )}{" "}
                 {sale.tokenSymbol}
                 <Link
@@ -236,22 +238,24 @@ export default function SaleTemplateV1({
                   href={getEtherscanLink(
                     CHAIN_NAMES[process.env.NEXT_PUBLIC_CHAIN_ID!],
                     sale.token as `0x${string}`,
-                    "token"
+                    "token",
                   )}
                   target={"_blank"}
                 >
                   <ExternalLinkIcon />
                 </Link>
               </chakra.p>
-              <chakra.p fontSize={'sm'}>
-                <Tag mr={1} verticalAlign={"top"} size="sm">Contract</Tag>
+              <chakra.p fontSize={"sm"}>
+                <Tag mr={1} verticalAlign={"top"} size="sm">
+                  Contract
+                </Tag>
                 {`${sale.id?.slice(0, 5)}...${sale.id?.slice(-4)}`}
                 <Link
                   ml={1}
                   href={getEtherscanLink(
                     CHAIN_NAMES[process.env.NEXT_PUBLIC_CHAIN_ID!],
                     sale.id as `0x${string}`,
-                    "address"
+                    "address",
                   )}
                   target={"_blank"}
                 >
@@ -279,10 +283,10 @@ export default function SaleTemplateV1({
               sale.minRaisedAmount ? getBigNumber(sale.minRaisedAmount) : Big(0)
             }
             targetTotalRaised={getBigNumber(
-              metaData.targetTotalRaised ? metaData.targetTotalRaised : 0
+              metaData.targetTotalRaised ? metaData.targetTotalRaised : 0,
             ).mul(Big(10).pow(raisedTokenDecimal))}
             maximumTotalRaised={getBigNumber(
-              metaData.maximumTotalRaised ? metaData.maximumTotalRaised : 0
+              metaData.maximumTotalRaised ? metaData.maximumTotalRaised : 0,
             ).mul(Big(10).pow(raisedTokenDecimal))}
             raisedTokenSymbol={raisedTokenSymbol}
             raisedTokenDecimal={raisedTokenDecimal}
@@ -367,7 +371,7 @@ export default function SaleTemplateV1({
                                     ? strVal
                                     : isNaN(val)
                                     ? 0
-                                    : val
+                                    : val,
                                 )
                               }
                             >

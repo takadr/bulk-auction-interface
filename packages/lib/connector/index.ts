@@ -1,8 +1,8 @@
-import { Chain, configureChains, createConfig, mainnet, sepolia } from 'wagmi';
+import { Chain, configureChains, createConfig, mainnet, sepolia } from "wagmi";
 import { goerli } from "wagmi/chains";
 import { alchemyProvider } from "wagmi/providers/alchemy";
 import { infuraProvider } from "wagmi/providers/infura";
-import { publicProvider } from 'wagmi/providers/public';
+import { publicProvider } from "wagmi/providers/public";
 
 import { CoinbaseWalletConnector } from "@wagmi/core/connectors/coinbaseWallet";
 import { InjectedConnector } from "@wagmi/core/connectors/injected";
@@ -24,10 +24,10 @@ const { chains, publicClient, webSocketPublicClient } = configureChains<Chain>(
   getSupportedChain(),
   [
     infuraProvider({ apiKey: process.env.NEXT_PUBLIC_INFURA_API_TOKEN! }),
-    alchemyProvider({ apiKey: process.env.NEXT_PUBLIC_ALCHEMY_API_KEY!}),
-    publicProvider()
+    alchemyProvider({ apiKey: process.env.NEXT_PUBLIC_ALCHEMY_API_KEY! }),
+    publicProvider(),
   ],
-)
+);
 
 const config: any = createConfig({
   autoConnect: true,
@@ -60,6 +60,6 @@ const config: any = createConfig({
   ],
   publicClient,
   webSocketPublicClient,
-})
+});
 
 export default config;

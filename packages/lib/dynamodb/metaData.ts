@@ -41,7 +41,7 @@ const dynamoDBItemsToMetaData = (item: any) => {
 
 export async function scanMetaData(
   lastEvaluatedKeyId?: string,
-  lastEvaluatedKeyCreatedAt?: string
+  lastEvaluatedKeyCreatedAt?: string,
 ): Promise<MetaData[] | undefined> {
   const command = new ScanCommand({
     TableName: process.env.AWS_DYNAMO_TABLE_NAME,
@@ -58,7 +58,7 @@ export async function scanMetaData(
 }
 
 export async function fetchMetaData(
-  saleId: string
+  saleId: string,
 ): Promise<MetaData | undefined> {
   const command = new GetItemCommand({
     TableName: process.env.AWS_DYNAMO_TABLE_NAME,
@@ -71,7 +71,7 @@ export async function fetchMetaData(
 }
 
 export async function batchFetchMetaData(
-  saleIds: string[]
+  saleIds: string[],
 ): Promise<MetaData[]> {
   const tableName = process.env.AWS_DYNAMO_TABLE_NAME as string;
   const command = new BatchGetItemCommand({
@@ -86,12 +86,12 @@ export async function batchFetchMetaData(
   const output = await dbClient.send(command);
   if (output.Responses == undefined) return [];
   return output.Responses[tableName].map((item: any) =>
-    dynamoDBItemsToMetaData(item)
+    dynamoDBItemsToMetaData(item),
   );
 }
 
 export async function addMetaData(
-  sale: MetaData
+  sale: MetaData,
 ): Promise<MetaData | undefined> {
   // TODO Take Minimum total raised into account
   // validateMetaData(auction, minRaisedAmount)
@@ -132,7 +132,7 @@ export async function addMetaData(
 }
 
 export async function updateSale(
-  sale: MetaData
+  sale: MetaData,
 ): Promise<MetaData | undefined> {
   const errors = validateMetaData(sale);
   if (Object.keys(errors).length > 0) {

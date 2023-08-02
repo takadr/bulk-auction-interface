@@ -41,7 +41,8 @@ export default function useApprove({
     BigInt(MaxUint256.toString()),
   ];
   const allowanceArgs: [`0x${string}`, `0x${string}`] = [owner, spender];
-  const isReady: boolean = !!targetAddress && !!owner && !!spender && !!chain && enabled;
+  const isReady: boolean =
+    !!targetAddress && !!owner && !!spender && !!chain && enabled;
 
   const prepareFn = usePrepareContractWrite({
     chainId: chain?.id,

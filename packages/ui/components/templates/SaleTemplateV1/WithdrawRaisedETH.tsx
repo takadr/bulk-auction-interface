@@ -72,7 +72,7 @@ export default function WithdrawRaisedETH({ sale, onSuccessConfirm }: Props) {
             ? tokenAmountFormat(
                 getBigNumber(balanceData.value.toString()),
                 18,
-                2
+                2,
               )
             : "-"}{" "}
           ETH

@@ -11,7 +11,7 @@ export function handleReceived(event: ReceivedEvent): void {
   const totalRaised = sale.totalRaised.plus(event.params.amount);
 
   const contribution = new Contribution(
-    event.transaction.hash.toHex() + "-" + event.logIndex.toString()
+    event.transaction.hash.toHex() + "-" + event.logIndex.toString(),
   );
   contribution.amount = event.params.amount;
   contribution.from = event.params.account.toHex();
@@ -32,7 +32,7 @@ export function handleClaimed(event: ClaimedEvent): void {
   if (sale === null) return;
 
   const claim = new Claim(
-    event.transaction.hash.toHex() + "-" + event.logIndex.toString()
+    event.transaction.hash.toHex() + "-" + event.logIndex.toString(),
   );
   claim.contributor = event.params.contributor.toHex();
   claim.recipient = event.params.recipient.toHex();

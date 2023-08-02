@@ -11,7 +11,7 @@ export function add(v1: BigNumberValueType, v2: BigNumberValueType): Big {
 }
 export function addToNum(
   v1: BigNumberValueType,
-  v2: BigNumberValueType
+  v2: BigNumberValueType,
 ): number {
   return add(v1, v2).toNumber();
 }
@@ -23,7 +23,7 @@ export function subtract(v1: BigNumberValueType, v2: BigNumberValueType): Big {
 }
 export function subtractToNum(
   v1: BigNumberValueType,
-  v2: BigNumberValueType
+  v2: BigNumberValueType,
 ): number {
   return subtract(v1, v2).toNumber();
 }
@@ -35,7 +35,7 @@ export function multiply(v1: BigNumberValueType, v2: BigNumberValueType): Big {
 }
 export function multiplyToNum(
   v1: BigNumberValueType,
-  v2: BigNumberValueType
+  v2: BigNumberValueType,
 ): number {
   return multiply(v1, v2).toNumber();
 }
@@ -47,7 +47,7 @@ export function divide(v1: BigNumberValueType, v2: BigNumberValueType): Big {
 }
 export function divideToNum(
   v1: BigNumberValueType,
-  v2: BigNumberValueType
+  v2: BigNumberValueType,
 ): number {
   return divide(v1, v2).toNumber();
 }

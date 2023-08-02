@@ -26,7 +26,8 @@ export default function ClaimButton({
   // Local state to change the claim button state after claim
   const [claimSucceeded, setClaimSucceeded] = useState<boolean>(false);
   // Local state to show that it is waiting for updateed subgraph data after the claim tx is confirmed
-  const [waitForSubgraphUpdate, setWaitForSubgraphUpdate] = useState<boolean>(false);
+  const [waitForSubgraphUpdate, setWaitForSubgraphUpdate] =
+    useState<boolean>(false);
 
   const {
     prepareFn: claimPrepareFn,
@@ -55,29 +56,33 @@ export default function ClaimButton({
       setTimeout(() => {
         mutateIsClaimed();
         setWaitForSubgraphUpdate(false);
-      }, 5000)
+      }, 5000);
     },
-    claimed: isClaimed
+    claimed: isClaimed,
   });
   const expectedAmount = getExpectedAmount(
     myContribution,
     Big(0),
     sale.totalRaised,
-    sale.allocatedAmount
+    sale.allocatedAmount,
   );
   const toast = useToast({ position: "top-right", isClosable: true });
   const { t } = useLocale();
   return (
     <Button
       variant={"solid"}
-      isDisabled={(isClaimed || claimSucceeded) || !claimWriteFn.writeAsync}
-      isLoading={claimWriteFn?.isLoading || claimWaitFn?.isLoading || waitForSubgraphUpdate}
+      isDisabled={isClaimed || claimSucceeded || !claimWriteFn.writeAsync}
+      isLoading={
+        claimWriteFn?.isLoading ||
+        claimWaitFn?.isLoading ||
+        waitForSubgraphUpdate
+      }
       {...buttonProps}
       onClick={async () => {
         await claimWriteFn.writeAsync();
       }}
     >
-      {(isClaimed || claimSucceeded)
+      {isClaimed || claimSucceeded
         ? t("CLAIMED")
         : expectedAmount.eq(0) && myContribution.gt(0)
         ? t("CLAIM_REFUND")

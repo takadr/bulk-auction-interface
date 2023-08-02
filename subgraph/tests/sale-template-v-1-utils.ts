@@ -7,17 +7,20 @@ import {
 
 export function createReceivedEvent(
   account: Address,
-  amount: BigInt
+  amount: BigInt,
 ): Received {
   let receivedEvent = changetype<Received>(newMockEvent());
 
   receivedEvent.parameters = new Array();
 
   receivedEvent.parameters.push(
-    new ethereum.EventParam("account", ethereum.Value.fromAddress(account))
+    new ethereum.EventParam("account", ethereum.Value.fromAddress(account)),
   );
   receivedEvent.parameters.push(
-    new ethereum.EventParam("amount", ethereum.Value.fromUnsignedBigInt(amount))
+    new ethereum.EventParam(
+      "amount",
+      ethereum.Value.fromUnsignedBigInt(amount),
+    ),
   );
 
   return receivedEvent;
@@ -27,7 +30,7 @@ export function createClaimedEvent(
   contributor: Address,
   recipient: Address,
   userShare: BigInt,
-  allocation: BigInt
+  allocation: BigInt,
 ): Claimed {
   let claimedEvent = changetype<Claimed>(newMockEvent());
 
@@ -36,23 +39,23 @@ export function createClaimedEvent(
   claimedEvent.parameters.push(
     new ethereum.EventParam(
       "contributor",
-      ethereum.Value.fromAddress(contributor)
-    )
+      ethereum.Value.fromAddress(contributor),
+    ),
   );
   claimedEvent.parameters.push(
-    new ethereum.EventParam("recipient", ethereum.Value.fromAddress(recipient))
+    new ethereum.EventParam("recipient", ethereum.Value.fromAddress(recipient)),
   );
   claimedEvent.parameters.push(
     new ethereum.EventParam(
       "userShare",
-      ethereum.Value.fromUnsignedBigInt(userShare)
-    )
+      ethereum.Value.fromUnsignedBigInt(userShare),
+    ),
   );
   claimedEvent.parameters.push(
     new ethereum.EventParam(
       "allocation",
-      ethereum.Value.fromUnsignedBigInt(allocation)
-    )
+      ethereum.Value.fromUnsignedBigInt(allocation),
+    ),
   );
 
   return claimedEvent;

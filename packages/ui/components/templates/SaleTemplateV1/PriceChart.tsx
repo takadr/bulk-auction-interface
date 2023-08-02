@@ -29,7 +29,7 @@ ChartJS.register(
   Filler,
   Title,
   Tooltip,
-  Legend
+  Legend,
 );
 
 export default function PriceChart({ sale }: { sale: Sale }) {
@@ -75,7 +75,7 @@ export default function PriceChart({ sale }: { sale: Sale }) {
           sale.minRaisedAmount,
           sale.allocatedAmount,
           contribution.totalRaised,
-          Number(sale.tokenDecimals)
+          Number(sale.tokenDecimals),
         ).toNumber(),
       };
     });
@@ -85,7 +85,7 @@ export default function PriceChart({ sale }: { sale: Sale }) {
       y: getMinTokenPriceAgainstETH(
         sale.minRaisedAmount,
         sale.allocatedAmount,
-        Number(sale.tokenDecimals)
+        Number(sale.tokenDecimals),
       ).toNumber(),
     });
     // Price now
@@ -96,7 +96,7 @@ export default function PriceChart({ sale }: { sale: Sale }) {
         sale.minRaisedAmount,
         sale.allocatedAmount,
         sale.totalRaised,
-        Number(sale.tokenDecimals)
+        Number(sale.tokenDecimals),
       ).toNumber(),
     });
     newData.sort((a, b) => a.x - b.x);
@@ -113,7 +113,7 @@ export default function PriceChart({ sale }: { sale: Sale }) {
             sale.minRaisedAmount,
             sale.allocatedAmount,
             sale.totalRaised,
-            Number(sale.tokenDecimals)
+            Number(sale.tokenDecimals),
           ).toFixed(8)} ETH`,
           font: { weight: "bold", size: 18 },
           color: "white",

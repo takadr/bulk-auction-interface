@@ -33,14 +33,14 @@ describe("Describe entity assertions", () => {
   beforeAll(() => {
     // 1. Deploy sale
     let templateName = Bytes.fromHexString(
-      "0x42756c6b73616c65563100000000000000000000000000000000000000000000"
+      "0x42756c6b73616c65563100000000000000000000000000000000000000000000",
     );
     let deployedAddr = Address.fromString(
-      "0xa16081f360e3847006db660bae1c6d1b2e17ec2a"
+      "0xa16081f360e3847006db660bae1c6d1b2e17ec2a",
     );
     let tokenAddr = Address.fromString(USDT_ADDRESS);
     let owner = Address.fromString(
-      "0x0000000000000000000000000000000000000003"
+      "0x0000000000000000000000000000000000000003",
     );
     let allocatedAmount = BigInt.fromI32(234);
     let startingAt = BigInt.fromI32(234);
@@ -55,7 +55,7 @@ describe("Describe entity assertions", () => {
       allocatedAmount,
       startingAt,
       eventDuration,
-      minRaisedAmount
+      minRaisedAmount,
     );
 
     // Mock function calls
@@ -75,7 +75,7 @@ describe("Describe entity assertions", () => {
 
     // 2. Receive fund from sender
     let sender = Address.fromString(
-      "0x0000000000000000000000000000000000000004"
+      "0x0000000000000000000000000000000000000004",
     );
     let amount = BigInt.fromI32(234);
     let newReceivedEvent = createReceivedEvent(sender, amount);
@@ -92,7 +92,7 @@ describe("Describe entity assertions", () => {
       "Sale",
       "0xa16081f360e3847006db660bae1c6d1b2e17ec2a",
       "totalRaised",
-      "234"
+      "234",
     );
 
     assert.entityCount("Contribution", 1);
@@ -102,10 +102,10 @@ describe("Describe entity assertions", () => {
 
   test("Claimed created and stored", () => {
     let contributor = Address.fromString(
-      "0x0000000000000000000000000000000000000010"
+      "0x0000000000000000000000000000000000000010",
     );
     let recipient = Address.fromString(
-      "0x0000000000000000000000000000000000000011"
+      "0x0000000000000000000000000000000000000011",
     );
     let userShare = BigInt.fromI32(234);
     let allocation = BigInt.fromI32(345);
@@ -113,7 +113,7 @@ describe("Describe entity assertions", () => {
       contributor,
       recipient,
       userShare,
-      allocation
+      allocation,
     );
     handleClaimed(newClaimedEvent);
 
