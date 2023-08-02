@@ -2,7 +2,7 @@ import { useContractReads } from "wagmi";
 import SaleTemplateV1ABI from "lib/constants/abis/SaleTemplateV1.json";
 import Big, { getBigNumber } from "lib/utils/bignumber";
 import { Sale } from "lib/types/Sale";
-import { ContractFunctionConfig, Abi } from "viem";
+import { Abi } from "viem";
 
 export default function useRaised(
   sale: Sale,
@@ -19,21 +19,15 @@ export default function useRaised(
     abi: SaleTemplateV1ABI as Abi,
   };
 
-  const { data, isError, refetch, isLoading } = useContractReads<
-    ContractFunctionConfig<Abi, string>[],
-    boolean,
-    any
-  >({
+  const { data, isError, refetch, isLoading } = useContractReads({
     contracts: [
       {
         ...saleContractConfig,
         functionName: "raised",
-        // TODO
+        // TODO Specify Type
         // @ts-ignore
         args: [address],
       },
-      // TODO
-      // @ts-ignore
       {
         ...saleContractConfig,
         functionName: "totalRaised",
