@@ -15,6 +15,7 @@ import FactoryABI from "lib/constants/abis/Factory.json";
 import { SALE_TEMPLATE_V1_NAME } from "lib/constants";
 import "rsuite/dist/rsuite-no-reset.min.css";
 import "assets/css/rsuite-override.css";
+import { isAddress } from "viem";
 
 const now = new Date().getTime();
 export default function useSaleForm({
@@ -132,12 +133,17 @@ export default function useSaleForm({
     functionName: "balanceOf",
     args: [address],
     watch: true,
+    enabled: !!debouncedSale.token && isAddress(debouncedSale.token)
   });
+
   const {
     data: tokenData,
     isLoading: tokenLoading,
     isFetched: tokenFetched,
-  } = useToken({ address: debouncedSale.token as `0x${string}` });
+  } = useToken({ 
+    address: debouncedSale.token as `0x${string}`,
+    enabled: !!debouncedSale.token && isAddress(debouncedSale.token)
+  });
   const prepareFn = usePrepareContractWrite({
     address: process.env.NEXT_PUBLIC_FACTORY_ADDRESS as `0x${string}`, //factory
     abi: FactoryABI,
@@ -154,6 +160,7 @@ export default function useSaleForm({
       debouncedSale.eventDuration,
       multiply(debouncedSale.minRaisedAmount, Big(10).pow(18)).toString(), // ETH
     ],
+    enabled: !!debouncedSale.token && isAddress(debouncedSale.token)
   });
 
   const writeFn = useContractWrite({
@@ -189,6 +196,7 @@ export default function useSaleForm({
       onApprovalTxConfirmed && onApprovalTxConfirmed(data);
       prepareFn.refetch();
     },
+    enabled: !!debouncedSale.token && isAddress(debouncedSale.token)
   });
 
   return {

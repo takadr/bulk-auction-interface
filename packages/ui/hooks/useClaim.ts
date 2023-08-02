@@ -11,18 +11,20 @@ export default function useClaim({
   address,
   onSuccessWrite,
   onSuccessConfirm,
+  claimed,
 }: {
   targetAddress: `0x${string}` | null;
   address: `0x${string}` | undefined;
   onSuccessWrite?: (data: any) => void;
   onSuccessConfirm?: (data: any) => void;
+  claimed: boolean;
 }): {
   prepareFn: any;
   writeFn: any;
   waitFn: ReturnType<typeof useWaitForTransaction>;
 } {
   const { chain } = useNetwork();
-  const enabled: boolean = !!targetAddress && !!address && !!chain;
+  const enabled: boolean = !!targetAddress && !!address && !!chain && !claimed;
 
   const prepareFn = usePrepareContractWrite({
     chainId: chain?.id,

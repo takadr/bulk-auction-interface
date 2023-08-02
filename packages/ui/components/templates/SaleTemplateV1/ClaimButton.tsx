@@ -57,6 +57,7 @@ export default function ClaimButton({
         setWaitForSubgraphUpdate(false);
       }, 5000)
     },
+    claimed: isClaimed
   });
   const expectedAmount = getExpectedAmount(
     myContribution,

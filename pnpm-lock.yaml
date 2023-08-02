@@ -159,6 +159,9 @@ importers:
       eslint-config-custom:
         specifier: workspace:*
         version: link:../../packages/eslint-config-custom
+      ethers:
+        specifier: ^6.6.7
+        version: 6.6.7
       start-server-and-test:
         specifier: ^2.0.0
         version: 2.0.0
@@ -215,6 +218,9 @@ importers:
       chartjs-adapter-moment:
         specifier: ^1.0.1
         version: 1.0.1(chart.js@4.3.2)(moment@2.29.4)
+      ethers:
+        specifier: ^6.6.7
+        version: 6.6.7
       lib:
         specifier: workspace:*
         version: link:../lib

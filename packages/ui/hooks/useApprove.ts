@@ -16,6 +16,7 @@ export default function useApprove({
   onErrorWrite,
   onSuccessConfirm,
   onErrorConfirm,
+  enabled,
 }: {
   targetAddress: `0x${string}` | null;
   owner: `0x${string}`;
@@ -24,6 +25,7 @@ export default function useApprove({
   onErrorWrite?: (e: Error) => void;
   onSuccessConfirm?: (data: any) => void;
   onErrorConfirm?: (e: Error) => void;
+  enabled: boolean;
 }): {
   prepareFn: any;
   writeFn: any;
@@ -39,7 +41,7 @@ export default function useApprove({
     BigInt(MaxUint256.toString()),
   ];
   const allowanceArgs: [`0x${string}`, `0x${string}`] = [owner, spender];
-  const enabled: boolean = !!targetAddress && !!owner && !!spender && !!chain;
+  const isReady: boolean = !!targetAddress && !!owner && !!spender && !!chain && enabled;
 
   const prepareFn = usePrepareContractWrite({
     chainId: chain?.id,
@@ -47,7 +49,7 @@ export default function useApprove({
     abi: erc20ABI,
     functionName: "approve",
     args: approveArgs,
-    enabled,
+    enabled: isReady,
   });
 
   const writeFn = useContractWrite({
