@@ -17,17 +17,24 @@ export default function ProvidersList({
   onClose,
 }: {
   isOpen: boolean;
-  onConnectSuccess?: ({address, chainId}: {address: `0x${string}`, chainId: number}) => void;
+  onConnectSuccess?: ({
+    address,
+    chainId,
+  }: {
+    address: `0x${string}`;
+    chainId: number;
+  }) => void;
   onClose: () => void;
 }) {
   const toast = useToast({ position: "top-right", isClosable: true });
   const { connect, connectors, error, isLoading, pendingConnector } =
     useConnect({
       onSuccess: (data) => {
-        onConnectSuccess && onConnectSuccess({
-          address: data.account,
-          chainId: data.chain.id
-        });
+        onConnectSuccess &&
+          onConnectSuccess({
+            address: data.account,
+            chainId: data.chain.id,
+          });
       },
       onError: (error: Error) => {
         disconnect();

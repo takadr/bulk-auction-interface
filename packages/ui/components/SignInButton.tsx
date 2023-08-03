@@ -25,17 +25,21 @@ export default function SignInButton({
   const { chain } = useNetwork();
   const { signMessageAsync } = useSignMessage();
   const { t } = useLocale();
-  
+
   const fetchNonce = async () => {
     const nonceRes = await fetch("/api/nonce");
     const nonce = await nonceRes.text();
     return nonce;
   };
 
-  const signIn = async ({title, address, chainId}:{
-    title?:string, 
-    address?:string, 
-    chainId?:number
+  const signIn = async ({
+    title,
+    address,
+    chainId,
+  }: {
+    title?: string;
+    address?: string;
+    chainId?: number;
   }) => {
     try {
       const chainId = chain?.id;
@@ -83,17 +87,19 @@ export default function SignInButton({
         colorScheme={"green"}
         isLoading={state.loading}
         onClick={
-          !address || !chain?.id ? () => {
-            providersListDisclosure.onOpen();
-          } : () => { 
-            signIn({
-              title: buttonProps.title
-                ? buttonProps.title
-                : t("SIGN_IN_WITH_ETHEREUM"),
-              address,
-              chainId: chain?.id
-            })
-          }
+          !address || !chain?.id
+            ? () => {
+                providersListDisclosure.onOpen();
+              }
+            : () => {
+                signIn({
+                  title: buttonProps.title
+                    ? buttonProps.title
+                    : t("SIGN_IN_WITH_ETHEREUM"),
+                  address,
+                  chainId: chain?.id,
+                });
+              }
         }
       >
         {text ? text : t("SIGN_IN_WITH_ETHEREUM")}
@@ -102,13 +108,19 @@ export default function SignInButton({
         <ProvidersList
           isOpen={providersListDisclosure.isOpen}
           onClose={providersListDisclosure.onClose}
-          onConnectSuccess={async({address, chainId}:{address: `0x${string}`, chainId: number}) => {
+          onConnectSuccess={async ({
+            address,
+            chainId,
+          }: {
+            address: `0x${string}`;
+            chainId: number;
+          }) => {
             await signIn({
               title: buttonProps.title
                 ? buttonProps.title
                 : t("SIGN_IN_WITH_ETHEREUM"),
               address,
-              chainId
+              chainId,
             });
             providersListDisclosure.onClose();
           }}
