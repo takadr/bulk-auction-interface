@@ -2,18 +2,8 @@ import { useState, useEffect, useRef } from "react";
 import { useAccount, useNetwork, useSignMessage } from "wagmi";
 import { SiweMessage } from "siwe";
 import { Button, ButtonProps, useDisclosure } from "@chakra-ui/react";
-import { useAtom } from "jotai";
-import { continueSignInAtom, signInTriggerIdAtom } from "lib/store";
 import { useLocale } from "../hooks/useLocale";
 import ProvidersList from "./ProvidersList";
-
-function usePrevious(value: any) {
-  const ref = useRef(null);
-  useEffect(() => {
-    ref.current = value;
-  });
-  return ref.current;
-}
 
 export default function SignInButton({
   onSuccess,
@@ -29,54 +19,40 @@ export default function SignInButton({
     loading?: boolean;
   }>({});
   const providersListDisclosure = useDisclosure();
-  const [continueSignIn, setContinueSignIn] = useAtom(continueSignInAtom);
-  const [signInTriggerId, setSignInTriggerId] = useAtom(signInTriggerIdAtom);
-  const fetchNonce = async () => {
-    const nonceRes = await fetch("/api/nonce");
-    const nonce = await nonceRes.text();
-    return nonce;
-  };
   const { address, isConnected } = useAccount({
     onConnect: async ({ address, connector }) => {},
   });
   const { chain } = useNetwork();
   const { signMessageAsync } = useSignMessage();
   const { t } = useLocale();
-  const isFirstRender = useRef(true);
+  
+  const fetchNonce = async () => {
+    const nonceRes = await fetch("/api/nonce");
+    const nonce = await nonceRes.text();
+    return nonce;
+  };
 
-  useEffect(() => {
-    if (isFirstRender.current) {
-      isFirstRender.current = false;
-      return;
-    }
-    if (!!signInTriggerId && signInTriggerId !== buttonProps.id) return;
-
-    !prevIsConnected && isConnected && continueSignIn && signIn();
-  }, [signInTriggerId]);
-  const prevIsConnected = usePrevious(isConnected);
-
-  const signIn = async () => {
+  const signIn = async ({title, address, chainId}:{
+    title?:string, 
+    address?:string, 
+    chainId?:number
+  }) => {
     try {
       const chainId = chain?.id;
-      if (!address || !chainId) {
-        setContinueSignIn(true);
-        return providersListDisclosure.onOpen();
-      }
-      setSignInTriggerId(buttonProps.id);
       setState((x) => ({ ...x, loading: true }));
+
       // Create SIWE message with pre-fetched nonce and sign with wallet
       const _nonce = await fetchNonce();
       const message = new SiweMessage({
         domain: window.location.host,
         address: address,
-        statement: buttonProps.title
-          ? buttonProps.title
-          : t("SIGN_IN_WITH_ETHEREUM"),
+        statement: title,
         uri: window.location.origin,
         version: "1",
         chainId,
         nonce: _nonce,
       });
+
       const signature = await signMessageAsync({
         message: message.prepareMessage(),
       });
@@ -91,11 +67,9 @@ export default function SignInButton({
       });
       if (!verifyRes.ok) throw new Error("Error verifying message");
 
-      setSignInTriggerId(undefined);
       setState((x) => ({ ...x, loading: false }));
       onSuccess({ address: address as `0x${string}` });
     } catch (error) {
-      setSignInTriggerId(undefined);
       setState((x) => ({ ...x, loading: false }));
       onError({ error: error as Error });
     }
@@ -108,18 +82,35 @@ export default function SignInButton({
         variant={"solid"}
         colorScheme={"green"}
         isLoading={state.loading}
-        onClick={signIn}
+        onClick={
+          !address || !chain?.id ? () => {
+            providersListDisclosure.onOpen();
+          } : () => { 
+            signIn({
+              title: buttonProps.title
+                ? buttonProps.title
+                : t("SIGN_IN_WITH_ETHEREUM"),
+              address,
+              chainId: chain?.id
+            })
+          }
+        }
       >
         {text ? text : t("SIGN_IN_WITH_ETHEREUM")}
       </Button>
       {!isConnected && (
         <ProvidersList
           isOpen={providersListDisclosure.isOpen}
-          onClose={() => {
-            setTimeout(() => {
-              setContinueSignIn(false);
-              providersListDisclosure.onClose();
-            }, 200);
+          onClose={providersListDisclosure.onClose}
+          onConnectSuccess={async({address, chainId}:{address: `0x${string}`, chainId: number}) => {
+            await signIn({
+              title: buttonProps.title
+                ? buttonProps.title
+                : t("SIGN_IN_WITH_ETHEREUM"),
+              address,
+              chainId
+            });
+            providersListDisclosure.onClose();
           }}
         />
       )}

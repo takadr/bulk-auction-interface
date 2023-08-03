@@ -20,6 +20,7 @@ export default function ConnectButton(props: ButtonProps) {
       <ProvidersList
         isOpen={providersListDisclosure.isOpen}
         onClose={providersListDisclosure.onClose}
+        onConnectSuccess={providersListDisclosure.onClose}
       />
     </>
   );

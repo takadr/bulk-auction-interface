@@ -13,16 +13,21 @@ import { useLocale } from "../hooks/useLocale";
 
 export default function ProvidersList({
   isOpen,
+  onConnectSuccess,
   onClose,
 }: {
   isOpen: boolean;
+  onConnectSuccess?: ({address, chainId}: {address: `0x${string}`, chainId: number}) => void;
   onClose: () => void;
 }) {
   const toast = useToast({ position: "top-right", isClosable: true });
   const { connect, connectors, error, isLoading, pendingConnector } =
     useConnect({
-      onSuccess: () => {
-        onClose();
+      onSuccess: (data) => {
+        onConnectSuccess && onConnectSuccess({
+          address: data.account,
+          chainId: data.chain.id
+        });
       },
       onError: (error: Error) => {
         disconnect();
