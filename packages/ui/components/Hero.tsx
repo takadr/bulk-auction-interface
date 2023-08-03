@@ -76,6 +76,7 @@ export default function Hero({
         <HStack spacing={4}>
           {!currentUser && (
             <SignInButton
+              id="sign-in-with-ethereum-hero"
               size={"lg"}
               onSuccess={async (args: any) => {
                 mutate && (await mutate());

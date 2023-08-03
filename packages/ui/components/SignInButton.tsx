@@ -1,7 +1,9 @@
 import { useState, useEffect, useRef } from "react";
 import { useAccount, useNetwork, useSignMessage } from "wagmi";
 import { SiweMessage } from "siwe";
-import { Button, ButtonProps, useDisclosure, chakra } from "@chakra-ui/react";
+import { Button, ButtonProps, useDisclosure } from "@chakra-ui/react";
+import { useAtom } from "jotai";
+import { continueSignInAtom, signInTriggerIdAtom } from "lib/store";
 import { useLocale } from "../hooks/useLocale";
 import ProvidersList from "./ProvidersList";
 
@@ -25,7 +27,8 @@ export default function SignInButton({
     loading?: boolean;
   }>({});
   const providersListDisclosure = useDisclosure();
-  const [continueSignIn, setContinueSignIn] = useState(false);
+  const [continueSignIn, setContinueSignIn] = useAtom(continueSignInAtom);
+  const [signInTriggerId, setSignInTriggerId] = useAtom(signInTriggerIdAtom);
   const fetchNonce = async () => {
     const nonceRes = await fetch("/api/nonce");
     const nonce = await nonceRes.text();
@@ -37,10 +40,17 @@ export default function SignInButton({
   const { chain } = useNetwork();
   const { signMessageAsync } = useSignMessage();
   const { t } = useLocale();
+  const isFirstRender = useRef(true);
 
   useEffect(() => {
+    if (isFirstRender.current) {
+      isFirstRender.current = false;
+      return;
+    }
+    if(!!signInTriggerId && signInTriggerId !== buttonProps.id) return;
+
     !prevIsConnected && isConnected && continueSignIn && signIn();
-  }, [isConnected]);
+  }, [signInTriggerId]);
   const prevIsConnected = usePrevious(isConnected);
 
   const signIn = async () => {
@@ -50,7 +60,7 @@ export default function SignInButton({
         setContinueSignIn(true);
         return providersListDisclosure.onOpen();
       }
-
+      setSignInTriggerId(buttonProps.id);
       setState((x) => ({ ...x, loading: true }));
       // Create SIWE message with pre-fetched nonce and sign with wallet
       const _nonce = await fetchNonce();
@@ -79,9 +89,11 @@ export default function SignInButton({
       });
       if (!verifyRes.ok) throw new Error("Error verifying message");
 
+      setSignInTriggerId(undefined);
       setState((x) => ({ ...x, loading: false }));
       onSuccess({ address: address as `0x${string}` });
     } catch (error) {
+      setSignInTriggerId(undefined);
       setState((x) => ({ ...x, loading: false }));
       onError({ error: error as Error });
     }
@@ -96,11 +108,7 @@ export default function SignInButton({
         isLoading={state.loading}
         onClick={signIn}
       >
-        Sign In
-        <chakra.span display={{ base: "none", md: "inline" }} ml={1}>
-          {" "}
-          with Ethereum
-        </chakra.span>
+        { t("SIGN_IN_WITH_ETHEREUM") }
       </Button>
       {!isConnected && (
         <ProvidersList

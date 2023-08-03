@@ -70,6 +70,7 @@ const Header: FC<HeaderProps> = ({ title }) => {
           onClick={providersListDisclosure.onOpen}
           variant={"outline"}
           size={{ base: "xs", md: "sm" }}
+          w={"full"}
         >
           {t("CONNECT_WALLET")}
         </Button>
@@ -133,7 +134,7 @@ const Header: FC<HeaderProps> = ({ title }) => {
                 <Tag size={"sm"}>
                   {chain?.unsupported ? "Unsupported Chain" : chain?.name}
                 </Tag>
-                {currentUser && <Tag size={"sm"}>Signed in</Tag>}
+                {currentUser && <Tag size={"sm"} ml={1}>Signed in</Tag>}
               </HStack>
               {isConnected && currentUser && (
                 <MenuItem
@@ -170,9 +171,38 @@ const Header: FC<HeaderProps> = ({ title }) => {
                   {t("SIGN_OUT_AND_DISCONNECT")}
                 </MenuItem>
               ) : (
-                <MenuItem onClick={() => disconnect()}>
-                  {t("DISCONNECT")}
-                </MenuItem>
+                <>
+                  <MenuItem onClick={() => disconnect()}>
+                    {t("DISCONNECT")}
+                  </MenuItem>
+                  <Flex align="center" px="2" mt="2">
+                    <Divider />
+                    <Text padding="2" color={"gray.400"} fontSize={"xs"} whiteSpace={"nowrap"}>{t("MANAGE_AUCTION")}</Text>
+                    <Divider />
+                  </Flex>
+                  <chakra.div px={3} py={1}>
+                    <SignInButton
+                      id="sign-in-with-ethereum-connection"
+                      size={{ base: "xs", md: "sm" }}
+                      w="full"
+                      onSuccess={async () => {
+                        mutate && (await mutate());
+                        Router.push("/dashboard");
+                      }}
+                      onError={(args) => {
+                        if ("error" in args) {
+                          const error = args.error;
+                          toast({
+                            description: error.message,
+                            status: "error",
+                            duration: 5000,
+                          });
+                        }
+                      }}
+                      // nonce={nonce}
+                    />
+                  </chakra.div>
+                </>
               )}
             </MenuList>
           </HStack>
@@ -228,34 +258,64 @@ const Header: FC<HeaderProps> = ({ title }) => {
             )}
             <Button
               variant="ghost"
-              display={{ base: "none", md: "block" }}
-              size={"md"}
+              // display={{ base: "none", md: "block" }}
+              size={{base: "sm", md: "md"}}
               onClick={() => Router.push("/sales")}
             >
               {t("SALES")}
             </Button>
-            {!currentUser && (
-              <SignInButton
-                id="sign-in-with-ethereum"
-                size={{ base: "xs", md: "sm" }}
-                onSuccess={async () => {
-                  mutate && (await mutate());
-                  Router.push("/dashboard");
-                }}
-                onError={(args) => {
-                  if ("error" in args) {
-                    const error = args.error;
-                    toast({
-                      description: error.message,
-                      status: "error",
-                      duration: 5000,
-                    });
-                  }
-                }}
-                // nonce={nonce}
-              />
-            )}
-            {isConnected ? connectedMenu() : noConnectedMenu()}
+
+            {
+              !currentUser && !isConnected &&
+              <Menu>
+                <HStack spacing={1}>
+                  <MenuButton as={Button} size={{base: "sm", md: "md"}}>
+                    <HStack>
+                      <Text fontSize={{base: "xs", md: "sm"}} id="account">
+                        {t("CONNECT_WALLET")}
+                      </Text>
+                      <ChevronDownIcon />
+                    </HStack>
+                  </MenuButton>
+                  <MenuList zIndex={101}>
+                    <Flex align="center" px="2">
+                      <Divider />
+                      <Text p="2" color={"gray.400"} fontSize={"xs"} whiteSpace={"nowrap"}>{t("JOIN_AUCTION")}</Text>
+                      <Divider />
+                    </Flex>
+                    <chakra.div px={3} py={1}>{noConnectedMenu()}</chakra.div>
+                    <Flex align="center" px="2" mt="2">
+                      <Divider />
+                      <Text padding="2" color={"gray.400"} fontSize={"xs"} whiteSpace={"nowrap"}>{t("MANAGE_AUCTION")}</Text>
+                      <Divider />
+                    </Flex>
+                    <chakra.div px={3} py={1}>
+                      <SignInButton
+                        id="sign-in-with-ethereum-header-no-connection"
+                        size={{ base: "xs", md: "sm" }}
+                        w="full"
+                        onSuccess={async () => {
+                          mutate && (await mutate());
+                          Router.push("/dashboard");
+                        }}
+                        onError={(args) => {
+                          if ("error" in args) {
+                            const error = args.error;
+                            toast({
+                              description: error.message,
+                              status: "error",
+                              duration: 5000,
+                            });
+                          }
+                        }}
+                        // nonce={nonce}
+                      />
+                    </chakra.div>
+                  </MenuList>
+                </HStack>
+              </Menu>
+            }
+            {isConnected && connectedMenu()}
           </HStack>
         </Flex>
       </Container>

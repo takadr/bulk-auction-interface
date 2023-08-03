@@ -119,4 +119,7 @@ export default {
   CONFIRMATION: "確認",
   ACHIEVED: "達成しました 🎉",
   PRICE_AGAINST_ETH: "ETH建て価格",
+  JOIN_AUCTION: "オークションに参加する",
+  MANAGE_AUCTION: "オークションを管理する",
+  CREATE_AUCTION: "オークションを作成する"
 };
