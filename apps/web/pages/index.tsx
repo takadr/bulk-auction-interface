@@ -66,7 +66,7 @@ export default function Web() {
           )}
         </Stack>
         <Flex alignItems={"center"} justifyContent={"center"} pb={8}>
-          <Button size={"lg"} onClick={() => Router.push("/sales")}>
+          <Button size={"lg"} onClick={() => Router.push("/auctions")}>
             {t("VIEW_ALL_SALES")}
           </Button>
         </Flex>

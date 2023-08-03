@@ -95,7 +95,7 @@ export default function Hero({
               }}
             />
           )}
-          <Button size={"lg"} onClick={() => Router.push("/sales")}>
+          <Button size={"lg"} onClick={() => Router.push("/auctions")}>
             {t("JOIN_AUCTION")}
           </Button>
         </HStack>

@@ -124,7 +124,7 @@ export default function SaleCard({
           <Flex flexDirection={{ base: "column", md: "row" }}>
             <chakra.div flex={10} pr={4}>
               <Heading size="lg">
-                <Link _hover={{ opacity: 0.75 }} href={`/sales/${sale.id}`}>
+                <Link _hover={{ opacity: 0.75 }} href={`/auctions/${sale.id}`}>
                   {data?.metaData?.title
                     ? data?.metaData?.title
                     : "Unnamed Sale"}

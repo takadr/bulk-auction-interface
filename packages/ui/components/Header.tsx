@@ -124,7 +124,7 @@ const Header: FC<HeaderProps> = ({ title }) => {
               )}
               <MenuItem
                 display={{ base: "block", md: "none" }}
-                onClick={() => Router.push("/sales")}
+                onClick={() => Router.push("/auctions")}
               >
                 {t("VIEW_ALL_SALES")}
               </MenuItem>
@@ -238,7 +238,7 @@ const Header: FC<HeaderProps> = ({ title }) => {
               variant="ghost"
               display={{ base: isConnected ? "none" : "block", md: "block" }}
               size={{base: "xs", md: "sm"}}
-              onClick={() => Router.push("/sales")}
+              onClick={() => Router.push("/auctions")}
             >
               {t("VIEW_ALL_SALES")}
             </Button>
