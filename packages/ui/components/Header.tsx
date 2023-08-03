@@ -148,7 +148,7 @@ const Header: FC<HeaderProps> = ({ title }) => {
                 display={{ base: "block", md: "none" }}
                 onClick={() => Router.push("/sales")}
               >
-                {t("SALES")}
+                {t("VIEW_ALL_SALES")}
               </MenuItem>
               <Divider display={{ base: "block", md: "none" }} />
               {currentUser ? (
@@ -258,11 +258,11 @@ const Header: FC<HeaderProps> = ({ title }) => {
             )}
             <Button
               variant="ghost"
-              // display={{ base: "none", md: "block" }}
-              size={{base: "sm", md: "md"}}
+              display={{ base: isConnected ? "none" : "block", md: "block" }}
+              size={{base: "xs", md: "sm"}}
               onClick={() => Router.push("/sales")}
             >
-              {t("SALES")}
+              {t("VIEW_ALL_SALES")}
             </Button>
 
             {

@@ -18,10 +18,12 @@ function usePrevious(value: any) {
 export default function SignInButton({
   onSuccess,
   onError,
+  text,
   ...buttonProps
 }: {
   onSuccess: (args: { address: string }) => void;
   onError: (args: { error: Error }) => void;
+  text?: string;
 } & ButtonProps) {
   const [state, setState] = useState<{
     loading?: boolean;
@@ -108,7 +110,7 @@ export default function SignInButton({
         isLoading={state.loading}
         onClick={signIn}
       >
-        { t("SIGN_IN_WITH_ETHEREUM") }
+        { text ? text : t("SIGN_IN_WITH_ETHEREUM") }
       </Button>
       {!isConnected && (
         <ProvidersList

@@ -76,6 +76,7 @@ export default function Hero({
         <HStack spacing={4}>
           {!currentUser && (
             <SignInButton
+              text={t("CREATE_AUCTION")}
               id="sign-in-with-ethereum-hero"
               size={"lg"}
               onSuccess={async (args: any) => {
@@ -95,7 +96,7 @@ export default function Hero({
             />
           )}
           <Button size={"lg"} onClick={() => Router.push("/sales")}>
-            {t("VIEW_ALL_SALES")}
+            {t("JOIN_AUCTION")}
           </Button>
         </HStack>
       </Stack>
