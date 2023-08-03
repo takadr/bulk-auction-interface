@@ -53,7 +53,8 @@ export default {
   DEPLOY_CONTRACT: "コントラクトのデプロイ",
   INPUT_INFORMATION: "オークション情報の入力",
   SELECT_SALE_TEMPLETE: "テンプレートを選択",
-  YOU_CAN_CHOOSE_THE_TYPE_OF_TOKEN_SALE: "トークンオークションのタイプを選択できます",
+  YOU_CAN_CHOOSE_THE_TYPE_OF_TOKEN_SALE:
+    "トークンオークションのタイプを選択できます",
   TOKEN_ADDRESS: "トークンアドレス",
   INPUT_THE_ADDRESS_OF_THE_TOKEN_YOU_WOULD_LIKE_TO_ALLOCATE_TO_THIS_SALE:
     "このオークションで配布するトークンのアドレスを入力してください",
@@ -121,5 +122,5 @@ export default {
   PRICE_AGAINST_ETH: "ETH建て価格",
   JOIN_AUCTION: "オークションに参加する",
   MANAGE_AUCTION: "オークションを管理する",
-  CREATE_AUCTION: "オークションを作成する"
+  CREATE_AUCTION: "オークションを作成する",
 };

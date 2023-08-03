@@ -49,7 +49,7 @@ export default function SignInButton({
       isFirstRender.current = false;
       return;
     }
-    if(!!signInTriggerId && signInTriggerId !== buttonProps.id) return;
+    if (!!signInTriggerId && signInTriggerId !== buttonProps.id) return;
 
     !prevIsConnected && isConnected && continueSignIn && signIn();
   }, [signInTriggerId]);
@@ -110,7 +110,7 @@ export default function SignInButton({
         isLoading={state.loading}
         onClick={signIn}
       >
-        { text ? text : t("SIGN_IN_WITH_ETHEREUM") }
+        {text ? text : t("SIGN_IN_WITH_ETHEREUM")}
       </Button>
       {!isConnected && (
         <ProvidersList

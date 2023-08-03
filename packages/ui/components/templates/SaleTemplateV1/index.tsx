@@ -383,18 +383,24 @@ export default function SaleTemplateV1({
                               </NumberInputStepper>
                             </NumberInput>
                             <chakra.div px={2}>{raisedTokenSymbol}</chakra.div>
-                            {
-                              address ? <Button
-                              isLoading={isLoadingWaitTX || isLoadingSendTX}
-                              isDisabled={!sendTransactionAsync || !started}
-                              type="submit"
-                              variant="solid"
-                              colorScheme={"green"}
-                            >
-                              {t("CONTRIBUTE")}
-                            </Button> :
-                            <ConnectButton w={"auto"} size={"md"} colorScheme={"green"} variant={"solid"} />
-                            }
+                            {address ? (
+                              <Button
+                                isLoading={isLoadingWaitTX || isLoadingSendTX}
+                                isDisabled={!sendTransactionAsync || !started}
+                                type="submit"
+                                variant="solid"
+                                colorScheme={"green"}
+                              >
+                                {t("CONTRIBUTE")}
+                              </Button>
+                            ) : (
+                              <ConnectButton
+                                w={"auto"}
+                                size={"md"}
+                                colorScheme={"green"}
+                                variant={"solid"}
+                              />
+                            )}
                           </Flex>
                           <FormErrorMessage>
                             {formikProps.errors.amount}

@@ -112,7 +112,8 @@ export default {
   TRANSACTION_SENT: "Transaction sent!",
   TRANSACTION_CONFIRMED: "Transaction confirmed!",
   APPROVAL_CONFIRMED: "Approval confirmed!",
-  SALE_INFORMATION_SUCCESSFULLY_SAVED: "Auction information successfully saved!",
+  SALE_INFORMATION_SUCCESSFULLY_SAVED:
+    "Auction information successfully saved!",
   NO_LIVE_SALE: "No live auction",
   NO_SALE: "No auction",
   LOAD_MORE_SALES: "Load more auctions",
@@ -125,5 +126,5 @@ export default {
   PRICE_AGAINST_ETH: "Price against ETH",
   JOIN_AUCTION: "Join Auction",
   MANAGE_AUCTION: "Manage Auctions",
-  CREATE_AUCTION: "Create Auction"
+  CREATE_AUCTION: "Create Auction",
 };

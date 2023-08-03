@@ -112,7 +112,11 @@ const Header: FC<HeaderProps> = ({ title }) => {
                 <Tag size={"sm"}>
                   {chain?.unsupported ? "Unsupported Chain" : chain?.name}
                 </Tag>
-                {currentUser && <Tag size={"sm"} ml={1}>Signed in</Tag>}
+                {currentUser && (
+                  <Tag size={"sm"} ml={1}>
+                    Signed in
+                  </Tag>
+                )}
               </HStack>
               {isConnected && currentUser && (
                 <MenuItem
@@ -155,7 +159,14 @@ const Header: FC<HeaderProps> = ({ title }) => {
                   </MenuItem>
                   <Flex align="center" px="2" mt="2">
                     <Divider />
-                    <Text padding="2" color={"gray.400"} fontSize={"xs"} whiteSpace={"nowrap"}>{t("MANAGE_AUCTION")}</Text>
+                    <Text
+                      padding="2"
+                      color={"gray.400"}
+                      fontSize={"xs"}
+                      whiteSpace={"nowrap"}
+                    >
+                      {t("MANAGE_AUCTION")}
+                    </Text>
                     <Divider />
                   </Flex>
                   <chakra.div px={3} py={1}>
@@ -237,19 +248,18 @@ const Header: FC<HeaderProps> = ({ title }) => {
             <Button
               variant="ghost"
               display={{ base: isConnected ? "none" : "block", md: "block" }}
-              size={{base: "xs", md: "sm"}}
+              size={{ base: "xs", md: "sm" }}
               onClick={() => Router.push("/auctions")}
             >
               {t("VIEW_ALL_SALES")}
             </Button>
 
-            {
-              !currentUser && !isConnected &&
+            {!currentUser && !isConnected && (
               <Menu>
                 <HStack spacing={1}>
-                  <MenuButton as={Button} size={{base: "sm", md: "md"}}>
+                  <MenuButton as={Button} size={{ base: "sm", md: "md" }}>
                     <HStack>
-                      <Text fontSize={{base: "xs", md: "sm"}} id="account">
+                      <Text fontSize={{ base: "xs", md: "sm" }} id="account">
                         {t("CONNECT_WALLET")}
                       </Text>
                       <ChevronDownIcon />
@@ -258,20 +268,34 @@ const Header: FC<HeaderProps> = ({ title }) => {
                   <MenuList zIndex={101}>
                     <Flex align="center" px="2">
                       <Divider />
-                      <Text p="2" color={"gray.400"} fontSize={"xs"} whiteSpace={"nowrap"}>{t("JOIN_AUCTION")}</Text>
+                      <Text
+                        p="2"
+                        color={"gray.400"}
+                        fontSize={"xs"}
+                        whiteSpace={"nowrap"}
+                      >
+                        {t("JOIN_AUCTION")}
+                      </Text>
                       <Divider />
                     </Flex>
                     <chakra.div px={3} py={1}>
-                    <ConnectButton
-                      id="connectButton"
-                      variant={"outline"}
-                      size={{ base: "xs", md: "sm" }}
-                      w={"full"}
-                    />
+                      <ConnectButton
+                        id="connectButton"
+                        variant={"outline"}
+                        size={{ base: "xs", md: "sm" }}
+                        w={"full"}
+                      />
                     </chakra.div>
                     <Flex align="center" px="2" mt="2">
                       <Divider />
-                      <Text padding="2" color={"gray.400"} fontSize={"xs"} whiteSpace={"nowrap"}>{t("MANAGE_AUCTION")}</Text>
+                      <Text
+                        padding="2"
+                        color={"gray.400"}
+                        fontSize={"xs"}
+                        whiteSpace={"nowrap"}
+                      >
+                        {t("MANAGE_AUCTION")}
+                      </Text>
                       <Divider />
                     </Flex>
                     <chakra.div px={3} py={1}>
@@ -299,7 +323,7 @@ const Header: FC<HeaderProps> = ({ title }) => {
                   </MenuList>
                 </HStack>
               </Menu>
-            }
+            )}
             {isConnected && connectedMenu()}
           </HStack>
         </Flex>
