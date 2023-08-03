@@ -62,6 +62,7 @@ import {
   parseEther,
 } from "lib/utils";
 import { CHAIN_NAMES } from "lib/constants";
+import ConnectButton from "../../connectButton";
 
 type SaleTemplateV1Params = {
   sale: Sale;
@@ -382,7 +383,8 @@ export default function SaleTemplateV1({
                               </NumberInputStepper>
                             </NumberInput>
                             <chakra.div px={2}>{raisedTokenSymbol}</chakra.div>
-                            <Button
+                            {
+                              address ? <Button
                               isLoading={isLoadingWaitTX || isLoadingSendTX}
                               isDisabled={!sendTransactionAsync || !started}
                               type="submit"
@@ -390,7 +392,9 @@ export default function SaleTemplateV1({
                               colorScheme={"green"}
                             >
                               {t("CONTRIBUTE")}
-                            </Button>
+                            </Button> :
+                            <ConnectButton w={"auto"} size={"md"} colorScheme={"green"} variant={"solid"} />
+                            }
                           </Flex>
                           <FormErrorMessage>
                             {formikProps.errors.amount}
