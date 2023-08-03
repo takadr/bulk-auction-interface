@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react";
+import { useState } from "react";
 import { useAccount, useNetwork, useSignMessage } from "wagmi";
 import { SiweMessage } from "siwe";
 import { Button, ButtonProps, useDisclosure } from "@chakra-ui/react";
@@ -42,7 +42,6 @@ export default function SignInButton({
     chainId?: number;
   }) => {
     try {
-      const chainId = chain?.id;
       setState((x) => ({ ...x, loading: true }));
 
       // Create SIWE message with pre-fetched nonce and sign with wallet
