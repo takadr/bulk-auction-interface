@@ -127,7 +127,7 @@ export default function SaleCard({
                 <Link _hover={{ opacity: 0.75 }} href={`/auctions/${sale.id}`}>
                   {data?.metaData?.title
                     ? data?.metaData?.title
-                    : "Unnamed Sale"}
+                    : "Unnamed Auction"}
                 </Link>
                 {editable && (
                   <Button size={"sm"} ml={2} onClick={onOpen}>

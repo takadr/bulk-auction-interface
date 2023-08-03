@@ -218,7 +218,7 @@ export default function SaleTemplateV1({
           />
           <Box px={8}>
             <Heading>
-              {metaData.title ? metaData.title : "Unnamed Sale"}
+              {metaData.title ? metaData.title : "Unnamed Auction"}
             </Heading>
             <HStack spacing={4}>
               <chakra.p fontSize={"sm"}>
