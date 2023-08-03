@@ -11,7 +11,6 @@ import {
   Avatar,
   Text,
   VStack,
-  useDisclosure,
   useToast,
   Divider,
   Link,
@@ -30,10 +29,10 @@ import {
   useNetwork,
 } from "wagmi";
 import { useLocale } from "../hooks/useLocale";
-import ProvidersList from "./ProvidersList";
 import { CurrentUserContext } from "./providers/CurrentUserProvider";
 import SignInButton from "./SignInButton";
 import ProviderLogo from "./ProviderLogo";
+import ConnectButton from "./connectButton";
 
 type HeaderProps = {
   title?: string;
@@ -41,7 +40,6 @@ type HeaderProps = {
 
 const Header: FC<HeaderProps> = ({ title }) => {
   const { chain } = useNetwork();
-  const providersListDisclosure = useDisclosure();
   const toast = useToast({ position: "top-right", isClosable: true });
   const { currentUser, mutate } = useContext(CurrentUserContext);
   const { address, isConnected, connector } = useAccount();
@@ -61,26 +59,6 @@ const Header: FC<HeaderProps> = ({ title }) => {
     const _address = currentUser ? currentUser.address : address;
     setAddressString(`${_address?.slice(0, 5)}...${_address?.slice(-4)}`);
   }, [currentUser, address]);
-
-  const noConnectedMenu = () => {
-    return (
-      <>
-        <Button
-          id="connectButton"
-          onClick={providersListDisclosure.onOpen}
-          variant={"outline"}
-          size={{ base: "xs", md: "sm" }}
-          w={"full"}
-        >
-          {t("CONNECT_WALLET")}
-        </Button>
-        <ProvidersList
-          isOpen={providersListDisclosure.isOpen}
-          onClose={providersListDisclosure.onClose}
-        />
-      </>
-    );
-  };
 
   const connectedMenu = () => {
     return (
@@ -283,7 +261,14 @@ const Header: FC<HeaderProps> = ({ title }) => {
                       <Text p="2" color={"gray.400"} fontSize={"xs"} whiteSpace={"nowrap"}>{t("JOIN_AUCTION")}</Text>
                       <Divider />
                     </Flex>
-                    <chakra.div px={3} py={1}>{noConnectedMenu()}</chakra.div>
+                    <chakra.div px={3} py={1}>
+                    <ConnectButton
+                      id="connectButton"
+                      variant={"outline"}
+                      size={{ base: "xs", md: "sm" }}
+                      w={"full"}
+                    />
+                    </chakra.div>
                     <Flex align="center" px="2" mt="2">
                       <Divider />
                       <Text padding="2" color={"gray.400"} fontSize={"xs"} whiteSpace={"nowrap"}>{t("MANAGE_AUCTION")}</Text>
