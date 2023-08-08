@@ -1,4 +1,4 @@
-import { ERC20 } from "../../generated/FactoryV1/ERC20";
+import { ERC20 } from "../../generated/Factory/ERC20";
 import { Address, BigInt } from "@graphprotocol/graph-ts";
 
 export function fetchTokenSymbol(tokenAddress: Address): string {
