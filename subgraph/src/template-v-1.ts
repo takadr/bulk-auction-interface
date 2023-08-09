@@ -1,4 +1,4 @@
-import { log, BigInt } from "@graphprotocol/graph-ts";
+import { log, BigInt, Bytes, Address } from "@graphprotocol/graph-ts";
 import {
   Deployed as DeployedEvent,
   // Received as ReceivedEvent,
@@ -7,10 +7,9 @@ import {
 import { Auction, TemplateAuctionMap, Contribution, Claim, Token, TotalRaised } from "../generated/schema";
 import { BaseTemplate } from "../generated/templates";
 import {
-  fetchTokenName,
-  fetchTokenSymbol,
-  fetchTokenDecimals,
+  findOrCreateToken
 } from "./utils/token";
+import { uniqueArray } from "./utils";
 
 export function handleDeployed(event: DeployedEvent): void {
   const auction = new Auction(event.params.deployedAddress.toHex());
@@ -18,38 +17,52 @@ export function handleDeployed(event: DeployedEvent): void {
   auction.owner = event.params.owner.toHex();
 
   // Auction token
-  const auctionToken = new Token(
-    auction.id + "-" + event.params.auctionToken.toHex(),
-  );
-  auctionToken.symbol = fetchTokenSymbol(event.params.auctionToken);
-  auctionToken.name = fetchTokenName(event.params.auctionToken);
-  auctionToken.decimals = fetchTokenDecimals(event.params.auctionToken);
-  auctionToken.save();
+  const tokenAddress = event.params.auctionToken.toHex();
+  const auctionToken = findOrCreateToken(tokenAddress);// Token.load(tokenAddress);
   auction.auctionToken = auctionToken.id;
 
   // TODO Raised tokens
-  // const raisedToken = new Token(
-  //   auction.id + "-" + event.params.auctionToken.toHex(),
-  // );
-  // auctionToken.symbol = fetchTokenSymbol(event.params.auctionToken);
-  // auctionToken.name = fetchTokenName(event.params.auctionToken);
-  // auctionToken.decimals = fetchTokenDecimals(event.params.auctionToken);
-  // auctionToken.save();
-  // auction.raisedTokens = event.params.raisedTokens.toHex();
-  // if (auction.baseToken == "0x0000000000000000000000000000000000000000") {
-  //   auction.baseTokenSymbol = "ETH";
-  //   auction.baseTokenName = "Ether";
-  //   auction.baseTokenDecimals = BigInt.fromI32(18);
-  // } else {
-  //   auction.baseTokenSymbol = fetchTokenSymbol(event.params.baseToken);
-  //   auction.baseTokenName = fetchTokenName(event.params.baseToken);
-  //   auction.baseTokenDecimals = fetchTokenDecimals(event.params.baseToken);
+  auction.raisedTokens = [auctionToken.id];
+  // TODO Sample 0x00 + USDT (20 bytes + 20 bytes)
+  const arrayData = Bytes.fromHexString("0x0000000000000000000000000000000000000000c2c527c0cacf457746bd31b2a698fe89de2b6d49");
+  // 20バイトごとにアドレスを読み取る
+  const raisedTokens: string[] = [];
+  for (let i = 0; i < arrayData.length; i += 20) {
+    const segment = arrayData.subarray(i, i + 20);
+    let addressString = "0x";
+    for (let j = 0; j < segment.length; j++) {
+      addressString += segment[j].toString(16).padStart(2, "0");
+    }
+
+  //   // const address = Address.fromHexString(addressString);
+  //   const addr = Bytes.fromHexString(addressString);
+  //   if (addr !== null) {
+  //     const decoded = ethereum.decode("(address)", addr)!.toTuple();
+  //     const address = decoded.at(0).toAddress();
+  //     addresses.push(changetype<Address>(address));
+  //   } else {
+  //     // Handle the error if the address is null
+  //   }
   // }
 
+    const raisedToken = findOrCreateToken(addressString);
+    raisedTokens.push(raisedToken.id);
+  }
+  auction.raisedTokens = uniqueArray(raisedTokens);
   auction.startingAt = event.params.startingAt;
   auction.closingAt = event.params.closingAt;
-  // TODO Total raised
-  // auction.totalRaised = BigInt.fromI32(0);
+  auction.args = event.params.args;
+
+  // Total raised 
+  const totalRaisedArray: string[] = [];
+  for(let i = 0; i < raisedTokens.length; i++) {
+    const id = `${auction.id}-${raisedTokens[i]}`;
+    let totalRaised = new TotalRaised(`${auction.id}-${raisedTokens[i]}`);
+    totalRaised.amount = BigInt.fromI32(0);
+    totalRaised.token = raisedTokens[i];
+    totalRaisedArray.push(id);
+  }
+  auction.totalRaised = totalRaisedArray;
   auction.contributions = [];
   auction.claims = [];
   auction.blockNumber = event.block.number;

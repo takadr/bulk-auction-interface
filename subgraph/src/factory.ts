@@ -11,8 +11,8 @@ import { Factory } from "../generated/Factory/Factory";
 export function handleDeployed(event: DeployedEvent): void {
   const map = new TemplateAuctionMap(event.params.deployedAddress.toHex());
   let contract = Factory.bind(event.address);
-  let symbolResult = contract.templates(event.params.templateName);
-  map.template = symbolResult.getImplemention().toHexString();
+  let templateResult = contract.templates(event.params.templateName);
+  map.template = templateResult.getImplemention().toHexString();
   map.save();
   BaseTemplate.create(event.params.deployedAddress);
 }
