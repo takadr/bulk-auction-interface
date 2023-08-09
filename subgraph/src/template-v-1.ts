@@ -1,8 +1,8 @@
 import { log, BigInt, Bytes, Address } from "@graphprotocol/graph-ts";
 import {
   Deployed as DeployedEvent,
-  // Received as ReceivedEvent,
-  // Claimed as ClaimedEvent,
+  Received as ReceivedEvent,
+  Claimed as ClaimedEvent,
 } from "../generated/templates/BaseTemplate/BaseTemplate";
 import { Auction, TemplateAuctionMap, Contribution, Claim, Token, TotalRaised } from "../generated/schema";
 import { BaseTemplate } from "../generated/templates";
@@ -60,6 +60,7 @@ export function handleDeployed(event: DeployedEvent): void {
     let totalRaised = new TotalRaised(`${auction.id}-${raisedTokens[i]}`);
     totalRaised.amount = BigInt.fromI32(0);
     totalRaised.token = raisedTokens[i];
+    totalRaised.save();
     totalRaisedArray.push(id);
   }
   auction.totalRaised = totalRaisedArray;
@@ -69,45 +70,50 @@ export function handleDeployed(event: DeployedEvent): void {
   auction.save();
 }
 
-// export function handleReceived(event: ReceivedEvent): void {
-//   let sale = Auction.load(event.address.toHexString());
-//   if (sale === null) return;
-//   const totalRaised = sale.totalRaised.plus(event.params.amount);
+export function handleReceived(event: ReceivedEvent): void {
+  let auction = Auction.load(event.address.toHex());
+  if (auction == null) return;
 
-//   const contribution = new Contribution(
-//     event.transaction.hash.toHex() + "-" + event.logIndex.toString(),
-//   );
-//   contribution.amount = event.params.amount;
-//   contribution.from = event.params.account.toHex();
-//   contribution.totalRaised = totalRaised;
-//   contribution.receivedAt = event.block.timestamp;
-//   contribution.blockNumber = event.block.number;
-//   contribution.save();
+  const totalRaised = TotalRaised.load(`${auction.id}-${event.params.token.toHex()}`);
+  if (totalRaised == null) return;
 
-//   sale.totalRaised = totalRaised;
-//   const contributions = sale.contributions;
-//   contributions.push(contribution.id);
-//   sale.contributions = contributions;
-//   sale.save();
-// }
+  totalRaised.amount = totalRaised.amount.plus(event.params.amount);
+  totalRaised.save();
 
-// export function handleClaimed(event: ClaimedEvent): void {
-//   let sale = Auction.load(event.address.toHexString());
-//   if (sale === null) return;
+  const contribution = new Contribution(
+    event.transaction.hash.toHex() + "-" + event.logIndex.toString(),
+  );
+  contribution.amount = event.params.amount;
+  contribution.raisedToken = event.params.token.toHex();
+  contribution.from = event.params.account.toHex();
+  contribution.totalRaised = totalRaised.amount;
+  contribution.receivedAt = event.block.timestamp;
+  contribution.blockNumber = event.block.number;
+  contribution.save();
 
-//   const claim = new Claim(
-//     event.transaction.hash.toHex() + "-" + event.logIndex.toString(),
-//   );
-//   claim.contributor = event.params.contributor.toHex();
-//   claim.recipient = event.params.recipient.toHex();
-//   claim.userShare = event.params.userShare;
-//   claim.erc20allocation = event.params.allocation;
-//   claim.claimedAt = event.block.timestamp;
-//   claim.blockNumber = event.block.number;
-//   claim.save();
+  const contributions = auction.contributions;
+  contributions.push(contribution.id);
+  auction.contributions = contributions;
+  auction.save();
+}
 
-//   const claims = sale.claims;
-//   claims.push(claim.id);
-//   sale.claims = claims;
-//   sale.save();
-// }
+export function handleClaimed(event: ClaimedEvent): void {
+  let sale = Auction.load(event.address.toHexString());
+  if (sale == null) return;
+
+  const claim = new Claim(
+    event.transaction.hash.toHex() + "-" + event.logIndex.toString(),
+  );
+  claim.contributor = event.params.contributor.toHex();
+  claim.recipient = event.params.recipient.toHex();
+  claim.userShare = event.params.userShare;
+  claim.erc20allocation = event.params.allocation;
+  claim.claimedAt = event.block.timestamp;
+  claim.blockNumber = event.block.number;
+  claim.save();
+
+  const claims = sale.claims;
+  claims.push(claim.id);
+  sale.claims = claims;
+  sale.save();
+}

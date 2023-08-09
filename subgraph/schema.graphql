@@ -59,10 +59,12 @@ type Contribution @entity {
   id: ID!
   # Amount received
   amount: BigInt!
+  # Raised token
+  raisedToken: Token!
   # Sender address
   from: String!
   # totalRaised after received
-  totalRaised: TotalRaised!
+  totalRaised: BigInt!
   # Timestamp
   receivedAt: BigInt!
   # Block number

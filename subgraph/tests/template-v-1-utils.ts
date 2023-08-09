@@ -2,8 +2,8 @@ import { newMockEvent } from "matchstick-as";
 import { ethereum, Address, Bytes, BigInt } from "@graphprotocol/graph-ts";
 import {
   Deployed,
-  // Received,
-  // Claimed,
+  Received,
+  Claimed,
 } from "../generated/templates/BaseTemplate/BaseTemplate";
 
 export function createDeployedEvent(
@@ -56,58 +56,62 @@ export function createDeployedEvent(
   return deployedEvent;
 }
 
-// export function createReceivedEvent(
-//   account: Address,
-//   amount: BigInt,
-// ): Received {
-//   let receivedEvent = changetype<Received>(newMockEvent());
+export function createReceivedEvent(
+  account: Address,
+  token: Address,
+  amount: BigInt,
+): Received {
+  let receivedEvent = changetype<Received>(newMockEvent());
 
-//   receivedEvent.parameters = new Array();
+  receivedEvent.parameters = new Array();
 
-//   receivedEvent.parameters.push(
-//     new ethereum.EventParam("account", ethereum.Value.fromAddress(account)),
-//   );
-//   receivedEvent.parameters.push(
-//     new ethereum.EventParam(
-//       "amount",
-//       ethereum.Value.fromUnsignedBigInt(amount),
-//     ),
-//   );
+  receivedEvent.parameters.push(
+    new ethereum.EventParam("account", ethereum.Value.fromAddress(account)),
+  );
+  receivedEvent.parameters.push(
+    new ethereum.EventParam("token", ethereum.Value.fromAddress(token)),
+  );
+  receivedEvent.parameters.push(
+    new ethereum.EventParam(
+      "amount",
+      ethereum.Value.fromUnsignedBigInt(amount),
+    ),
+  );
 
-//   return receivedEvent;
-// }
+  return receivedEvent;
+}
 
-// export function createClaimedEvent(
-//   contributor: Address,
-//   recipient: Address,
-//   userShare: BigInt,
-//   allocation: BigInt,
-// ): Claimed {
-//   let claimedEvent = changetype<Claimed>(newMockEvent());
+export function createClaimedEvent(
+  contributor: Address,
+  recipient: Address,
+  userShare: BigInt,
+  allocation: BigInt,
+): Claimed {
+  let claimedEvent = changetype<Claimed>(newMockEvent());
 
-//   claimedEvent.parameters = new Array();
+  claimedEvent.parameters = new Array();
 
-//   claimedEvent.parameters.push(
-//     new ethereum.EventParam(
-//       "contributor",
-//       ethereum.Value.fromAddress(contributor),
-//     ),
-//   );
-//   claimedEvent.parameters.push(
-//     new ethereum.EventParam("recipient", ethereum.Value.fromAddress(recipient)),
-//   );
-//   claimedEvent.parameters.push(
-//     new ethereum.EventParam(
-//       "userShare",
-//       ethereum.Value.fromUnsignedBigInt(userShare),
-//     ),
-//   );
-//   claimedEvent.parameters.push(
-//     new ethereum.EventParam(
-//       "allocation",
-//       ethereum.Value.fromUnsignedBigInt(allocation),
-//     ),
-//   );
+  claimedEvent.parameters.push(
+    new ethereum.EventParam(
+      "contributor",
+      ethereum.Value.fromAddress(contributor),
+    ),
+  );
+  claimedEvent.parameters.push(
+    new ethereum.EventParam("recipient", ethereum.Value.fromAddress(recipient)),
+  );
+  claimedEvent.parameters.push(
+    new ethereum.EventParam(
+      "userShare",
+      ethereum.Value.fromUnsignedBigInt(userShare),
+    ),
+  );
+  claimedEvent.parameters.push(
+    new ethereum.EventParam(
+      "allocation",
+      ethereum.Value.fromUnsignedBigInt(allocation),
+    ),
+  );
 
-//   return claimedEvent;
-// }
+  return claimedEvent;
+}

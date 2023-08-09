@@ -6,7 +6,7 @@ export function findOrCreateToken(addressString: string): Token {
   let token = Token.load(addressString);
   if(token == null) {
     token = new Token(addressString);
-    if(addressString == "0x0000000000000000000000000000000000000000") {
+    if(addressString == Address.zero().toHex()) {
       token.symbol = "ETH";
       token.name = "Ether";
       token.decimals = BigInt.fromI32(18);
