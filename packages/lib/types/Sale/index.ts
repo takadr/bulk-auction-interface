@@ -22,6 +22,30 @@ export type Sale = {
   claims: Claim[];
 };
 
+export type Template = {
+  id: `0x${string}`;
+  templateName: `0x${string}`;
+  addedAt: string; //Timestamp
+};
+
+export type TemplateAuctionMap = {
+  id: `0x${string}`;
+  template: Template;
+}
+
+export type Token = {
+  id: `0x${string}`;
+  name: String;
+  symbol: String;
+  decimals: String;
+}
+
+export type TotalRaised = {
+  id: string;
+  amount: string;
+  token: Token;
+}
+
 export type Contribution = {
   id: string;
   amount: string;
@@ -66,12 +90,6 @@ export type MetaData = {
   tokenDecimals?: number;
   templateName?: string;
   createdAt?: number;
-};
-
-export type Template = {
-  id: string;
-  templateName: `0x${string}`;
-  addedAt: string; //Timestamp
 };
 
 export const validateMetaData = (

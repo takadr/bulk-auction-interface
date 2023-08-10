@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import {
   Modal,
   ModalOverlay,
@@ -44,6 +44,11 @@ export default function SaleFormModal({
     `0x${string}` | undefined
   >(undefined);
   const { t } = useLocale();
+  const [tx, setTx] = useState<string|undefined>(undefined);
+  const txRef = useRef(tx);
+  useEffect(() => {
+    txRef.current = tx;
+  }, [tx]);
 
   const {
     formikProps,
@@ -56,6 +61,7 @@ export default function SaleFormModal({
   } = useSaleForm({
     address: address as `0x${string}`,
     onSubmitSuccess: (result) => {
+      setTx(result.hash);
       setStep(2);
       onDeploy && onDeploy();
       toast({
@@ -137,13 +143,14 @@ export default function SaleFormModal({
     abi: FactoryABI,
     eventName: "Deployed",
     listener: (logs: any[]) => {
-      const { args } = logs[0];
+      const { args, transactionHash } = logs[0];
       if (
-        (args.owner as string).toLowerCase() ===
-        (address as string).toLowerCase()
+        (transactionHash as string).toLowerCase() ===
+        (txRef.current as string).toLowerCase()
       ) {
-        setContractAddress(args.deployedAddr as `0x${string}`);
         unwatch && unwatch();
+        setContractAddress(args.deployedAddress as `0x${string}`);
+        setTx(undefined);
       }
     },
   });

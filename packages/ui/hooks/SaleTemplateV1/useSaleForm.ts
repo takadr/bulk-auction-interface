@@ -6,6 +6,8 @@ import {
   useContractRead,
   useToken,
 } from "wagmi";
+import { isAddress } from "viem";
+import { AbiCoder } from "ethers";
 import { useDebounce } from "use-debounce";
 import { useFormik, FormikProps } from "formik";
 import useApprove from "../useApprove";
@@ -15,7 +17,6 @@ import FactoryABI from "lib/constants/abis/Factory.json";
 import { SALE_TEMPLATE_V1_NAME } from "lib/constants";
 import "rsuite/dist/rsuite-no-reset.min.css";
 import "assets/css/rsuite-override.css";
-import { isAddress } from "viem";
 
 const now = new Date().getTime();
 export default function useSaleForm({
@@ -56,6 +57,27 @@ export default function useSaleForm({
     minRaisedAmount: 0,
     owner: address,
   };
+
+  const getArgs = (): string => {
+    try {
+      return AbiCoder.defaultAbiCoder().encode(
+        ["address", "uint256", "uint256", "address", "uint256", "uint256"],
+        [
+          debouncedSale.owner,
+          Math.round(debouncedSale.startingAt / 1000),
+          debouncedSale.eventDuration,
+          debouncedSale.token,
+          multiply(
+            debouncedSale.allocatedAmount,
+            tokenData?.decimals ? Big(10).pow(tokenData.decimals) : 1,
+          ).toString(),
+          multiply(debouncedSale.minRaisedAmount, Big(10).pow(18)).toString(),
+        ],
+      );
+    } catch(e) {
+      return "";
+    }
+  }
 
   const validate = (values: SaleForm) => {
     const errors: any = {};
@@ -144,21 +166,14 @@ export default function useSaleForm({
     address: debouncedSale.token as `0x${string}`,
     enabled: !!debouncedSale.token && isAddress(debouncedSale.token),
   });
+  
   const prepareFn = usePrepareContractWrite({
     address: process.env.NEXT_PUBLIC_FACTORY_ADDRESS as `0x${string}`, //factory
     abi: FactoryABI,
-    functionName: "deploySaleClone",
+    functionName: "deployAuction",
     args: [
       debouncedSale.templateName, //SALE_TEMPLATE_V1_NAME
-      debouncedSale.token,
-      debouncedSale.owner,
-      multiply(
-        debouncedSale.allocatedAmount,
-        tokenData?.decimals ? Big(10).pow(tokenData.decimals) : 1,
-      ).toString(),
-      Math.round(debouncedSale.startingAt / 1000),
-      debouncedSale.eventDuration,
-      multiply(debouncedSale.minRaisedAmount, Big(10).pow(18)).toString(), // ETH
+      getArgs()
     ],
     enabled: !!debouncedSale.token && isAddress(debouncedSale.token),
   });
