@@ -4,7 +4,7 @@ import {
   Deployed,
   Received,
   Claimed,
-} from "../generated/templates/BaseTemplate/BaseTemplate";
+} from "../../generated/templates/BaseTemplate/BaseTemplate";
 
 export function createDeployedEvent(
   deployedAddr: Address,

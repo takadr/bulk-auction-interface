@@ -46,8 +46,8 @@ templates:
       eventHandlers:
         - event: Deployed(address,address,uint256,uint256,address,bytes,bytes)
           handler: handleDeployed
-        # - event: Received(indexed address,uint256)
-        #   handler: handleReceived
-        # - event: Claimed(indexed address,indexed address,uint256,uint256)
-        #   handler: handleClaimed
-      file: ./src/template-v-1.ts
+        - event: Received(indexed address,uint256)
+          handler: handleReceived
+        - event: Claimed(indexed address,indexed address,uint256,uint256)
+          handler: handleClaimed
+      file: ./src/base-tamplate.ts

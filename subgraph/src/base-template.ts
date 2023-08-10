@@ -1,11 +1,10 @@
-import { log, BigInt, Bytes, Address } from "@graphprotocol/graph-ts";
+import { BigInt } from "@graphprotocol/graph-ts";
 import {
   Deployed as DeployedEvent,
   Received as ReceivedEvent,
   Claimed as ClaimedEvent,
 } from "../generated/templates/BaseTemplate/BaseTemplate";
-import { Auction, TemplateAuctionMap, Contribution, Claim, Token, TotalRaised } from "../generated/schema";
-import { BaseTemplate } from "../generated/templates";
+import { Auction, Contribution, Claim, TotalRaised } from "../generated/schema";
 import {
   findOrCreateToken
 } from "./utils/token";
@@ -21,11 +20,9 @@ export function handleDeployed(event: DeployedEvent): void {
   const auctionToken = findOrCreateToken(tokenAddress);// Token.load(tokenAddress);
   auction.auctionToken = auctionToken.id;
 
-  // TODO Raised tokens
   auction.raisedTokens = [auctionToken.id];
-  // TODO Sample 0x00 + USDT (20 bytes + 20 bytes)
-  const arrayData = Bytes.fromHexString("0x0000000000000000000000000000000000000000c2c527c0cacf457746bd31b2a698fe89de2b6d49");
-  // 20バイトごとにアドレスを読み取る
+  // Expects raisedTokens as concatenated 20 bytes addresses
+  const arrayData = event.params.raisedTokens;
   const raisedTokens: string[] = [];
   for (let i = 0; i < arrayData.length; i += 20) {
     const segment = arrayData.subarray(i, i + 20);
@@ -33,18 +30,6 @@ export function handleDeployed(event: DeployedEvent): void {
     for (let j = 0; j < segment.length; j++) {
       addressString += segment[j].toString(16).padStart(2, "0");
     }
-
-  //   // const address = Address.fromHexString(addressString);
-  //   const addr = Bytes.fromHexString(addressString);
-  //   if (addr !== null) {
-  //     const decoded = ethereum.decode("(address)", addr)!.toTuple();
-  //     const address = decoded.at(0).toAddress();
-  //     addresses.push(changetype<Address>(address));
-  //   } else {
-  //     // Handle the error if the address is null
-  //   }
-  // }
-
     const raisedToken = findOrCreateToken(addressString);
     raisedTokens.push(raisedToken.id);
   }

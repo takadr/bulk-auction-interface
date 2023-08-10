@@ -4,7 +4,7 @@ import {
   Deployed,
   TemplateAdded,
   TemplateRemoved,
-} from "../generated/Factory/Factory";
+} from "../../generated/Factory/Factory";
 
 export function createDeployedEvent(
   templateName: Bytes,
