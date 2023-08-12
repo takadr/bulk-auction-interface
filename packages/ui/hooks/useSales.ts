@@ -81,7 +81,7 @@ export const useSWRSales = (
         },
       })
       .then((result) => {
-        return result.data.sales;
+        return result.data.auctions;
       });
   };
 

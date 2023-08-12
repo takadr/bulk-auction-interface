@@ -1,6 +1,6 @@
 import { ethers } from "ethers";
 import FactoryABI from "lib/constants/abis/Factory.json";
-import SaleTemplateV1ABI from "lib/constants/abis/SaleTemplateV1.json";
+import TemplateV1ABI from "lib/constants/abis/TemplateV1.json";
 import MintableERC20 from 'lib/constants/abis/MintableERC20.json';
 import { SALE_TEMPLATE_V1_NAME } from "lib/constants";
 import Big, { getBigNumber, multiply } from 'lib/utils/bignumber';
@@ -41,7 +41,7 @@ function getFactoryContract() {
 
 function getSaleContract(address) {
   const provider = ethers.getDefaultProvider(Cypress.env('NETWORK_NAME'));
-  const contract = new ethers.Contract(address, SaleTemplateV1ABI, provider);
+  const contract = new ethers.Contract(address, TemplateV1ABI, provider);
   return contract
 }
 

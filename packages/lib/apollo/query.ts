@@ -1,75 +1,90 @@
 import { gql } from "@apollo/client";
 
 export const LIST_ACTIVE_AND_UPCOMING_SALE_QUERY = gql`
-  query ListSales($skip: Int! = 0, $first: Int! = 50, $now: Int!) {
-    sales(
+  query ListAuctions($skip: Int! = 0, $first: Int! = 50, $now: Int!) {
+    auctions(
       orderBy: startingAt
       skip: $skip
       first: $first
       where: { closingAt_gt: $now }
     ) {
       id
-      templateName
+      templateAuctionMap {
+        id
+      }
       owner
-      token
-      tokenName
-      tokenSymbol
-      tokenDecimals
       startingAt
       closingAt
-      allocatedAmount
-      minRaisedAmount
-      totalRaised
+      args
+      auctionToken {
+        id
+      }
+      raisedTokens {
+        id
+      }
+      totalRaised {
+        id
+      }
       blockNumber
     }
   }
 `;
 
 export const LIST_ACTIVE_SALE_QUERY = gql`
-  query ListSales($skip: Int! = 0, $first: Int! = 50, $now: Int!) {
-    sales(
+  query ListAuctions($skip: Int! = 0, $first: Int! = 50, $now: Int!) {
+    auctions(
       orderBy: startingAt
       skip: $skip
       first: $first
       where: { startingAt_lte: $now, closingAt_gt: $now }
     ) {
       id
-      templateName
+      templateAuctionMap {
+        id
+      }
       owner
-      token
-      tokenName
-      tokenSymbol
-      tokenDecimals
       startingAt
       closingAt
-      allocatedAmount
-      minRaisedAmount
-      totalRaised
+      args
+      auctionToken {
+        id
+      }
+      raisedTokens {
+        id
+      }
+      totalRaised {
+        id
+      }
       blockNumber
     }
   }
 `;
 
 export const LIST_UPCOMING_SALE_QUERY = gql`
-  query ListSales($skip: Int! = 0, $first: Int! = 50, $now: Int!) {
-    sales(
+  query ListAuctions($skip: Int! = 0, $first: Int! = 50, $now: Int!) {
+    auctions(
       orderBy: startingAt
       skip: $skip
       first: $first
       where: { startingAt_gt: $now }
     ) {
       id
-      templateName
+      templateAuctionMap {
+        id
+      }
       owner
-      token
-      tokenName
-      tokenSymbol
-      tokenDecimals
       startingAt
       closingAt
-      allocatedAmount
-      minRaisedAmount
-      totalRaised
+      args
+      auctionToken {
+        id
+      }
+      raisedTokens {
+        id
+      }
+      totalRaised {
+        id
+      }
       blockNumber
     }
   }
@@ -77,70 +92,144 @@ export const LIST_UPCOMING_SALE_QUERY = gql`
 
 export const LIST_CLOSED_SALE_QUERY = gql`
   query ListSales($skip: Int! = 0, $first: Int! = 50, $now: Int!) {
-    sales(
+    auctions(
       orderBy: startingAt
       skip: $skip
       first: $first
       where: { closingAt_lt: $now }
     ) {
       id
-      templateName
+      templateAuctionMap {
+        id
+        template {
+          id
+          templateName
+          addedAt
+        }
+      }
       owner
-      token
-      tokenName
-      tokenSymbol
-      tokenDecimals
       startingAt
       closingAt
-      allocatedAmount
-      minRaisedAmount
-      totalRaised
+      args
+      auctionToken {
+        id
+        name
+        symbol
+        decimals
+      }
+      raisedTokens {
+        id
+        name
+        symbol
+        decimals
+      }
+      totalRaised {
+        id
+        amount
+        token {
+          id
+          name
+          symbol
+          decimals
+        }
+      }
       blockNumber
     }
   }
 `;
 
 export const LIST_MY_SALE_QUERY = gql`
-  query MySale($id: ID!) {
-    sales(orderBy: startingAt, where: { owner: $id }) {
+  query MyAuctions($id: ID!) {
+    auctions(orderBy: startingAt, where: { owner: $id }) {
       id
-      templateName
+      templateAuctionMap {
+        id
+        template {
+          id
+          templateName
+          addedAt
+        }
+      }
       owner
-      token
-      tokenName
-      tokenSymbol
-      tokenDecimals
       startingAt
       closingAt
-      allocatedAmount
-      minRaisedAmount
-      totalRaised
+      args
+      auctionToken {
+        id
+        name
+        symbol
+        decimals
+      }
+      raisedTokens {
+        id
+        name
+        symbol
+        decimals
+      }
+      totalRaised {
+        id
+        amount
+        token {
+          id
+          name
+          symbol
+          decimals
+        }
+      }
       blockNumber
     }
   }
 `;
 
 export const GET_SALE_QUERY = gql`
-  query GetSale($id: ID!, $address: String!) {
-    sale(id: $id) {
+  query GetAuction($id: ID!, $address: String!) {
+    auction(id: $id) {
       id
-      templateName
+      templateAuctionMap {
+        id
+        template {
+          id
+          templateName
+          addedAt
+        }
+      }
       owner
-      token
-      tokenName
-      tokenSymbol
-      tokenDecimals
       startingAt
       closingAt
-      allocatedAmount
-      minRaisedAmount
-      totalRaised
+      args
+      auctionToken {
+        id
+        name
+        symbol
+        decimals
+      }
+      raisedTokens {
+        id
+        name
+        symbol
+        decimals
+      }
+      totalRaised {
+        id
+        amount
+        token {
+          id
+          name
+          symbol
+          decimals
+        }
+      }
       contributions(last: 1000) {
         id
         amount
         from
-        receivedAt
+        raisedToken {
+          name
+          symbol
+          decimals
+        }
         totalRaised
+        receivedAt
         blockNumber
       }
       claims(where: { contributor: $address }) {

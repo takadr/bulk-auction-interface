@@ -20,7 +20,7 @@ import {
 } from "@chakra-ui/react";
 import { EditIcon } from "@chakra-ui/icons";
 import Big, { divideToNum, getBigNumber } from "lib/utils/bignumber";
-import { Sale } from "lib/types/Sale";
+import { Sale, TemplateV1 } from "lib/types/Sale";
 import useSWRMetaData from "../hooks/useSWRMetaData";
 import MetaDataFormModal from "./MetaDataFormModal";
 import {
@@ -42,12 +42,13 @@ export default function SaleCard({
   sale: Sale;
   editable?: boolean;
 }) {
+  const auction = new TemplateV1(sale);
   // TODO use enum
   // 0-> not started, 1 -> started, 2 -> closed
   const [stage, setStage] = useState<"0" | "1" | "2">("0");
   const { onOpen, isOpen, onClose } = useDisclosure();
   const { t, locale } = useLocale();
-  const { data, mutate, error } = useSWRMetaData(sale.id as string);
+  const { data, mutate, error } = useSWRMetaData(auction.id as string);
   const [countdown, setCountdown] = useState({
     days: "0",
     hours: "00",
@@ -57,51 +58,18 @@ export default function SaleCard({
   const [now] = useNow();
   useEffect(() => {
     let currentStage = stage;
-    if (now < sale.startingAt) {
+    if (now < auction.startingAt) {
       currentStage = "0";
-      setCountdown(getCountdown(sale.startingAt - now));
-    } else if (now >= sale.startingAt && now < sale.closingAt) {
+      setCountdown(getCountdown(auction.startingAt - now));
+    } else if (now >= auction.startingAt && now < auction.closingAt) {
       currentStage = "1";
-      setCountdown(getCountdown(sale.closingAt - now));
-    } else if (now >= sale.closingAt) {
+      setCountdown(getCountdown(auction.closingAt - now));
+    } else if (now >= auction.closingAt) {
       currentStage = "2";
     }
 
     setStage(currentStage);
   }, [now]);
-
-  // const {data: totalRaised, refetch} = useContractRead({
-  //     address: sale.id as `0x${string}`,
-  //     abi: SaleTemplateV1ABI,
-  //     functionName: 'totalRaised',
-  //     staleTime: 1000,
-  //     cacheTime: 1000,
-  // });
-  // useContractEvent({
-  //     address: sale.id as `0x${string}`,
-  //     abi: SaleTemplateV1ABI,
-  //     eventName: 'Received',
-  //     listener() {
-  //         refetch();
-  //     },
-  // });
-
-  // if(!data) {
-  //     return <Card
-  //     direction={{ base: 'column', sm: 'row' }}
-  //     overflow='hidden'>
-  //         <Image
-  //         objectFit='contain'
-  //         maxW={{ base: '100%', sm: '200px' }}
-  //         src={'https://dummyimage.com/200x200/718096/fff.png&text=No+Image'}
-  //         alt={''}
-  //         />
-
-  //         <Stack w={'full'}>
-  //             <CardBody><Skeleton /></CardBody>
-  //         </Stack>
-  //     </Card>
-  // }
 
   return (
     <Card direction={{ base: "column", sm: "row" }} overflow="hidden">
@@ -124,10 +92,10 @@ export default function SaleCard({
           <Flex flexDirection={{ base: "column", md: "row" }}>
             <chakra.div flex={10} pr={4}>
               <Heading size="lg">
-                <Link _hover={{ opacity: 0.75 }} href={`/auctions/${sale.id}`}>
+                <Link _hover={{ opacity: 0.75 }} href={`/auctions/${auction.id}`}>
                   {data?.metaData?.title
                     ? data?.metaData?.title
-                    : "Unnamed Auction"}
+                    : t("UNNAMED_SALE")}
                 </Link>
                 {editable && (
                   <Button size={"sm"} ml={2} onClick={onOpen}>
@@ -145,14 +113,14 @@ export default function SaleCard({
                 <chakra.span>{t("ALLOCATED_TO_THE_SALE")}</chakra.span>
                 <chakra.span fontSize={"2xl"}>
                   {tokenAmountFormat(
-                    sale.allocatedAmount,
-                    Number(sale.tokenDecimals),
+                    auction.allocatedAmount,
+                    Number(auction.auctionToken.decimals),
                     getDecimalsForView(
-                      getBigNumber(sale.allocatedAmount),
-                      Number(sale.tokenDecimals),
+                      getBigNumber(auction.allocatedAmount),
+                      Number(auction.auctionToken.decimals),
                     ),
                   )}
-                  <chakra.span fontSize={"md"}> {sale.tokenSymbol}</chakra.span>
+                  <chakra.span fontSize={"md"}> {auction.auctionToken.symbol}</chakra.span>
                 </chakra.span>
               </Flex>
               <Divider />
@@ -164,7 +132,7 @@ export default function SaleCard({
                 <chakra.span>{t("TOTAL_RAISED")}</chakra.span>{" "}
                 <chakra.span fontSize={"2xl"}>
                   {sale.totalRaised
-                    ? etherAmountFormat(sale.totalRaised, 2)
+                    ? etherAmountFormat(auction.totalRaised[0].amount, 2)
                     : 0}{" "}
                   <chakra.span fontSize={"md"}>ETH</chakra.span>
                 </chakra.span>
@@ -175,7 +143,7 @@ export default function SaleCard({
                 value={
                   data?.metaData?.maximumTotalRaised
                     ? getTargetPercetage(
-                        sale.totalRaised,
+                      auction.totalRaised[0].amount,
                         parseEtherInBig(data.metaData.maximumTotalRaised),
                       )
                     : 0
@@ -188,7 +156,7 @@ export default function SaleCard({
               >
                 <Text fontSize={"sm"}>{t("MINIMUM_TOTAL_RAISED")}</Text>
                 <Text fontSize={"lg"}>
-                  {etherAmountFormat(sale.minRaisedAmount, 2)}{" "}
+                  {etherAmountFormat(auction.minRaisedAmount, 2)}{" "}
                   <chakra.span fontSize={"sm"}>ETH</chakra.span>
                 </Text>
               </Flex>
@@ -262,10 +230,10 @@ export default function SaleCard({
       </Stack>
       {editable && isOpen && (
         <MetaDataFormModal
-          minRaisedAmount={divideToNum(sale.minRaisedAmount, Big(10).pow(18))}
+          minRaisedAmount={divideToNum(auction.minRaisedAmount, Big(10).pow(18))}
           isOpen={isOpen}
           onClose={onClose}
-          existingContractAddress={sale.id as `0x${string}`}
+          existingContractAddress={auction.id as `0x${string}`}
           saleMetaData={data?.metaData}
           onSubmitSuccess={mutate}
         />

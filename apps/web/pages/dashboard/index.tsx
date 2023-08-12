@@ -83,11 +83,11 @@ export default function DashboardPage() {
                     <SaleCardSkeleton />
                   </>
                 ) : (
-                  data.sales.map((sale: Sale) => {
+                  data.auctions.map((sale: Sale) => {
                     return <SaleCard key={sale.id} sale={sale} editable />;
                   })
                 )}
-                {!loading && data && data.sales.length === 0 && (
+                {!loading && data && data.auctions.length === 0 && (
                   <Flex
                     minH={"25vh"}
                     justifyContent="center"

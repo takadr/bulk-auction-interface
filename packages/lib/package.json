@@ -15,5 +15,8 @@
     "not android <= 4.4.4",
     "not dead",
     "not op_mini all"
-  ]
+  ],
+  "dependencies": {
+    "ethers": "^6.7.0"
+  }
 }

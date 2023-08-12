@@ -13,7 +13,7 @@ import {
 } from "viem";
 import { mainnet, goerli, sepolia, localhost, Chain } from "viem/chains";
 import { scanMetaData, addMetaData, updateSale } from "lib/dynamodb/metaData";
-import SaleTemplateV1ABI from "lib/constants/abis/SaleTemplateV1.json";
+import TemplateV1ABI from "lib/constants/abis/TemplateV1.json";
 import ironOptions from "lib/constants/ironOptions";
 import { CHAIN_IDS, CHAIN_NAMES } from "lib/constants";
 
@@ -49,7 +49,7 @@ const requireContractOwner = (
   req: NextApiRequest,
 ): Promise<{
   metaData: any;
-  saleContract: GetContractReturnType<typeof SaleTemplateV1ABI, PublicClient>;
+  saleContract: GetContractReturnType<typeof TemplateV1ABI, PublicClient>;
   provider: PublicClient<Transport, Chain>;
 }> => {
   return new Promise(async (resolve, reject) => {
@@ -59,7 +59,7 @@ const requireContractOwner = (
       const provider = getViemProvider(req.session.siwe.chainId);
       const saleContract = getContract({
         address: metaData.id,
-        abi: SaleTemplateV1ABI,
+        abi: TemplateV1ABI,
         publicClient: provider,
       });
       const contractOwner = await saleContract.read.owner();
