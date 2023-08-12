@@ -75,7 +75,7 @@ type Claim @entity {
   # event.transaction.hash.toHex() + "-" + event.logIndex.toString()
   id: ID!
   # Contributor address
-  contributor: String!
+  participant: String!
   # Receipient address
   recipient: String!
   # Total contribution by user

@@ -1,7 +1,7 @@
 import { BigInt } from "@graphprotocol/graph-ts";
 import {
   Deployed as DeployedEvent,
-  Received as ReceivedEvent,
+  Raised as RaisedEvent,
   Claimed as ClaimedEvent,
 } from "../generated/templates/BaseTemplate/BaseTemplate";
 import { Auction, Contribution, Claim, TotalRaised } from "../generated/schema";
@@ -55,7 +55,7 @@ export function handleDeployed(event: DeployedEvent): void {
   auction.save();
 }
 
-export function handleReceived(event: ReceivedEvent): void {
+export function handleRaised(event: RaisedEvent): void {
   let auction = Auction.load(event.address.toHex());
   if (auction == null) return;
 
@@ -70,7 +70,7 @@ export function handleReceived(event: ReceivedEvent): void {
   );
   contribution.amount = event.params.amount;
   contribution.raisedToken = event.params.token.toHex();
-  contribution.from = event.params.account.toHex();
+  contribution.from = event.params.participant.toHex();
   contribution.totalRaised = totalRaised.amount;
   contribution.receivedAt = event.block.timestamp;
   contribution.blockNumber = event.block.number;
@@ -89,7 +89,7 @@ export function handleClaimed(event: ClaimedEvent): void {
   const claim = new Claim(
     event.transaction.hash.toHex() + "-" + event.logIndex.toString(),
   );
-  claim.contributor = event.params.contributor.toHex();
+  claim.participant = event.params.participant.toHex();
   claim.recipient = event.params.recipient.toHex();
   claim.userShare = event.params.userShare;
   claim.erc20allocation = event.params.allocation;

@@ -25,8 +25,8 @@ import {
 import {
   handleDeployed as handleTemplateDeployed,
 } from "../src/base-template";
-import { createReceivedEvent, createClaimedEvent } from "./lib/base-template-utils";
-import { handleReceived, handleClaimed } from "../src/base-template";
+import { createRaisedEvent, createClaimedEvent } from "./lib/base-template-utils";
+import { handleRaised, handleClaimed } from "../src/base-template";
 import { DEFAULT_EVENT_ADDRESS, TEST_ADDRESS, TEMPLATE_NAME, USDT_ADDRESS } from "./lib/constants";
 import { createTokenMockFuntions } from "./lib/token";
 
@@ -163,14 +163,14 @@ describe("Describe Deployed event with baseToken ETH", () => {
   });
 
   describe("Auction behavior", () => {
-    test("Received", () => {
+    test("Raised", () => {
       // Receive fund from sender
       let sender = Address.fromString(
         "0x0000000000000000000000000000000000000004",
       );
       let amount = BigInt.fromI32(234);
-      let newReceivedEvent = createReceivedEvent(sender, Address.zero(), amount);
-      handleReceived(newReceivedEvent);
+      let newRaisedEvent = createRaisedEvent(sender, Address.zero(), amount);
+      handleRaised(newRaisedEvent);
   
       assert.fieldEquals(
         "Auction",
@@ -211,7 +211,7 @@ describe("Describe Deployed event with baseToken ETH", () => {
     });
 
     test("Claimed", () => {
-      let contributor = Address.fromString(
+      let participant = Address.fromString(
         "0x0000000000000000000000000000000000000010",
       );
       let recipient = Address.fromString(
@@ -220,7 +220,7 @@ describe("Describe Deployed event with baseToken ETH", () => {
       let userShare = BigInt.fromI32(234);
       let allocation = BigInt.fromI32(345);
       let newClaimedEvent = createClaimedEvent(
-        contributor,
+        participant,
         recipient,
         userShare,
         allocation,

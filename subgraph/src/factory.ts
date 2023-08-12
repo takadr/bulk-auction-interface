@@ -18,12 +18,12 @@ export function handleDeployed(event: DeployedEvent): void {
 }
 
 export function handleTemplateAdded(event: TemplateAddedEvent): void {
-  const template = new Template(event.params.templateAddr.toHex());
+  const template = new Template(event.params.implementionAddr.toHex());
   template.templateName = event.params.templateName;
   template.addedAt = event.block.timestamp;
   template.save();
 }
 
 export function handleTemplateRemoved(event: TemplateRemovedEvent): void {
-  store.remove("Template", event.params.templateAddr.toHex());
+  store.remove("Template", event.params.implementionAddr.toHex());
 }

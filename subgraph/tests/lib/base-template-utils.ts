@@ -2,7 +2,7 @@ import { newMockEvent } from "matchstick-as";
 import { ethereum, Address, Bytes, BigInt } from "@graphprotocol/graph-ts";
 import {
   Deployed,
-  Received,
+  Raised,
   Claimed,
 } from "../../generated/templates/BaseTemplate/BaseTemplate";
 
@@ -56,12 +56,12 @@ export function createDeployedEvent(
   return deployedEvent;
 }
 
-export function createReceivedEvent(
+export function createRaisedEvent(
   account: Address,
   token: Address,
   amount: BigInt,
-): Received {
-  let receivedEvent = changetype<Received>(newMockEvent());
+): Raised {
+  let receivedEvent = changetype<Raised>(newMockEvent());
 
   receivedEvent.parameters = new Array();
 
@@ -82,7 +82,7 @@ export function createReceivedEvent(
 }
 
 export function createClaimedEvent(
-  contributor: Address,
+  participant: Address,
   recipient: Address,
   userShare: BigInt,
   allocation: BigInt,
@@ -93,8 +93,8 @@ export function createClaimedEvent(
 
   claimedEvent.parameters.push(
     new ethereum.EventParam(
-      "contributor",
-      ethereum.Value.fromAddress(contributor),
+      "participant",
+      ethereum.Value.fromAddress(participant),
     ),
   );
   claimedEvent.parameters.push(

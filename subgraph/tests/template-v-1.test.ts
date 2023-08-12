@@ -101,7 +101,7 @@
 //   });
 
 //   test("Claimed created and stored", () => {
-//     let contributor = Address.fromString(
+//     let participant = Address.fromString(
 //       "0x0000000000000000000000000000000000000010",
 //     );
 //     let recipient = Address.fromString(
@@ -110,7 +110,7 @@
 //     let userShare = BigInt.fromI32(234);
 //     let allocation = BigInt.fromI32(345);
 //     let newClaimedEvent = createClaimedEvent(
-//       contributor,
+//       participant,
 //       recipient,
 //       userShare,
 //       allocation,
