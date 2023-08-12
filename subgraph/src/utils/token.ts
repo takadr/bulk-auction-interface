@@ -1,5 +1,5 @@
 import { Address, BigInt } from "@graphprotocol/graph-ts";
-import { ERC20 } from "../../generated/Factory/ERC20";
+import { ERC20 } from "../../generated/templates/BaseTemplate/ERC20";
 import { Token } from "../../generated/schema";
 
 export function findOrCreateToken(addressString: string): Token {
