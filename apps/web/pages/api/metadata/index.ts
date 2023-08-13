@@ -121,17 +121,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
         const { metaData, saleContract, provider } = await requireContractOwner(
           req,
         );
-        const tokenAddress = await saleContract.read.erc20onsale();
-        const { tokenName, tokenSymbol, tokenDecimal } = await getTokenInfo(
-          tokenAddress as `0x${string}`,
-          provider,
-        );
-        const result = await addMetaData({
-          ...metaData,
-          tokenName,
-          tokenSymbol,
-          tokenDecimal,
-        });
+        const result = await addMetaData(metaData);
         res.json({ result });
       } catch (_error) {
         console.log(_error);
@@ -144,17 +134,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
         const { metaData, saleContract, provider } = await requireContractOwner(
           req,
         );
-        const tokenAddress = await saleContract.read.erc20onsale();
-        const { tokenName, tokenSymbol, tokenDecimal } = await getTokenInfo(
-          tokenAddress as `0x${string}`,
-          provider,
-        );
-        const result = await updateSale({
-          ...metaData,
-          tokenName,
-          tokenSymbol,
-          tokenDecimal,
-        });
+        const result = await updateSale(metaData);
         res.json({ result });
       } catch (_error: any) {
         console.log(_error);

@@ -136,9 +136,6 @@ export type MetaData = {
   otherURL?: string;
   targetTotalRaised?: number;
   maximumTotalRaised?: number;
-  tokenName?: string;
-  tokenSymbol?: string;
-  tokenDecimals?: number;
   templateName?: string;
   createdAt?: number;
 };

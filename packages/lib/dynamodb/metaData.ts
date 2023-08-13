@@ -32,9 +32,6 @@ const dynamoDBItemsToMetaData = (item: any) => {
     maximumTotalRaised: item.MaximumTotalRaised
       ? item.MaximumTotalRaised.N
       : undefined,
-    tokenName: item.TokenName ? item.TokenName.S : undefined,
-    tokenSymbol: item.TokenSymbol ? item.TokenSymbol.S : undefined,
-    tokenDecimals: item.TokenDecimals ? item.TokenDecimals.N : undefined,
     templateName: item.TemplateName ? item.TemplateName.S : undefined,
   } as MetaData;
 };
@@ -116,11 +113,6 @@ export async function addMetaData(
     MaximumTotalRaised: {
       N: sale.maximumTotalRaised ? sale.maximumTotalRaised.toString() : "0",
     },
-    TokenName: { S: sale.tokenName ? sale.tokenName : "" },
-    TokenSymbol: { S: sale.tokenSymbol ? sale.tokenSymbol : "" },
-    TokenDecimals: {
-      N: sale.tokenDecimals ? sale.tokenDecimals.toString() : "0",
-    },
     TemplateName: { S: TEMPLATE_V1_NAME },
   };
   const command = new PutItemCommand({
@@ -146,7 +138,7 @@ export async function updateSale(
     TableName: process.env.AWS_DYNAMO_TABLE_NAME,
     Key: { AuctionId: { S: (sale.id as string).toLowerCase() } },
     UpdateExpression:
-      "set Title = :Title, Description=:Description, Terms = :Terms, ProjectURL = :ProjectURL, LogoURL = :LogoURL, OtherURL = :OtherURL, TargetTotalRaised = :TargetTotalRaised, MaximumTotalRaised = :MaximumTotalRaised, TokenName = :TokenName, TokenSymbol = :TokenSymbol, TokenDecimals = :TokenDecimals, TemplateName = :TemplateName",
+      "set Title = :Title, Description=:Description, Terms = :Terms, ProjectURL = :ProjectURL, LogoURL = :LogoURL, OtherURL = :OtherURL, TargetTotalRaised = :TargetTotalRaised, MaximumTotalRaised = :MaximumTotalRaised, TemplateName = :TemplateName",
     ExpressionAttributeValues: {
       ":Title": { S: sale.title ? sale.title : "" },
       ":Description": { S: sale.description ? sale.description : "" },
@@ -159,11 +151,6 @@ export async function updateSale(
       },
       ":MaximumTotalRaised": {
         N: sale.maximumTotalRaised ? sale.maximumTotalRaised.toString() : "0",
-      },
-      ":TokenName": { S: sale.tokenName ? sale.tokenName : "" },
-      ":TokenSymbol": { S: sale.tokenSymbol ? sale.tokenSymbol : "" },
-      ":TokenDecimals": {
-        N: sale.tokenDecimals ? sale.tokenDecimals.toString() : "0",
       },
       ":TemplateName": { S: TEMPLATE_V1_NAME },
     },
