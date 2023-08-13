@@ -9,27 +9,27 @@ import {
   Flex,
   SkeletonText,
 } from "@chakra-ui/react";
-import { AuctionProps } from "lib/types/Sale";
+import { AuctionProps } from "lib/types/Auction";
 import { TEMPLATE_V1_NAME } from "lib/constants/templates";
-import V1 from "./templates/TemplateV1/SaleCardContent";
+import V1 from "./templates/TemplateV1/AuctionCardContent";
 
-export default function SaleCard({
+export default function AuctionCard({
   auctionProps,
   editable = false,
 }: {
   auctionProps: AuctionProps;
   editable?: boolean;
 }) {
-  // Add sale card components as needed
+  // Add auction card components as needed
   switch (auctionProps.templateAuctionMap.template.templateName) {
     case TEMPLATE_V1_NAME:
       return <V1 auctionProps={auctionProps} editable={editable} />;
     default:
-      return <SaleCardSkeleton />;
+      return <AuctionCardSkeleton />;
   }
 }
 
-export const SaleCardSkeleton = () => {
+export const AuctionCardSkeleton = () => {
   return (
     <Card direction={{ base: "column", sm: "row" }} overflow="hidden">
       <Box p={6}>

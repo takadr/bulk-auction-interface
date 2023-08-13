@@ -229,7 +229,7 @@ const Header: FC<HeaderProps> = ({ title }) => {
                   fontSize="xl"
                   fontWeight="extrabold"
                 >
-                  {title ? title : "DFGC Bulksale Maker (仮)"}
+                  {title ? title : "Yamawake"}
                 </Text>
               </Heading>
             </Link>

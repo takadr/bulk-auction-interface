@@ -12,31 +12,31 @@ import {
   Alert,
   AlertIcon,
 } from "@chakra-ui/react";
-import { AuctionProps } from "lib/types/Sale";
+import { AuctionProps } from "lib/types/Auction";
 import Layout from "ui/components/layouts/layout";
-import SaleCard, { SaleCardSkeleton } from "ui/components/SaleCard";
-import { QueryType, useSWRSales } from "ui/hooks/useSales";
+import AuctionCard, { AuctionCardSkeleton } from "ui/components/AuctionCard";
+import { QueryType, useSWRAuctions } from "ui/hooks/useAuctions";
 import { useLocale } from "ui/hooks/useLocale";
 
-export default function SalePage() {
+export default function AuctionPage() {
   const {
-    sales: activeSales,
-    isLast: isLastActiveSales,
-    isLoading: isLoadingActiveSales,
-    isValidating: isValidatingActiveSales,
-    error: activeSalesError,
-    loadMoreSales: loadMoreActiveSales,
-  } = useSWRSales({});
-  // const { sales: activeSales, isLast: isLastActiveSales, isLoading: isLoadingActiveSales, isValidating: isValidatingActiveSales, error: activeSalesError, loadMoreSales: loadMoreActiveSales } = useSWRSales({}, QueryType.ACTIVE);
-  // const { sales: upcomingSales, isLast: isLastUpcomingSales, isLoading: isLoadingUpcomingSales, isValidating: isValidatingUpcomingSales, error: upcomingSalesError, loadMoreSales: loadMoreUpcomingSales } = useSWRSales({}, QueryType.UPCOMING);
+    auctions: activeAuctions,
+    isLast: isLastActiveAuctions,
+    isLoading: isLoadingActiveAuctions,
+    isValidating: isValidatingActiveAuctions,
+    error: activeAuctionsError,
+    loadMoreAuctions: loadMoreActiveAuctions,
+  } = useSWRAuctions({});
+  // const { auctions: activeAuctions, isLast: isLastActiveAuctions, isLoading: isLoadingActiveAuctions, isValidating: isValidatingActiveAuctions, error: activeAuctionsError, loadMoreAuctions: loadMoreActiveAuctions } = useSWRAuctions({}, QueryType.ACTIVE);
+  // const { auctions: upcomingAuctions, isLast: isLastUpcomingAuctions, isLoading: isLoadingUpcomingAuctions, isValidating: isValidatingUpcomingAuctions, error: upcomingAuctionsError, loadMoreAuctions: loadMoreUpcomingAuctions } = useSWRAuctions({}, QueryType.UPCOMING);
   const {
-    sales: closedSales,
-    isLast: isLastClosedSales,
-    isLoading: isLoadingClosedSales,
-    isValidating: isValidatingClosedSales,
-    error: closedSalesError,
-    loadMoreSales: loadMoreClosedSales,
-  } = useSWRSales({}, QueryType.CLOSED);
+    auctions: closedAuctions,
+    isLast: isLastClosedAuctions,
+    isLoading: isLoadingClosedAuctions,
+    isValidating: isValidatingClosedAuctions,
+    error: closedAuctionsError,
+    loadMoreAuctions: loadMoreClosedAuctions,
+  } = useSWRAuctions({}, QueryType.CLOSED);
   const { t } = useLocale();
 
   return (
@@ -47,44 +47,44 @@ export default function SalePage() {
             <Tab fontSize={{ base: "sm", md: "md" }}>
               {t("LIVE_UPCOMING_SALES")}
             </Tab>
-            {/* <Tab fontSize={{base: 'sm', md: 'md'}}>Live Sales</Tab>
-                    <Tab fontSize={{base: 'sm', md: 'md'}}>Upcoming Sales</Tab> */}
+            {/* <Tab fontSize={{base: 'sm', md: 'md'}}>Live Auctions</Tab>
+                    <Tab fontSize={{base: 'sm', md: 'md'}}>Upcoming Auctions</Tab> */}
             <Tab fontSize={{ base: "sm", md: "md" }}>{t("ENDED_SALES")}</Tab>
           </TabList>
           <TabPanels mt={4}>
             <TabPanel p={{ base: 0, md: 4 }}>
               <Stack spacing={8}>
-                {activeSalesError && (
+                {activeAuctionsError && (
                   <Alert status={"error"}>
                     <AlertIcon />
-                    {activeSalesError.message}
+                    {activeAuctionsError.message}
                   </Alert>
                 )}
-                {isLoadingActiveSales ? (
+                {isLoadingActiveAuctions ? (
                   <>
-                    <SaleCardSkeleton />
-                    <SaleCardSkeleton />
-                    <SaleCardSkeleton />
+                    <AuctionCardSkeleton />
+                    <AuctionCardSkeleton />
+                    <AuctionCardSkeleton />
                   </>
                 ) : (
-                  activeSales.map((auctionProps: AuctionProps) => {
+                  activeAuctions.map((auctionProps: AuctionProps) => {
                     return (
-                      <SaleCard
+                      <AuctionCard
                         key={auctionProps.id}
                         auctionProps={auctionProps}
                       />
                     );
                   })
                 )}
-                {!isLastActiveSales && activeSales.length > 0 && (
+                {!isLastActiveAuctions && activeAuctions.length > 0 && (
                   <Button
-                    isLoading={isLoadingActiveSales || isValidatingActiveSales}
-                    onClick={loadMoreActiveSales}
+                    isLoading={isLoadingActiveAuctions || isValidatingActiveAuctions}
+                    onClick={loadMoreActiveAuctions}
                   >
                     {t("LOAD_MORE_SALES")}
                   </Button>
                 )}
-                {!isLoadingActiveSales && activeSales.length === 0 && (
+                {!isLoadingActiveAuctions && activeAuctions.length === 0 && (
                   <Flex
                     minH={"25vh"}
                     justifyContent="center"
@@ -101,22 +101,22 @@ export default function SalePage() {
             {/* <TabPanel p={{base: 0, md: 4}}>
                         <Stack spacing={8}>
                             {
-                                upcomingSalesError && <Alert status={'error'}><AlertIcon />{upcomingSalesError.message}</Alert>
+                                upcomingAuctionsError && <Alert status={'error'}><AlertIcon />{upcomingAuctionsError.message}</Alert>
                             }
                             {
-                                isLoadingUpcomingSales ? <>
-                                    <SaleCardSkeleton /><SaleCardSkeleton /><SaleCardSkeleton />
+                                isLoadingUpcomingAuctions ? <>
+                                    <AuctionCardSkeleton /><AuctionCardSkeleton /><AuctionCardSkeleton />
                                 </> 
-                                : upcomingSales.map((sale: Sale) => {
-                                    return <SaleCard key={sale.id} sale={sale} />
+                                : upcomingAuctions.map((auctionProps: AuctionProps) => {
+                                    return <AuctionCard key={auctionProps.id} auctionProps={auctionProps} />
                                 })
                             }
                             {
-                                !isLastUpcomingSales && upcomingSales.length > 0 && <Button isLoading={isLoadingUpcomingSales || isValidatingUpcomingSales} onClick={loadMoreUpcomingSales}>Load more sale</Button>
+                                !isLastUpcomingAuctions && upcomingAuctions.length > 0 && <Button isLoading={isLoadingUpcomingAuctions || isValidatingUpcomingAuctions} onClick={loadMoreUpcomingAuctions}>Load more auctions</Button>
                             }
                             {
-                                !isLoadingUpcomingSales && upcomingSales.length === 0 && <Flex minH={'25vh'} justifyContent='center' alignItems={'center'}>
-                                    <Text fontSize={'lg'} opacity={'.75'} textAlign={'center'}>No sales</Text>
+                                !isLoadingUpcomingAuctions && upcomingAuctions.length === 0 && <Flex minH={'25vh'} justifyContent='center' alignItems={'center'}>
+                                    <Text fontSize={'lg'} opacity={'.75'} textAlign={'center'}>No auctions</Text>
                                 </Flex>
                             }
                         </Stack>
@@ -124,37 +124,37 @@ export default function SalePage() {
 
             <TabPanel p={{ base: 0, md: 4 }}>
               <Stack spacing={8}>
-                {closedSalesError && (
+                {closedAuctionsError && (
                   <Alert status={"error"}>
                     <AlertIcon />
-                    {closedSalesError.message}
+                    {closedAuctionsError.message}
                   </Alert>
                 )}
-                {isLoadingClosedSales ? (
+                {isLoadingClosedAuctions ? (
                   <>
-                    <SaleCardSkeleton />
-                    <SaleCardSkeleton />
-                    <SaleCardSkeleton />
+                    <AuctionCardSkeleton />
+                    <AuctionCardSkeleton />
+                    <AuctionCardSkeleton />
                   </>
                 ) : (
-                  closedSales.map((auctionProps: AuctionProps) => {
+                  closedAuctions.map((auctionProps: AuctionProps) => {
                     return (
-                      <SaleCard
+                      <AuctionCard
                         key={auctionProps.id}
                         auctionProps={auctionProps}
                       />
                     );
                   })
                 )}
-                {!isLastClosedSales && closedSales.length > 0 && (
+                {!isLastClosedAuctions && closedAuctions.length > 0 && (
                   <Button
-                    isLoading={isLoadingClosedSales || isValidatingClosedSales}
-                    onClick={loadMoreClosedSales}
+                    isLoading={isLoadingClosedAuctions || isValidatingClosedAuctions}
+                    onClick={loadMoreClosedAuctions}
                   >
                     {t("LOAD_MORE_SALES")}
                   </Button>
                 )}
-                {!isLoadingClosedSales && closedSales.length === 0 && (
+                {!isLoadingClosedAuctions && closedAuctions.length === 0 && (
                   <Flex
                     minH={"25vh"}
                     justifyContent="center"

@@ -1,20 +1,19 @@
 import { useEffect } from "react";
 import { useFormik, FormikProps } from "formik";
-import { MetaData, validateMetaData } from "lib/types/Sale";
-import { URL_REGEX } from "lib/constants";
+import { MetaData, validateMetaData } from "lib/types/Auction";
 
 export default function useMetaDataForm({
   contractId,
   minRaisedAmount,
   onSubmitSuccess,
   onSubmitError,
-  saleMetaData,
+  auctionMetaData,
 }: {
   contractId?: `0x${string}`;
   minRaisedAmount: number; // Numbers that take decimals into account. e.g. 10
   onSubmitSuccess?: (result: Response) => void;
   onSubmitError?: (e: any) => void;
-  saleMetaData?: MetaData;
+  auctionMetaData?: MetaData;
 }): {
   formikProps: FormikProps<MetaData>;
 } {
@@ -39,7 +38,7 @@ export default function useMetaDataForm({
     try {
       const result = await fetch("/api/metadata", {
         credentials: "same-origin",
-        method: saleMetaData ? "PUT" : "POST",
+        method: auctionMetaData ? "PUT" : "POST",
         headers: {
           "Content-Type": "application/json",
         },
@@ -58,7 +57,7 @@ export default function useMetaDataForm({
 
   const formikProps = useFormik({
     enableReinitialize: true,
-    initialValues: saleMetaData ? saleMetaData : initMetaData,
+    initialValues: auctionMetaData ? auctionMetaData : initMetaData,
     onSubmit: handleSubmit,
     validate: (value: MetaData) => validateMetaData(value, minRaisedAmount),
   });

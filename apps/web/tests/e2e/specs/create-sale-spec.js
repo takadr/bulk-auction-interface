@@ -38,13 +38,13 @@ function getFactoryContract() {
   return contract
 }
 
-function getSaleContract(address) {
+function getAuctionContract(address) {
   const provider = ethers.getDefaultProvider(Cypress.env('NETWORK_NAME'));
   const contract = new ethers.Contract(address, TemplateV1ABI, provider);
   return contract
 }
 
-describe('create-sale-spec', () => {
+describe('create-auction-spec', () => {
   before(() => {
     cy.revokeApproval()
     cy.mintToken()
@@ -68,7 +68,7 @@ describe('create-sale-spec', () => {
   })
 
   it('should approve token usage', () => {
-    cy.get('button').contains('Create new sale').first().click();
+    cy.get('button').contains('Create new auction').first().click();
     cy.get('input#token').type(Cypress.env('TEST_TOKEN'))
     
     cy.get('input[name="allocatedAmount"]').clear().type(TOKEN_AMOUNT)
@@ -115,12 +115,12 @@ describe('create-sale-spec', () => {
     
     cy.get('.rs-picker-toolbar-right > button').contains('OK').first().click()
 
-    cy.get('button').contains('Deploy Sale Contract').first().click().then(() => {
+    cy.get('button').contains('Deploy Auction Contract').first().click().then(() => {
       const token = getToken()
       Promise.all([token.totalSupply(), token.decimals(), token.symbol()]).then(([totalSupply, decimals, symbol]) => {
         const tokenAmountWithFormat = tokenAmountFormat(multiply(Big(TOKEN_AMOUNT), Big(10).pow(decimals)), decimals, getDecimalsForView(getBigNumber(totalSupply.toString()), decimals))
-        cy.get('p[aria-label="Allocated to the sale"]').should('have.text', `${tokenAmountWithFormat} ${symbol}`).then(() => {
-          cy.get('p[aria-label="Sale Template"]').should('have.text', 'SaleTemplateV1');
+        cy.get('p[aria-label="Allocated to the auction"]').should('have.text', `${tokenAmountWithFormat} ${symbol}`).then(() => {
+          cy.get('p[aria-label="Auction Template"]').should('have.text', 'AuctionTemplateV1');
           cy.get('p[aria-label="Token address"]').should('have.text', Cypress.env('TEST_TOKEN'));
           cy.get('p[aria-label="Start date - End date"]').should('have.text', `${format(start, 'yyyy/MM/dd ')}05:10:00 - ${format(end, 'yyyy/MM/dd ')}15:43:00${' '}${format(new Date, '(z)')}`);
           cy.get('p[aria-label="Minimum total raised"]').should('have.text', '1.00 ETH');
@@ -130,8 +130,8 @@ describe('create-sale-spec', () => {
     cy.wait(5000)
   })
 
-  it('should deploy sale contract with the same parameters as user\'s input', () => {
-    cy.get('button[type="submit"]').contains('Deploy Sale Contract').first().click().then(res => {
+  it('should deploy auction contract with the same parameters as user\'s input', () => {
+    cy.get('button[type="submit"]').contains('Deploy Auction Contract').first().click().then(res => {
       // workaround https://github.com/Synthetixio/synpress/issues/795
       cy.wait(10000)
 
@@ -142,7 +142,7 @@ describe('create-sale-spec', () => {
     })
     // cy.get('input#id').invoke('val')
     // .then((contractAddress) => {
-    //   const sale = getSaleContract(address);
+    //   const auction = getAuctionContract(address);
     // })
   })
 })

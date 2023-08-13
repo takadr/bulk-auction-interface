@@ -4,11 +4,11 @@ export const TEMPLATE_V1_NAME =
 export const COMPATIBLE_TEMPLATES = [TEMPLATE_V1_NAME];
 
 export const LOCK_DURATION: { [key: string]: number } = {
-  // SaleTemplateV1 -> 3 day
+  // TemplateV1 -> 3 day
   [TEMPLATE_V1_NAME]: 86400 * 3,
 };
 
 export const FEE_RATE_PER_MIL: { [key: string]: number } = {
-  // SaleTemplateV1
+  // TemplateV1
   [TEMPLATE_V1_NAME]: 1,
 };

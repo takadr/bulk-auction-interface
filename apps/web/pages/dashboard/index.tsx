@@ -19,12 +19,12 @@ import {
 } from "@chakra-ui/react";
 import { AddIcon } from "@chakra-ui/icons";
 import { useQuery } from "@apollo/client";
-import { AuctionProps } from "lib/types/Sale";
+import { AuctionProps } from "lib/types/Auction";
 import Layout from "ui/components/layouts/layout";
 import { LIST_MY_SALE_QUERY } from "lib/apollo/query";
 import { CurrentUserContext } from "ui/components/providers/CurrentUserProvider";
-import SaleFormModal from "ui/components/SaleFormModal";
-import SaleCard, { SaleCardSkeleton } from "ui/components/SaleCard";
+import AuctionFormModal from "ui/components/AuctionFormModal";
+import AuctionCard, { AuctionCardSkeleton } from "ui/components/AuctionCard";
 import { useLocale } from "ui/hooks/useLocale";
 import Render404 from "ui/components/errors/404";
 import CustomError from "../_error";
@@ -33,7 +33,7 @@ export default function DashboardPage() {
   const { chain } = useNetwork();
   const { address, isConnected, connector } = useAccount();
   const { currentUser, mutate } = useContext(CurrentUserContext);
-  const saleFormModalDisclosure = useDisclosure();
+  const auctionFormModalDisclosure = useDisclosure();
   const { data, loading, error, refetch } = useQuery(LIST_MY_SALE_QUERY, {
     variables: { id: String(address).toLowerCase() },
   });
@@ -64,28 +64,28 @@ export default function DashboardPage() {
           <TabPanels>
             <TabPanel p={{ base: 0, md: 4 }}>
               <chakra.div mt={4} textAlign={"right"}>
-                <Button onClick={saleFormModalDisclosure.onOpen}>
+                <Button onClick={auctionFormModalDisclosure.onOpen}>
                   <AddIcon fontSize={"sm"} mr={2} />
                   {t("CREATE_NEW_SALE")}
                 </Button>
               </chakra.div>
-              <SaleFormModal
-                isOpen={saleFormModalDisclosure.isOpen}
-                onClose={saleFormModalDisclosure.onClose}
+              <AuctionFormModal
+                isOpen={auctionFormModalDisclosure.isOpen}
+                onClose={auctionFormModalDisclosure.onClose}
                 onDeployConfirmed={refetch}
                 onInformationSaved={() => setTimeout(refetch, 1000)}
               />
               <Stack mt={4} spacing={8}>
                 {loading || !data ? (
                   <>
-                    <SaleCardSkeleton />
-                    <SaleCardSkeleton />
-                    <SaleCardSkeleton />
+                    <AuctionCardSkeleton />
+                    <AuctionCardSkeleton />
+                    <AuctionCardSkeleton />
                   </>
                 ) : (
                   data.auctions.map((auctionProps: AuctionProps) => {
                     return (
-                      <SaleCard
+                      <AuctionCard
                         key={auctionProps.id}
                         auctionProps={auctionProps}
                         editable

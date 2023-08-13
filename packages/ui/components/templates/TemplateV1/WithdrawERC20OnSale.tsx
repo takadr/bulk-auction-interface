@@ -9,8 +9,8 @@ import {
   Heading,
 } from "@chakra-ui/react";
 import { useContractRead, erc20ABI } from "wagmi";
-import useWithdrawERC20Onsale from "../../../hooks/useWithdrawERC20Onsale";
-import { TemplateV1 } from "lib/types/Sale";
+import useWithdrawERC20OnSale from "../../../hooks/useWithdrawERC20OnSale";
+import { TemplateV1 } from "lib/types/Auction";
 import { getDecimalsForView, tokenAmountFormat } from "lib/utils";
 import { getBigNumber } from "lib/utils/bignumber";
 import TxSentToast from "../../TxSentToast";
@@ -33,9 +33,9 @@ export default function WithdrawERC20({ auction, onSuccessConfirm }: Props) {
     prepareFn: withdrawERC20PrepareFn,
     writeFn: withdrawERC20WriteFn,
     waitFn: withdrawERC20WaitFn,
-  } = useWithdrawERC20Onsale({
+  } = useWithdrawERC20OnSale({
     targetAddress: auction.id as `0x${string}`,
-    onSuccessWrite: (data) => {
+    onSuccessWrite: (data: any) => {
       toast({
         title: "Transaction sent!",
         status: "success",
@@ -50,7 +50,7 @@ export default function WithdrawERC20({ auction, onSuccessConfirm }: Props) {
         duration: 5000,
       });
     },
-    onSuccessConfirm: (data) => {
+    onSuccessConfirm: (data: any) => {
       toast({
         description: `Transaction confirmed!`,
         status: "success",

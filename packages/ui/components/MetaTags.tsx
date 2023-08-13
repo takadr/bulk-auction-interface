@@ -2,9 +2,9 @@ import Head from "next/head";
 import bgImage from "assets/images/background_sky-min.png";
 
 export default function MetaTags({
-  title = "Bulksale maker(仮)",
+  title = "Yamawake",
   description = "An inclusive and transparent token launchpad,\n offering a permissionless and fair launch model.",
-  site_name = "Bulksale maker(仮)",
+  site_name = "Yamawake",
   image = undefined,
   children,
 }: {

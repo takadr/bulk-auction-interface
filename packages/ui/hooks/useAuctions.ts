@@ -7,20 +7,20 @@ import {
   LIST_UPCOMING_SALE_QUERY,
   LIST_CLOSED_SALE_QUERY,
 } from "lib/apollo/query";
-import { AuctionProps } from "lib/types/Sale";
+import { AuctionProps } from "lib/types/Auction";
 import { DocumentNode } from "@apollo/client";
 
-interface SWRSaleStore {
-  sales: AuctionProps[];
+interface SWRAuctionStore {
+  auctions: AuctionProps[];
   isLast: boolean;
   error?: Error;
   isLoading: boolean;
   isValidating: boolean;
   fetcher: (args: [number, number]) => Promise<AuctionProps[]>;
-  loadMoreSales: () => void;
+  loadMoreAuctions: () => void;
 }
 
-type SalesParams = {
+type AuctionsParams = {
   first?: number;
   skip?: number;
   keySuffix?: string;
@@ -52,10 +52,10 @@ const getQuery = (queryType: QueryType): DocumentNode => {
   }
 };
 
-export const useSWRSales = (
-  config: SalesParams & SWRConfiguration,
+export const useSWRAuctions = (
+  config: AuctionsParams & SWRConfiguration,
   queryType: QueryType = QueryType.ACTIVE_AND_UPCOMING,
-): SWRSaleStore => {
+): SWRAuctionStore => {
   const getKey = (pageIndex: number, previousPageData: AuctionProps[]) => {
     if (previousPageData && !previousPageData.length) return null;
     const skip = previousPageData === null ? 0 : previousPageData.length;
@@ -85,7 +85,7 @@ export const useSWRSales = (
   };
 
   const {
-    data: saleList,
+    data: auctionList,
     error,
     size,
     setSize,
@@ -93,22 +93,22 @@ export const useSWRSales = (
     isValidating,
   } = useSWRInfinite<AuctionProps[], Error>(getKey, fetcher, config);
 
-  const loadMoreSales = () => {
+  const loadMoreAuctions = () => {
     setSize(size + 1);
   };
 
-  const isLast = saleList
-    ? saleList.filter((list) => list.length < LIMIT).length > 0
+  const isLast = auctionList
+    ? auctionList.filter((list) => list.length < LIMIT).length > 0
     : false;
-  const sales = saleList ? saleList.flat() : [];
+  const auctions = auctionList ? auctionList.flat() : [];
 
   return {
-    sales,
+    auctions,
     isLast,
     error,
     isLoading,
     isValidating,
     fetcher,
-    loadMoreSales,
+    loadMoreAuctions,
   };
 };

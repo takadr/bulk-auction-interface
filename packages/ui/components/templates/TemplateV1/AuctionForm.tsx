@@ -40,12 +40,12 @@ import {
   tokenAmountFormat,
 } from "lib/utils";
 import Big, { divide, getBigNumber, multiply } from "lib/utils/bignumber";
-import { SaleForm, Template } from "lib/types/Sale";
+import { AuctionForm, Template } from "lib/types/Auction";
 import { CHAIN_NAMES } from "lib/constants";
 import { LIST_TEMPLATE_QUERY } from "lib/apollo/query";
 import { useLocale } from "../../../hooks/useLocale";
 
-export default function SaleForm({
+export default function AuctionForm({
   formikProps,
   address,
   approvals,
@@ -53,7 +53,7 @@ export default function SaleForm({
   tokenData,
   balance,
 }: {
-  formikProps: FormikProps<SaleForm>;
+  formikProps: FormikProps<AuctionForm>;
   address: `0x${string}`;
   approvals: any;
   writeFn: any;
@@ -374,7 +374,7 @@ export default function SaleForm({
                         <chakra.p>{t("SELECT_SALE_TEMPLETE")}</chakra.p>
                         <chakra.p
                           fontWeight={"bold"}
-                          aria-label="Sale Template"
+                          aria-label="Auction Template"
                         >
                           {ethers.decodeBytes32String(
                             formikProps.values.templateName,
@@ -428,7 +428,7 @@ export default function SaleForm({
                         <chakra.p>{t("ALLOCATED_TO_THE_SALE")}</chakra.p>
                         <chakra.p
                           fontWeight={"bold"}
-                          aria-label="Allocated to the sale"
+                          aria-label="Allocated to the auction"
                         >
                           {tokenData
                             ? Number(

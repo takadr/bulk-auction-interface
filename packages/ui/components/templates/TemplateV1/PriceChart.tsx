@@ -13,7 +13,7 @@ import {
 } from "chart.js";
 import { Line } from "react-chartjs-2";
 import "chartjs-adapter-moment";
-import { TemplateV1 } from "lib/types/Sale";
+import { TemplateV1 } from "lib/types/Auction";
 import { useEffect, useState } from "react";
 import {
   getMinTokenPriceAgainstETH,
@@ -79,7 +79,7 @@ export default function PriceChart({ auction }: { auction: TemplateV1 }) {
         ).toNumber(),
       };
     });
-    // Price at the sale start
+    // Price at the auction start
     newData.unshift({
       x: auction.startingAt * 1000,
       y: getMinTokenPriceAgainstETH(
@@ -136,7 +136,7 @@ export default function PriceChart({ auction }: { auction: TemplateV1 }) {
               day: "YYYY/MM/DD",
             },
           },
-          // min: new Date(sale.startingAt * 1000).getTime(),
+          // min: new Date(auction.startingAt * 1000).getTime(),
           max: new Date(auction.closingAt * 1000).getTime(),
           ticks: {
             autoSkip: true,
@@ -145,8 +145,8 @@ export default function PriceChart({ auction }: { auction: TemplateV1 }) {
         },
         y: {
           position: "right" as const,
-          // min: getMinTokenPriceAgainstETH(sale.minRaisedAmount, sale.allocatedAmount, sale.tokenDecimals).toNumber(),
-          // max: getTokenPriceAgainstETHWithMinPrice(sale.minRaisedAmount, sale.allocatedAmount, sale.totalRaised, sale.tokenDecimals).times(1.2).toNumber(),
+          // min: getMinTokenPriceAgainstETH(auction.minRaisedAmount, auction.allocatedAmount, auction.tokenDecimals).toNumber(),
+          // max: getTokenPriceAgainstETHWithMinPrice(auction.minRaisedAmount, auction.allocatedAmount, auction.totalRaised, auction.tokenDecimals).times(1.2).toNumber(),
           ticks: {
             callback: function (value: string | number) {
               return `${Number(value).toFixed(8)}`;

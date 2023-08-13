@@ -20,9 +20,9 @@ import {
 } from "@chakra-ui/react";
 import { EditIcon } from "@chakra-ui/icons";
 import Big, { divideToNum, getBigNumber } from "lib/utils/bignumber";
-import { AuctionProps, TemplateV1 } from "lib/types/Sale";
+import { AuctionProps, TemplateV1 } from "lib/types/Auction";
 import useSWRMetaData from "../../../hooks/useSWRMetaData";
-import MetaDataFormModal from "./../../MetaDataFormModal";
+import MetaDataFormModal from "../../MetaDataFormModal";
 import {
   tokenAmountFormat,
   getCountdown,
@@ -35,7 +35,7 @@ import {
 import { useNow } from "../../../hooks/useNow";
 import { useLocale } from "../../../hooks/useLocale";
 
-export default function SaleCardContent({
+export default function AuctionCardContent({
   auctionProps,
   editable = false,
 }: {
@@ -241,7 +241,7 @@ export default function SaleCardContent({
           isOpen={isOpen}
           onClose={onClose}
           existingContractAddress={auction.id as `0x${string}`}
-          saleMetaData={data?.metaData}
+          auctionMetaData={data?.metaData}
           onSubmitSuccess={mutate}
         />
       )}
@@ -249,7 +249,7 @@ export default function SaleCardContent({
   );
 }
 
-export const SaleCardSkeleton = () => {
+export const AuctionCardSkeleton = () => {
   return (
     <Card direction={{ base: "column", sm: "row" }} overflow="hidden">
       <Box p={6}>

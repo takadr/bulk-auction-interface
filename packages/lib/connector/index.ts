@@ -36,7 +36,7 @@ const config: any = createConfig({
     new CoinbaseWalletConnector({
       chains,
       options: {
-        appName: "DFGC Bulksale Maker",
+        appName: "Yamawake",
       },
     }),
     new WalletConnectConnector({

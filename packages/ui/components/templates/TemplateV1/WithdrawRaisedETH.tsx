@@ -10,7 +10,7 @@ import {
 } from "@chakra-ui/react";
 import { useBalance } from "wagmi";
 import useWithdrawRaisedETH from "../../../hooks/useWithdrawRaisedETH";
-import { TemplateV1 } from "lib/types/Sale";
+import { TemplateV1 } from "lib/types/Auction";
 import { tokenAmountFormat } from "lib/utils";
 import { getBigNumber } from "lib/utils/bignumber";
 import TxSentToast from "../../TxSentToast";

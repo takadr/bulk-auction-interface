@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { ButtonProps, Button, useToast } from "@chakra-ui/react";
 import { ApolloQueryResult } from "@apollo/client/core/types";
-import { TemplateV1 } from "lib/types/Sale";
+import { TemplateV1 } from "lib/types/Auction";
 import { getExpectedAmount } from "lib/utils";
 import Big from "lib/utils/bignumber";
 import useClaim from "../../../hooks/useClaim";

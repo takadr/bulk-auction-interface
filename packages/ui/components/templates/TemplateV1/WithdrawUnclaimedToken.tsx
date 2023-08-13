@@ -9,35 +9,35 @@ import {
   chakra,
 } from "@chakra-ui/react";
 import { useContractRead, erc20ABI } from "wagmi";
-import useWithdrawUnclaimedERC20OnSale from "../../../hooks/useWithdrawUnclaimedERC20OnSale";
-import { Sale } from "lib/types/Sale";
+import useWithdrawUnclaimedERC20OnAuction from "../../../hooks/useWithdrawUnclaimedERC20OnSale";
+import { TemplateV1 } from "lib/types/Auction";
 import { getDecimalsForView, tokenAmountFormat } from "lib/utils";
 import { getBigNumber } from "lib/utils/bignumber";
 import TxSentToast from "../../TxSentToast";
 
 type Props = {
-  sale: Sale;
+  auction: TemplateV1;
   onSuccessConfirm?: (data: any) => void;
 };
 export default function WithdrawUnclaimedToken({
-  sale,
+  auction,
   onSuccessConfirm,
 }: Props) {
   const toast = useToast({ position: "top-right", isClosable: true });
   const { data: balance } = useContractRead({
-    address: sale.token as `0x${string}`,
+    address: auction.auctionToken.id as `0x${string}`,
     abi: erc20ABI,
     functionName: "balanceOf",
-    args: [sale.id as `0x${string}`],
+    args: [auction.id as `0x${string}`],
     watch: true,
   });
   const {
     prepareFn: withdrawUnclaimedERC20PrepareFn,
     writeFn: withdrawUnclaimedERC20WriteFn,
     waitFn: withdrawUnclaimedERC20WaitFn,
-  } = useWithdrawUnclaimedERC20OnSale({
-    targetAddress: sale.id as `0x${string}`,
-    onSuccessWrite: (data) => {
+  } = useWithdrawUnclaimedERC20OnAuction({
+    targetAddress: auction.id as `0x${string}`,
+    onSuccessWrite: (data: any) => {
       toast({
         title: "Transaction sent!",
         status: "success",
@@ -52,7 +52,7 @@ export default function WithdrawUnclaimedToken({
         duration: 5000,
       });
     },
-    onSuccessConfirm: (data) => {
+    onSuccessConfirm: (data: any) => {
       toast({
         description: `Transaction confirmed!`,
         status: "success",
@@ -80,14 +80,14 @@ export default function WithdrawUnclaimedToken({
           {typeof balance !== "undefined"
             ? tokenAmountFormat(
                 getBigNumber(balance.toString()),
-                Number(sale.tokenDecimals),
+                Number(auction.auctionToken.decimals),
                 getDecimalsForView(
-                  getBigNumber(sale.allocatedAmount),
-                  Number(sale.tokenDecimals),
+                  getBigNumber(auction.allocatedAmount),
+                  Number(auction.auctionToken.decimals),
                 ),
               )
             : "-"}{" "}
-          {sale.tokenSymbol}
+          {auction.auctionToken.symbol}
         </chakra.p>
         <Button
           variant={"solid"}

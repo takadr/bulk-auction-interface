@@ -12,14 +12,14 @@ import { useAccount, useContractEvent } from "wagmi";
 import { CustomProvider } from "rsuite";
 import FactoryABI from "lib/constants/abis/Factory.json";
 import { Steps } from "./Steps";
-import SaleForm from "./templates/TemplateV1/SaleForm";
-import useSaleForm from "../hooks/TemplateV1/useSaleForm";
+import AuctionForm from "./templates/TemplateV1/AuctionForm";
+import useAuctionForm from "../hooks/TemplateV1/useAuctionForm";
 import MetaDataForm from "./templates/TemplateV1/MetaDataForm";
 import useMetaDataForm from "../hooks/TemplateV1/useMetaDataForm";
 import { useLocale } from "../hooks/useLocale";
 import TxSentToast from "./TxSentToast";
 
-type SaleFormModalProps = {
+type AuctionFormModalProps = {
   isOpen: boolean;
   onClose: () => void;
   onDeploy?: () => void;
@@ -28,14 +28,14 @@ type SaleFormModalProps = {
   onInformationCanceled?: () => void;
 };
 
-export default function SaleFormModal({
+export default function AuctionFormModal({
   isOpen,
   onClose,
   onDeploy,
   onDeployConfirmed,
   onInformationSaved,
   onInformationCanceled,
-}: SaleFormModalProps) {
+}: AuctionFormModalProps) {
   const { address } = useAccount();
   const toast = useToast({ position: "top-right", isClosable: true });
   const { colorMode, setColorMode, toggleColorMode } = useColorMode();
@@ -58,7 +58,7 @@ export default function SaleFormModal({
     waitFn,
     tokenData,
     balance,
-  } = useSaleForm({
+  } = useAuctionForm({
     address: address as `0x${string}`,
     onSubmitSuccess: (result) => {
       setTx(result.hash);
@@ -184,7 +184,7 @@ export default function SaleFormModal({
               currentStep={step}
             />
             {step === 1 ? (
-              <SaleForm
+              <AuctionForm
                 formikProps={formikProps}
                 address={address as `0x${string}`}
                 approvals={approvals}

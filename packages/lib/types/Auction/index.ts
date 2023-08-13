@@ -116,7 +116,7 @@ export type Claim = {
   blockNumber: string;
 };
 
-export type SaleForm = {
+export type AuctionForm = {
   templateName: string;
   token: `0x${string}` | null;
   owner: `0x${string}`;

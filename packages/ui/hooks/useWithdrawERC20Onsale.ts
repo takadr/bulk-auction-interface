@@ -6,7 +6,7 @@ import {
 } from "wagmi";
 import Template from "lib/constants/abis/TemplateV1.json";
 
-export default function useWithdrawERC20Onsale({
+export default function useWithdrawERC20OnSale({
   targetAddress,
   onSuccessWrite,
   onErrorWrite,

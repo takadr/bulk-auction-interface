@@ -145,7 +145,7 @@ export const LIST_UPCOMING_SALE_QUERY = gql`
 `;
 
 export const LIST_CLOSED_SALE_QUERY = gql`
-  query ListSales($skip: Int! = 0, $first: Int! = 50, $now: Int!) {
+  query ListAuctions($skip: Int! = 0, $first: Int! = 50, $now: Int!) {
     auctions(
       orderBy: startingAt
       skip: $skip

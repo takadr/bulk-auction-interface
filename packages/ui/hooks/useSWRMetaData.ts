@@ -1,5 +1,5 @@
 import useSWR, { SWRResponse } from "swr";
-import { MetaData } from "lib/types/Sale";
+import { MetaData } from "lib/types/Auction";
 import {
   LOCK_DURATION,
   FEE_RATE_PER_MIL,

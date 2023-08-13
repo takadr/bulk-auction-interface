@@ -9,13 +9,13 @@ type Auction @entity {
   auctionToken: Token!
   # Raised tokens
   raisedTokens: [Token!]!
-  # Sale start timestamp
+  # Auction start timestamp
   startingAt: BigInt!
-  # Sale end timestamp
+  # Auction end timestamp
   closingAt: BigInt!
-  # Total amount of distribution for during the sale
+  # Total amount of distribution for during the auction
   args: Bytes!
-  # The total amount of bidding that the sale raised
+  # The total amount of bidding that the auction raised
   totalRaised: [TotalRaised!]!
   # Received amount and related information
   contributions: [Contribution!]!
@@ -28,7 +28,7 @@ type Auction @entity {
 type Template @entity {
   # Contract address
   id: ID!
-  # Sale template name (e.g. BulksaleV1)
+  # Auction template name (e.g. BulksaleV1)
   templateName: Bytes!
   addedAt: BigInt!
 }

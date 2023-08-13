@@ -19,7 +19,7 @@ import {
 import { QuestionIcon } from "@chakra-ui/icons";
 import { FormikProps } from "formik";
 import { useWaitForTransaction } from "wagmi";
-import { MetaData } from "lib/types/Sale";
+import { MetaData } from "lib/types/Auction";
 import { SAMPLE_DISCLAIMERS } from "lib/constants";
 import { useLocale } from "../../../hooks/useLocale";
 

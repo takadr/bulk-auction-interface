@@ -10,10 +10,10 @@ import { useLocale } from "ui/hooks/useLocale";
 import { zeroAddress } from "viem";
 import CustomError from "../_error";
 import AuctionDetail, {
-  SkeletonSale,
+  SkeletonAuction,
 } from "ui/components/templates/AuctionDetail";
 
-export default function SalePage() {
+export default function AuctionPage() {
   const { address, isConnected, connector } = useAccount();
   const router = useRouter();
   const { id } = router.query;
@@ -21,7 +21,7 @@ export default function SalePage() {
   const toast = useToast({ position: "top-right", isClosable: true });
 
   const {
-    data: saleData,
+    data: auctionData,
     loading,
     error: apolloError,
     refetch,
@@ -47,11 +47,11 @@ export default function SalePage() {
   if (loading || !metaData)
     return (
       <Layout>
-        <SkeletonSale />
+        <SkeletonAuction />
       </Layout>
     );
 
-  if (!saleData || !saleData.auction) return <CustomError statusCode={404} />;
+  if (!auctionData || !auctionData.auction) return <CustomError statusCode={404} />;
 
   return (
     <Layout>
@@ -67,8 +67,8 @@ export default function SalePage() {
         image={metaData.metaData.logoURL && metaData.metaData.logoURL}
       />
       <AuctionDetail
-        auctionProps={saleData.auction}
-        refetchSale={refetch}
+        auctionProps={auctionData.auction}
+        refetchAuction={refetch}
         metaData={metaData.metaData}
         refetchMetaData={mutate}
         contractAddress={id as `0x${string}`}

@@ -13,21 +13,21 @@ import {
 import { CurrentUserContext } from "ui/components/providers/CurrentUserProvider";
 import Layout from "ui/components/layouts/layout";
 import Hero from "ui/components/Hero";
-import SaleCard, { SaleCardSkeleton } from "ui/components/SaleCard";
-import { useSWRSales, QueryType } from "ui/hooks/useSales";
+import AuctionCard, { AuctionCardSkeleton } from "ui/components/AuctionCard";
+import { useSWRAuctions, QueryType } from "ui/hooks/useAuctions";
 import { useLocale } from "ui/hooks/useLocale";
-import { AuctionProps } from "lib/types/Sale";
+import { AuctionProps } from "lib/types/Auction";
 
 export default function Web() {
   const { currentUser, mutate } = useContext(CurrentUserContext);
   const {
-    sales: activeSales,
-    isLast: isLastActiveSales,
-    isLoading: isLoadingActiveSales,
-    isValidating: isValidatingActiveSales,
-    error: activeSalesError,
-    loadMoreSales: loadMoreActiveSales,
-  } = useSWRSales({ first: 5, keySuffix: "top" }, QueryType.ACTIVE);
+    auctions: activeAuctions,
+    isLast: isLastActiveAuctions,
+    isLoading: isLoadingActiveAuctions,
+    isValidating: isValidatingActiveAuctions,
+    error: activeAuctionsError,
+    loadMoreAuctions: loadMoreActiveAuctions,
+  } = useSWRAuctions({ first: 5, keySuffix: "top" }, QueryType.ACTIVE);
   const { t } = useLocale();
 
   return (
@@ -40,26 +40,26 @@ export default function Web() {
       <Container maxW={"container.xl"}>
         <Heading>{t("LIVE_SALES")}</Heading>
         <Stack spacing={8} py={8}>
-          {activeSalesError && (
+          {activeAuctionsError && (
             <Alert status={"error"}>
               <AlertIcon />
-              {activeSalesError.message}
+              {activeAuctionsError.message}
             </Alert>
           )}
-          {isLoadingActiveSales ? (
+          {isLoadingActiveAuctions ? (
             <>
-              <SaleCardSkeleton />
-              <SaleCardSkeleton />
-              <SaleCardSkeleton />
+              <AuctionCardSkeleton />
+              <AuctionCardSkeleton />
+              <AuctionCardSkeleton />
             </>
           ) : (
-            activeSales.map((auctionProps: AuctionProps) => {
+            activeAuctions.map((auctionProps: AuctionProps) => {
               return (
-                <SaleCard key={auctionProps.id} auctionProps={auctionProps} />
+                <AuctionCard key={auctionProps.id} auctionProps={auctionProps} />
               );
             })
           )}
-          {!isLoadingActiveSales && activeSales.length === 0 && (
+          {!isLoadingActiveAuctions && activeAuctions.length === 0 && (
             <Flex minH={"25vh"} justifyContent="center" alignItems={"center"}>
               <Text fontSize={"lg"} opacity={".75"} textAlign={"center"}>
                 {t("NO_LIVE_SALE")}

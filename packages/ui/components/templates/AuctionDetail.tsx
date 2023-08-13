@@ -1,5 +1,5 @@
 import { TEMPLATE_V1_NAME } from "lib/constants/templates";
-import { AuctionProps, MetaData } from "lib/types/Sale";
+import { AuctionProps, MetaData } from "lib/types/Auction";
 import Render500 from "../errors/500";
 import { ApolloQueryResult } from "@apollo/client";
 import { KeyedMutator } from "swr";
@@ -17,7 +17,7 @@ import {
 
 export type DetailPageParams = {
   auctionProps: AuctionProps;
-  refetchSale: () => Promise<ApolloQueryResult<any>>;
+  refetchAuction: () => Promise<ApolloQueryResult<any>>;
   metaData: MetaData;
   refetchMetaData: KeyedMutator<any>;
   address: `0x${string}` | undefined;
@@ -34,7 +34,7 @@ export default function AuctionDetail(props: DetailPageParams) {
   }
 }
 
-export function SkeletonSale() {
+export function SkeletonAuction() {
   return (
     <Container maxW={"container.lg"} py={16}>
       <Flex alignItems={"center"} minH={"150px"}>

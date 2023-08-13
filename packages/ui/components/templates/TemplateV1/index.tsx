@@ -48,12 +48,12 @@ import StatisticsInCircle from "./StatisticsInCircle";
 import PriceChart from "./PriceChart";
 import useRaised from "../../../hooks/TemplateV1/useRaised";
 import useRate from "../../../hooks/useRate";
-import { AuctionProps, MetaData, TemplateV1 } from "lib/types/Sale";
+import { AuctionProps, MetaData, TemplateV1 } from "lib/types/Auction";
 import ExternalLinkTag from "../../ExternalLinkTag";
 import ClaimButton from "./ClaimButton";
 import TxSentToast from "../../TxSentToast";
 import WithdrawRaisedETH from "./WithdrawRaisedETH";
-import WithdrawERC20 from "./WithdrawERC20";
+import WithdrawERC20 from "./WithdrawERC20OnSale";
 import { useLocale } from "../../../hooks/useLocale";
 import {
   getDecimalsForView,
@@ -67,7 +67,7 @@ import { DetailPageParams } from "../AuctionDetail";
 
 export default function DetailPage({
   auctionProps,
-  refetchSale,
+  refetchAuction,
   metaData,
   refetchMetaData,
   address,
@@ -107,7 +107,7 @@ export default function DetailPage({
   }, 1000);
   useInterval(() => {
     updateRate();
-    refetchSale();
+    refetchAuction();
     refetchMetaData();
     refetchRaised();
   }, 30000);
@@ -180,7 +180,7 @@ export default function DetailPage({
       });
       formikProps.resetForm();
       setTimeout(() => {
-        refetchSale();
+        refetchAuction();
         refetchRaised();
         refetchBalance();
       }, 0);
@@ -443,7 +443,7 @@ export default function DetailPage({
                     address={address}
                     myContribution={raised}
                     isClaimed={auction.claims.length > 0}
-                    mutateIsClaimed={refetchSale}
+                    mutateIsClaimed={refetchAuction}
                     colorScheme={"green"}
                   />
                 </chakra.div>
@@ -475,14 +475,14 @@ export default function DetailPage({
                   <chakra.div textAlign={"center"}>
                     <WithdrawERC20
                       auction={auction}
-                      onSuccessConfirm={refetchSale}
+                      onSuccessConfirm={refetchAuction}
                     />
                   </chakra.div>
 
                   <chakra.div textAlign={"center"}>
                     <WithdrawRaisedETH
                       auction={auction}
-                      onSuccessConfirm={refetchSale}
+                      onSuccessConfirm={refetchAuction}
                     />
                   </chakra.div>
                 </Stack>
