@@ -111,7 +111,9 @@ export async function addMetaData(
       N: auction.targetTotalRaised ? auction.targetTotalRaised.toString() : "0",
     },
     MaximumTotalRaised: {
-      N: auction.maximumTotalRaised ? auction.maximumTotalRaised.toString() : "0",
+      N: auction.maximumTotalRaised
+        ? auction.maximumTotalRaised.toString()
+        : "0",
     },
     TemplateName: { S: TEMPLATE_V1_NAME },
   };
@@ -147,10 +149,14 @@ export async function updateAuction(
       ":LogoURL": { S: auction.logoURL ? auction.logoURL : "" },
       ":OtherURL": { S: auction.otherURL ? auction.otherURL : "" },
       ":TargetTotalRaised": {
-        N: auction.targetTotalRaised ? auction.targetTotalRaised.toString() : "0",
+        N: auction.targetTotalRaised
+          ? auction.targetTotalRaised.toString()
+          : "0",
       },
       ":MaximumTotalRaised": {
-        N: auction.maximumTotalRaised ? auction.maximumTotalRaised.toString() : "0",
+        N: auction.maximumTotalRaised
+          ? auction.maximumTotalRaised.toString()
+          : "0",
       },
       ":TemplateName": { S: TEMPLATE_V1_NAME },
     },

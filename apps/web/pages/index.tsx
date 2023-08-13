@@ -55,7 +55,10 @@ export default function Web() {
           ) : (
             activeAuctions.map((auctionProps: AuctionProps) => {
               return (
-                <AuctionCard key={auctionProps.id} auctionProps={auctionProps} />
+                <AuctionCard
+                  key={auctionProps.id}
+                  auctionProps={auctionProps}
+                />
               );
             })
           )}

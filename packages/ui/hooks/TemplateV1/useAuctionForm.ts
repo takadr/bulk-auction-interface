@@ -71,7 +71,10 @@ export default function useAuctionForm({
             debouncedAuction.allocatedAmount,
             tokenData?.decimals ? Big(10).pow(tokenData.decimals) : 1,
           ).toString(),
-          multiply(debouncedAuction.minRaisedAmount, Big(10).pow(18)).toString(),
+          multiply(
+            debouncedAuction.minRaisedAmount,
+            Big(10).pow(18),
+          ).toString(),
         ],
       );
     } catch (e) {

@@ -78,7 +78,9 @@ export default function AuctionPage() {
                 )}
                 {!isLastActiveAuctions && activeAuctions.length > 0 && (
                   <Button
-                    isLoading={isLoadingActiveAuctions || isValidatingActiveAuctions}
+                    isLoading={
+                      isLoadingActiveAuctions || isValidatingActiveAuctions
+                    }
                     onClick={loadMoreActiveAuctions}
                   >
                     {t("LOAD_MORE_SALES")}
@@ -148,7 +150,9 @@ export default function AuctionPage() {
                 )}
                 {!isLastClosedAuctions && closedAuctions.length > 0 && (
                   <Button
-                    isLoading={isLoadingClosedAuctions || isValidatingClosedAuctions}
+                    isLoading={
+                      isLoadingClosedAuctions || isValidatingClosedAuctions
+                    }
                     onClick={loadMoreClosedAuctions}
                   >
                     {t("LOAD_MORE_SALES")}

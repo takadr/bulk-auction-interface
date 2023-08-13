@@ -51,7 +51,8 @@ export default function AuctionPage() {
       </Layout>
     );
 
-  if (!auctionData || !auctionData.auction) return <CustomError statusCode={404} />;
+  if (!auctionData || !auctionData.auction)
+    return <CustomError statusCode={404} />;
 
   return (
     <Layout>

@@ -11,7 +11,11 @@ import {
   Transport,
 } from "viem";
 import { mainnet, goerli, sepolia, localhost, Chain } from "viem/chains";
-import { scanMetaData, addMetaData, updateAuction } from "lib/dynamodb/metaData";
+import {
+  scanMetaData,
+  addMetaData,
+  updateAuction,
+} from "lib/dynamodb/metaData";
 import BaseTemplateABI from "lib/constants/abis/BaseTemplate.json";
 import ironOptions from "lib/constants/ironOptions";
 import { CHAIN_NAMES } from "lib/constants";
@@ -117,9 +121,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     case "POST":
       try {
         requireAvailableNetwork(req);
-        const { metaData } = await requireContractOwner(
-          req,
-        );
+        const { metaData } = await requireContractOwner(req);
         const result = await addMetaData(metaData);
         res.json({ result });
       } catch (_error) {
@@ -130,9 +132,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     case "PUT":
       try {
         requireAvailableNetwork(req);
-        const { metaData } = await requireContractOwner(
-          req,
-        );
+        const { metaData } = await requireContractOwner(req);
         const result = await updateAuction(metaData);
         res.json({ result });
       } catch (_error: any) {
