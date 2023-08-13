@@ -1,5 +1,4 @@
 import { ETHER_DECIMALS_FOR_VIEW } from "../constants";
-import { Sale } from "../types/Sale";
 import Big, {
   BigNumberValueType,
   add,
