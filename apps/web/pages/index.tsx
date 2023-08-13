@@ -54,7 +54,9 @@ export default function Web() {
             </>
           ) : (
             activeSales.map((auctionProps: AuctionProps) => {
-              return <SaleCard key={auctionProps.id} auctionProps={auctionProps} />;
+              return (
+                <SaleCard key={auctionProps.id} auctionProps={auctionProps} />
+              );
             })
           )}
           {!isLoadingActiveSales && activeSales.length === 0 && (

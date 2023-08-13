@@ -41,16 +41,19 @@ export function createDeployedEvent(
     ),
   );
   deployedEvent.parameters.push(
-    new ethereum.EventParam("auctionToken", ethereum.Value.fromAddress(auctionToken)),
-  );
-  deployedEvent.parameters.push(
-    new ethereum.EventParam("raisedTokens", ethereum.Value.fromBytes(raisedTokens)),
+    new ethereum.EventParam(
+      "auctionToken",
+      ethereum.Value.fromAddress(auctionToken),
+    ),
   );
   deployedEvent.parameters.push(
     new ethereum.EventParam(
-      "args",
-      ethereum.Value.fromBytes(args),
+      "raisedTokens",
+      ethereum.Value.fromBytes(raisedTokens),
     ),
+  );
+  deployedEvent.parameters.push(
+    new ethereum.EventParam("args", ethereum.Value.fromBytes(args)),
   );
 
   return deployedEvent;

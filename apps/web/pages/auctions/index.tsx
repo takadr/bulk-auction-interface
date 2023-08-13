@@ -68,7 +68,12 @@ export default function SalePage() {
                   </>
                 ) : (
                   activeSales.map((auctionProps: AuctionProps) => {
-                    return <SaleCard key={auctionProps.id} auctionProps={auctionProps} />;
+                    return (
+                      <SaleCard
+                        key={auctionProps.id}
+                        auctionProps={auctionProps}
+                      />
+                    );
                   })
                 )}
                 {!isLastActiveSales && activeSales.length > 0 && (
@@ -133,7 +138,12 @@ export default function SalePage() {
                   </>
                 ) : (
                   closedSales.map((auctionProps: AuctionProps) => {
-                    return <SaleCard key={auctionProps.id} auctionProps={auctionProps} />;
+                    return (
+                      <SaleCard
+                        key={auctionProps.id}
+                        auctionProps={auctionProps}
+                      />
+                    );
                   })
                 )}
                 {!isLastClosedSales && closedSales.length > 0 && (

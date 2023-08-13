@@ -20,4 +20,4 @@ export default function Render500({ error }: { error: Error }) {
       </Card>
     </Container>
   );
-};
+}

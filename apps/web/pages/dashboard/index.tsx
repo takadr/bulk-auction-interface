@@ -84,7 +84,13 @@ export default function DashboardPage() {
                   </>
                 ) : (
                   data.auctions.map((auctionProps: AuctionProps) => {
-                    return <SaleCard key={auctionProps.id} auctionProps={auctionProps} editable />;
+                    return (
+                      <SaleCard
+                        key={auctionProps.id}
+                        auctionProps={auctionProps}
+                        editable
+                      />
+                    );
                   })
                 )}
                 {!loading && data && data.auctions.length === 0 && (

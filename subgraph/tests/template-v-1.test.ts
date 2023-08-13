@@ -121,98 +121,98 @@
 //     const sale = Sale.load("0xa16081f360e3847006db660bae1c6d1b2e17ec2a");
 //     assert.assertTrue(sale!.claims.length == 1);
 //   });
-    // test("Deployed created and stored", () => {
-    //   assert.entityCount("Sale", 1);
-    //   assert.fieldEquals(
-    //     "Sale",
-    //     "0x0000000000000000000000000000000000000001",
-    //     "templateName",
-    //     "0x42756c6b73616c65563100000000000000000000000000000000000000000000",
-    //   );
-    //   assert.fieldEquals(
-    //     "Sale",
-    //     "0x0000000000000000000000000000000000000001",
-    //     "token",
-    //     Address.fromString(USDT_ADDRESS).toHex(),
-    //   );
-    //   assert.fieldEquals(
-    //     "Sale",
-    //     "0x0000000000000000000000000000000000000001",
-    //     "owner",
-    //     "0x0000000000000000000000000000000000000003",
-    //   );
-    //   assert.fieldEquals(
-    //     "Sale",
-    //     "0x0000000000000000000000000000000000000001",
-    //     "allocatedAmount",
-    //     "234",
-    //   );
-    //   assert.fieldEquals(
-    //     "Sale",
-    //     "0x0000000000000000000000000000000000000001",
-    //     "startingAt",
-    //     "234",
-    //   );
-    //   assert.fieldEquals(
-    //     "Sale",
-    //     "0x0000000000000000000000000000000000000001",
-    //     "closingAt",
-    //     "468",
-    //   );
-    //   assert.fieldEquals(
-    //     "Sale",
-    //     "0x0000000000000000000000000000000000000001",
-    //     "minRaisedAmount",
-    //     "234",
-    //   );
-    //   assert.fieldEquals(
-    //     "Sale",
-    //     "0x0000000000000000000000000000000000000001",
-    //     "totalRaised",
-    //     "0",
-    //   );
-    //   assert.fieldEquals(
-    //     "Sale",
-    //     "0x0000000000000000000000000000000000000001",
-    //     "tokenName",
-    //     "Test Tether USD",
-    //   );
-    //   assert.fieldEquals(
-    //     "Sale",
-    //     "0x0000000000000000000000000000000000000001",
-    //     "tokenSymbol",
-    //     "USDT",
-    //   );
-    //   assert.fieldEquals(
-    //     "Sale",
-    //     "0x0000000000000000000000000000000000000001",
-    //     "tokenDecimals",
-    //     "18",
-    //   );
-    //   assert.fieldEquals(
-    //     "Sale",
-    //     "0x0000000000000000000000000000000000000001",
-    //     "baseToken",
-    //     Address.fromString(USDT_ADDRESS).toHex(),
-    //   );
-    //   assert.fieldEquals(
-    //     "Sale",
-    //     "0x0000000000000000000000000000000000000001",
-    //     "baseTokenName",
-    //     "Test Tether USD",
-    //   );
-    //   assert.fieldEquals(
-    //     "Sale",
-    //     "0x0000000000000000000000000000000000000001",
-    //     "baseTokenSymbol",
-    //     "USDT",
-    //   );
-    //   assert.fieldEquals(
-    //     "Sale",
-    //     "0x0000000000000000000000000000000000000001",
-    //     "baseTokenDecimals",
-    //     "18",
-    //   );
-    // });
-    // });
+// test("Deployed created and stored", () => {
+//   assert.entityCount("Sale", 1);
+//   assert.fieldEquals(
+//     "Sale",
+//     "0x0000000000000000000000000000000000000001",
+//     "templateName",
+//     "0x42756c6b73616c65563100000000000000000000000000000000000000000000",
+//   );
+//   assert.fieldEquals(
+//     "Sale",
+//     "0x0000000000000000000000000000000000000001",
+//     "token",
+//     Address.fromString(USDT_ADDRESS).toHex(),
+//   );
+//   assert.fieldEquals(
+//     "Sale",
+//     "0x0000000000000000000000000000000000000001",
+//     "owner",
+//     "0x0000000000000000000000000000000000000003",
+//   );
+//   assert.fieldEquals(
+//     "Sale",
+//     "0x0000000000000000000000000000000000000001",
+//     "allocatedAmount",
+//     "234",
+//   );
+//   assert.fieldEquals(
+//     "Sale",
+//     "0x0000000000000000000000000000000000000001",
+//     "startingAt",
+//     "234",
+//   );
+//   assert.fieldEquals(
+//     "Sale",
+//     "0x0000000000000000000000000000000000000001",
+//     "closingAt",
+//     "468",
+//   );
+//   assert.fieldEquals(
+//     "Sale",
+//     "0x0000000000000000000000000000000000000001",
+//     "minRaisedAmount",
+//     "234",
+//   );
+//   assert.fieldEquals(
+//     "Sale",
+//     "0x0000000000000000000000000000000000000001",
+//     "totalRaised",
+//     "0",
+//   );
+//   assert.fieldEquals(
+//     "Sale",
+//     "0x0000000000000000000000000000000000000001",
+//     "tokenName",
+//     "Test Tether USD",
+//   );
+//   assert.fieldEquals(
+//     "Sale",
+//     "0x0000000000000000000000000000000000000001",
+//     "tokenSymbol",
+//     "USDT",
+//   );
+//   assert.fieldEquals(
+//     "Sale",
+//     "0x0000000000000000000000000000000000000001",
+//     "tokenDecimals",
+//     "18",
+//   );
+//   assert.fieldEquals(
+//     "Sale",
+//     "0x0000000000000000000000000000000000000001",
+//     "baseToken",
+//     Address.fromString(USDT_ADDRESS).toHex(),
+//   );
+//   assert.fieldEquals(
+//     "Sale",
+//     "0x0000000000000000000000000000000000000001",
+//     "baseTokenName",
+//     "Test Tether USD",
+//   );
+//   assert.fieldEquals(
+//     "Sale",
+//     "0x0000000000000000000000000000000000000001",
+//     "baseTokenSymbol",
+//     "USDT",
+//   );
+//   assert.fieldEquals(
+//     "Sale",
+//     "0x0000000000000000000000000000000000000001",
+//     "baseTokenDecimals",
+//     "18",
+//   );
+// });
+// });
 // });

@@ -5,9 +5,7 @@ import {
   Claimed as ClaimedEvent,
 } from "../generated/templates/BaseTemplate/BaseTemplate";
 import { Auction, Contribution, Claim, TotalRaised } from "../generated/schema";
-import {
-  findOrCreateToken
-} from "./utils/token";
+import { findOrCreateToken } from "./utils/token";
 import { uniqueArray } from "./utils";
 
 export function handleDeployed(event: DeployedEvent): void {
@@ -17,7 +15,7 @@ export function handleDeployed(event: DeployedEvent): void {
 
   // Auction token
   const tokenAddress = event.params.auctionToken.toHex();
-  const auctionToken = findOrCreateToken(tokenAddress);// Token.load(tokenAddress);
+  const auctionToken = findOrCreateToken(tokenAddress); // Token.load(tokenAddress);
   auction.auctionToken = auctionToken.id;
 
   auction.raisedTokens = [auctionToken.id];
@@ -38,9 +36,9 @@ export function handleDeployed(event: DeployedEvent): void {
   auction.closingAt = event.params.closingAt;
   auction.args = event.params.args;
 
-  // Total raised 
+  // Total raised
   const totalRaisedArray: string[] = [];
-  for(let i = 0; i < raisedTokens.length; i++) {
+  for (let i = 0; i < raisedTokens.length; i++) {
     const id = `${auction.id}-${raisedTokens[i]}`;
     let totalRaised = new TotalRaised(`${auction.id}-${raisedTokens[i]}`);
     totalRaised.amount = BigInt.fromI32(0);
@@ -59,7 +57,9 @@ export function handleRaised(event: RaisedEvent): void {
   let auction = Auction.load(event.address.toHex());
   if (auction == null) return;
 
-  const totalRaised = TotalRaised.load(`${auction.id}-${event.params.token.toHex()}`);
+  const totalRaised = TotalRaised.load(
+    `${auction.id}-${event.params.token.toHex()}`,
+  );
   if (totalRaised == null) return;
 
   totalRaised.amount = totalRaised.amount.plus(event.params.amount);

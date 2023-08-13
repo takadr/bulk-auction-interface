@@ -35,9 +35,12 @@ export abstract class BaseAuction implements AuctionProps {
 export class TemplateV1 extends BaseAuction {
   allocatedAmount: string;
   minRaisedAmount: string;
-  parseArgs(): { allocatedAmount: string,  minRaisedAmount: string} {
-    const params = AbiCoder.defaultAbiCoder().decode([ "uint256", "uint256" ], this.args);
-    return { allocatedAmount: params[0],  minRaisedAmount: params[1]}
+  parseArgs(): { allocatedAmount: string; minRaisedAmount: string } {
+    const params = AbiCoder.defaultAbiCoder().decode(
+      ["uint256", "uint256"],
+      this.args,
+    );
+    return { allocatedAmount: params[0], minRaisedAmount: params[1] };
   }
   constructor(data: AuctionProps) {
     super(data);
@@ -79,20 +82,20 @@ export type Template = {
 export type TemplateAuctionMap = {
   id: `0x${string}`;
   template: Template;
-}
+};
 
 export type Token = {
   id: `0x${string}`;
   name: string;
   symbol: string;
   decimals: string;
-}
+};
 
 export type TotalRaised = {
   id: string;
   amount: string;
   token: Token;
-}
+};
 
 export type Contribution = {
   id: string;

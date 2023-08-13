@@ -44,7 +44,7 @@ export default function SaleFormModal({
     `0x${string}` | undefined
   >(undefined);
   const { t } = useLocale();
-  const [tx, setTx] = useState<string|undefined>(undefined);
+  const [tx, setTx] = useState<string | undefined>(undefined);
   const txRef = useRef(tx);
   useEffect(() => {
     txRef.current = tx;

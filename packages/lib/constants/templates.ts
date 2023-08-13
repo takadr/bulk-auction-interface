@@ -1,9 +1,7 @@
 export const TEMPLATE_V1_NAME =
   "0x54656d706c617465563100000000000000000000000000000000000000000000";
 
-export const COMPATIBLE_TEMPLATES = [
-  TEMPLATE_V1_NAME
-]
+export const COMPATIBLE_TEMPLATES = [TEMPLATE_V1_NAME];
 
 export const LOCK_DURATION: { [key: string]: number } = {
   // SaleTemplateV1 -> 3 day

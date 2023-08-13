@@ -21,11 +21,11 @@ export default function SaleCard({
   editable?: boolean;
 }) {
   // Add sale card components as needed
-  switch(auctionProps.templateAuctionMap.template.templateName) {
+  switch (auctionProps.templateAuctionMap.template.templateName) {
     case TEMPLATE_V1_NAME:
-      return <V1 auctionProps={auctionProps} editable={editable} />
+      return <V1 auctionProps={auctionProps} editable={editable} />;
     default:
-      return <SaleCardSkeleton />
+      return <SaleCardSkeleton />;
   }
 }
 

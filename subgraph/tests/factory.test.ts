@@ -19,15 +19,19 @@ import {
   createTemplateRemovedEvent,
 } from "./lib/factory-utils";
 import { Auction } from "../generated/schema";
+import { createDeployedEvent as createTemplateDeployEvent } from "./lib/base-template-utils";
+import { handleDeployed as handleTemplateDeployed } from "../src/base-template";
 import {
-  createDeployedEvent as createTemplateDeployEvent,
+  createRaisedEvent,
+  createClaimedEvent,
 } from "./lib/base-template-utils";
-import {
-  handleDeployed as handleTemplateDeployed,
-} from "../src/base-template";
-import { createRaisedEvent, createClaimedEvent } from "./lib/base-template-utils";
 import { handleRaised, handleClaimed } from "../src/base-template";
-import { DEFAULT_EVENT_ADDRESS, TEST_ADDRESS, TEMPLATE_NAME, USDT_ADDRESS } from "./lib/constants";
+import {
+  DEFAULT_EVENT_ADDRESS,
+  TEST_ADDRESS,
+  TEMPLATE_NAME,
+  USDT_ADDRESS,
+} from "./lib/constants";
 import { createTokenMockFuntions } from "./lib/token";
 
 // Tests structure (matchstick-as >=0.5.0)
@@ -39,14 +43,20 @@ describe("Describe Deployed event with baseToken ETH", () => {
     let templateName = Bytes.fromHexString(TEMPLATE_NAME);
     let deployedAddr = Address.fromString(DEPLOYED_ADDRESS);
     let tokenAddr = Address.fromString(USDT_ADDRESS);
-    let newDeployedEvent = createDeployedEvent(
-      templateName,
-      deployedAddr,
-    );
+    let newDeployedEvent = createDeployedEvent(templateName, deployedAddr);
 
     // Mock function calls
-    createTokenMockFuntions(tokenAddr, "Test Tether USD", "USDT", BigInt.fromI32(18));
-    createMockedFunction(newDeployedEvent.address, "templates", "templates(bytes32):(address,bytes4,bytes4)")
+    createTokenMockFuntions(
+      tokenAddr,
+      "Test Tether USD",
+      "USDT",
+      BigInt.fromI32(18),
+    );
+    createMockedFunction(
+      newDeployedEvent.address,
+      "templates",
+      "templates(bytes32):(address,bytes4,bytes4)",
+    )
       .withArgs([ethereum.Value.fromFixedBytes(templateName)])
       .returns([
         ethereum.Value.fromAddress(Address.fromString(TEST_ADDRESS)),
@@ -56,14 +66,15 @@ describe("Describe Deployed event with baseToken ETH", () => {
 
     handleDeployed(newDeployedEvent);
 
-
     const owner = Address.fromString(
       "0x0000000000000000000000000000000000000003",
     );
     const startingAt = BigInt.fromI32(234);
     const closingAt = BigInt.fromI32(235);
     const auctionToken = tokenAddr;
-    const raisedTokens = Bytes.fromHexString("0x0000000000000000000000000000000000000000c2c527c0cacf457746bd31b2a698fe89de2b6d49");//Bytes.fromHexString(Address.zero().toHex());
+    const raisedTokens = Bytes.fromHexString(
+      "0x0000000000000000000000000000000000000000c2c527c0cacf457746bd31b2a698fe89de2b6d49",
+    ); //Bytes.fromHexString(Address.zero().toHex());
     const args = Bytes.fromHexString(USDT_ADDRESS);
     const templateDeployEvent = createTemplateDeployEvent(
       deployedAddr,
@@ -91,24 +102,9 @@ describe("Describe Deployed event with baseToken ETH", () => {
     );
 
     assert.entityCount("Token", 2);
-    assert.fieldEquals(
-      "Token",
-      USDT_ADDRESS,
-      "name",
-      "Test Tether USD",
-    );
-    assert.fieldEquals(
-      "Token",
-      USDT_ADDRESS,
-      "symbol",
-      "USDT",
-    );
-    assert.fieldEquals(
-      "Token",
-      USDT_ADDRESS,
-      "decimals",
-      "18",
-    );
+    assert.fieldEquals("Token", USDT_ADDRESS, "name", "Test Tether USD");
+    assert.fieldEquals("Token", USDT_ADDRESS, "symbol", "USDT");
+    assert.fieldEquals("Token", USDT_ADDRESS, "decimals", "18");
 
     assert.entityCount("Auction", 1);
     assert.fieldEquals(
@@ -129,24 +125,9 @@ describe("Describe Deployed event with baseToken ETH", () => {
       "owner",
       "0x0000000000000000000000000000000000000003",
     );
-    assert.fieldEquals(
-      "Auction",
-      DEPLOYED_ADDRESS,
-      "startingAt",
-      "234",
-    );
-    assert.fieldEquals(
-      "Auction",
-      DEPLOYED_ADDRESS,
-      "closingAt",
-      "235",
-    );
-    assert.fieldEquals(
-      "Auction",
-      DEPLOYED_ADDRESS,
-      "args",
-      USDT_ADDRESS,
-    );
+    assert.fieldEquals("Auction", DEPLOYED_ADDRESS, "startingAt", "234");
+    assert.fieldEquals("Auction", DEPLOYED_ADDRESS, "closingAt", "235");
+    assert.fieldEquals("Auction", DEPLOYED_ADDRESS, "args", USDT_ADDRESS);
     assert.fieldEquals(
       "Auction",
       DEPLOYED_ADDRESS,
@@ -171,7 +152,7 @@ describe("Describe Deployed event with baseToken ETH", () => {
       let amount = BigInt.fromI32(234);
       let newRaisedEvent = createRaisedEvent(sender, Address.zero(), amount);
       handleRaised(newRaisedEvent);
-  
+
       assert.fieldEquals(
         "Auction",
         DEPLOYED_ADDRESS,
@@ -191,7 +172,7 @@ describe("Describe Deployed event with baseToken ETH", () => {
         "amount",
         amount.toString(),
       );
-  
+
       const acution = Auction.load(DEPLOYED_ADDRESS);
       assert.assertTrue(acution!.contributions.length == 1);
 
@@ -228,7 +209,9 @@ describe("Describe Deployed event with baseToken ETH", () => {
       handleClaimed(newClaimedEvent);
 
       assert.entityCount("Claim", 1);
-      const auction = Auction.load("0xa16081f360e3847006db660bae1c6d1b2e17ec2a")!;
+      const auction = Auction.load(
+        "0xa16081f360e3847006db660bae1c6d1b2e17ec2a",
+      )!;
       assert.assertTrue(auction.claims.length == 1);
     });
   });

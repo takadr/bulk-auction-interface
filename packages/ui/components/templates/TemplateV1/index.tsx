@@ -274,7 +274,9 @@ export default function DetailPage({
             totalRaised={totalRaised}
             allocatedAmount={getBigNumber(auction.allocatedAmount)}
             minRaisedAmount={
-              auction.minRaisedAmount ? getBigNumber(auction.minRaisedAmount) : Big(0)
+              auction.minRaisedAmount
+                ? getBigNumber(auction.minRaisedAmount)
+                : Big(0)
             }
             targetTotalRaised={getBigNumber(
               metaData.targetTotalRaised ? metaData.targetTotalRaised : 0,
@@ -422,7 +424,9 @@ export default function DetailPage({
                       totalRaised={totalRaised}
                       allocatedAmount={getBigNumber(auction.allocatedAmount)}
                       distributedTokenSymbol={auction.auctionToken.symbol}
-                      distributedTokenDecimal={Number(auction.auctionToken.decimals)}
+                      distributedTokenDecimal={Number(
+                        auction.auctionToken.decimals,
+                      )}
                       raisedTokenSymbol={raisedTokenSymbol}
                       raisedTokenDecimal={raisedTokenDecimal}
                       isEnding={ended}
@@ -469,7 +473,10 @@ export default function DetailPage({
               <CardBody>
                 <Stack divider={<StackDivider />} spacing="4">
                   <chakra.div textAlign={"center"}>
-                    <WithdrawERC20 auction={auction} onSuccessConfirm={refetchSale} />
+                    <WithdrawERC20
+                      auction={auction}
+                      onSuccessConfirm={refetchSale}
+                    />
                   </chakra.div>
 
                   <chakra.div textAlign={"center"}>

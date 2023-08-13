@@ -4,16 +4,22 @@ import { Token } from "../../generated/schema";
 
 export function findOrCreateToken(addressString: string): Token {
   let token = Token.load(addressString);
-  if(token == null) {
+  if (token == null) {
     token = new Token(addressString);
-    if(addressString == Address.zero().toHex()) {
+    if (addressString == Address.zero().toHex()) {
       token.symbol = "ETH";
       token.name = "Ether";
       token.decimals = BigInt.fromI32(18);
     } else {
-      token.symbol = fetchTokenSymbol(changetype<Address>(Address.fromHexString(addressString)));
-      token.name = fetchTokenName(changetype<Address>(Address.fromHexString(addressString)));
-      token.decimals = fetchTokenDecimals(changetype<Address>(Address.fromHexString(addressString)));
+      token.symbol = fetchTokenSymbol(
+        changetype<Address>(Address.fromHexString(addressString)),
+      );
+      token.name = fetchTokenName(
+        changetype<Address>(Address.fromHexString(addressString)),
+      );
+      token.decimals = fetchTokenDecimals(
+        changetype<Address>(Address.fromHexString(addressString)),
+      );
     }
     token.save();
   }

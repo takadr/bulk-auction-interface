@@ -20,7 +20,10 @@ type Props = {
   auction: TemplateV1;
   onSuccessConfirm?: (data: any) => void;
 };
-export default function WithdrawRaisedETH({ auction, onSuccessConfirm }: Props) {
+export default function WithdrawRaisedETH({
+  auction,
+  onSuccessConfirm,
+}: Props) {
   const toast = useToast({ position: "top-right", isClosable: true });
   const { data: balanceData, isLoading: isLoadingBalance } = useBalance({
     address: auction.id as `0x${string}`,

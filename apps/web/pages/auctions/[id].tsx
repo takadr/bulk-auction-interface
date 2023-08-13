@@ -9,7 +9,9 @@ import useSWRMetaData from "ui/hooks/useSWRMetaData";
 import { useLocale } from "ui/hooks/useLocale";
 import { zeroAddress } from "viem";
 import CustomError from "../_error";
-import AuctionDetail, { SkeletonSale } from "ui/components/templates/AuctionDetail";
+import AuctionDetail, {
+  SkeletonSale,
+} from "ui/components/templates/AuctionDetail";
 
 export default function SalePage() {
   const { address, isConnected, connector } = useAccount();

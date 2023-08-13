@@ -74,10 +74,10 @@ export default function useSaleForm({
           multiply(debouncedSale.minRaisedAmount, Big(10).pow(18)).toString(),
         ],
       );
-    } catch(e) {
+    } catch (e) {
       return "";
     }
-  }
+  };
 
   const validate = (values: SaleForm) => {
     const errors: any = {};
@@ -166,14 +166,14 @@ export default function useSaleForm({
     address: debouncedSale.token as `0x${string}`,
     enabled: !!debouncedSale.token && isAddress(debouncedSale.token),
   });
-  
+
   const prepareFn = usePrepareContractWrite({
     address: process.env.NEXT_PUBLIC_FACTORY_ADDRESS as `0x${string}`, //factory
     abi: FactoryABI,
     functionName: "deployAuction",
     args: [
       debouncedSale.templateName, //TEMPLATE_V1_NAME
-      getArgs()
+      getArgs(),
     ],
     enabled: !!debouncedSale.token && isAddress(debouncedSale.token),
   });

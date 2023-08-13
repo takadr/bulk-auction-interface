@@ -92,7 +92,10 @@ export default function SaleCardContent({
           <Flex flexDirection={{ base: "column", md: "row" }}>
             <chakra.div flex={10} pr={4}>
               <Heading size="lg">
-                <Link _hover={{ opacity: 0.75 }} href={`/auctions/${auction.id}`}>
+                <Link
+                  _hover={{ opacity: 0.75 }}
+                  href={`/auctions/${auction.id}`}
+                >
                   {data?.metaData?.title
                     ? data?.metaData?.title
                     : t("UNNAMED_SALE")}
@@ -120,7 +123,10 @@ export default function SaleCardContent({
                       Number(auction.auctionToken.decimals),
                     ),
                   )}
-                  <chakra.span fontSize={"md"}> {auction.auctionToken.symbol}</chakra.span>
+                  <chakra.span fontSize={"md"}>
+                    {" "}
+                    {auction.auctionToken.symbol}
+                  </chakra.span>
                 </chakra.span>
               </Flex>
               <Divider />
@@ -141,7 +147,7 @@ export default function SaleCardContent({
                 value={
                   data?.metaData?.maximumTotalRaised
                     ? getTargetPercetage(
-                      auction.totalRaised[0].amount,
+                        auction.totalRaised[0].amount,
                         parseEtherInBig(data.metaData.maximumTotalRaised),
                       )
                     : 0
@@ -228,7 +234,10 @@ export default function SaleCardContent({
       </Stack>
       {editable && isOpen && (
         <MetaDataFormModal
-          minRaisedAmount={divideToNum(auction.minRaisedAmount, Big(10).pow(18))}
+          minRaisedAmount={divideToNum(
+            auction.minRaisedAmount,
+            Big(10).pow(18),
+          )}
           isOpen={isOpen}
           onClose={onClose}
           existingContractAddress={auction.id as `0x${string}`}
