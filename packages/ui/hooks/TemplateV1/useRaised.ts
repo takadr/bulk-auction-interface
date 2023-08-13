@@ -1,11 +1,11 @@
 import { useContractReads } from "wagmi";
 import TemplateV1ABI from "lib/constants/abis/TemplateV1.json";
 import Big, { getBigNumber } from "lib/utils/bignumber";
-import { Sale } from "lib/types/Sale";
+import { TemplateV1 } from "lib/types/Sale";
 import { ContractFunctionConfig, Abi } from "viem";
 
 export default function useRaised(
-  sale: Sale,
+  auction: TemplateV1,
   address: `0x${string}` | undefined,
 ): {
   raised: Big;
@@ -15,7 +15,7 @@ export default function useRaised(
   refetch: (() => Promise<any>) | (() => void);
 } {
   const saleContractConfig = {
-    address: sale.id as `0x${string}`,
+    address: auction.id as `0x${string}`,
     abi: TemplateV1ABI as Abi,
   };
 
@@ -46,7 +46,7 @@ export default function useRaised(
   if (typeof address === "undefined") {
     return {
       raised: Big(0),
-      totalRaised: getBigNumber(sale.totalRaised),
+      totalRaised: getBigNumber(auction.totalRaised[0].amount),
       isLoading: false,
       isError: false,
       refetch: () => {},

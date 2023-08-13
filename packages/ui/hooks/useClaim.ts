@@ -4,7 +4,7 @@ import {
   useContractWrite,
   useWaitForTransaction,
 } from "wagmi";
-import Template from "lib/constants/abis/TemplateV1.json";
+import BaseTemplate from "lib/constants/abis/BaseTemplate.json";
 
 export default function useClaim({
   targetAddress,
@@ -29,7 +29,7 @@ export default function useClaim({
   const prepareFn = usePrepareContractWrite({
     chainId: chain?.id,
     address: targetAddress ? targetAddress : "0x00",
-    abi: Template,
+    abi: BaseTemplate,
     functionName: "claim",
     args: [address, address], // Contributer, Reciepient
     enabled,

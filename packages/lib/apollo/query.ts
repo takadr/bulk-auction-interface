@@ -11,6 +11,11 @@ export const LIST_ACTIVE_AND_UPCOMING_SALE_QUERY = gql`
       id
       templateAuctionMap {
         id
+        template {
+          id
+          templateName
+          addedAt
+        }
       }
       owner
       startingAt
@@ -18,12 +23,25 @@ export const LIST_ACTIVE_AND_UPCOMING_SALE_QUERY = gql`
       args
       auctionToken {
         id
+        name
+        symbol
+        decimals
       }
       raisedTokens {
         id
+        name
+        symbol
+        decimals
       }
       totalRaised {
         id
+        amount
+        token {
+          id
+          name
+          symbol
+          decimals
+        }
       }
       blockNumber
     }
@@ -41,6 +59,11 @@ export const LIST_ACTIVE_SALE_QUERY = gql`
       id
       templateAuctionMap {
         id
+        template {
+          id
+          templateName
+          addedAt
+        }
       }
       owner
       startingAt
@@ -48,12 +71,25 @@ export const LIST_ACTIVE_SALE_QUERY = gql`
       args
       auctionToken {
         id
+        name
+        symbol
+        decimals
       }
       raisedTokens {
         id
+        name
+        symbol
+        decimals
       }
       totalRaised {
         id
+        amount
+        token {
+          id
+          name
+          symbol
+          decimals
+        }
       }
       blockNumber
     }
@@ -71,6 +107,11 @@ export const LIST_UPCOMING_SALE_QUERY = gql`
       id
       templateAuctionMap {
         id
+        template {
+          id
+          templateName
+          addedAt
+        }
       }
       owner
       startingAt
@@ -78,12 +119,25 @@ export const LIST_UPCOMING_SALE_QUERY = gql`
       args
       auctionToken {
         id
+        name
+        symbol
+        decimals
       }
       raisedTokens {
         id
+        name
+        symbol
+        decimals
       }
       totalRaised {
         id
+        amount
+        token {
+          id
+          name
+          symbol
+          decimals
+        }
       }
       blockNumber
     }
@@ -232,7 +286,7 @@ export const GET_SALE_QUERY = gql`
         receivedAt
         blockNumber
       }
-      claims(where: { contributor: $address }) {
+      claims(where: { participant: $address }) {
         id
       }
       blockNumber

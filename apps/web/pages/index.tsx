@@ -16,7 +16,7 @@ import Hero from "ui/components/Hero";
 import SaleCard, { SaleCardSkeleton } from "ui/components/SaleCard";
 import { useSWRSales, QueryType } from "ui/hooks/useSales";
 import { useLocale } from "ui/hooks/useLocale";
-import { Sale } from "lib/types/Sale";
+import { AuctionProps } from "lib/types/Sale";
 
 export default function Web() {
   const { currentUser, mutate } = useContext(CurrentUserContext);
@@ -53,8 +53,8 @@ export default function Web() {
               <SaleCardSkeleton />
             </>
           ) : (
-            activeSales.map((sale: Sale) => {
-              return <SaleCard key={sale.id} sale={sale} />;
+            activeSales.map((auctionProps: AuctionProps) => {
+              return <SaleCard key={auctionProps.id} auctionProps={auctionProps} />;
             })
           )}
           {!isLoadingActiveSales && activeSales.length === 0 && (

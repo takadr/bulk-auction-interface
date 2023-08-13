@@ -14,7 +14,7 @@ import useApprove from "../useApprove";
 import { SaleForm } from "lib/types/Sale";
 import Big, { multiply } from "lib/utils/bignumber";
 import FactoryABI from "lib/constants/abis/Factory.json";
-import { SALE_TEMPLATE_V1_NAME } from "lib/constants";
+import { TEMPLATE_V1_NAME } from "lib/constants/templates";
 import "rsuite/dist/rsuite-no-reset.min.css";
 import "assets/css/rsuite-override.css";
 
@@ -49,7 +49,7 @@ export default function useSaleForm({
   balance: bigint | undefined;
 } {
   const emptySale: SaleForm = {
-    templateName: SALE_TEMPLATE_V1_NAME,
+    templateName: TEMPLATE_V1_NAME,
     token: null,
     startingAt: now + 60 * 60 * 24 * 7 * 1000,
     eventDuration: 60 * 60 * 24 * 7,
@@ -172,7 +172,7 @@ export default function useSaleForm({
     abi: FactoryABI,
     functionName: "deployAuction",
     args: [
-      debouncedSale.templateName, //SALE_TEMPLATE_V1_NAME
+      debouncedSale.templateName, //TEMPLATE_V1_NAME
       getArgs()
     ],
     enabled: !!debouncedSale.token && isAddress(debouncedSale.token),

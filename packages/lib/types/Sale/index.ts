@@ -1,7 +1,7 @@
 import { AbiCoder } from "ethers";
 import { URL_REGEX } from "../../constants";
 
-export abstract class BaseAuction implements Sale {
+export abstract class BaseAuction implements AuctionProps {
   id?: string;
   templateAuctionMap: TemplateAuctionMap;
   auctionToken: Token;
@@ -17,8 +17,8 @@ export abstract class BaseAuction implements Sale {
   // Decode this.args and set attributes as needed
   abstract parseArgs(): void;
 
-  constructor(data: Sale) {
-    this.id = data.id;
+  constructor(data: AuctionProps) {
+    this.id = data.id ? data.id : undefined;
     this.templateAuctionMap = data.templateAuctionMap;
     this.auctionToken = data.auctionToken;
     this.owner = data.owner;
@@ -39,7 +39,7 @@ export class TemplateV1 extends BaseAuction {
     const params = AbiCoder.defaultAbiCoder().decode([ "uint256", "uint256" ], this.args);
     return { allocatedAmount: params[0],  minRaisedAmount: params[1]}
   }
-  constructor(data: Sale) {
+  constructor(data: AuctionProps) {
     super(data);
     const decodedArgs = this.parseArgs();
     this.allocatedAmount = decodedArgs.allocatedAmount;
@@ -47,7 +47,7 @@ export class TemplateV1 extends BaseAuction {
   }
 }
 
-export type Sale = {
+export type AuctionProps = {
   id?: string;
   templateAuctionMap: TemplateAuctionMap;
   auctionToken: Token;
@@ -83,9 +83,9 @@ export type TemplateAuctionMap = {
 
 export type Token = {
   id: `0x${string}`;
-  name: String;
-  symbol: String;
-  decimals: String;
+  name: string;
+  symbol: string;
+  decimals: string;
 }
 
 export type TotalRaised = {

@@ -12,7 +12,7 @@ import {
   Alert,
   AlertIcon,
 } from "@chakra-ui/react";
-import { Sale } from "lib/types/Sale";
+import { AuctionProps } from "lib/types/Sale";
 import Layout from "ui/components/layouts/layout";
 import SaleCard, { SaleCardSkeleton } from "ui/components/SaleCard";
 import { QueryType, useSWRSales } from "ui/hooks/useSales";
@@ -67,8 +67,8 @@ export default function SalePage() {
                     <SaleCardSkeleton />
                   </>
                 ) : (
-                  activeSales.map((sale: Sale) => {
-                    return <SaleCard key={sale.id} sale={sale} />;
+                  activeSales.map((auctionProps: AuctionProps) => {
+                    return <SaleCard key={auctionProps.id} auctionProps={auctionProps} />;
                   })
                 )}
                 {!isLastActiveSales && activeSales.length > 0 && (
@@ -132,8 +132,8 @@ export default function SalePage() {
                     <SaleCardSkeleton />
                   </>
                 ) : (
-                  closedSales.map((sale: Sale) => {
-                    return <SaleCard key={sale.id} sale={sale} />;
+                  closedSales.map((auctionProps: AuctionProps) => {
+                    return <SaleCard key={auctionProps.id} auctionProps={auctionProps} />;
                   })
                 )}
                 {!isLastClosedSales && closedSales.length > 0 && (

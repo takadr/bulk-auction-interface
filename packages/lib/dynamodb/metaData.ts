@@ -6,7 +6,7 @@ import {
   UpdateItemCommand,
   ScanCommand,
 } from "@aws-sdk/client-dynamodb";
-import { SALE_TEMPLATE_V1_NAME } from "../constants";
+import { TEMPLATE_V1_NAME } from "../constants/templates";
 import { MetaData, validateMetaData } from "../types/Sale";
 
 const dbClient = new DynamoDBClient({
@@ -121,7 +121,7 @@ export async function addMetaData(
     TokenDecimals: {
       N: sale.tokenDecimals ? sale.tokenDecimals.toString() : "0",
     },
-    TemplateName: { S: SALE_TEMPLATE_V1_NAME },
+    TemplateName: { S: TEMPLATE_V1_NAME },
   };
   const command = new PutItemCommand({
     TableName: process.env.AWS_DYNAMO_TABLE_NAME,
@@ -165,7 +165,7 @@ export async function updateSale(
       ":TokenDecimals": {
         N: sale.tokenDecimals ? sale.tokenDecimals.toString() : "0",
       },
-      ":TemplateName": { S: SALE_TEMPLATE_V1_NAME },
+      ":TemplateName": { S: TEMPLATE_V1_NAME },
     },
   });
   const output = await dbClient.send(command);

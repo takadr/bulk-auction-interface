@@ -13,7 +13,7 @@ import {
 } from "chart.js";
 import { Line } from "react-chartjs-2";
 import "chartjs-adapter-moment";
-import { Sale } from "lib/types/Sale";
+import { TemplateV1 } from "lib/types/Sale";
 import { useEffect, useState } from "react";
 import {
   getMinTokenPriceAgainstETH,
@@ -32,7 +32,7 @@ ChartJS.register(
   Legend,
 );
 
-export default function PriceChart({ sale }: { sale: Sale }) {
+export default function PriceChart({ auction }: { auction: TemplateV1 }) {
   const [options, setOptions] = useState({});
   let defaultData = {
     datasets: [
@@ -68,35 +68,35 @@ export default function PriceChart({ sale }: { sale: Sale }) {
   >(defaultData);
 
   useEffect(() => {
-    const newData = sale.contributions.map((contribution) => {
+    const newData = auction.contributions.map((contribution) => {
       return {
         x: contribution.receivedAt * 1000,
         y: getTokenPriceAgainstETHWithMinPrice(
-          sale.minRaisedAmount,
-          sale.allocatedAmount,
+          auction.minRaisedAmount,
+          auction.allocatedAmount,
           contribution.totalRaised,
-          Number(sale.tokenDecimals),
+          Number(auction.auctionToken.decimals),
         ).toNumber(),
       };
     });
     // Price at the sale start
     newData.unshift({
-      x: sale.startingAt * 1000,
+      x: auction.startingAt * 1000,
       y: getMinTokenPriceAgainstETH(
-        sale.minRaisedAmount,
-        sale.allocatedAmount,
-        Number(sale.tokenDecimals),
+        auction.minRaisedAmount,
+        auction.allocatedAmount,
+        Number(auction.auctionToken.decimals),
       ).toNumber(),
     });
     // Price now
     const now = new Date().getTime();
     newData.push({
-      x: now > sale.closingAt * 1000 ? sale.closingAt * 1000 : now,
+      x: now > auction.closingAt * 1000 ? auction.closingAt * 1000 : now,
       y: getTokenPriceAgainstETHWithMinPrice(
-        sale.minRaisedAmount,
-        sale.allocatedAmount,
-        sale.totalRaised,
-        Number(sale.tokenDecimals),
+        auction.minRaisedAmount,
+        auction.allocatedAmount,
+        auction.totalRaised[0].amount,
+        Number(auction.auctionToken.decimals),
       ).toNumber(),
     });
     newData.sort((a, b) => a.x - b.x);
@@ -109,11 +109,11 @@ export default function PriceChart({ sale }: { sale: Sale }) {
         },
         title: {
           display: true,
-          text: `1 ${sale.tokenSymbol.toUpperCase()} = ${getTokenPriceAgainstETHWithMinPrice(
-            sale.minRaisedAmount,
-            sale.allocatedAmount,
-            sale.totalRaised,
-            Number(sale.tokenDecimals),
+          text: `1 ${auction.auctionToken.symbol.toUpperCase()} = ${getTokenPriceAgainstETHWithMinPrice(
+            auction.minRaisedAmount,
+            auction.allocatedAmount,
+            auction.totalRaised[0].amount,
+            Number(auction.auctionToken.decimals),
           ).toFixed(8)} ETH`,
           font: { weight: "bold", size: 18 },
           color: "white",
@@ -137,7 +137,7 @@ export default function PriceChart({ sale }: { sale: Sale }) {
             },
           },
           // min: new Date(sale.startingAt * 1000).getTime(),
-          max: new Date(sale.closingAt * 1000).getTime(),
+          max: new Date(auction.closingAt * 1000).getTime(),
           ticks: {
             autoSkip: true,
             maxTicksLimit: 5,
@@ -176,7 +176,7 @@ export default function PriceChart({ sale }: { sale: Sale }) {
         },
       ],
     });
-  }, [sale]);
+  }, [auction]);
 
   return <Line options={options} data={data} />;
 }

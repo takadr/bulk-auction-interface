@@ -10,27 +10,27 @@ import {
 } from "@chakra-ui/react";
 import { useBalance } from "wagmi";
 import useWithdrawRaisedETH from "../../../hooks/useWithdrawRaisedETH";
-import { Sale } from "lib/types/Sale";
+import { TemplateV1 } from "lib/types/Sale";
 import { tokenAmountFormat } from "lib/utils";
 import { getBigNumber } from "lib/utils/bignumber";
 import TxSentToast from "../../TxSentToast";
 import { useLocale } from "../../../hooks/useLocale";
 
 type Props = {
-  sale: Sale;
+  auction: TemplateV1;
   onSuccessConfirm?: (data: any) => void;
 };
-export default function WithdrawRaisedETH({ sale, onSuccessConfirm }: Props) {
+export default function WithdrawRaisedETH({ auction, onSuccessConfirm }: Props) {
   const toast = useToast({ position: "top-right", isClosable: true });
   const { data: balanceData, isLoading: isLoadingBalance } = useBalance({
-    address: sale.id as `0x${string}`,
+    address: auction.id as `0x${string}`,
   });
   const {
     prepareFn: withdrawETHPrepareFn,
     writeFn: withdrawETHWriteFn,
     waitFn: withdrawETHWaitFn,
   } = useWithdrawRaisedETH({
-    targetAddress: sale.id as `0x${string}`,
+    targetAddress: auction.id as `0x${string}`,
     onSuccessWrite: (data) => {
       toast({
         title: "Transaction sent!",

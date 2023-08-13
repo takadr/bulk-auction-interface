@@ -10,23 +10,23 @@ import {
 } from "@chakra-ui/react";
 import { useContractRead, erc20ABI } from "wagmi";
 import useWithdrawERC20Onsale from "../../../hooks/useWithdrawERC20Onsale";
-import { Sale } from "lib/types/Sale";
+import { TemplateV1 } from "lib/types/Sale";
 import { getDecimalsForView, tokenAmountFormat } from "lib/utils";
 import { getBigNumber } from "lib/utils/bignumber";
 import TxSentToast from "../../TxSentToast";
 import { useLocale } from "../../../hooks/useLocale";
 
 type Props = {
-  sale: Sale;
+  auction: TemplateV1;
   onSuccessConfirm?: (data: any) => void;
 };
-export default function WithdrawERC20({ sale, onSuccessConfirm }: Props) {
+export default function WithdrawERC20({ auction, onSuccessConfirm }: Props) {
   const toast = useToast({ position: "top-right", isClosable: true });
   const { data: balance } = useContractRead({
-    address: sale.token as `0x${string}`,
+    address: auction.auctionToken.id as `0x${string}`,
     abi: erc20ABI,
     functionName: "balanceOf",
-    args: [sale.id as `0x${string}`],
+    args: [auction.id as `0x${string}`],
     watch: true,
   });
   const {
@@ -34,7 +34,7 @@ export default function WithdrawERC20({ sale, onSuccessConfirm }: Props) {
     writeFn: withdrawERC20WriteFn,
     waitFn: withdrawERC20WaitFn,
   } = useWithdrawERC20Onsale({
-    targetAddress: sale.id as `0x${string}`,
+    targetAddress: auction.id as `0x${string}`,
     onSuccessWrite: (data) => {
       toast({
         title: "Transaction sent!",
@@ -80,14 +80,14 @@ export default function WithdrawERC20({ sale, onSuccessConfirm }: Props) {
           {typeof balance !== "undefined"
             ? tokenAmountFormat(
                 getBigNumber(balance.toString()),
-                Number(sale.tokenDecimals),
+                Number(auction.auctionToken.decimals),
                 getDecimalsForView(
-                  getBigNumber(sale.allocatedAmount),
-                  Number(sale.tokenDecimals),
+                  getBigNumber(auction.allocatedAmount),
+                  Number(auction.auctionToken.decimals),
                 ),
               )
             : "-"}{" "}
-          {sale.tokenSymbol}
+          {auction.auctionToken.symbol}
         </chakra.p>
         <Button
           variant={"solid"}

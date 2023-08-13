@@ -7,7 +7,7 @@ import {
   Container,
 } from "@chakra-ui/react";
 
-export const Render404 = () => {
+export default function Render404() {
   return (
     <Container maxW={"container.md"} py={8}>
       <Card p={8}>
@@ -20,5 +20,3 @@ export const Render404 = () => {
     </Container>
   );
 };
-
-export default Render404;

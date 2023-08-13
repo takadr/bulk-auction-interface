@@ -12,10 +12,10 @@ import { useAccount, useContractEvent } from "wagmi";
 import { CustomProvider } from "rsuite";
 import FactoryABI from "lib/constants/abis/Factory.json";
 import { Steps } from "./Steps";
-import SaleForm from "./templates/SaleTemplateV1/SaleForm";
-import useSaleForm from "../hooks/SaleTemplateV1/useSaleForm";
-import MetaDataForm from "./templates/SaleTemplateV1/MetaDataForm";
-import useMetaDataForm from "../hooks/SaleTemplateV1/useMetaDataForm";
+import SaleForm from "./templates/TemplateV1/SaleForm";
+import useSaleForm from "../hooks/TemplateV1/useSaleForm";
+import MetaDataForm from "./templates/TemplateV1/MetaDataForm";
+import useMetaDataForm from "../hooks/TemplateV1/useMetaDataForm";
 import { useLocale } from "../hooks/useLocale";
 import TxSentToast from "./TxSentToast";
 

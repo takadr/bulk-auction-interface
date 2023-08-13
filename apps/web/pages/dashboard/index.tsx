@@ -19,7 +19,7 @@ import {
 } from "@chakra-ui/react";
 import { AddIcon } from "@chakra-ui/icons";
 import { useQuery } from "@apollo/client";
-import { Sale } from "lib/types/Sale";
+import { AuctionProps } from "lib/types/Sale";
 import Layout from "ui/components/layouts/layout";
 import { LIST_MY_SALE_QUERY } from "lib/apollo/query";
 import { CurrentUserContext } from "ui/components/providers/CurrentUserProvider";
@@ -83,8 +83,8 @@ export default function DashboardPage() {
                     <SaleCardSkeleton />
                   </>
                 ) : (
-                  data.auctions.map((sale: Sale) => {
-                    return <SaleCard key={sale.id} sale={sale} editable />;
+                  data.auctions.map((auctionProps: AuctionProps) => {
+                    return <SaleCard key={auctionProps.id} auctionProps={auctionProps} editable />;
                   })
                 )}
                 {!loading && data && data.auctions.length === 0 && (

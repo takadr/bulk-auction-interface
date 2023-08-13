@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { ButtonProps, Button, useToast } from "@chakra-ui/react";
 import { ApolloQueryResult } from "@apollo/client/core/types";
-import { Sale } from "lib/types/Sale";
+import { TemplateV1 } from "lib/types/Sale";
 import { getExpectedAmount } from "lib/utils";
 import Big from "lib/utils/bignumber";
 import useClaim from "../../../hooks/useClaim";
@@ -9,14 +9,14 @@ import TxSentToast from "../../TxSentToast";
 import { useLocale } from "../../../hooks/useLocale";
 
 interface Props {
-  sale: Sale;
+  auction: TemplateV1;
   address: `0x${string}`;
   myContribution: Big;
   isClaimed: boolean;
   mutateIsClaimed: () => Promise<ApolloQueryResult<any>>;
 }
 export default function ClaimButton({
-  sale,
+  auction,
   address,
   myContribution,
   isClaimed,
@@ -34,7 +34,7 @@ export default function ClaimButton({
     writeFn: claimWriteFn,
     waitFn: claimWaitFn,
   } = useClaim({
-    targetAddress: sale.id as `0x${string}`,
+    targetAddress: auction.id as `0x${string}`,
     address,
     onSuccessWrite: (data) => {
       toast({
@@ -63,8 +63,8 @@ export default function ClaimButton({
   const expectedAmount = getExpectedAmount(
     myContribution,
     Big(0),
-    sale.totalRaised,
-    sale.allocatedAmount,
+    auction.totalRaised[0].amount,
+    auction.allocatedAmount,
   );
   const toast = useToast({ position: "top-right", isClosable: true });
   const { t } = useLocale();

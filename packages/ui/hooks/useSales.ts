@@ -1,6 +1,5 @@
 import { SWRConfiguration } from "swr";
 import useSWRInfinite from "swr/infinite";
-import { useQuery } from "wagmi";
 import client from "lib/apollo/client";
 import {
   LIST_ACTIVE_AND_UPCOMING_SALE_QUERY,
@@ -8,16 +7,16 @@ import {
   LIST_UPCOMING_SALE_QUERY,
   LIST_CLOSED_SALE_QUERY,
 } from "lib/apollo/query";
-import { Sale } from "lib/types/Sale";
+import { AuctionProps } from "lib/types/Sale";
 import { DocumentNode } from "@apollo/client";
 
 interface SWRSaleStore {
-  sales: Sale[];
+  sales: AuctionProps[];
   isLast: boolean;
   error?: Error;
   isLoading: boolean;
   isValidating: boolean;
-  fetcher: (args: [number, number]) => Promise<Sale[]>;
+  fetcher: (args: [number, number]) => Promise<AuctionProps[]>;
   loadMoreSales: () => void;
 }
 
@@ -57,7 +56,7 @@ export const useSWRSales = (
   config: SalesParams & SWRConfiguration,
   queryType: QueryType = QueryType.ACTIVE_AND_UPCOMING,
 ): SWRSaleStore => {
-  const getKey = (pageIndex: number, previousPageData: Sale[]) => {
+  const getKey = (pageIndex: number, previousPageData: AuctionProps[]) => {
     if (previousPageData && !previousPageData.length) return null;
     const skip = previousPageData === null ? 0 : previousPageData.length;
     return [
@@ -70,7 +69,7 @@ export const useSWRSales = (
     ];
   };
 
-  const fetcher = async (args: [number, number]): Promise<Sale[]> => {
+  const fetcher = async (args: [number, number]): Promise<AuctionProps[]> => {
     return client
       .query({
         query: getQuery(queryType),
@@ -92,7 +91,7 @@ export const useSWRSales = (
     setSize,
     isLoading,
     isValidating,
-  } = useSWRInfinite<Sale[], Error>(getKey, fetcher, config);
+  } = useSWRInfinite<AuctionProps[], Error>(getKey, fetcher, config);
 
   const loadMoreSales = () => {
     setSize(size + 1);

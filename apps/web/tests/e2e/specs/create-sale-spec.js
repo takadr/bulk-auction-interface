@@ -2,7 +2,6 @@ import { ethers } from "ethers";
 import FactoryABI from "lib/constants/abis/Factory.json";
 import TemplateV1ABI from "lib/constants/abis/TemplateV1.json";
 import MintableERC20 from 'lib/constants/abis/MintableERC20.json';
-import { SALE_TEMPLATE_V1_NAME } from "lib/constants";
 import Big, { getBigNumber, multiply } from 'lib/utils/bignumber';
 import { getDecimalsForView, tokenAmountFormat } from 'lib/utils';
 import { differenceInSeconds, addSeconds, format } from 'date-fns';
