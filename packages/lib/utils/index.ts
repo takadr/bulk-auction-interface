@@ -126,8 +126,8 @@ export const etherAmountFormat = (
   smallValueNotation: boolean = true,
 ): string => {
   const amountInBig = formatEtherInBig(amount);
-  if (smallValueNotation && amountInBig.gt(0) && amountInBig.lt(0.01)) {
-    return "< 0.01";
+  if (smallValueNotation && amountInBig.gt(0) && amountInBig.lt(0.001)) {
+    return "< 0.001";
   } else {
     return formatEtherInBig(amount).toFixed(precision);
   }

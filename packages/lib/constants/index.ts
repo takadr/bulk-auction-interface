@@ -13,7 +13,7 @@ export const CHAIN_IDS = {
 
 export const COINGECKO_URL = "https://api.coingecko.com/api/v3/simple/price";
 
-export const ETHER_DECIMALS_FOR_VIEW = 2;
+export const ETHER_DECIMALS_FOR_VIEW = 3;
 
 export const URL_REGEX = new RegExp(
   /https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)/,
