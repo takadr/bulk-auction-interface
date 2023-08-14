@@ -14,8 +14,6 @@ import {
   NumberIncrementStepper,
   NumberDecrementStepper,
   Link,
-  AlertIcon,
-  Alert,
   AlertDialog,
   AlertDialogBody,
   AlertDialogFooter,
@@ -25,13 +23,10 @@ import {
   useDisclosure,
   Stack,
   Divider,
-  Select,
-  Spinner,
+  useToast,
 } from "@chakra-ui/react";
 import { ExternalLinkIcon, QuestionIcon } from "@chakra-ui/icons";
-import { useQuery } from "@apollo/client";
 import { DateRangePicker } from "rsuite";
-import { FormikProps } from "formik";
 import { differenceInSeconds, format } from "date-fns";
 import { ethers } from "ethers";
 import {
@@ -40,73 +35,86 @@ import {
   tokenAmountFormat,
 } from "lib/utils";
 import Big, { divide, getBigNumber, multiply } from "lib/utils/bignumber";
-import { AuctionForm, Template } from "lib/types/Auction";
+import { AuctionForm } from "lib/types/Auction";
 import { CHAIN_NAMES } from "lib/constants";
-import { LIST_TEMPLATE_QUERY } from "lib/apollo/query";
 import { useLocale } from "../../../hooks/useLocale";
+import useAuctionForm from "../../../hooks/TemplateV1/useAuctionForm";
+import TxSentToast from "../../TxSentToast";
 
 export default function AuctionForm({
-  formikProps,
   address,
-  approvals,
-  writeFn,
-  tokenData,
-  balance,
+  onSubmitSuccess,
+  onSubmitError,
+  onApprovalTxSent,
+  onApprovalTxConfirmed,
 }: {
-  formikProps: FormikProps<AuctionForm>;
   address: `0x${string}`;
-  approvals: any;
-  writeFn: any;
-  tokenData: any;
-  balance?: bigint | undefined;
+  onSubmitSuccess?: (result: any) => void;
+  onSubmitError?: (e: Error) => void;
+  onApprovalTxSent?: (result: any) => void;
+  onApprovalTxConfirmed?: (result: any) => void;
 }) {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const containerRef = useRef<HTMLFormElement>(null);
   const cancelRef = useRef<HTMLButtonElement>(null);
-  const { data, loading, error, refetch } = useQuery(LIST_TEMPLATE_QUERY);
+  const toast = useToast({ position: "top-right", isClosable: true });
   const { t } = useLocale();
+
+  const {
+    formikProps,
+    approvals,
+    prepareFn,
+    writeFn,
+    tokenData,
+    balance,
+    debouncedAuction,
+    getEncodedArgs,
+    getDecodedArgs,
+  } = useAuctionForm({
+    address: address as `0x${string}`,
+    onSubmitSuccess: (result) => {
+      onSubmitSuccess
+        ? onSubmitSuccess(result)
+        : toast({
+            title: t("TRANSACTION_SENT"),
+            status: "success",
+            duration: 5000,
+            render: (props) => <TxSentToast txid={result.hash} {...props} />,
+          });
+    },
+    onSubmitError: (e: any) => {
+      onSubmitError
+        ? onSubmitError
+        : toast({
+            description: e.message,
+            status: "error",
+            duration: 5000,
+          });
+    },
+    onApprovalTxSent: (result: any) => {
+      onApprovalTxSent
+        ? onApprovalTxSent(result)
+        : toast({
+            title: t("TRANSACTION_SENT"),
+            status: "success",
+            duration: 5000,
+            render: (props) => <TxSentToast txid={result.hash} {...props} />,
+          });
+    },
+    onApprovalTxConfirmed: (result: any) => {
+      onApprovalTxConfirmed
+        ? onApprovalTxConfirmed(result)
+        : toast({
+            title: t("APPROVAL_CONFIRMED"),
+            status: "success",
+            duration: 5000,
+          });
+    },
+  });
 
   return (
     <div>
       <form ref={containerRef} onSubmit={formikProps.handleSubmit}>
-        <FormControl
-          isInvalid={
-            !!formikProps.errors.templateName &&
-            !!formikProps.touched.templateName
-          }
-        >
-          <FormLabel htmlFor="token" alignItems={"baseline"}>
-            {t("SELECT_SALE_TEMPLETE")}
-            <Tooltip
-              hasArrow
-              label={t("YOU_CAN_CHOOSE_THE_TYPE_OF_TOKEN_SALE")}
-            >
-              <QuestionIcon mb={1} ml={1} />
-            </Tooltip>
-          </FormLabel>
-          <Select
-            isDisabled={true}
-            id="templateName"
-            name="templateName"
-            onBlur={formikProps.handleBlur}
-            onChange={formikProps.handleChange}
-            value={formikProps.values.templateName}
-          >
-            {!data && (
-              <option value="">
-                <Spinner />
-              </option>
-            )}
-            {data &&
-              data.templates.map((template: Template) => (
-                <option key={template.id} value={template.templateName}>
-                  {ethers.decodeBytes32String(template.templateName)}
-                </option>
-              ))}
-          </Select>
-          <FormErrorMessage>{formikProps.errors.templateName}</FormErrorMessage>
-        </FormControl>
-
         <FormControl
           mt={4}
           isInvalid={!!formikProps.errors.token && !!formikProps.touched.token}
@@ -336,7 +344,7 @@ export default function AuctionForm({
           </FormErrorMessage>
         </FormControl>
         {approvals.allowance &&
-        Big(approvals.allowance).gte(
+        Big(approvals.allowance.toString()).gte(
           multiply(
             Big(formikProps.values.allocatedAmount.toString()),
             Big(10).pow(tokenData ? tokenData.decimals : 0),
@@ -377,7 +385,7 @@ export default function AuctionForm({
                           aria-label="Auction Template"
                         >
                           {ethers.decodeBytes32String(
-                            formikProps.values.templateName,
+                            debouncedAuction.templateName,
                           )}
                         </chakra.p>
                       </div>
@@ -391,12 +399,12 @@ export default function AuctionForm({
                           <Link
                             href={getEtherscanLink(
                               CHAIN_NAMES[process.env.NEXT_PUBLIC_CHAIN_ID!],
-                              formikProps.values.token as `0x${string}`,
+                              debouncedAuction.token as `0x${string}`,
                               "token",
                             )}
                             target={"_blank"}
                           >
-                            {formikProps.values.token}
+                            {debouncedAuction.token}
                             <ExternalLinkIcon ml={1} />
                           </Link>
                         </chakra.p>
@@ -410,13 +418,13 @@ export default function AuctionForm({
                         >
                           <>
                             {format(
-                              formikProps.values.startingAt,
+                              debouncedAuction.startingAt,
                               "yyyy/MM/dd HH:mm:ss",
                             )}
                             {` - `}
                             {format(
-                              formikProps.values.startingAt +
-                                formikProps.values.eventDuration * 1000,
+                              debouncedAuction.startingAt +
+                                debouncedAuction.eventDuration * 1000,
                               "yyyy/MM/dd HH:mm:ss",
                             )}{" "}
                             {format(new Date(), "(z)")}
@@ -431,9 +439,7 @@ export default function AuctionForm({
                           aria-label="Allocated to the auction"
                         >
                           {tokenData
-                            ? Number(
-                                formikProps.values.allocatedAmount,
-                              ).toFixed(
+                            ? Number(debouncedAuction.allocatedAmount).toFixed(
                                 getDecimalsForView(
                                   getBigNumber(
                                     tokenData?.totalSupply.value.toString(),
@@ -452,9 +458,7 @@ export default function AuctionForm({
                           fontWeight={"bold"}
                           aria-label="Minimum total raised"
                         >
-                          {Number(formikProps.values.minRaisedAmount).toFixed(
-                            2,
-                          )}{" "}
+                          {Number(debouncedAuction.minRaisedAmount).toFixed(2)}{" "}
                           ETH
                         </chakra.p>
                       </div>

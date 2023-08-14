@@ -8,13 +8,15 @@ import {
 } from "wagmi";
 import { isAddress } from "viem";
 import { AbiCoder } from "ethers";
+import { useAtom } from "jotai";
 import { useDebounce } from "use-debounce";
-import { useFormik, FormikProps } from "formik";
+import { useFormik, FormikProps, FormikValues } from "formik";
 import useApprove from "../useApprove";
 import { AuctionForm } from "lib/types/Auction";
 import Big, { multiply } from "lib/utils/bignumber";
 import FactoryABI from "lib/constants/abis/Factory.json";
 import { TEMPLATE_V1_NAME } from "lib/constants/templates";
+import { creatingAuctionAtom, waitingCreationTxAtom } from "lib/store";
 import "rsuite/dist/rsuite-no-reset.min.css";
 import "assets/css/rsuite-override.css";
 
@@ -25,8 +27,6 @@ export default function useAuctionForm({
   onSubmitError,
   onContractWriteSuccess,
   onContractWriteError,
-  onWaitForTransactionSuccess,
-  onWaitForTransactionError,
   onApprovalTxSent,
   onApprovalTxConfirmed,
 }: {
@@ -35,8 +35,6 @@ export default function useAuctionForm({
   onSubmitError?: (e: any) => void;
   onContractWriteSuccess?: (result: any) => void;
   onContractWriteError?: (e: any) => void;
-  onWaitForTransactionSuccess?: (result: any) => void;
-  onWaitForTransactionError?: (e: any) => void;
   onApprovalTxSent?: (result: any) => void;
   onApprovalTxConfirmed?: (result: any) => void;
 }): {
@@ -44,10 +42,14 @@ export default function useAuctionForm({
   approvals: ReturnType<typeof useApprove>;
   prepareFn: any;
   writeFn: ReturnType<typeof useContractWrite>;
-  waitFn: ReturnType<typeof useWaitForTransaction>;
   tokenData: any;
   balance: bigint | undefined;
+  debouncedAuction: AuctionForm;
+  getEncodedArgs: () => string;
+  getDecodedArgs: () => any;
 } {
+  const [waitingTx, setWaitingTx] = useAtom(waitingCreationTxAtom);
+  const [creatingAuction, setCreatingAuction] = useAtom(creatingAuctionAtom);
   const emptyAuction: AuctionForm = {
     templateName: TEMPLATE_V1_NAME,
     token: null,
@@ -58,7 +60,7 @@ export default function useAuctionForm({
     owner: address,
   };
 
-  const getArgs = (): string => {
+  const getEncodedArgs = (): string => {
     try {
       return AbiCoder.defaultAbiCoder().encode(
         ["address", "uint256", "uint256", "address", "uint256", "uint256"],
@@ -79,6 +81,17 @@ export default function useAuctionForm({
       );
     } catch (e) {
       return "";
+    }
+  };
+
+  const getDecodedArgs = () => {
+    try {
+      return AbiCoder.defaultAbiCoder().decode(
+        ["address", "uint256", "uint256", "address", "uint256", "uint256"],
+        getEncodedArgs(),
+      );
+    } catch (e) {
+      return [];
     }
   };
 
@@ -138,6 +151,10 @@ export default function useAuctionForm({
   const handleSubmit = async (auction: AuctionForm) => {
     try {
       const result = await writeFn!.writeAsync!();
+
+      // Save minRaisedAmount to Atom to validate on the metadata form for convenience
+      setCreatingAuction({ minRaisedAmount: debouncedAuction.minRaisedAmount });
+
       onSubmitSuccess && onSubmitSuccess(result);
     } catch (e: any) {
       onSubmitError && onSubmitError(e);
@@ -176,7 +193,7 @@ export default function useAuctionForm({
     functionName: "deployAuction",
     args: [
       debouncedAuction.templateName, //TEMPLATE_V1_NAME
-      getArgs(),
+      getEncodedArgs(),
     ],
     enabled: !!debouncedAuction.token && isAddress(debouncedAuction.token),
   });
@@ -184,22 +201,14 @@ export default function useAuctionForm({
   const writeFn = useContractWrite({
     ...prepareFn.config,
     onSuccess(data) {
+      // Save tx id to Atom to watch status from the form component
+      setWaitingTx(data.hash);
+
       onContractWriteSuccess && onContractWriteSuccess(data);
     },
     onError(e: Error) {
       console.log(e.message);
       onContractWriteError && onContractWriteError(e);
-    },
-  });
-
-  const waitFn = useWaitForTransaction({
-    hash: writeFn.data?.hash,
-    onSuccess(data) {
-      onWaitForTransactionSuccess && onWaitForTransactionSuccess(data);
-    },
-    onError(e: Error) {
-      console.log(e.message);
-      onWaitForTransactionError && onWaitForTransactionError(e);
     },
   });
 
@@ -222,8 +231,10 @@ export default function useAuctionForm({
     approvals,
     prepareFn,
     writeFn,
-    waitFn,
     tokenData,
     balance,
+    debouncedAuction,
+    getEncodedArgs,
+    getDecodedArgs,
   };
 }

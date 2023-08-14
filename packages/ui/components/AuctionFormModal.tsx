@@ -8,16 +8,17 @@ import {
   ModalCloseButton,
 } from "@chakra-ui/react";
 import { useToast, useColorMode } from "@chakra-ui/react";
-import { useAccount, useContractEvent } from "wagmi";
+import { useAccount, useContractEvent, useWaitForTransaction } from "wagmi";
 import { CustomProvider } from "rsuite";
+import { useAtom } from "jotai";
 import FactoryABI from "lib/constants/abis/Factory.json";
+import { creatingAuctionAtom, waitingCreationTxAtom } from "lib/store";
 import { Steps } from "./Steps";
-import AuctionForm from "./templates/TemplateV1/AuctionForm";
-import useAuctionForm from "../hooks/TemplateV1/useAuctionForm";
 import MetaDataForm from "./templates/TemplateV1/MetaDataForm";
 import useMetaDataForm from "../hooks/TemplateV1/useMetaDataForm";
 import { useLocale } from "../hooks/useLocale";
 import TxSentToast from "./TxSentToast";
+import AuctionFormWrapper from "./templates/AuctionFormWrapper";
 
 type AuctionFormModalProps = {
   isOpen: boolean;
@@ -46,80 +47,43 @@ export default function AuctionFormModal({
   const { t } = useLocale();
   const [tx, setTx] = useState<string | undefined>(undefined);
   const txRef = useRef(tx);
+  const [creatingAuction, setCreatingAuction] = useAtom(creatingAuctionAtom);
   useEffect(() => {
     txRef.current = tx;
   }, [tx]);
 
-  const {
-    formikProps,
-    approvals,
-    prepareFn,
-    writeFn,
-    waitFn,
-    tokenData,
-    balance,
-  } = useAuctionForm({
-    address: address as `0x${string}`,
-    onSubmitSuccess: (result) => {
-      setTx(result.hash);
-      setStep(2);
-      onDeploy && onDeploy();
-      toast({
-        title: t("TRANSACTION_SENT"),
-        status: "success",
-        duration: 5000,
-        render: (props) => <TxSentToast txid={result.hash} {...props} />,
-      });
-    },
-    onSubmitError: (e: any) => {
-      toast({
-        description: e.message,
-        status: "error",
-        duration: 5000,
-      });
-    },
-    onWaitForTransactionSuccess: (result: any) => {
-      onDeployConfirmed && onDeployConfirmed();
+  const waitFn = useWaitForTransaction({
+    hash: tx as `0x${string}`,
+    enabled: !!tx,
+    onSuccess(data) {
       toast({
         title: t("TRANSACTION_CONFIRMED"),
         status: "success",
         duration: 5000,
       });
     },
-    onWaitForTransactionError: (e: Error) => {
+    onError(e) {
       toast({
         description: e.message,
         status: "error",
         duration: 5000,
       });
     },
-    onApprovalTxSent: (result: any) => {
-      toast({
-        title: t("TRANSACTION_SENT"),
-        status: "success",
-        duration: 5000,
-        render: (props) => <TxSentToast txid={result.hash} {...props} />,
-      });
-    },
-    onApprovalTxConfirmed: (result: any) => {
-      toast({
-        title: t("APPROVAL_CONFIRMED"),
-        status: "success",
-        duration: 5000,
-      });
-    },
   });
 
   const handleClose = () => {
-    formikProps.resetForm();
     metaFormikProps.resetForm();
     onClose();
     setStep(1);
+    setCreatingAuction(undefined);
   };
 
   const { formikProps: metaFormikProps } = useMetaDataForm({
     contractId: contractAddress,
-    minRaisedAmount: formikProps.values.minRaisedAmount,
+    minRaisedAmount:
+      creatingAuction && creatingAuction.minRaisedAmount
+        ? creatingAuction.minRaisedAmount
+        : 0,
     onSubmitSuccess: (response) => {
       handleClose();
       onInformationSaved && onInformationSaved();
@@ -184,14 +148,24 @@ export default function AuctionFormModal({
               currentStep={step}
             />
             {step === 1 ? (
-              <AuctionForm
-                formikProps={formikProps}
-                address={address as `0x${string}`}
-                approvals={approvals}
-                writeFn={writeFn}
-                tokenData={tokenData}
-                balance={balance}
-              />
+              <>
+                <AuctionFormWrapper
+                  address={address as `0x${string}`}
+                  onSubmitSuccess={(result) => {
+                    setTx(result.hash);
+                    setStep(2);
+                    onDeploy && onDeploy();
+                    toast({
+                      title: t("TRANSACTION_SENT"),
+                      status: "success",
+                      duration: 5000,
+                      render: (props) => (
+                        <TxSentToast txid={result.hash} {...props} />
+                      ),
+                    });
+                  }}
+                />
+              </>
             ) : (
               <MetaDataForm
                 formikProps={metaFormikProps}

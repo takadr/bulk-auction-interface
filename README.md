@@ -39,6 +39,7 @@ npx env-cmd -f ../../.env npm run test:headless
 
 - packages/ui/components/AuctionCard.tsx
 - packages/ui/components/templates/AuctionDetail.tsx
+- packages/ui/components/templates/AuctionFormWrapper.tsx
 
 ## Subgraph
 
