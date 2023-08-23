@@ -21,7 +21,7 @@ export default function AuctionCard({
   editable?: boolean;
 }) {
   // Add auction card components as needed
-  switch (auctionProps.templateAuctionMap.template.templateName) {
+  switch (auctionProps.templateAuctionMap.templateName) {
     case TEMPLATE_V1_NAME:
       return <V1 auctionProps={auctionProps} editable={editable} />;
     default:

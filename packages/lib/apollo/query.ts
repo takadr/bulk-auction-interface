@@ -11,11 +11,7 @@ export const LIST_ACTIVE_AND_UPCOMING_SALE_QUERY = gql`
       id
       templateAuctionMap {
         id
-        template {
-          id
-          templateName
-          addedAt
-        }
+        templateName
       }
       owner
       startingAt
@@ -59,11 +55,7 @@ export const LIST_ACTIVE_SALE_QUERY = gql`
       id
       templateAuctionMap {
         id
-        template {
-          id
-          templateName
-          addedAt
-        }
+        templateName
       }
       owner
       startingAt
@@ -107,11 +99,7 @@ export const LIST_UPCOMING_SALE_QUERY = gql`
       id
       templateAuctionMap {
         id
-        template {
-          id
-          templateName
-          addedAt
-        }
+        templateName
       }
       owner
       startingAt
@@ -155,11 +143,7 @@ export const LIST_CLOSED_SALE_QUERY = gql`
       id
       templateAuctionMap {
         id
-        template {
-          id
-          templateName
-          addedAt
-        }
+        templateName
       }
       owner
       startingAt
@@ -198,11 +182,7 @@ export const LIST_MY_SALE_QUERY = gql`
       id
       templateAuctionMap {
         id
-        template {
-          id
-          templateName
-          addedAt
-        }
+        templateName
       }
       owner
       startingAt
@@ -241,11 +221,7 @@ export const GET_SALE_QUERY = gql`
       id
       templateAuctionMap {
         id
-        template {
-          id
-          templateName
-          addedAt
-        }
+        templateName
       }
       owner
       startingAt

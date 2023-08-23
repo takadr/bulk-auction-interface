@@ -6,13 +6,10 @@ import {
 } from "../generated/Factory/Factory";
 import { Template, TemplateAuctionMap } from "../generated/schema";
 import { BaseTemplate } from "../generated/templates";
-import { Factory } from "../generated/Factory/Factory";
 
 export function handleDeployed(event: DeployedEvent): void {
   const map = new TemplateAuctionMap(event.params.deployedAddress.toHex());
-  let contract = Factory.bind(event.address);
-  let templateResult = contract.templates(event.params.templateName);
-  map.template = templateResult.getImplemention().toHexString();
+  map.templateName = event.params.templateName.toHex();
   map.save();
   BaseTemplate.create(event.params.deployedAddress);
 }

@@ -81,7 +81,7 @@ export type Template = {
 
 export type TemplateAuctionMap = {
   id: `0x${string}`;
-  template: Template;
+  templateName: `0x${string}`;
 };
 
 export type Token = {

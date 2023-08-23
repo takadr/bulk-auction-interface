@@ -48,7 +48,7 @@ export default function AuctionFormWrapper(props: AuctionFormWrapperParams) {
         isDisabled={true}
         id="templateName"
         name="templateName"
-        defaultValue={templateData && templateData.templates[0].templateName}
+        defaultValue={templateData && templateData.templates.length > 0 && templateData.templates[0].templateName}
         onChange={(ev) => setTemplateName(ev.target.value)}
         value={templateName}
       >

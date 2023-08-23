@@ -26,7 +26,7 @@ export type DetailPageParams = {
 
 export default function AuctionDetail(props: DetailPageParams) {
   // Add detail page components as needed
-  switch (props.auctionProps.templateAuctionMap.template.templateName) {
+  switch (props.auctionProps.templateAuctionMap.templateName) {
     case TEMPLATE_V1_NAME:
       return <TemplateV1Detail {...props} />;
     default:
