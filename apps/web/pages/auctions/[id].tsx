@@ -1,9 +1,6 @@
 import { useRouter } from "next/router";
 import { useAccount } from "wagmi";
 import { useToast } from "@chakra-ui/react";
-import SaleTemplateV1, {
-  SkeletonSale,
-} from "ui/components/templates/SaleTemplateV1";
 import Layout from "ui/components/layouts/layout";
 import MetaTags from "ui/components/MetaTags";
 import { useQuery } from "@apollo/client";
@@ -12,18 +9,19 @@ import useSWRMetaData from "ui/hooks/useSWRMetaData";
 import { useLocale } from "ui/hooks/useLocale";
 import { zeroAddress } from "viem";
 import CustomError from "../_error";
+import AuctionDetail, {
+  SkeletonAuction,
+} from "ui/components/templates/AuctionDetail";
 
-export default function SalePage() {
+export default function AuctionPage() {
   const { address, isConnected, connector } = useAccount();
   const router = useRouter();
   const { id } = router.query;
   const { t, locale } = useLocale();
   const toast = useToast({ position: "top-right", isClosable: true });
 
-  // TODO Get template address from contractAddress
-  // Switch template by using template address
   const {
-    data: saleData,
+    data: auctionData,
     loading,
     error: apolloError,
     refetch,
@@ -49,11 +47,12 @@ export default function SalePage() {
   if (loading || !metaData)
     return (
       <Layout>
-        <SkeletonSale />
+        <SkeletonAuction />
       </Layout>
     );
 
-  if (!saleData || !saleData.sale) return <CustomError statusCode={404} />;
+  if (!auctionData || !auctionData.auction)
+    return <CustomError statusCode={404} />;
 
   return (
     <Layout>
@@ -68,9 +67,9 @@ export default function SalePage() {
         }
         image={metaData.metaData.logoURL && metaData.metaData.logoURL}
       />
-      <SaleTemplateV1
-        sale={saleData.sale}
-        refetchSale={refetch}
+      <AuctionDetail
+        auctionProps={auctionData.auction}
+        refetchAuction={refetch}
         metaData={metaData.metaData}
         refetchMetaData={mutate}
         contractAddress={id as `0x${string}`}

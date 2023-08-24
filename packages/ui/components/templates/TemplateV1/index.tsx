@@ -46,14 +46,14 @@ import CalendarInCircle from "./CalendarInCircle";
 import PersonalStatistics from "./PersonalStatistics";
 import StatisticsInCircle from "./StatisticsInCircle";
 import PriceChart from "./PriceChart";
-import useRaised from "../../../hooks/SaleTemplateV1/useRaised";
+import useRaised from "../../../hooks/TemplateV1/useRaised";
 import useRate from "../../../hooks/useRate";
-import { Sale, MetaData } from "lib/types/Sale";
+import { AuctionProps, MetaData, TemplateV1 } from "lib/types/Auction";
 import ExternalLinkTag from "../../ExternalLinkTag";
 import ClaimButton from "./ClaimButton";
 import TxSentToast from "../../TxSentToast";
 import WithdrawRaisedETH from "./WithdrawRaisedETH";
-import WithdrawERC20 from "./WithdrawERC20";
+import WithdrawERC20 from "./WithdrawERC20OnSale";
 import { useLocale } from "../../../hooks/useLocale";
 import {
   getDecimalsForView,
@@ -63,31 +63,24 @@ import {
 } from "lib/utils";
 import { CHAIN_NAMES } from "lib/constants";
 import ConnectButton from "../../connectButton";
+import { DetailPageParams } from "../AuctionDetail";
 
-type SaleTemplateV1Params = {
-  sale: Sale;
-  refetchSale: () => Promise<ApolloQueryResult<any>>;
-  metaData: MetaData;
-  refetchMetaData: KeyedMutator<any>;
-  address: `0x${string}` | undefined;
-  contractAddress: `0x${string}`;
-};
-
-export default function SaleTemplateV1({
-  sale,
-  refetchSale,
+export default function DetailPage({
+  auctionProps,
+  refetchAuction,
   metaData,
   refetchMetaData,
   address,
   contractAddress,
-}: SaleTemplateV1Params) {
+}: DetailPageParams) {
+  const auction = new TemplateV1(auctionProps);
   const toast = useToast({ position: "top-right", isClosable: true });
   const {
     raised,
     totalRaised,
     isLoading: isLoadingRaisedAmount,
     refetch: refetchRaised,
-  } = useRaised(sale, address);
+  } = useRaised(auction, address);
   const {
     data: balanceData,
     isLoading: isLoadingBalance,
@@ -109,12 +102,12 @@ export default function SaleTemplateV1({
   } = useRate("ethereum", "usd");
 
   useInterval(() => {
-    setStarted(sale.startingAt * 1000 <= new Date().getTime());
-    setEnded(sale.closingAt * 1000 < new Date().getTime());
+    setStarted(auction.startingAt * 1000 <= new Date().getTime());
+    setEnded(auction.closingAt * 1000 < new Date().getTime());
   }, 1000);
   useInterval(() => {
     updateRate();
-    refetchSale();
+    refetchAuction();
     refetchMetaData();
     refetchRaised();
   }, 30000);
@@ -187,7 +180,7 @@ export default function SaleTemplateV1({
       });
       formikProps.resetForm();
       setTimeout(() => {
-        refetchSale();
+        refetchAuction();
         refetchRaised();
         refetchBalance();
       }, 0);
@@ -226,19 +219,19 @@ export default function SaleTemplateV1({
                   Token
                 </Tag>
                 {tokenAmountFormat(
-                  sale.allocatedAmount,
-                  parseInt(sale.tokenDecimals),
+                  auction.allocatedAmount,
+                  Number(auction.auctionToken.decimals),
                   getDecimalsForView(
-                    getBigNumber(sale.allocatedAmount),
-                    parseInt(sale.tokenDecimals),
+                    getBigNumber(auction.allocatedAmount),
+                    Number(auction.auctionToken.decimals),
                   ),
                 )}{" "}
-                {sale.tokenSymbol}
+                {auction.auctionToken.symbol}
                 <Link
                   ml={1}
                   href={getEtherscanLink(
                     CHAIN_NAMES[process.env.NEXT_PUBLIC_CHAIN_ID!],
-                    sale.token as `0x${string}`,
+                    auction.auctionToken.id as `0x${string}`,
                     "token",
                   )}
                   target={"_blank"}
@@ -250,12 +243,12 @@ export default function SaleTemplateV1({
                 <Tag mr={1} verticalAlign={"top"} size="sm">
                   Contract
                 </Tag>
-                {`${sale.id?.slice(0, 5)}...${sale.id?.slice(-4)}`}
+                {`${auction.id?.slice(0, 5)}...${auction.id?.slice(-4)}`}
                 <Link
                   ml={1}
                   href={getEtherscanLink(
                     CHAIN_NAMES[process.env.NEXT_PUBLIC_CHAIN_ID!],
-                    sale.id as `0x${string}`,
+                    auction.id as `0x${string}`,
                     "address",
                   )}
                   target={"_blank"}
@@ -279,9 +272,11 @@ export default function SaleTemplateV1({
         <Flex mt={8} gridGap={4} flexDirection={{ base: "column", md: "row" }}>
           <StatisticsInCircle
             totalRaised={totalRaised}
-            allocatedAmount={getBigNumber(sale.allocatedAmount)}
+            allocatedAmount={getBigNumber(auction.allocatedAmount)}
             minRaisedAmount={
-              sale.minRaisedAmount ? getBigNumber(sale.minRaisedAmount) : Big(0)
+              auction.minRaisedAmount
+                ? getBigNumber(auction.minRaisedAmount)
+                : Big(0)
             }
             targetTotalRaised={getBigNumber(
               metaData.targetTotalRaised ? metaData.targetTotalRaised : 0,
@@ -291,7 +286,7 @@ export default function SaleTemplateV1({
             ).mul(Big(10).pow(raisedTokenDecimal))}
             raisedTokenSymbol={raisedTokenSymbol}
             raisedTokenDecimal={raisedTokenDecimal}
-            tokenSymbol={sale.tokenSymbol}
+            tokenSymbol={auction.auctionToken.symbol}
             fiatSymbol={fiatSymbol}
             fiatRate={rateDate && rateDate.usd ? rateDate.usd : 0}
             contractAddress={contractAddress}
@@ -300,8 +295,8 @@ export default function SaleTemplateV1({
             p={0.5}
           />
           <CalendarInCircle
-            unixStartDate={sale.startingAt}
-            unixEndDate={sale.closingAt}
+            unixStartDate={auction.startingAt}
+            unixEndDate={auction.closingAt}
             w={{ base: "full", md: "50%" }}
             p={0.5}
           />
@@ -425,19 +420,17 @@ export default function SaleTemplateV1({
                     <PersonalStatistics
                       inputValue={formikProps.values.amount}
                       myContribution={raised}
-                      minRaisedAmount={getBigNumber(sale.minRaisedAmount)}
+                      minRaisedAmount={getBigNumber(auction.minRaisedAmount)}
                       totalRaised={totalRaised}
-                      allocatedAmount={getBigNumber(sale.allocatedAmount)}
-                      distributedTokenSymbol={
-                        sale.tokenSymbol ? sale.tokenSymbol : ""
-                      }
-                      distributedTokenDecimal={
-                        sale.tokenDecimals ? Number(sale.tokenDecimals) : 0
-                      }
+                      allocatedAmount={getBigNumber(auction.allocatedAmount)}
+                      distributedTokenSymbol={auction.auctionToken.symbol}
+                      distributedTokenDecimal={Number(
+                        auction.auctionToken.decimals,
+                      )}
                       raisedTokenSymbol={raisedTokenSymbol}
                       raisedTokenDecimal={raisedTokenDecimal}
                       isEnding={ended}
-                      isClaimed={sale.claims.length > 0}
+                      isClaimed={auction.claims.length > 0}
                       isLodingTX={isLoadingWaitTX || isLoadingSendTX}
                     />
                   </Box>
@@ -446,11 +439,11 @@ export default function SaleTemplateV1({
               {address && ended && (
                 <chakra.div textAlign={"right"} mt={2}>
                   <ClaimButton
-                    sale={sale}
+                    auction={auction}
                     address={address}
                     myContribution={raised}
-                    isClaimed={sale.claims.length > 0}
-                    mutateIsClaimed={refetchSale}
+                    isClaimed={auction.claims.length > 0}
+                    mutateIsClaimed={refetchAuction}
                     colorScheme={"green"}
                   />
                 </chakra.div>
@@ -463,13 +456,13 @@ export default function SaleTemplateV1({
                 <Heading size="md">{t("PRICE_AGAINST_ETH")}</Heading>
               </CardHeader>
               <CardBody>
-                <PriceChart sale={sale} />
+                <PriceChart auction={auction} />
               </CardBody>
             </Card>
           )}
         </Flex>
 
-        {address && sale.owner?.toLowerCase() === address.toLowerCase() && (
+        {address && auction.owner.toLowerCase() === address.toLowerCase() && (
           <>
             <Divider mt={8} />
             <Card mt={8}>
@@ -480,13 +473,16 @@ export default function SaleTemplateV1({
               <CardBody>
                 <Stack divider={<StackDivider />} spacing="4">
                   <chakra.div textAlign={"center"}>
-                    <WithdrawERC20 sale={sale} onSuccessConfirm={refetchSale} />
+                    <WithdrawERC20
+                      auction={auction}
+                      onSuccessConfirm={refetchAuction}
+                    />
                   </chakra.div>
 
                   <chakra.div textAlign={"center"}>
                     <WithdrawRaisedETH
-                      sale={sale}
-                      onSuccessConfirm={refetchSale}
+                      auction={auction}
+                      onSuccessConfirm={refetchAuction}
                     />
                   </chakra.div>
                 </Stack>
@@ -498,26 +494,3 @@ export default function SaleTemplateV1({
     </>
   );
 }
-
-export const SkeletonSale = () => {
-  return (
-    <Container maxW={"container.lg"} py={16}>
-      <Flex alignItems={"center"} minH={"150px"}>
-        <SkeletonCircle w={"150px"} h={"150px"} />
-        <Box px={8}>
-          <Heading>
-            <Skeleton h={"30px"} />
-          </Heading>
-          <HStack mt={4} spacing={4}>
-            <Skeleton h={"20px"} w={"100px"} />
-            <Skeleton h={"20px"} w={"100px"} />
-            <Skeleton h={"20px"} w={"100px"} />
-          </HStack>
-        </Box>
-      </Flex>
-      <Box mt={4}>
-        <SkeletonText />
-      </Box>
-    </Container>
-  );
-};

@@ -6,8 +6,8 @@ import {
   UpdateItemCommand,
   ScanCommand,
 } from "@aws-sdk/client-dynamodb";
-import { SALE_TEMPLATE_V1_NAME } from "../constants";
-import { MetaData, validateMetaData } from "../types/Sale";
+import { TEMPLATE_V1_NAME } from "../constants/templates";
+import { MetaData, validateMetaData } from "../types/Auction";
 
 const dbClient = new DynamoDBClient({
   region: process.env.AWS_REGION as string,
@@ -32,9 +32,6 @@ const dynamoDBItemsToMetaData = (item: any) => {
     maximumTotalRaised: item.MaximumTotalRaised
       ? item.MaximumTotalRaised.N
       : undefined,
-    tokenName: item.TokenName ? item.TokenName.S : undefined,
-    tokenSymbol: item.TokenSymbol ? item.TokenSymbol.S : undefined,
-    tokenDecimals: item.TokenDecimals ? item.TokenDecimals.N : undefined,
     templateName: item.TemplateName ? item.TemplateName.S : undefined,
   } as MetaData;
 };
@@ -58,11 +55,11 @@ export async function scanMetaData(
 }
 
 export async function fetchMetaData(
-  saleId: string,
+  auctionId: string,
 ): Promise<MetaData | undefined> {
   const command = new GetItemCommand({
     TableName: process.env.AWS_DYNAMO_TABLE_NAME,
-    Key: { AuctionId: { S: saleId } },
+    Key: { AuctionId: { S: auctionId } },
   });
   const output = await dbClient.send(command);
   const item = output.Item;
@@ -71,13 +68,13 @@ export async function fetchMetaData(
 }
 
 export async function batchFetchMetaData(
-  saleIds: string[],
+  auctionIds: string[],
 ): Promise<MetaData[]> {
   const tableName = process.env.AWS_DYNAMO_TABLE_NAME as string;
   const command = new BatchGetItemCommand({
     RequestItems: {
       [tableName]: {
-        Keys: saleIds.map((id) => {
+        Keys: auctionIds.map((id) => {
           return { AuctionId: { S: id } };
         }),
       },
@@ -91,11 +88,11 @@ export async function batchFetchMetaData(
 }
 
 export async function addMetaData(
-  sale: MetaData,
+  auction: MetaData,
 ): Promise<MetaData | undefined> {
   // TODO Take Minimum total raised into account
   // validateMetaData(auction, minRaisedAmount)
-  const errors = validateMetaData(sale);
+  const errors = validateMetaData(auction);
   if (Object.keys(errors).length > 0) {
     const errorMessage = Object.entries(errors)
       .map((e) => e[1])
@@ -103,38 +100,35 @@ export async function addMetaData(
     throw new Error(errorMessage);
   }
   const item = {
-    AuctionId: { S: (sale.id as string).toLowerCase() },
-    Title: { S: sale.title ? sale.title : "" },
-    Description: { S: sale.description ? sale.description : "" },
-    Terms: { S: sale.terms ? sale.terms : "" },
-    ProjectURL: { S: sale.projectURL ? sale.projectURL : "" },
-    LogoURL: { S: sale.logoURL ? sale.logoURL : "" },
-    OtherURL: { S: sale.otherURL ? sale.otherURL : "" },
+    AuctionId: { S: (auction.id as string).toLowerCase() },
+    Title: { S: auction.title ? auction.title : "" },
+    Description: { S: auction.description ? auction.description : "" },
+    Terms: { S: auction.terms ? auction.terms : "" },
+    ProjectURL: { S: auction.projectURL ? auction.projectURL : "" },
+    LogoURL: { S: auction.logoURL ? auction.logoURL : "" },
+    OtherURL: { S: auction.otherURL ? auction.otherURL : "" },
     TargetTotalRaised: {
-      N: sale.targetTotalRaised ? sale.targetTotalRaised.toString() : "0",
+      N: auction.targetTotalRaised ? auction.targetTotalRaised.toString() : "0",
     },
     MaximumTotalRaised: {
-      N: sale.maximumTotalRaised ? sale.maximumTotalRaised.toString() : "0",
+      N: auction.maximumTotalRaised
+        ? auction.maximumTotalRaised.toString()
+        : "0",
     },
-    TokenName: { S: sale.tokenName ? sale.tokenName : "" },
-    TokenSymbol: { S: sale.tokenSymbol ? sale.tokenSymbol : "" },
-    TokenDecimals: {
-      N: sale.tokenDecimals ? sale.tokenDecimals.toString() : "0",
-    },
-    TemplateName: { S: SALE_TEMPLATE_V1_NAME },
+    TemplateName: { S: TEMPLATE_V1_NAME },
   };
   const command = new PutItemCommand({
     TableName: process.env.AWS_DYNAMO_TABLE_NAME,
     Item: item,
   });
   const output = await dbClient.send(command);
-  return sale;
+  return auction;
 }
 
-export async function updateSale(
-  sale: MetaData,
+export async function updateAuction(
+  auction: MetaData,
 ): Promise<MetaData | undefined> {
-  const errors = validateMetaData(sale);
+  const errors = validateMetaData(auction);
   if (Object.keys(errors).length > 0) {
     const errorMessage = Object.entries(errors)
       .map((e) => e[1])
@@ -144,30 +138,29 @@ export async function updateSale(
 
   const command = new UpdateItemCommand({
     TableName: process.env.AWS_DYNAMO_TABLE_NAME,
-    Key: { AuctionId: { S: (sale.id as string).toLowerCase() } },
+    Key: { AuctionId: { S: (auction.id as string).toLowerCase() } },
     UpdateExpression:
-      "set Title = :Title, Description=:Description, Terms = :Terms, ProjectURL = :ProjectURL, LogoURL = :LogoURL, OtherURL = :OtherURL, TargetTotalRaised = :TargetTotalRaised, MaximumTotalRaised = :MaximumTotalRaised, TokenName = :TokenName, TokenSymbol = :TokenSymbol, TokenDecimals = :TokenDecimals, TemplateName = :TemplateName",
+      "set Title = :Title, Description=:Description, Terms = :Terms, ProjectURL = :ProjectURL, LogoURL = :LogoURL, OtherURL = :OtherURL, TargetTotalRaised = :TargetTotalRaised, MaximumTotalRaised = :MaximumTotalRaised, TemplateName = :TemplateName",
     ExpressionAttributeValues: {
-      ":Title": { S: sale.title ? sale.title : "" },
-      ":Description": { S: sale.description ? sale.description : "" },
-      ":Terms": { S: sale.terms ? sale.terms : "" },
-      ":ProjectURL": { S: sale.projectURL ? sale.projectURL : "" },
-      ":LogoURL": { S: sale.logoURL ? sale.logoURL : "" },
-      ":OtherURL": { S: sale.otherURL ? sale.otherURL : "" },
+      ":Title": { S: auction.title ? auction.title : "" },
+      ":Description": { S: auction.description ? auction.description : "" },
+      ":Terms": { S: auction.terms ? auction.terms : "" },
+      ":ProjectURL": { S: auction.projectURL ? auction.projectURL : "" },
+      ":LogoURL": { S: auction.logoURL ? auction.logoURL : "" },
+      ":OtherURL": { S: auction.otherURL ? auction.otherURL : "" },
       ":TargetTotalRaised": {
-        N: sale.targetTotalRaised ? sale.targetTotalRaised.toString() : "0",
+        N: auction.targetTotalRaised
+          ? auction.targetTotalRaised.toString()
+          : "0",
       },
       ":MaximumTotalRaised": {
-        N: sale.maximumTotalRaised ? sale.maximumTotalRaised.toString() : "0",
+        N: auction.maximumTotalRaised
+          ? auction.maximumTotalRaised.toString()
+          : "0",
       },
-      ":TokenName": { S: sale.tokenName ? sale.tokenName : "" },
-      ":TokenSymbol": { S: sale.tokenSymbol ? sale.tokenSymbol : "" },
-      ":TokenDecimals": {
-        N: sale.tokenDecimals ? sale.tokenDecimals.toString() : "0",
-      },
-      ":TemplateName": { S: SALE_TEMPLATE_V1_NAME },
+      ":TemplateName": { S: TEMPLATE_V1_NAME },
     },
   });
   const output = await dbClient.send(command);
-  return sale;
+  return auction;
 }

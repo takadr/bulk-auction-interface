@@ -3,50 +3,54 @@ schema:
   file: ./schema.graphql
 dataSources:
   - kind: ethereum
-    name: FactoryV1
+    name: Factory
     network: goerli
     source:
-      address: "0x1a44dCfbEFefD756503f3B9F416e78901afFeC28"
-      abi: FactoryV1
-      startBlock: 9415664
+      address: "0x161AFA5900C3BDFF7614d53B96Bf59C4C29a3206"
+      abi: Factory
+      startBlock: 9570588
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.7
       language: wasm/assemblyscript
       entities:
-        - Sale
+        - TemplateAuctionMap
         - Template
       abis:
-        - name: FactoryV1
-          file: ./abis/FactoryV1.json
-        - name: ERC20
-          file: ./abis/ERC20.json
+        - name: Factory
+          file: ./abis/Factory.json
       eventHandlers:
-        - event: Deployed(bytes32,address,address,address,address,uint256,uint256,uint256,uint256)
+        - event: Deployed(bytes32,address)
           handler: handleDeployed
         - event: TemplateAdded(indexed bytes32,indexed address)
           handler: handleTemplateAdded
-        - event: TemplateDeleted(indexed bytes32,indexed address)
-          handler: handleTemplateDeleted
-      file: ./src/factory-v-1.ts
+        - event: TemplateRemoved(indexed bytes32,indexed address)
+          handler: handleTemplateRemoved
+      file: ./src/factory.ts
 templates:
   - kind: ethereum
-    name: SaleTemplateV1
+    name: BaseTemplate
     network: goerli
     source:
-      abi: SaleTemplateV1
+      abi: BaseTemplate
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.7
       language: wasm/assemblyscript
       entities:
-        - Received
+        - TemplateAuctionMap
+        - Contribution
+        - Claim
       abis:
-        - name: SaleTemplateV1
-          file: ./abis/SaleTemplateV1.json
+        - name: BaseTemplate
+          file: ./abis/BaseTemplate.json
+        - name: ERC20
+          file: ./abis/ERC20.json
       eventHandlers:
-        - event: Received(indexed address,uint256)
-          handler: handleReceived
+        - event: Deployed(address,address,uint256,uint256,address,bytes,bytes)
+          handler: handleDeployed
+        - event: Raised(indexed address,address,uint256)
+          handler: handleRaised
         - event: Claimed(indexed address,indexed address,uint256,uint256)
           handler: handleClaimed
-      file: ./src/sale-template-v-1.ts
+      file: ./src/base-template.ts

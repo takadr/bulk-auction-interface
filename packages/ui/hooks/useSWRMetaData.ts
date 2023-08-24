@@ -1,10 +1,10 @@
 import useSWR, { SWRResponse } from "swr";
-import { MetaData } from "lib/types/Sale";
+import { MetaData } from "lib/types/Auction";
 import {
   LOCK_DURATION,
   FEE_RATE_PER_MIL,
-  SALE_TEMPLATE_V1_NAME,
-} from "lib/constants";
+  TEMPLATE_V1_NAME,
+} from "lib/constants/templates";
 import { useLocale } from "./useLocale";
 
 type Constants = { lockDuration: number; feeRatePerMil: number };
@@ -30,8 +30,8 @@ const useSWRMetaData = (
                 title: t("UNNAMED_SALE"),
               } as MetaData),
           constants: {
-            lockDuration: LOCK_DURATION[SALE_TEMPLATE_V1_NAME],
-            feeRatePerMil: FEE_RATE_PER_MIL[SALE_TEMPLATE_V1_NAME],
+            lockDuration: LOCK_DURATION[TEMPLATE_V1_NAME],
+            feeRatePerMil: FEE_RATE_PER_MIL[TEMPLATE_V1_NAME],
           },
         };
       });

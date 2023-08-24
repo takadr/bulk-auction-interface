@@ -6,7 +6,7 @@ export default {
   SIGNED_IN_AS: "{{address}}でログイン中",
   SIGN_OUT_AND_DISCONNECT: "ログアウト & 切断",
   DISCONNECT: "切断",
-  APP_NAME: "Bulksale maker(仮)",
+  APP_NAME: "Yamawake",
   AN_INCLUSIVE_AND_TRANSPARENT_TOKEN_LAUNCHPAD:
     "パーミッションレスで公平な販売モデルを提供する、\n包括的で透明性のあるトークンローンチパッド",
   VIEW_ALL_SALES: "すべてのオークションを見る",

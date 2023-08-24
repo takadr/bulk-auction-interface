@@ -1,25 +1,100 @@
+import { AbiCoder } from "ethers";
 import { URL_REGEX } from "../../constants";
-import Big from "../../utils/bignumber";
 
-export type Sale = {
+export abstract class BaseAuction implements AuctionProps {
   id?: string;
-  templateName: string;
-  token: `0x${string}` | null;
-  tokenName: string;
-  tokenSymbol: string;
-  tokenDecimals: string;
-  owner?: `0x${string}`;
-  allocatedAmount: string;
+  templateAuctionMap: TemplateAuctionMap;
+  auctionToken: Token;
+  owner: `0x${string}`;
+  args: string;
   startingAt: number; //Timestamp
   closingAt: number; //Timestamp
-  minRaisedAmount: string;
-  lockDuration?: number; //In sec
-  expirationDuration?: number; //In sec
-  feeRatePerMil?: number;
-  totalRaised: string;
-  blockNumber: string; // Deployed block number
+  totalRaised: TotalRaised[];
   contributions: Contribution[];
   claims: Claim[];
+  blockNumber: string; // Deployed block number
+
+  // Decode this.args and set attributes as needed
+  abstract parseArgs(): void;
+
+  constructor(data: AuctionProps) {
+    this.id = data.id ? data.id : undefined;
+    this.templateAuctionMap = data.templateAuctionMap;
+    this.auctionToken = data.auctionToken;
+    this.owner = data.owner;
+    this.args = data.args;
+    this.startingAt = data.startingAt;
+    this.closingAt = data.closingAt;
+    this.totalRaised = data.totalRaised;
+    this.contributions = data.contributions;
+    this.claims = data.claims;
+    this.blockNumber = data.blockNumber;
+  }
+}
+
+export class TemplateV1 extends BaseAuction {
+  allocatedAmount: string;
+  minRaisedAmount: string;
+  parseArgs(): { allocatedAmount: string; minRaisedAmount: string } {
+    const params = AbiCoder.defaultAbiCoder().decode(
+      ["uint256", "uint256"],
+      this.args,
+    );
+    return { allocatedAmount: params[0], minRaisedAmount: params[1] };
+  }
+  constructor(data: AuctionProps) {
+    super(data);
+    const decodedArgs = this.parseArgs();
+    this.allocatedAmount = decodedArgs.allocatedAmount;
+    this.minRaisedAmount = decodedArgs.minRaisedAmount;
+  }
+}
+
+export type AuctionProps = {
+  id?: string;
+  templateAuctionMap: TemplateAuctionMap;
+  auctionToken: Token;
+  // token: `0x${string}` | null;
+  // tokenName: string;
+  // tokenSymbol: string;
+  // tokenDecimals: string;
+  owner: `0x${string}`;
+  args: string;
+  // allocatedAmount: string;
+  // minRaisedAmount: string;
+  startingAt: number; //Timestamp
+  closingAt: number; //Timestamp
+  // lockDuration?: number; //In sec
+  // expirationDuration?: number; //In sec
+  // feeRatePerMil?: number;
+  totalRaised: TotalRaised[];
+  contributions: Contribution[];
+  claims: Claim[];
+  blockNumber: string; // Deployed block number
+};
+
+export type Template = {
+  id: `0x${string}`;
+  templateName: `0x${string}`;
+  addedAt: string; //Timestamp
+};
+
+export type TemplateAuctionMap = {
+  id: `0x${string}`;
+  templateName: `0x${string}`;
+};
+
+export type Token = {
+  id: `0x${string}`;
+  name: string;
+  symbol: string;
+  decimals: string;
+};
+
+export type TotalRaised = {
+  id: string;
+  amount: string;
+  token: Token;
 };
 
 export type Contribution = {
@@ -33,7 +108,7 @@ export type Contribution = {
 
 export type Claim = {
   id: string;
-  contributor: `0x${string}`;
+  participant: `0x${string}`;
   recipient: `0x${string}`;
   userShare: string;
   erc20allocation: string;
@@ -41,7 +116,7 @@ export type Claim = {
   blockNumber: string;
 };
 
-export type SaleForm = {
+export type AuctionForm = {
   templateName: string;
   token: `0x${string}` | null;
   owner: `0x${string}`;
@@ -61,17 +136,8 @@ export type MetaData = {
   otherURL?: string;
   targetTotalRaised?: number;
   maximumTotalRaised?: number;
-  tokenName?: string;
-  tokenSymbol?: string;
-  tokenDecimals?: number;
   templateName?: string;
   createdAt?: number;
-};
-
-export type Template = {
-  id: string;
-  templateName: `0x${string}`;
-  addedAt: string; //Timestamp
 };
 
 export const validateMetaData = (

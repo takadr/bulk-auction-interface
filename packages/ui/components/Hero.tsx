@@ -21,7 +21,7 @@ type HeroProps = {
 };
 
 export default function Hero({
-  title = "Bulksale maker(仮)",
+  title = "Yamawake",
   subtitle = "An inclusive and transparent token launchpad,\n offering a permissionless and fair launch model.",
   currentUser,
   mutate,

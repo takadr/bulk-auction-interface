@@ -7,7 +7,7 @@ import {
   Container,
 } from "@chakra-ui/react";
 
-export const Render500 = ({ error }: { error: Error }) => {
+export default function Render500({ error }: { error: Error }) {
   return (
     <Container maxW={"container.md"} py={8}>
       <Card p={8}>
@@ -20,6 +20,4 @@ export const Render500 = ({ error }: { error: Error }) => {
       </Card>
     </Container>
   );
-};
-
-export default Render500;
+}

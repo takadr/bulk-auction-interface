@@ -10,16 +10,16 @@ import {
 import { useToast, useColorMode } from "@chakra-ui/react";
 import { useAccount } from "wagmi";
 import { CustomProvider } from "rsuite";
-import MetaDataForm from "./templates/SaleTemplateV1/MetaDataForm";
-import useMetaDataForm from "../hooks/SaleTemplateV1/useMetaDataForm";
+import MetaDataForm from "./templates/TemplateV1/MetaDataForm";
+import useMetaDataForm from "../hooks/TemplateV1/useMetaDataForm";
 import { useLocale } from "../hooks/useLocale";
-import { MetaData } from "lib/types/Sale";
+import { MetaData } from "lib/types/Auction";
 
 export default function MetaDataFormModal({
   isOpen,
   onClose,
   existingContractAddress,
-  saleMetaData,
+  auctionMetaData,
   minRaisedAmount,
   onSubmitSuccess,
 }: {
@@ -27,7 +27,7 @@ export default function MetaDataFormModal({
   onClose: () => void;
   onSuccess?: () => void;
   existingContractAddress?: `0x${string}`;
-  saleMetaData?: MetaData;
+  auctionMetaData?: MetaData;
   minRaisedAmount: number;
   onSubmitSuccess?: () => void;
 }) {
@@ -47,7 +47,7 @@ export default function MetaDataFormModal({
   const { formikProps } = useMetaDataForm({
     contractId: contractAddress,
     minRaisedAmount: minRaisedAmount,
-    saleMetaData,
+    auctionMetaData,
     onSubmitSuccess: (response) => {
       onSubmitSuccess && onSubmitSuccess();
       handleClose();

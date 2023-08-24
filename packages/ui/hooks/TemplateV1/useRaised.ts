@@ -1,11 +1,11 @@
 import { useContractReads } from "wagmi";
-import SaleTemplateV1ABI from "lib/constants/abis/SaleTemplateV1.json";
+import TemplateV1ABI from "lib/constants/abis/TemplateV1.json";
 import Big, { getBigNumber } from "lib/utils/bignumber";
-import { Sale } from "lib/types/Sale";
+import { TemplateV1 } from "lib/types/Auction";
 import { ContractFunctionConfig, Abi } from "viem";
 
 export default function useRaised(
-  sale: Sale,
+  auction: TemplateV1,
   address: `0x${string}` | undefined,
 ): {
   raised: Big;
@@ -14,9 +14,9 @@ export default function useRaised(
   isError: boolean;
   refetch: (() => Promise<any>) | (() => void);
 } {
-  const saleContractConfig = {
-    address: sale.id as `0x${string}`,
-    abi: SaleTemplateV1ABI as Abi,
+  const auctionContractConfig = {
+    address: auction.id as `0x${string}`,
+    abi: TemplateV1ABI as Abi,
   };
 
   const { data, isError, refetch, isLoading } = useContractReads<
@@ -26,14 +26,14 @@ export default function useRaised(
   >({
     contracts: [
       {
-        ...saleContractConfig,
+        ...auctionContractConfig,
         functionName: "raised",
         // TODO Specify Type
         // @ts-ignore
         args: [address],
       },
       {
-        ...saleContractConfig,
+        ...auctionContractConfig,
         functionName: "totalRaised",
       },
     ],
@@ -41,12 +41,12 @@ export default function useRaised(
   });
 
   /*
-  To reduce RPC request, it returns 0 raised and totalRaised from Sale object if address is not given.
+  To reduce RPC request, it returns 0 raised and totalRaised from Auction object if address is not given.
   */
   if (typeof address === "undefined") {
     return {
       raised: Big(0),
-      totalRaised: getBigNumber(sale.totalRaised),
+      totalRaised: getBigNumber(auction.totalRaised[0].amount),
       isLoading: false,
       isError: false,
       refetch: () => {},

@@ -1,6 +1,5 @@
 import { SWRConfiguration } from "swr";
 import useSWRInfinite from "swr/infinite";
-import { useQuery } from "wagmi";
 import client from "lib/apollo/client";
 import {
   LIST_ACTIVE_AND_UPCOMING_SALE_QUERY,
@@ -8,20 +7,20 @@ import {
   LIST_UPCOMING_SALE_QUERY,
   LIST_CLOSED_SALE_QUERY,
 } from "lib/apollo/query";
-import { Sale } from "lib/types/Sale";
+import { AuctionProps } from "lib/types/Auction";
 import { DocumentNode } from "@apollo/client";
 
-interface SWRSaleStore {
-  sales: Sale[];
+interface SWRAuctionStore {
+  auctions: AuctionProps[];
   isLast: boolean;
   error?: Error;
   isLoading: boolean;
   isValidating: boolean;
-  fetcher: (args: [number, number]) => Promise<Sale[]>;
-  loadMoreSales: () => void;
+  fetcher: (args: [number, number]) => Promise<AuctionProps[]>;
+  loadMoreAuctions: () => void;
 }
 
-type SalesParams = {
+type AuctionsParams = {
   first?: number;
   skip?: number;
   keySuffix?: string;
@@ -53,11 +52,11 @@ const getQuery = (queryType: QueryType): DocumentNode => {
   }
 };
 
-export const useSWRSales = (
-  config: SalesParams & SWRConfiguration,
+export const useSWRAuctions = (
+  config: AuctionsParams & SWRConfiguration,
   queryType: QueryType = QueryType.ACTIVE_AND_UPCOMING,
-): SWRSaleStore => {
-  const getKey = (pageIndex: number, previousPageData: Sale[]) => {
+): SWRAuctionStore => {
+  const getKey = (pageIndex: number, previousPageData: AuctionProps[]) => {
     if (previousPageData && !previousPageData.length) return null;
     const skip = previousPageData === null ? 0 : previousPageData.length;
     return [
@@ -70,7 +69,7 @@ export const useSWRSales = (
     ];
   };
 
-  const fetcher = async (args: [number, number]): Promise<Sale[]> => {
+  const fetcher = async (args: [number, number]): Promise<AuctionProps[]> => {
     return client
       .query({
         query: getQuery(queryType),
@@ -81,35 +80,35 @@ export const useSWRSales = (
         },
       })
       .then((result) => {
-        return result.data.sales;
+        return result.data.auctions;
       });
   };
 
   const {
-    data: saleList,
+    data: auctionList,
     error,
     size,
     setSize,
     isLoading,
     isValidating,
-  } = useSWRInfinite<Sale[], Error>(getKey, fetcher, config);
+  } = useSWRInfinite<AuctionProps[], Error>(getKey, fetcher, config);
 
-  const loadMoreSales = () => {
+  const loadMoreAuctions = () => {
     setSize(size + 1);
   };
 
-  const isLast = saleList
-    ? saleList.filter((list) => list.length < LIMIT).length > 0
+  const isLast = auctionList
+    ? auctionList.filter((list) => list.length < LIMIT).length > 0
     : false;
-  const sales = saleList ? saleList.flat() : [];
+  const auctions = auctionList ? auctionList.flat() : [];
 
   return {
-    sales,
+    auctions,
     isLast,
     error,
     isLoading,
     isValidating,
     fetcher,
-    loadMoreSales,
+    loadMoreAuctions,
   };
 };

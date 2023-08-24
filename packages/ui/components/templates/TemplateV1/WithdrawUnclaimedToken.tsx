@@ -1,41 +1,43 @@
 import { QuestionIcon } from "@chakra-ui/icons";
 import {
-  chakra,
   useToast,
   Button,
   Tooltip,
   Flex,
   Box,
   Heading,
+  chakra,
 } from "@chakra-ui/react";
 import { useContractRead, erc20ABI } from "wagmi";
-import useWithdrawERC20Onsale from "../../../hooks/useWithdrawERC20Onsale";
-import { Sale } from "lib/types/Sale";
+import useWithdrawUnclaimedERC20OnAuction from "../../../hooks/useWithdrawUnclaimedERC20OnSale";
+import { TemplateV1 } from "lib/types/Auction";
 import { getDecimalsForView, tokenAmountFormat } from "lib/utils";
 import { getBigNumber } from "lib/utils/bignumber";
 import TxSentToast from "../../TxSentToast";
-import { useLocale } from "../../../hooks/useLocale";
 
 type Props = {
-  sale: Sale;
+  auction: TemplateV1;
   onSuccessConfirm?: (data: any) => void;
 };
-export default function WithdrawERC20({ sale, onSuccessConfirm }: Props) {
+export default function WithdrawUnclaimedToken({
+  auction,
+  onSuccessConfirm,
+}: Props) {
   const toast = useToast({ position: "top-right", isClosable: true });
   const { data: balance } = useContractRead({
-    address: sale.token as `0x${string}`,
+    address: auction.auctionToken.id as `0x${string}`,
     abi: erc20ABI,
     functionName: "balanceOf",
-    args: [sale.id as `0x${string}`],
+    args: [auction.id as `0x${string}`],
     watch: true,
   });
   const {
-    prepareFn: withdrawERC20PrepareFn,
-    writeFn: withdrawERC20WriteFn,
-    waitFn: withdrawERC20WaitFn,
-  } = useWithdrawERC20Onsale({
-    targetAddress: sale.id as `0x${string}`,
-    onSuccessWrite: (data) => {
+    prepareFn: withdrawUnclaimedERC20PrepareFn,
+    writeFn: withdrawUnclaimedERC20WriteFn,
+    waitFn: withdrawUnclaimedERC20WaitFn,
+  } = useWithdrawUnclaimedERC20OnAuction({
+    targetAddress: auction.id as `0x${string}`,
+    onSuccessWrite: (data: any) => {
       toast({
         title: "Transaction sent!",
         status: "success",
@@ -50,7 +52,7 @@ export default function WithdrawERC20({ sale, onSuccessConfirm }: Props) {
         duration: 5000,
       });
     },
-    onSuccessConfirm: (data) => {
+    onSuccessConfirm: (data: any) => {
       toast({
         description: `Transaction confirmed!`,
         status: "success",
@@ -58,19 +60,17 @@ export default function WithdrawERC20({ sale, onSuccessConfirm }: Props) {
       });
       onSuccessConfirm && onSuccessConfirm(data);
     },
-    isReady: typeof balance !== "undefined" && balance !== 0n,
   });
-  const { t } = useLocale();
 
   return (
     <Box>
       <Heading fontSize={"lg"} textAlign={"left"}>
-        {t("TOKEN_BALANCE_IN_SALE_CONTRACT")}
+        Unclaimed token balance (削除予定)
         <Tooltip
           hasArrow
-          label={t(
-            "TOKEN_WITHDRAWALS_WILL_BE_AVAILABLE_IMMEDIATELY_AFTER_THE_END_OF_THE_SALE",
-          )}
+          label={
+            "Finished, passed lock duration, and still there're unsold ERC-20."
+          }
         >
           <QuestionIcon mb={1} ml={1} />
         </Tooltip>
@@ -80,26 +80,29 @@ export default function WithdrawERC20({ sale, onSuccessConfirm }: Props) {
           {typeof balance !== "undefined"
             ? tokenAmountFormat(
                 getBigNumber(balance.toString()),
-                Number(sale.tokenDecimals),
+                Number(auction.auctionToken.decimals),
                 getDecimalsForView(
-                  getBigNumber(sale.allocatedAmount),
-                  Number(sale.tokenDecimals),
+                  getBigNumber(auction.allocatedAmount),
+                  Number(auction.auctionToken.decimals),
                 ),
               )
             : "-"}{" "}
-          {sale.tokenSymbol}
+          {auction.auctionToken.symbol}
         </chakra.p>
         <Button
           variant={"solid"}
           isDisabled={
-            !balance || balance === 0n || !withdrawERC20WriteFn.writeAsync
+            !balance ||
+            balance === BigInt(0) ||
+            !withdrawUnclaimedERC20WriteFn.writeAsync
           }
           isLoading={
-            withdrawERC20WriteFn.isLoading || withdrawERC20WaitFn.isLoading
+            withdrawUnclaimedERC20WriteFn.isLoading ||
+            withdrawUnclaimedERC20WaitFn.isLoading
           }
-          onClick={() => withdrawERC20WriteFn.writeAsync()}
+          onClick={() => withdrawUnclaimedERC20WriteFn.writeAsync()}
         >
-          {t("WITHDRAW_TOKEN")}
+          Withdraw Unclaimed Token
         </Button>
       </Flex>
     </Box>

@@ -11,50 +11,8 @@
       {
         "indexed": false,
         "internalType": "address",
-        "name": "deployedAddr",
+        "name": "deployedAddress",
         "type": "address"
-      },
-      {
-        "indexed": false,
-        "internalType": "address",
-        "name": "tokenAddr",
-        "type": "address"
-      },
-      {
-        "indexed": false,
-        "internalType": "address",
-        "name": "baseToken",
-        "type": "address"
-      },
-      {
-        "indexed": false,
-        "internalType": "address",
-        "name": "owner",
-        "type": "address"
-      },
-      {
-        "indexed": false,
-        "internalType": "uint256",
-        "name": "allocatedAmount",
-        "type": "uint256"
-      },
-      {
-        "indexed": false,
-        "internalType": "uint256",
-        "name": "startingAt",
-        "type": "uint256"
-      },
-      {
-        "indexed": false,
-        "internalType": "uint256",
-        "name": "eventDuration",
-        "type": "uint256"
-      },
-      {
-        "indexed": false,
-        "internalType": "uint256",
-        "name": "minRaisedAmount",
-        "type": "uint256"
       }
     ],
     "name": "Deployed",
@@ -91,7 +49,7 @@
       {
         "indexed": true,
         "internalType": "address",
-        "name": "templateAddr",
+        "name": "implementionAddr",
         "type": "address"
       }
     ],
@@ -110,43 +68,34 @@
       {
         "indexed": true,
         "internalType": "address",
-        "name": "templateAddr",
+        "name": "implementionAddr",
         "type": "address"
       }
     ],
-    "name": "TemplateDeleted",
-    "type": "event"
-  },
-  {
-    "anonymous": false,
-    "inputs": [
-      {
-        "indexed": true,
-        "internalType": "address",
-        "name": "receiver",
-        "type": "address"
-      },
-      {
-        "indexed": false,
-        "internalType": "uint256",
-        "name": "amount",
-        "type": "uint256"
-      }
-    ],
-    "name": "WithdrawnEther",
+    "name": "TemplateRemoved",
     "type": "event"
   },
   {
     "inputs": [
       {
         "internalType": "bytes32",
-        "name": "templateName",
+        "name": "templateName_",
         "type": "bytes32"
       },
       {
         "internalType": "address",
-        "name": "templateAddr",
+        "name": "implementionAddr_",
         "type": "address"
+      },
+      {
+        "internalType": "bytes4",
+        "name": "initializeSignature_",
+        "type": "bytes4"
+      },
+      {
+        "internalType": "bytes4",
+        "name": "transferSignature_",
+        "type": "bytes4"
       }
     ],
     "name": "addTemplate",
@@ -158,41 +107,16 @@
     "inputs": [
       {
         "internalType": "bytes32",
-        "name": "templateName",
+        "name": "templateName_",
         "type": "bytes32"
       },
       {
-        "internalType": "address",
-        "name": "tokenAddr",
-        "type": "address"
-      },
-      {
-        "internalType": "address",
-        "name": "owner",
-        "type": "address"
-      },
-      {
-        "internalType": "uint256",
-        "name": "allocatedAmount",
-        "type": "uint256"
-      },
-      {
-        "internalType": "uint256",
-        "name": "startingAt",
-        "type": "uint256"
-      },
-      {
-        "internalType": "uint256",
-        "name": "eventDuration",
-        "type": "uint256"
-      },
-      {
-        "internalType": "uint256",
-        "name": "minRaisedAmount",
-        "type": "uint256"
+        "internalType": "bytes",
+        "name": "args_",
+        "type": "bytes"
       }
     ],
-    "name": "deploySaleClone",
+    "name": "deployAuction",
     "outputs": [
       {
         "internalType": "address",
@@ -220,7 +144,7 @@
     "inputs": [
       {
         "internalType": "bytes32",
-        "name": "templateName",
+        "name": "templateName_",
         "type": "bytes32"
       }
     ],
@@ -248,8 +172,18 @@
     "outputs": [
       {
         "internalType": "address",
-        "name": "",
+        "name": "implemention",
         "type": "address"
+      },
+      {
+        "internalType": "bytes4",
+        "name": "initializeSignature",
+        "type": "bytes4"
+      },
+      {
+        "internalType": "bytes4",
+        "name": "transferSignature",
+        "type": "bytes4"
       }
     ],
     "stateMutability": "view",
@@ -267,22 +201,5 @@
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "address",
-        "name": "to",
-        "type": "address"
-      }
-    ],
-    "name": "withdrawEther",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "stateMutability": "payable",
-    "type": "receive"
   }
 ]

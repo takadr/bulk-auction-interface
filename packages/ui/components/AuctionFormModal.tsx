@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import {
   Modal,
   ModalOverlay,
@@ -8,18 +8,19 @@ import {
   ModalCloseButton,
 } from "@chakra-ui/react";
 import { useToast, useColorMode } from "@chakra-ui/react";
-import { useAccount, useContractEvent } from "wagmi";
+import { useAccount, useContractEvent, useWaitForTransaction } from "wagmi";
 import { CustomProvider } from "rsuite";
+import { useAtom } from "jotai";
 import FactoryABI from "lib/constants/abis/Factory.json";
+import { creatingAuctionAtom, waitingCreationTxAtom } from "lib/store";
 import { Steps } from "./Steps";
-import SaleForm from "./templates/SaleTemplateV1/SaleForm";
-import useSaleForm from "../hooks/SaleTemplateV1/useSaleForm";
-import MetaDataForm from "./templates/SaleTemplateV1/MetaDataForm";
-import useMetaDataForm from "../hooks/SaleTemplateV1/useMetaDataForm";
+import MetaDataForm from "./templates/TemplateV1/MetaDataForm";
+import useMetaDataForm from "../hooks/TemplateV1/useMetaDataForm";
 import { useLocale } from "../hooks/useLocale";
 import TxSentToast from "./TxSentToast";
+import AuctionFormWrapper from "./templates/AuctionFormWrapper";
 
-type SaleFormModalProps = {
+type AuctionFormModalProps = {
   isOpen: boolean;
   onClose: () => void;
   onDeploy?: () => void;
@@ -28,14 +29,14 @@ type SaleFormModalProps = {
   onInformationCanceled?: () => void;
 };
 
-export default function SaleFormModal({
+export default function AuctionFormModal({
   isOpen,
   onClose,
   onDeploy,
   onDeployConfirmed,
   onInformationSaved,
   onInformationCanceled,
-}: SaleFormModalProps) {
+}: AuctionFormModalProps) {
   const { address } = useAccount();
   const toast = useToast({ position: "top-right", isClosable: true });
   const { colorMode, setColorMode, toggleColorMode } = useColorMode();
@@ -44,76 +45,45 @@ export default function SaleFormModal({
     `0x${string}` | undefined
   >(undefined);
   const { t } = useLocale();
+  const [tx, setTx] = useState<string | undefined>(undefined);
+  const txRef = useRef(tx);
+  const [creatingAuction, setCreatingAuction] = useAtom(creatingAuctionAtom);
+  useEffect(() => {
+    txRef.current = tx;
+  }, [tx]);
 
-  const {
-    formikProps,
-    approvals,
-    prepareFn,
-    writeFn,
-    waitFn,
-    tokenData,
-    balance,
-  } = useSaleForm({
-    address: address as `0x${string}`,
-    onSubmitSuccess: (result) => {
-      setStep(2);
-      onDeploy && onDeploy();
-      toast({
-        title: t("TRANSACTION_SENT"),
-        status: "success",
-        duration: 5000,
-        render: (props) => <TxSentToast txid={result.hash} {...props} />,
-      });
-    },
-    onSubmitError: (e: any) => {
-      toast({
-        description: e.message,
-        status: "error",
-        duration: 5000,
-      });
-    },
-    onWaitForTransactionSuccess: (result: any) => {
-      onDeployConfirmed && onDeployConfirmed();
+  const waitFn = useWaitForTransaction({
+    hash: tx as `0x${string}`,
+    enabled: !!tx,
+    onSuccess(data) {
       toast({
         title: t("TRANSACTION_CONFIRMED"),
         status: "success",
         duration: 5000,
       });
     },
-    onWaitForTransactionError: (e: Error) => {
+    onError(e) {
       toast({
         description: e.message,
         status: "error",
         duration: 5000,
       });
     },
-    onApprovalTxSent: (result: any) => {
-      toast({
-        title: t("TRANSACTION_SENT"),
-        status: "success",
-        duration: 5000,
-        render: (props) => <TxSentToast txid={result.hash} {...props} />,
-      });
-    },
-    onApprovalTxConfirmed: (result: any) => {
-      toast({
-        title: t("APPROVAL_CONFIRMED"),
-        status: "success",
-        duration: 5000,
-      });
-    },
   });
 
   const handleClose = () => {
-    formikProps.resetForm();
     metaFormikProps.resetForm();
     onClose();
     setStep(1);
+    setCreatingAuction(undefined);
   };
 
   const { formikProps: metaFormikProps } = useMetaDataForm({
     contractId: contractAddress,
-    minRaisedAmount: formikProps.values.minRaisedAmount,
+    minRaisedAmount:
+      creatingAuction && creatingAuction.minRaisedAmount
+        ? creatingAuction.minRaisedAmount
+        : 0,
     onSubmitSuccess: (response) => {
       handleClose();
       onInformationSaved && onInformationSaved();
@@ -137,13 +107,14 @@ export default function SaleFormModal({
     abi: FactoryABI,
     eventName: "Deployed",
     listener: (logs: any[]) => {
-      const { args } = logs[0];
+      const { args, transactionHash } = logs[0];
       if (
-        (args.owner as string).toLowerCase() ===
-        (address as string).toLowerCase()
+        (transactionHash as string).toLowerCase() ===
+        (txRef.current as string).toLowerCase()
       ) {
-        setContractAddress(args.deployedAddr as `0x${string}`);
         unwatch && unwatch();
+        setContractAddress(args.deployedAddress as `0x${string}`);
+        setTx(undefined);
       }
     },
   });
@@ -177,14 +148,24 @@ export default function SaleFormModal({
               currentStep={step}
             />
             {step === 1 ? (
-              <SaleForm
-                formikProps={formikProps}
-                address={address as `0x${string}`}
-                approvals={approvals}
-                writeFn={writeFn}
-                tokenData={tokenData}
-                balance={balance}
-              />
+              <>
+                <AuctionFormWrapper
+                  address={address as `0x${string}`}
+                  onSubmitSuccess={(result) => {
+                    setTx(result.hash);
+                    setStep(2);
+                    onDeploy && onDeploy();
+                    toast({
+                      title: t("TRANSACTION_SENT"),
+                      status: "success",
+                      duration: 5000,
+                      render: (props) => (
+                        <TxSentToast txid={result.hash} {...props} />
+                      ),
+                    });
+                  }}
+                />
+              </>
             ) : (
               <MetaDataForm
                 formikProps={metaFormikProps}

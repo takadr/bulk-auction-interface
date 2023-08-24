@@ -62,7 +62,7 @@ export default function Layout({
 
   return (
     <>
-      <Header title={title ? title : "DFGC Sale Maker(仮)"} />
+      <Header title={title ? title : "Yamawake"} />
       {chain && chain.unsupported && (
         <chakra.div px={{ base: 0, md: 8 }}>
           <Alert status="warning" mb={4}>

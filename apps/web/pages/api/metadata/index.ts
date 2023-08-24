@@ -8,14 +8,17 @@ import {
   getContract,
   PublicClient,
   GetContractReturnType,
-  Abi,
   Transport,
 } from "viem";
 import { mainnet, goerli, sepolia, localhost, Chain } from "viem/chains";
-import { scanMetaData, addMetaData, updateSale } from "lib/dynamodb/metaData";
-import SaleTemplateV1ABI from "lib/constants/abis/SaleTemplateV1.json";
+import {
+  scanMetaData,
+  addMetaData,
+  updateAuction,
+} from "lib/dynamodb/metaData";
+import BaseTemplateABI from "lib/constants/abis/BaseTemplate.json";
 import ironOptions from "lib/constants/ironOptions";
-import { CHAIN_IDS, CHAIN_NAMES } from "lib/constants";
+import { CHAIN_NAMES } from "lib/constants";
 
 // const availableNetwork = Object.values(CHAIN_IDS);
 const availableNetwork = [Number(process.env.NEXT_PUBLIC_CHAIN_ID)];
@@ -49,7 +52,7 @@ const requireContractOwner = (
   req: NextApiRequest,
 ): Promise<{
   metaData: any;
-  saleContract: GetContractReturnType<typeof SaleTemplateV1ABI, PublicClient>;
+  auctionContract: GetContractReturnType<typeof BaseTemplateABI, PublicClient>;
   provider: PublicClient<Transport, Chain>;
 }> => {
   return new Promise(async (resolve, reject) => {
@@ -57,15 +60,15 @@ const requireContractOwner = (
       if (!req.session.siwe) return reject("Unauthorized");
       const metaData = req.body;
       const provider = getViemProvider(req.session.siwe.chainId);
-      const saleContract = getContract({
+      const auctionContract = getContract({
         address: metaData.id,
-        abi: SaleTemplateV1ABI,
+        abi: BaseTemplateABI,
         publicClient: provider,
       });
-      const contractOwner = await saleContract.read.owner();
+      const contractOwner = await auctionContract.read.owner();
       if (contractOwner !== req.session.siwe.address)
         reject("You are not the owner of this contract");
-      resolve({ metaData, saleContract, provider });
+      resolve({ metaData, auctionContract, provider });
     } catch (error: any) {
       reject(error.message);
     }
@@ -118,20 +121,8 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     case "POST":
       try {
         requireAvailableNetwork(req);
-        const { metaData, saleContract, provider } = await requireContractOwner(
-          req,
-        );
-        const tokenAddress = await saleContract.read.erc20onsale();
-        const { tokenName, tokenSymbol, tokenDecimal } = await getTokenInfo(
-          tokenAddress as `0x${string}`,
-          provider,
-        );
-        const result = await addMetaData({
-          ...metaData,
-          tokenName,
-          tokenSymbol,
-          tokenDecimal,
-        });
+        const { metaData } = await requireContractOwner(req);
+        const result = await addMetaData(metaData);
         res.json({ result });
       } catch (_error) {
         console.log(_error);
@@ -141,20 +132,8 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     case "PUT":
       try {
         requireAvailableNetwork(req);
-        const { metaData, saleContract, provider } = await requireContractOwner(
-          req,
-        );
-        const tokenAddress = await saleContract.read.erc20onsale();
-        const { tokenName, tokenSymbol, tokenDecimal } = await getTokenInfo(
-          tokenAddress as `0x${string}`,
-          provider,
-        );
-        const result = await updateSale({
-          ...metaData,
-          tokenName,
-          tokenSymbol,
-          tokenDecimal,
-        });
+        const { metaData } = await requireContractOwner(req);
+        const result = await updateAuction(metaData);
         res.json({ result });
       } catch (_error: any) {
         console.log(_error);
