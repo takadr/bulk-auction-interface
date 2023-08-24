@@ -6,9 +6,9 @@ dataSources:
     name: Factory
     network: goerli
     source:
-      address: "0x7A0162aEE335d8073A579aE28CDFdC16143818D8"
+      address: "0x161AFA5900C3BDFF7614d53B96Bf59C4C29a3206"
       abi: Factory
-      startBlock: 9503363
+      startBlock: 9570588
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.7
