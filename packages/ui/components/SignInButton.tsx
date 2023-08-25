@@ -96,7 +96,7 @@ export default function SignInButton({
                     ? buttonProps.title
                     : t("SIGN_IN_WITH_ETHEREUM"),
                   address,
-                  chainId: chain?.id,
+                  chainId: Number(process.env.NEXT_PUBLIC_CHAIN_ID),
                 });
               }
         }

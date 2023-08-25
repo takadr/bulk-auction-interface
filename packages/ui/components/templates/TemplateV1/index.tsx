@@ -27,9 +27,6 @@ import {
   CardHeader,
   CardBody,
   StackDivider,
-  SkeletonCircle,
-  Skeleton,
-  SkeletonText,
 } from "@chakra-ui/react";
 import { ExternalLinkIcon, QuestionIcon } from "@chakra-ui/icons";
 import { useFormik } from "formik";
@@ -38,9 +35,8 @@ import {
   usePrepareSendTransaction,
   useSendTransaction,
   useBalance,
+  useNetwork,
 } from "wagmi";
-import { ApolloQueryResult } from "@apollo/client";
-import { KeyedMutator } from "swr";
 import Big, { getBigNumber } from "lib/utils/bignumber";
 import CalendarInCircle from "./CalendarInCircle";
 import PersonalStatistics from "./PersonalStatistics";
@@ -48,7 +44,7 @@ import StatisticsInCircle from "./StatisticsInCircle";
 import PriceChart from "./PriceChart";
 import useRaised from "../../../hooks/TemplateV1/useRaised";
 import useRate from "../../../hooks/useRate";
-import { AuctionProps, MetaData, TemplateV1 } from "lib/types/Auction";
+import { TemplateV1 } from "lib/types/Auction";
 import ExternalLinkTag from "../../ExternalLinkTag";
 import ClaimButton from "./ClaimButton";
 import TxSentToast from "../../TxSentToast";
@@ -86,6 +82,7 @@ export default function DetailPage({
     isLoading: isLoadingBalance,
     refetch: refetchBalance,
   } = useBalance({ address, enabled: !!address });
+  const { chain } = useNetwork();
 
   const raisedTokenSymbol = "ETH";
   const raisedTokenDecimal = 18;
@@ -381,7 +378,11 @@ export default function DetailPage({
                             {address ? (
                               <Button
                                 isLoading={isLoadingWaitTX || isLoadingSendTX}
-                                isDisabled={!sendTransactionAsync || !started}
+                                isDisabled={
+                                  chain?.unsupported ||
+                                  !sendTransactionAsync ||
+                                  !started
+                                }
                                 type="submit"
                                 variant="solid"
                                 colorScheme={"green"}
@@ -445,6 +446,7 @@ export default function DetailPage({
                     isClaimed={auction.claims.length > 0}
                     mutateIsClaimed={refetchAuction}
                     colorScheme={"green"}
+                    isDisabled={chain?.unsupported}
                   />
                 </chakra.div>
               )}

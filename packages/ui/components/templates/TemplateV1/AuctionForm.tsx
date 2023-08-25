@@ -29,6 +29,7 @@ import { ExternalLinkIcon, QuestionIcon } from "@chakra-ui/icons";
 import { DateRangePicker } from "rsuite";
 import { differenceInSeconds, format } from "date-fns";
 import { ethers } from "ethers";
+import { useNetwork } from "wagmi";
 import {
   getDecimalsForView,
   getEtherscanLink,
@@ -59,6 +60,7 @@ export default function AuctionForm({
   const cancelRef = useRef<HTMLButtonElement>(null);
   const toast = useToast({ position: "top-right", isClosable: true });
   const { t } = useLocale();
+  const { chain } = useNetwork();
 
   const {
     formikProps,
@@ -357,7 +359,11 @@ export default function AuctionForm({
               variant="solid"
               colorScheme="green"
               isLoading={writeFn.isLoading}
-              isDisabled={!writeFn.writeAsync || !formikProps.isValid}
+              isDisabled={
+                chain?.unsupported ||
+                !writeFn.writeAsync ||
+                !formikProps.isValid
+              }
               onClick={onOpen}
             >
               {t("DEPLOY_SALE_CONTRACT")}
@@ -475,7 +481,11 @@ export default function AuctionForm({
                       variant="solid"
                       colorScheme="green"
                       isLoading={writeFn.isLoading}
-                      isDisabled={!writeFn.writeAsync || !formikProps.isValid}
+                      isDisabled={
+                        chain?.unsupported ||
+                        !writeFn.writeAsync ||
+                        !formikProps.isValid
+                      }
                     >
                       {t("DEPLOY_SALE_CONTRACT")}
                     </Button>
@@ -494,7 +504,11 @@ export default function AuctionForm({
             isLoading={
               approvals.writeFn.isLoading || approvals.waitFn.isLoading
             }
-            isDisabled={!approvals.writeFn.write || !formikProps.isValid}
+            isDisabled={
+              chain?.unsupported ||
+              !approvals.writeFn.write ||
+              !formikProps.isValid
+            }
           >
             {t("APPROVE_TOKEN")}
           </Button>

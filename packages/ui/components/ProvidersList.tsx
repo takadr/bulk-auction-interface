@@ -1,4 +1,4 @@
-import { useConnect, useDisconnect } from "wagmi";
+import { useConnect, useDisconnect, useSwitchNetwork } from "wagmi";
 import { Button, Stack, Flex, useToast } from "@chakra-ui/react";
 import {
   Modal,
@@ -29,7 +29,8 @@ export default function ProvidersList({
   const toast = useToast({ position: "top-right", isClosable: true });
   const { connect, connectors, error, isLoading, pendingConnector } =
     useConnect({
-      onSuccess: (data) => {
+      chainId: Number(process.env.NEXT_PUBLIC_CHAIN_ID),
+      onSuccess: async (data) => {
         onConnectSuccess &&
           onConnectSuccess({
             address: data.account,

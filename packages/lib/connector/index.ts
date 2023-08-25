@@ -17,7 +17,7 @@ const getSupportedChain = (): Chain[] => {
   } else if (process.env.NEXT_PUBLIC_CHAIN_ID === "11155111") {
     return [sepolia];
   }
-  return [sepolia];
+  return [];
 };
 
 const { chains, publicClient, webSocketPublicClient } = configureChains<Chain>(
