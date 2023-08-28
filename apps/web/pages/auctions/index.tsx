@@ -17,6 +17,7 @@ import Layout from "ui/components/layouts/layout";
 import AuctionCard, { AuctionCardSkeleton } from "ui/components/AuctionCard";
 import { QueryType, useSWRAuctions } from "ui/hooks/useAuctions";
 import { useLocale } from "ui/hooks/useLocale";
+import MetaTags from "ui/components/MetaTags";
 
 export default function AuctionPage() {
   const {
@@ -41,6 +42,9 @@ export default function AuctionPage() {
 
   return (
     <Layout>
+      <MetaTags
+        title={`${t("LIVE_UPCOMING_SALES")} | ${t("APP_NAME")}`}
+      />
       <Container maxW="container.xl" py={16}>
         <Tabs variant="soft-rounded" colorScheme="green">
           <TabList>

@@ -17,6 +17,7 @@ import AuctionCard, { AuctionCardSkeleton } from "ui/components/AuctionCard";
 import { useSWRAuctions, QueryType } from "ui/hooks/useAuctions";
 import { useLocale } from "ui/hooks/useLocale";
 import { AuctionProps } from "lib/types/Auction";
+import MetaTags from "ui/components/MetaTags";
 
 export default function Web() {
   const { currentUser, mutate } = useContext(CurrentUserContext);
@@ -32,6 +33,7 @@ export default function Web() {
 
   return (
     <Layout>
+      <MetaTags />
       <Hero
         currentUser={currentUser}
         mutate={mutate}

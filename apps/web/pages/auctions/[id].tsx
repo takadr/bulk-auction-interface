@@ -63,7 +63,7 @@ export default function AuctionPage() {
         description={
           metaData.metaData.description
             ? metaData.metaData.description
-            : t("AN_INCLUSIVE_AND_TRANSPARENT_TOKEN_LAUNCHPAD")
+            : t("AN_INCLUSIVE_AND_TRANSPARENT_TOKEN_LAUNCHPAD").replace(/\n/g,"")
         }
         image={metaData.metaData.logoURL && metaData.metaData.logoURL}
       />
