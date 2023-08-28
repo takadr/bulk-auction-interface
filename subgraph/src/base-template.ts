@@ -68,6 +68,7 @@ export function handleRaised(event: RaisedEvent): void {
   const contribution = new Contribution(
     event.transaction.hash.toHex() + "-" + event.logIndex.toString(),
   );
+  contribution.auction = auction.id;
   contribution.amount = event.params.amount;
   contribution.raisedToken = event.params.token.toHex();
   contribution.from = event.params.participant.toHex();
@@ -83,12 +84,14 @@ export function handleRaised(event: RaisedEvent): void {
 }
 
 export function handleClaimed(event: ClaimedEvent): void {
-  let sale = Auction.load(event.address.toHexString());
-  if (sale == null) return;
+  let auction = Auction.load(event.address.toHexString());
+  if (auction == null) return;
 
   const claim = new Claim(
     event.transaction.hash.toHex() + "-" + event.logIndex.toString(),
   );
+  claim.auction = auction.id;
+  claim.token = auction.auctionToken;
   claim.participant = event.params.participant.toHex();
   claim.recipient = event.params.recipient.toHex();
   claim.userShare = event.params.userShare;
@@ -97,8 +100,8 @@ export function handleClaimed(event: ClaimedEvent): void {
   claim.blockNumber = event.block.number;
   claim.save();
 
-  const claims = sale.claims;
+  const claims = auction.claims;
   claims.push(claim.id);
-  sale.claims = claims;
-  sale.save();
+  auction.claims = claims;
+  auction.save();
 }

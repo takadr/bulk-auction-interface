@@ -57,6 +57,8 @@ type TotalRaised @entity {
 type Contribution @entity {
   # event.transaction.hash.toHex() + "-" + event.logIndex.toString()
   id: ID!
+  # Auction
+  auction: Auction!
   # Amount received
   amount: BigInt!
   # Raised token
@@ -74,6 +76,10 @@ type Contribution @entity {
 type Claim @entity {
   # event.transaction.hash.toHex() + "-" + event.logIndex.toString()
   id: ID!
+  # Auction
+  auction: Auction!
+  # Claimed token
+  token: Token!
   # Contributor address
   participant: String!
   # Receipient address

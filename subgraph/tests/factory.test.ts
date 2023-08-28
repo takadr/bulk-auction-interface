@@ -97,8 +97,8 @@ describe("Describe Deployed event with baseToken ETH", () => {
     assert.fieldEquals(
       "TemplateAuctionMap",
       DEPLOYED_ADDRESS,
-      "template",
-      TEST_ADDRESS.toLowerCase(),
+      "templateName",
+      TEMPLATE_NAME,
     );
 
     assert.entityCount("Token", 2);
@@ -180,6 +180,12 @@ describe("Describe Deployed event with baseToken ETH", () => {
       assert.fieldEquals(
         "Contribution",
         `${DEPLOYED_ADDRESS}-1`,
+        "auction",
+        `${DEPLOYED_ADDRESS}`,
+      );
+      assert.fieldEquals(
+        "Contribution",
+        `${DEPLOYED_ADDRESS}-1`,
         "amount",
         amount.toString(),
       );
@@ -213,6 +219,13 @@ describe("Describe Deployed event with baseToken ETH", () => {
         "0xa16081f360e3847006db660bae1c6d1b2e17ec2a",
       )!;
       assert.assertTrue(auction.claims.length == 1);
+
+      assert.fieldEquals(
+        "Claim",
+        `${DEPLOYED_ADDRESS}-${newClaimedEvent.logIndex}`,
+        "auction",
+        `${DEPLOYED_ADDRESS}`,
+      );
     });
   });
 });
