@@ -1,14 +1,8 @@
-import { SWRConfiguration } from "swr";
+import { KeyedMutator, SWRConfiguration } from "swr";
 import useSWRInfinite from "swr/infinite";
-import client from "lib/apollo/client";
-import {
-  LIST_ACTIVE_AND_UPCOMING_SALE_QUERY,
-  LIST_ACTIVE_SALE_QUERY,
-  LIST_UPCOMING_SALE_QUERY,
-  LIST_CLOSED_SALE_QUERY,
-} from "lib/apollo/query";
+import { QueryType } from "lib/apollo/query";
 import { AuctionProps } from "lib/types/Auction";
-import { DocumentNode } from "@apollo/client";
+import { zeroAddress } from "viem";
 
 interface SWRAuctionStore {
   auctions: AuctionProps[];
@@ -16,41 +10,21 @@ interface SWRAuctionStore {
   error?: Error;
   isLoading: boolean;
   isValidating: boolean;
-  fetcher: (args: [number, number]) => Promise<AuctionProps[]>;
+  fetcher: (args: [number, number, `0x${string}`]) => Promise<AuctionProps[]>;
   loadMoreAuctions: () => void;
+  mutate: KeyedMutator<AuctionProps[][]>;
 }
 
 type AuctionsParams = {
   first?: number;
   skip?: number;
+  id?: `0x${string}`;
   keySuffix?: string;
 };
-
-export enum QueryType {
-  ACTIVE_AND_UPCOMING,
-  ACTIVE,
-  UPCOMING,
-  CLOSED,
-}
 
 // TODO Send limit as a param
 const LIMIT = 50;
 const NOW = Math.floor(new Date().getTime() / 1000);
-
-const getQuery = (queryType: QueryType): DocumentNode => {
-  switch (queryType) {
-    case QueryType.ACTIVE_AND_UPCOMING:
-      return LIST_ACTIVE_AND_UPCOMING_SALE_QUERY;
-    case QueryType.ACTIVE:
-      return LIST_ACTIVE_SALE_QUERY;
-    case QueryType.UPCOMING:
-      return LIST_UPCOMING_SALE_QUERY;
-    case QueryType.CLOSED:
-      return LIST_CLOSED_SALE_QUERY;
-    default:
-      return LIST_ACTIVE_AND_UPCOMING_SALE_QUERY;
-  }
-};
 
 export const useSWRAuctions = (
   config: AuctionsParams & SWRConfiguration,
@@ -62,26 +36,30 @@ export const useSWRAuctions = (
     return [
       config.skip ? config.skip : skip,
       config.first ? config.first : LIMIT,
+      config.id ? config.id : zeroAddress,
       NOW,
+
       `queryType_${queryType.toString()}${
         config.keySuffix ? `_${config.keySuffix}` : ""
       }`,
     ];
   };
 
-  const fetcher = async (args: [number, number]): Promise<AuctionProps[]> => {
-    return client
-      .query({
-        query: getQuery(queryType),
-        variables: {
-          skip: args[0],
-          first: args[1],
-          now: NOW,
-        },
-      })
-      .then((result) => {
-        return result.data.auctions;
-      });
+  const fetcher = async (
+    args: [number, number, `0x${string}`],
+  ): Promise<AuctionProps[]> => {
+    const params = new URLSearchParams({
+      queryTypeIndex: queryType.toString(),
+      skip: args[0].toString(),
+      first: args[1].toString(),
+      id: args[2].toString(),
+      now: NOW.toString(),
+    }).toString();
+
+    return fetch(`/api/auctions/?${params}`).then(async (stream) => {
+      const result = await stream.json();
+      return result.data.auctions;
+    });
   };
 
   const {
@@ -91,6 +69,7 @@ export const useSWRAuctions = (
     setSize,
     isLoading,
     isValidating,
+    mutate,
   } = useSWRInfinite<AuctionProps[], Error>(getKey, fetcher, config);
 
   const loadMoreAuctions = () => {
@@ -110,5 +89,6 @@ export const useSWRAuctions = (
     isValidating,
     fetcher,
     loadMoreAuctions,
+    mutate,
   };
 };

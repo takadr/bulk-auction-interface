@@ -1,5 +1,13 @@
 import { gql } from "@apollo/client";
 
+export enum QueryType {
+  ACTIVE_AND_UPCOMING,
+  ACTIVE,
+  UPCOMING,
+  CLOSED,
+  MY_SALE_QUERY,
+}
+
 export const LIST_ACTIVE_AND_UPCOMING_SALE_QUERY = gql`
   query ListAuctions($skip: Int! = 0, $first: Int! = 50, $now: Int!) {
     auctions(

@@ -3,8 +3,7 @@ import { useAccount } from "wagmi";
 import { useToast } from "@chakra-ui/react";
 import Layout from "ui/components/layouts/layout";
 import MetaTags from "ui/components/MetaTags";
-import { useQuery } from "@apollo/client";
-import { GET_SALE_QUERY } from "lib/apollo/query";
+import useAuction from "ui/hooks/useAuction";
 import useSWRMetaData from "ui/hooks/useSWRMetaData";
 import { useLocale } from "ui/hooks/useLocale";
 import { zeroAddress } from "viem";
@@ -22,15 +21,15 @@ export default function AuctionPage() {
 
   const {
     data: auctionData,
-    loading,
+    mutate: refetch,
     error: apolloError,
-    refetch,
-  } = useQuery(GET_SALE_QUERY, {
-    variables: {
-      id: id as string,
-      address: address ? address.toLowerCase() : zeroAddress,
-    },
-  });
+  } = useAuction(
+    id as `0x${string}`,
+    address
+      ? (address.toLowerCase() as `0x${string}`)
+      : (zeroAddress as `0x${string}`),
+  );
+
   const {
     data: metaData,
     mutate,
@@ -44,15 +43,14 @@ export default function AuctionPage() {
       duration: 5000,
     });
 
-  if (loading || !metaData)
+  if (!auctionData || !metaData)
     return (
       <Layout>
         <SkeletonAuction />
       </Layout>
     );
 
-  if (!auctionData || !auctionData.auction)
-    return <CustomError statusCode={404} />;
+  if (!auctionData.auction) return <CustomError statusCode={404} />;
 
   return (
     <Layout>
@@ -63,7 +61,10 @@ export default function AuctionPage() {
         description={
           metaData.metaData.description
             ? metaData.metaData.description
-            : t("AN_INCLUSIVE_AND_TRANSPARENT_TOKEN_LAUNCHPAD").replace(/\n/g,"")
+            : t("AN_INCLUSIVE_AND_TRANSPARENT_TOKEN_LAUNCHPAD").replace(
+                /\n/g,
+                "",
+              )
         }
         image={metaData.metaData.logoURL && metaData.metaData.logoURL}
       />

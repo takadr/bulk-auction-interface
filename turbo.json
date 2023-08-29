@@ -6,8 +6,6 @@
       "outputs": [".next/**", "!.next/cache/**"],
       "env": [
         "NEXT_PUBLIC_FACTORY_ADDRESS",
-        "NEXT_PUBLIC_SUBGRAPH_SLUG",
-        "NEXT_PUBLIC_SUBGRAPH_VERSION",
         "NEXT_PUBLIC_CHAIN_ID",
         "NEXT_PUBLIC_WALLET_CONNECT_ID",
         "NEXT_PUBLIC_INFURA_API_TOKEN",
@@ -22,7 +20,8 @@
         "AWS_REGION",
         "AWS_DYNAMO_TABLE_NAME",
         "NODE_ENV",
-        "NEXT_PUBLIC_VERCEL_GIT_COMMIT_SHA"
+        "NEXT_PUBLIC_VERCEL_GIT_COMMIT_SHA",
+        "SUBGRAPH_ENDPOINT"
       ]
     },
     "lint": {},

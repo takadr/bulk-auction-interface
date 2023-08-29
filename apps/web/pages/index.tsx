@@ -14,9 +14,10 @@ import { CurrentUserContext } from "ui/components/providers/CurrentUserProvider"
 import Layout from "ui/components/layouts/layout";
 import Hero from "ui/components/Hero";
 import AuctionCard, { AuctionCardSkeleton } from "ui/components/AuctionCard";
-import { useSWRAuctions, QueryType } from "ui/hooks/useAuctions";
+import { useSWRAuctions } from "ui/hooks/useAuctions";
 import { useLocale } from "ui/hooks/useLocale";
 import { AuctionProps } from "lib/types/Auction";
+import { QueryType } from "lib/apollo/query";
 import MetaTags from "ui/components/MetaTags";
 
 export default function Web() {

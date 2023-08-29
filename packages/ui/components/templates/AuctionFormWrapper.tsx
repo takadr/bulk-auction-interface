@@ -1,9 +1,7 @@
 import { useEffect, useState } from "react";
 import { FormLabel, Select, Spinner, Tooltip } from "@chakra-ui/react";
 import { QuestionIcon } from "@chakra-ui/icons";
-import { useQuery } from "@apollo/client";
 import { ethers } from "ethers";
-import { LIST_TEMPLATE_QUERY } from "lib/apollo/query";
 import { Template } from "lib/types/Auction";
 import {
   COMPATIBLE_TEMPLATES,
@@ -11,6 +9,7 @@ import {
 } from "lib/constants/templates";
 import { useLocale } from "../../hooks/useLocale";
 import TemplateV1AuctionForm from "./TemplateV1/AuctionForm";
+import useTemplates from "../../hooks/useTemplates";
 
 export type AuctionFormWrapperParams = {
   address: `0x${string}`;
@@ -21,12 +20,7 @@ export type AuctionFormWrapperParams = {
 };
 
 export default function AuctionFormWrapper(props: AuctionFormWrapperParams) {
-  const {
-    data: templateData,
-    loading,
-    error,
-    refetch,
-  } = useQuery(LIST_TEMPLATE_QUERY);
+  const { data: templateData } = useTemplates();
   const [templateName, setTemplateName] = useState<string | undefined>(
     TEMPLATE_V1_NAME,
   );

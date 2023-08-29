@@ -18,25 +18,26 @@ import {
   useDisclosure,
 } from "@chakra-ui/react";
 import { AddIcon } from "@chakra-ui/icons";
-import { useQuery } from "@apollo/client";
 import { AuctionProps } from "lib/types/Auction";
 import Layout from "ui/components/layouts/layout";
-import { LIST_MY_SALE_QUERY } from "lib/apollo/query";
+import { QueryType } from "lib/apollo/query";
 import { CurrentUserContext } from "ui/components/providers/CurrentUserProvider";
 import AuctionFormModal from "ui/components/AuctionFormModal";
 import AuctionCard, { AuctionCardSkeleton } from "ui/components/AuctionCard";
 import { useLocale } from "ui/hooks/useLocale";
+import { useSWRAuctions } from "ui/hooks/useAuctions";
 import Render404 from "ui/components/errors/404";
 import CustomError from "../_error";
 
 export default function DashboardPage() {
   const { chain } = useNetwork();
   const { address, isConnected, connector } = useAccount();
-  const { currentUser, mutate } = useContext(CurrentUserContext);
+  const { currentUser } = useContext(CurrentUserContext);
   const auctionFormModalDisclosure = useDisclosure();
-  const { data, loading, error, refetch } = useQuery(LIST_MY_SALE_QUERY, {
-    variables: { id: String(address).toLowerCase() },
-  });
+  const { auctions, isLoading, error, mutate } = useSWRAuctions(
+    { id: String(address).toLowerCase() as `0x${string}` },
+    QueryType.MY_SALE_QUERY,
+  );
   const { t } = useLocale();
 
   if (typeof currentUser === "undefined") {
@@ -72,18 +73,18 @@ export default function DashboardPage() {
               <AuctionFormModal
                 isOpen={auctionFormModalDisclosure.isOpen}
                 onClose={auctionFormModalDisclosure.onClose}
-                onDeployConfirmed={refetch}
-                onInformationSaved={() => setTimeout(refetch, 1000)}
+                onDeployConfirmed={mutate}
+                onInformationSaved={() => setTimeout(mutate, 1000)}
               />
               <Stack mt={4} spacing={8}>
-                {loading || !data ? (
+                {isLoading || !auctions ? (
                   <>
                     <AuctionCardSkeleton />
                     <AuctionCardSkeleton />
                     <AuctionCardSkeleton />
                   </>
                 ) : (
-                  data.auctions.map((auctionProps: AuctionProps) => {
+                  auctions.map((auctionProps: AuctionProps) => {
                     return (
                       <AuctionCard
                         key={auctionProps.id}
@@ -93,7 +94,7 @@ export default function DashboardPage() {
                     );
                   })
                 )}
-                {!loading && data && data.auctions.length === 0 && (
+                {!isLoading && auctions && auctions.length === 0 && (
                   <Flex
                     minH={"25vh"}
                     justifyContent="center"
