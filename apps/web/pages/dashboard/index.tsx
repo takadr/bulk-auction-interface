@@ -86,20 +86,12 @@ export default function DashboardPage() {
                 ) : (
                   auctions.map((auctionProps: AuctionProps) => {
                     return (
-                      <AuctionCard
-                        key={auctionProps.id}
-                        auctionProps={auctionProps}
-                        editable
-                      />
+                      <AuctionCard key={auctionProps.id} auctionProps={auctionProps} editable />
                     );
                   })
                 )}
                 {!isLoading && auctions && auctions.length === 0 && (
-                  <Flex
-                    minH={"25vh"}
-                    justifyContent="center"
-                    alignItems={"center"}
-                  >
+                  <Flex minH={"25vh"} justifyContent="center" alignItems={"center"}>
                     <Text fontSize={"lg"} opacity={".75"} textAlign={"center"}>
                       {t("NO_SALE")}
                     </Text>

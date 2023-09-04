@@ -18,23 +18,11 @@ import SvgCommunityLogoBlack from "./svgs/CommunityLogoBlack";
 const Footer: FC = () => {
   const { t, setLocale, locale } = useLocale();
   return (
-    <Box
-      px={{ base: 0, md: 4 }}
-      top={"0"}
-      zIndex={100}
-      bg={"gray.900"}
-      opacity={0.975}
-    >
+    <Box px={{ base: 0, md: 4 }} top={"0"} zIndex={100} bg={"gray.900"} opacity={0.975}>
       <Container maxW="container.2xl" px={{ base: 2, md: 4 }}>
         <Flex py="4" justifyContent="space-between" alignItems="center">
           <chakra.div flex={1}></chakra.div>
-          <Flex
-            flex={2}
-            py="4"
-            gridGap={4}
-            justifyContent="center"
-            alignItems="center"
-          >
+          <Flex flex={2} py="4" gridGap={4} justifyContent="center" alignItems="center">
             <Link
               href="https://defigeek.xyz/"
               target={"_blank"}
@@ -73,10 +61,7 @@ const Footer: FC = () => {
               href={`https://github.com/DeFiGeek-Community/bulk-auction-interface/commit/${process.env.NEXT_PUBLIC_VERCEL_GIT_COMMIT_SHA}`}
               target={"_blank"}
             >
-              {`${process.env.NEXT_PUBLIC_VERCEL_GIT_COMMIT_SHA?.substring(
-                0,
-                7,
-              )}`}
+              {`${process.env.NEXT_PUBLIC_VERCEL_GIT_COMMIT_SHA?.substring(0, 7)}`}
             </Link>
           </HStack>
         </Flex>

@@ -46,14 +46,8 @@ export default function StatisticsInCircle({
   const [gray600, green400] = useToken("colors", ["gray.600", "green.400"]);
 
   const progressPercent = getTargetPercetage(totalRaised, maximumTotalRaised);
-  const minimumPercent = getTargetPercetage(
-    minRaisedAmount,
-    maximumTotalRaised,
-  );
-  const targetTotalRaisedPercent = getTargetPercetage(
-    targetTotalRaised,
-    maximumTotalRaised,
-  );
+  const minimumPercent = getTargetPercetage(minRaisedAmount, maximumTotalRaised);
+  const targetTotalRaisedPercent = getTargetPercetage(targetTotalRaised, maximumTotalRaised);
   const { t } = useLocale();
 
   return (
@@ -78,14 +72,10 @@ export default function StatisticsInCircle({
             transform={`rotate(${(minimumPercent * 360) / 100}deg)`}
             left={`calc(${
               ((Math.sin((minimumPercent / 100) * (2 * Math.PI)) + 1) * 100) / 2
-            }% - 8px - ${
-              Math.sin((minimumPercent / 100) * (2 * Math.PI)) * 5.1
-            }%)`} // 5.1 is used for adjusting position of arrow. TODO: move it to util
+            }% - 8px - ${Math.sin((minimumPercent / 100) * (2 * Math.PI)) * 5.1}%)`} // 5.1 is used for adjusting position of arrow. TODO: move it to util
             bottom={`calc(${
               ((Math.cos((minimumPercent / 100) * (2 * Math.PI)) + 1) * 100) / 2
-            }% - 8px - ${
-              Math.cos((minimumPercent / 100) * (2 * Math.PI)) * 5.1
-            }%)`}
+            }% - 8px - ${Math.cos((minimumPercent / 100) * (2 * Math.PI)) * 5.1}%)`}
           />
         </Tooltip>
         <Tooltip
@@ -107,21 +97,11 @@ export default function StatisticsInCircle({
             zIndex={100}
             transform={`rotate(${(targetTotalRaisedPercent * 360) / 100}deg)`}
             left={`calc(${
-              ((Math.sin((targetTotalRaisedPercent / 100) * (2 * Math.PI)) +
-                1) *
-                100) /
-              2
-            }% - 8px - ${
-              Math.sin((targetTotalRaisedPercent / 100) * (2 * Math.PI)) * 5.1
-            }%)`}
+              ((Math.sin((targetTotalRaisedPercent / 100) * (2 * Math.PI)) + 1) * 100) / 2
+            }% - 8px - ${Math.sin((targetTotalRaisedPercent / 100) * (2 * Math.PI)) * 5.1}%)`}
             bottom={`calc(${
-              ((Math.cos((targetTotalRaisedPercent / 100) * (2 * Math.PI)) +
-                1) *
-                100) /
-              2
-            }% - 8px - ${
-              Math.cos((targetTotalRaisedPercent / 100) * (2 * Math.PI)) * 5.1
-            }%)`}
+              ((Math.cos((targetTotalRaisedPercent / 100) * (2 * Math.PI)) + 1) * 100) / 2
+            }% - 8px - ${Math.cos((targetTotalRaisedPercent / 100) * (2 * Math.PI)) * 5.1}%)`}
           />
         </Tooltip>
         <Circle
@@ -163,18 +143,13 @@ export default function StatisticsInCircle({
               " $"
             }
             {started
-              ? "" +
-                getFiatConversionAmount(
-                  Number(formatEther(totalRaised)),
-                  fiatRate,
-                ).toFixed(2)
+              ? "" + getFiatConversionAmount(Number(formatEther(totalRaised)), fiatRate).toFixed(2)
               : "????"}
           </chakra.span>
           <div>
             {!!targetTotalRaised && (
               <chakra.div textAlign={"center"} mt={2} color={"gray.400"}>
-                {t("TARGET_TOTAL_RAISED")}{" "}
-                {etherAmountFormat(targetTotalRaised)}
+                {t("TARGET_TOTAL_RAISED")} {etherAmountFormat(targetTotalRaised)}
                 {raisedTokenSymbol.toUpperCase()}
                 {totalRaised.gte(targetTotalRaised) && started && (
                   <chakra.span textAlign={"center"}> 🎉</chakra.span>

@@ -15,10 +15,7 @@ import { Line } from "react-chartjs-2";
 import "chartjs-adapter-moment";
 import { TemplateV1 } from "lib/types/Auction";
 import { useEffect, useState } from "react";
-import {
-  getMinTokenPriceAgainstETH,
-  getTokenPriceAgainstETHWithMinPrice,
-} from "lib/utils";
+import { getMinTokenPriceAgainstETH, getTokenPriceAgainstETHWithMinPrice } from "lib/utils";
 
 ChartJS.register(
   LinearScale,

@@ -15,11 +15,9 @@ const useAuction = (
       .then((result) => {
         return { auction: result.data.auction };
       });
-  return useSWR<any | undefined, Error>(
-    `/api/auctions/${id}?${params}`,
-    fetcher,
-    { errorRetryCount: 2 },
-  );
+  return useSWR<any | undefined, Error>(`/api/auctions/${id}?${params}`, fetcher, {
+    errorRetryCount: 2,
+  });
 };
 
 export default useAuction;

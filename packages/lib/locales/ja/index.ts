@@ -53,8 +53,7 @@ export default {
   DEPLOY_CONTRACT: "コントラクトのデプロイ",
   INPUT_INFORMATION: "オークション情報の入力",
   SELECT_SALE_TEMPLETE: "テンプレートを選択",
-  YOU_CAN_CHOOSE_THE_TYPE_OF_TOKEN_SALE:
-    "トークンオークションのタイプを選択できます",
+  YOU_CAN_CHOOSE_THE_TYPE_OF_TOKEN_SALE: "トークンオークションのタイプを選択できます",
   TOKEN_ADDRESS: "トークンアドレス",
   INPUT_THE_ADDRESS_OF_THE_TOKEN_YOU_WOULD_LIKE_TO_ALLOCATE_TO_THIS_SALE:
     "このオークションで配布するトークンのアドレスを入力してください",
@@ -73,8 +72,7 @@ export default {
   DEPLOY_SALE_CONTRACT: "オークションコントラクトをデプロイ",
   SALE_CONTRACT_ADDRESS: "オークションコントラクトアドレス",
   THE_ADDRESS_OF_THE_SALE_CONTRACT: "オークションコントラクトのアドレス",
-  WAITING_FOR_THE_TRANSACTION_TO_BE_CONFIRMED:
-    "トランザクションの承認を待っています...",
+  WAITING_FOR_THE_TRANSACTION_TO_BE_CONFIRMED: "トランザクションの承認を待っています...",
   TITLE: "タイトル",
   INPUT_THE_TITLE_OF_THIS_SALE: "オークションのタイトルを入力してください",
   DFGC_DONATION_EVENT: "e.g. DFGC Donation Event",
@@ -93,16 +91,13 @@ export default {
   SET_THE_MAXIMUM_TOTAL_RAISED:
     "プログレスバーの100%の値としてのみ使用される「最大合計調達額」を設定してください。この値は他の場所には表示されません。この値はいつでも変更でき、オークション自体の成功や失敗には影響しません。また、この値が達成された後でもユーザーは入札することができます。",
   PROJECT_URL: "プロジェクトURL",
-  INPUT_YOUR_PROJECT_URL_IF_YOU_HAVE_IT:
-    "プロジェクトのURLがあれば入力してください",
+  INPUT_YOUR_PROJECT_URL_IF_YOU_HAVE_IT: "プロジェクトのURLがあれば入力してください",
   PROJECT_LOGO_URL: "プロジェクトのロゴURL",
-  INPUT_YOUR_PROJECT_LOGO_URL_IF_YOU_HAVE_IT:
-    "プロジェクトのロゴURLがあれば入力してください",
+  INPUT_YOUR_PROJECT_LOGO_URL_IF_YOU_HAVE_IT: "プロジェクトのロゴURLがあれば入力してください",
   OTHER_URL: "その他のURL",
   INPUT_ANY_URL_IF_YOU_WANT_TO_SHOW_SOMETHING_TO_USERS:
     "その他、オークションページに表示したいリンクがあれば入力してください。",
-  PLEASE_WAIT_FOR_THE_TRANSACTION_TO_BE_CONFIRMED:
-    "トランザクションが承認されるのをお待ちください",
+  PLEASE_WAIT_FOR_THE_TRANSACTION_TO_BE_CONFIRMED: "トランザクションが承認されるのをお待ちください",
   SAVE_SALE_INFORMATION: "オークション情報を保存",
   SKIP: "スキップする（後で入力できます）",
   UPDATE_SALE_INFORMATION: "オークション情報を更新",

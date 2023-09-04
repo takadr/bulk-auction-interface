@@ -8,9 +8,7 @@ import useSWRMetaData from "ui/hooks/useSWRMetaData";
 import { useLocale } from "ui/hooks/useLocale";
 import { zeroAddress } from "viem";
 import CustomError from "../_error";
-import AuctionDetail, {
-  SkeletonAuction,
-} from "ui/components/templates/AuctionDetail";
+import AuctionDetail, { SkeletonAuction } from "ui/components/templates/AuctionDetail";
 
 export default function AuctionPage() {
   const { address, isConnected, connector } = useAccount();
@@ -25,16 +23,10 @@ export default function AuctionPage() {
     error: apolloError,
   } = useAuction(
     id as `0x${string}`,
-    address
-      ? (address.toLowerCase() as `0x${string}`)
-      : (zeroAddress as `0x${string}`),
+    address ? (address.toLowerCase() as `0x${string}`) : (zeroAddress as `0x${string}`),
   );
 
-  const {
-    data: metaData,
-    mutate,
-    error: dynamodbError,
-  } = useSWRMetaData(id as string);
+  const { data: metaData, mutate, error: dynamodbError } = useSWRMetaData(id as string);
 
   if (apolloError || dynamodbError)
     toast({
@@ -55,16 +47,13 @@ export default function AuctionPage() {
   return (
     <Layout>
       <MetaTags
-        title={`${
-          metaData.metaData.title ? metaData.metaData.title : t("SALES")
-        } | ${t("APP_NAME")}`}
+        title={`${metaData.metaData.title ? metaData.metaData.title : t("SALES")} | ${t(
+          "APP_NAME",
+        )}`}
         description={
           metaData.metaData.description
             ? metaData.metaData.description
-            : t("AN_INCLUSIVE_AND_TRANSPARENT_TOKEN_LAUNCHPAD").replace(
-                /\n/g,
-                "",
-              )
+            : t("AN_INCLUSIVE_AND_TRANSPARENT_TOKEN_LAUNCHPAD").replace(/\n/g, "")
         }
         image={metaData.metaData.logoURL && metaData.metaData.logoURL}
       />

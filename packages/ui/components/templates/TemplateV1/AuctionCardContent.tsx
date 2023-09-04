@@ -92,13 +92,8 @@ export default function AuctionCardContent({
           <Flex flexDirection={{ base: "column", md: "row" }}>
             <chakra.div flex={10} pr={4}>
               <Heading size="lg">
-                <Link
-                  _hover={{ opacity: 0.75 }}
-                  href={`/auctions/${auction.id}`}
-                >
-                  {data?.metaData?.title
-                    ? data?.metaData?.title
-                    : t("UNNAMED_SALE")}
+                <Link _hover={{ opacity: 0.75 }} href={`/auctions/${auction.id}`}>
+                  {data?.metaData?.title ? data?.metaData?.title : t("UNNAMED_SALE")}
                 </Link>
                 {editable && (
                   <Button size={"sm"} ml={2} onClick={onOpen}>
@@ -107,8 +102,7 @@ export default function AuctionCardContent({
                 )}
               </Heading>
               <Text py="2">
-                {data?.metaData?.description &&
-                  ellipsisText(data?.metaData?.description, 200)}
+                {data?.metaData?.description && ellipsisText(data?.metaData?.description, 200)}
               </Text>
             </chakra.div>
             <chakra.div flex={7}>
@@ -123,18 +117,11 @@ export default function AuctionCardContent({
                       Number(auction.auctionToken.decimals),
                     ),
                   )}
-                  <chakra.span fontSize={"md"}>
-                    {" "}
-                    {auction.auctionToken.symbol}
-                  </chakra.span>
+                  <chakra.span fontSize={"md"}> {auction.auctionToken.symbol}</chakra.span>
                 </chakra.span>
               </Flex>
               <Divider />
-              <Flex
-                mt={2}
-                justifyContent={"space-between"}
-                alignItems={"baseline"}
-              >
+              <Flex mt={2} justifyContent={"space-between"} alignItems={"baseline"}>
                 <chakra.span>{t("TOTAL_RAISED")}</chakra.span>{" "}
                 <chakra.span fontSize={"2xl"}>
                   {etherAmountFormat(auction.totalRaised[0].amount, 2)}{" "}
@@ -153,22 +140,14 @@ export default function AuctionCardContent({
                     : 0
                 }
               />
-              <Flex
-                mt={2}
-                justifyContent={"space-between"}
-                alignItems={"baseline"}
-              >
+              <Flex mt={2} justifyContent={"space-between"} alignItems={"baseline"}>
                 <Text fontSize={"sm"}>{t("MINIMUM_TOTAL_RAISED")}</Text>
                 <Text fontSize={"lg"}>
                   {etherAmountFormat(auction.minRaisedAmount, 2)}{" "}
                   <chakra.span fontSize={"sm"}>ETH</chakra.span>
                 </Text>
               </Flex>
-              <Flex
-                mt={1}
-                justifyContent={"space-between"}
-                alignItems={"baseline"}
-              >
+              <Flex mt={1} justifyContent={"space-between"} alignItems={"baseline"}>
                 <Text fontSize={"sm"}>{t("TARGET_TOTAL_RAISED")}</Text>
                 <Text fontSize={"lg"}>
                   {data?.metaData?.targetTotalRaised
@@ -234,10 +213,7 @@ export default function AuctionCardContent({
       </Stack>
       {editable && isOpen && (
         <MetaDataFormModal
-          minRaisedAmount={divideToNum(
-            auction.minRaisedAmount,
-            Big(10).pow(18),
-          )}
+          minRaisedAmount={divideToNum(auction.minRaisedAmount, Big(10).pow(18))}
           isOpen={isOpen}
           onClose={onClose}
           existingContractAddress={auction.id as `0x${string}`}

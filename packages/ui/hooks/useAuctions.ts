@@ -39,15 +39,11 @@ export const useSWRAuctions = (
       config.id ? config.id : zeroAddress,
       NOW,
 
-      `queryType_${queryType.toString()}${
-        config.keySuffix ? `_${config.keySuffix}` : ""
-      }`,
+      `queryType_${queryType.toString()}${config.keySuffix ? `_${config.keySuffix}` : ""}`,
     ];
   };
 
-  const fetcher = async (
-    args: [number, number, `0x${string}`],
-  ): Promise<AuctionProps[]> => {
+  const fetcher = async (args: [number, number, `0x${string}`]): Promise<AuctionProps[]> => {
     const params = new URLSearchParams({
       queryTypeIndex: queryType.toString(),
       skip: args[0].toString(),
@@ -76,9 +72,7 @@ export const useSWRAuctions = (
     setSize(size + 1);
   };
 
-  const isLast = auctionList
-    ? auctionList.filter((list) => list.length < LIMIT).length > 0
-    : false;
+  const isLast = auctionList ? auctionList.filter((list) => list.length < LIMIT).length > 0 : false;
   const auctions = auctionList ? auctionList.flat() : [];
 
   return {

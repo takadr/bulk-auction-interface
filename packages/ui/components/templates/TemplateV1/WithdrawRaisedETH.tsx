@@ -1,13 +1,5 @@
 import { InfoIcon, QuestionIcon } from "@chakra-ui/icons";
-import {
-  useToast,
-  Box,
-  Heading,
-  chakra,
-  Button,
-  Tooltip,
-  Flex,
-} from "@chakra-ui/react";
+import { useToast, Box, Heading, chakra, Button, Tooltip, Flex } from "@chakra-ui/react";
 import { useBalance } from "wagmi";
 import useWithdrawRaisedETH from "../../../hooks/useWithdrawRaisedETH";
 import { TemplateV1 } from "lib/types/Auction";
@@ -20,10 +12,7 @@ type Props = {
   auction: TemplateV1;
   onSuccessConfirm?: (data: any) => void;
 };
-export default function WithdrawRaisedETH({
-  auction,
-  onSuccessConfirm,
-}: Props) {
+export default function WithdrawRaisedETH({ auction, onSuccessConfirm }: Props) {
   const toast = useToast({ position: "top-right", isClosable: true });
   const { data: balanceData, isLoading: isLoadingBalance } = useBalance({
     address: auction.id as `0x${string}`,
@@ -72,24 +61,16 @@ export default function WithdrawRaisedETH({
       <Flex alignItems={"center"} justifyContent={"space-between"}>
         <chakra.p fontSize={"lg"}>
           {typeof balanceData !== "undefined"
-            ? tokenAmountFormat(
-                getBigNumber(balanceData.value.toString()),
-                18,
-                2,
-              )
+            ? tokenAmountFormat(getBigNumber(balanceData.value.toString()), 18, 2)
             : "-"}{" "}
           ETH
         </chakra.p>
         <Button
           variant={"solid"}
           isDisabled={
-            !balanceData ||
-            balanceData.value === BigInt(0) ||
-            !withdrawETHWriteFn.writeAsync
+            !balanceData || balanceData.value === BigInt(0) || !withdrawETHWriteFn.writeAsync
           }
-          isLoading={
-            withdrawETHWriteFn.isLoading || withdrawETHWaitFn.isLoading
-          }
+          isLoading={withdrawETHWriteFn.isLoading || withdrawETHWaitFn.isLoading}
           onClick={() => withdrawETHWriteFn.writeAsync()}
         >
           {t("WITHDRAW_THE_TOTAL_RAISED")}

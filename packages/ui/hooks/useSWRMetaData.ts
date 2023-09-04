@@ -1,20 +1,13 @@
 import useSWR, { SWRResponse } from "swr";
 import { MetaData } from "lib/types/Auction";
-import {
-  LOCK_DURATION,
-  FEE_RATE_PER_MIL,
-  TEMPLATE_V1_NAME,
-} from "lib/constants/templates";
+import { LOCK_DURATION, FEE_RATE_PER_MIL, TEMPLATE_V1_NAME } from "lib/constants/templates";
 import { useLocale } from "./useLocale";
 
 type Constants = { lockDuration: number; feeRatePerMil: number };
 
 const useSWRMetaData = (
   id: string,
-): SWRResponse<
-  { metaData: MetaData; constants: Constants } | undefined,
-  Error
-> => {
+): SWRResponse<{ metaData: MetaData; constants: Constants } | undefined, Error> => {
   const { t } = useLocale();
   const fetcher = (
     url: string,
@@ -35,10 +28,11 @@ const useSWRMetaData = (
           },
         };
       });
-  return useSWR<
-    { metaData: MetaData; constants: Constants } | undefined,
-    Error
-  >(`/api/metadata/${id}`, fetcher, { errorRetryCount: 2 });
+  return useSWR<{ metaData: MetaData; constants: Constants } | undefined, Error>(
+    `/api/metadata/${id}`,
+    fetcher,
+    { errorRetryCount: 2 },
+  );
 };
 
 export default useSWRMetaData;

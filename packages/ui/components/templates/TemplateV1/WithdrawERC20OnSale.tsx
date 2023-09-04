@@ -1,13 +1,5 @@
 import { QuestionIcon } from "@chakra-ui/icons";
-import {
-  chakra,
-  useToast,
-  Button,
-  Tooltip,
-  Flex,
-  Box,
-  Heading,
-} from "@chakra-ui/react";
+import { chakra, useToast, Button, Tooltip, Flex, Box, Heading } from "@chakra-ui/react";
 import { useContractRead, erc20ABI } from "wagmi";
 import useWithdrawERC20OnSale from "../../../hooks/useWithdrawERC20OnSale";
 import { TemplateV1 } from "lib/types/Auction";
@@ -68,9 +60,7 @@ export default function WithdrawERC20({ auction, onSuccessConfirm }: Props) {
         {t("TOKEN_BALANCE_IN_SALE_CONTRACT")}
         <Tooltip
           hasArrow
-          label={t(
-            "TOKEN_WITHDRAWALS_WILL_BE_AVAILABLE_IMMEDIATELY_AFTER_THE_END_OF_THE_SALE",
-          )}
+          label={t("TOKEN_WITHDRAWALS_WILL_BE_AVAILABLE_IMMEDIATELY_AFTER_THE_END_OF_THE_SALE")}
         >
           <QuestionIcon mb={1} ml={1} />
         </Tooltip>
@@ -91,12 +81,8 @@ export default function WithdrawERC20({ auction, onSuccessConfirm }: Props) {
         </chakra.p>
         <Button
           variant={"solid"}
-          isDisabled={
-            !balance || balance === 0n || !withdrawERC20WriteFn.writeAsync
-          }
-          isLoading={
-            withdrawERC20WriteFn.isLoading || withdrawERC20WaitFn.isLoading
-          }
+          isDisabled={!balance || balance === 0n || !withdrawERC20WriteFn.writeAsync}
+          isLoading={withdrawERC20WriteFn.isLoading || withdrawERC20WaitFn.isLoading}
           onClick={() => withdrawERC20WriteFn.writeAsync()}
         >
           {t("WITHDRAW_TOKEN")}

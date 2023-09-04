@@ -1,12 +1,5 @@
 import { WarningIcon } from "@chakra-ui/icons";
-import {
-  chakra,
-  BoxProps,
-  Box,
-  Stack,
-  StackDivider,
-  Flex,
-} from "@chakra-ui/react";
+import { chakra, BoxProps, Box, Stack, StackDivider, Flex } from "@chakra-ui/react";
 import {
   etherAmountFormat,
   getDecimalsForView,
@@ -46,29 +39,15 @@ export default function PersonalStatistics({
   isLodingTX,
   ...boxProps
 }: Props & BoxProps) {
-  const inputValueInBig = multiply(
-    Big(inputValue),
-    Big(10).pow(raisedTokenDecimal),
-  );
+  const inputValueInBig = multiply(Big(inputValue), Big(10).pow(raisedTokenDecimal));
   const expectedAmount = tokenAmountFormat(
-    getExpectedAmount(
-      myContribution,
-      inputValueInBig,
-      totalRaised,
-      allocatedAmount,
-    ),
+    getExpectedAmount(myContribution, inputValueInBig, totalRaised, allocatedAmount),
     distributedTokenDecimal,
     getDecimalsForView(allocatedAmount, distributedTokenDecimal),
   );
-  const sumOfContributionAmount = etherAmountFormat(
-    add(myContribution, inputValueInBig),
-  );
+  const sumOfContributionAmount = etherAmountFormat(add(myContribution, inputValueInBig));
   const fixedContributionAmount = etherAmountFormat(myContribution);
-  const inputtingValueInFormat = tokenAmountFormat(
-    inputValueInBig,
-    raisedTokenDecimal,
-    2,
-  );
+  const inputtingValueInFormat = tokenAmountFormat(inputValueInBig, raisedTokenDecimal, 2);
   const { t } = useLocale();
 
   // if(isLoading) {
@@ -85,10 +64,7 @@ export default function PersonalStatistics({
         <Box>
           <Flex justifyContent={"space-between"}>
             <chakra.span fontSize={"sm"} color={"gray.400"}>
-              {!isEnding
-                ? t("ESTIMATED_AMOUNT_YOU_WILL_RECEIVE")
-                : t("AMOUNT_YOU_WILL_RECEIVE")}
-              :
+              {!isEnding ? t("ESTIMATED_AMOUNT_YOU_WILL_RECEIVE") : t("AMOUNT_YOU_WILL_RECEIVE")}:
             </chakra.span>
             <chakra.div textAlign={"right"}>
               <chakra.span fontWeight={"bold"} ml={2}>
@@ -99,9 +75,7 @@ export default function PersonalStatistics({
           {parseFloat(expectedAmount) === 0 ? (
             <chakra.p fontSize={"xs"} opacity={".75"} color={"yellow.500"}>
               <WarningIcon />{" "}
-              {t(
-                "THE_ESTIMATED_TOKEN_AMOUNT_IS_LESS_THAN_THE_PERMITTED_NUMBER_OF_DECIMALS",
-              )}
+              {t("THE_ESTIMATED_TOKEN_AMOUNT_IS_LESS_THAN_THE_PERMITTED_NUMBER_OF_DECIMALS")}
             </chakra.p>
           ) : (
             <chakra.p textAlign={"right"} color={"gray.400"} fontSize={"xs"}>

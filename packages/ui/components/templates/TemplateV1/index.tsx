@@ -51,12 +51,7 @@ import TxSentToast from "../../TxSentToast";
 import WithdrawRaisedETH from "./WithdrawRaisedETH";
 import WithdrawERC20 from "./WithdrawERC20OnSale";
 import { useLocale } from "../../../hooks/useLocale";
-import {
-  getDecimalsForView,
-  getEtherscanLink,
-  tokenAmountFormat,
-  parseEther,
-} from "lib/utils";
+import { getDecimalsForView, getEtherscanLink, tokenAmountFormat, parseEther } from "lib/utils";
 import { CHAIN_NAMES } from "lib/constants";
 import ConnectButton from "../../connectButton";
 import { DetailPageParams } from "../AuctionDetail";
@@ -92,11 +87,7 @@ export default function DetailPage({
 
   const [fiatSymbol, setFiatSymbol] = useState<string>("usd");
 
-  const {
-    data: rateDate,
-    mutate: updateRate,
-    error: rateError,
-  } = useRate("ethereum", "usd");
+  const { data: rateDate, mutate: updateRate, error: rateError } = useRate("ethereum", "usd");
 
   useInterval(() => {
     setStarted(auction.startingAt * 1000 <= new Date().getTime());
@@ -130,9 +121,7 @@ export default function DetailPage({
 
   const { config, isError } = usePrepareSendTransaction({
     to: contractAddress,
-    value: formikProps.values.amount
-      ? BigInt(parseEther(formikProps.values.amount))
-      : undefined,
+    value: formikProps.values.amount ? BigInt(parseEther(formikProps.values.amount)) : undefined,
     enabled: started && !ended,
   });
 
@@ -189,11 +178,7 @@ export default function DetailPage({
   return (
     <>
       <Container maxW={"container.lg"} py={16}>
-        <Flex
-          flexDirection={{ base: "column", md: "row" }}
-          alignItems={"center"}
-          minH={"150px"}
-        >
+        <Flex flexDirection={{ base: "column", md: "row" }} alignItems={"center"} minH={"150px"}>
           <Image
             borderRadius={"100%"}
             objectFit="cover"
@@ -207,9 +192,7 @@ export default function DetailPage({
             alt={metaData.title}
           />
           <Box px={8}>
-            <Heading>
-              {metaData.title ? metaData.title : "Unnamed Auction"}
-            </Heading>
+            <Heading>{metaData.title ? metaData.title : "Unnamed Auction"}</Heading>
             <HStack spacing={4}>
               <chakra.p fontSize={"sm"}>
                 <Tag mr={1} verticalAlign={"top"} size="sm">
@@ -255,9 +238,7 @@ export default function DetailPage({
               </chakra.p>
             </HStack>
             <HStack mt={4} spacing={4}>
-              {metaData.projectURL && (
-                <ExternalLinkTag url={metaData.projectURL} />
-              )}
+              {metaData.projectURL && <ExternalLinkTag url={metaData.projectURL} />}
               {metaData.otherURL && <ExternalLinkTag url={metaData.otherURL} />}
             </HStack>
           </Box>
@@ -271,9 +252,7 @@ export default function DetailPage({
             totalRaised={totalRaised}
             allocatedAmount={getBigNumber(auction.allocatedAmount)}
             minRaisedAmount={
-              auction.minRaisedAmount
-                ? getBigNumber(auction.minRaisedAmount)
-                : Big(0)
+              auction.minRaisedAmount ? getBigNumber(auction.minRaisedAmount) : Big(0)
             }
             targetTotalRaised={getBigNumber(
               metaData.targetTotalRaised ? metaData.targetTotalRaised : 0,
@@ -310,12 +289,7 @@ export default function DetailPage({
           </Box>
         )}
 
-        <Flex
-          mt={8}
-          gridGap={4}
-          alignItems={"top"}
-          flexDirection={{ base: "column", md: "row" }}
-        >
+        <Flex mt={8} gridGap={4} alignItems={"top"} flexDirection={{ base: "column", md: "row" }}>
           {started && (
             <Box flex={1}>
               <Card>
@@ -329,17 +303,11 @@ export default function DetailPage({
                         <FormControl
                           flex={1}
                           mt={4}
-                          isInvalid={
-                            !!formikProps.errors.amount &&
-                            !!formikProps.touched.amount
-                          }
+                          isInvalid={!!formikProps.errors.amount && !!formikProps.touched.amount}
                         >
                           <FormLabel alignItems={"baseline"}>
                             {t("CONTRIBUTE_AMOUNT")}
-                            <Tooltip
-                              hasArrow
-                              label={"Input the amount you wish to contribute"}
-                            >
+                            <Tooltip hasArrow label={"Input the amount you wish to contribute"}>
                               <QuestionIcon mb={1} ml={1} />
                             </Tooltip>
                           </FormLabel>
@@ -350,21 +318,13 @@ export default function DetailPage({
                               name="amount"
                               value={formikProps.values.amount}
                               step={0.01}
-                              max={
-                                balanceData
-                                  ? Number(balanceData.formatted)
-                                  : undefined
-                              }
+                              max={balanceData ? Number(balanceData.formatted) : undefined}
                               min={0.001}
                               onBlur={formikProps.handleBlur}
                               onChange={(strVal: string, val: number) =>
                                 formikProps.setFieldValue(
                                   "amount",
-                                  strVal && Number(strVal) === val
-                                    ? strVal
-                                    : isNaN(val)
-                                    ? 0
-                                    : val,
+                                  strVal && Number(strVal) === val ? strVal : isNaN(val) ? 0 : val,
                                 )
                               }
                             >
@@ -378,11 +338,7 @@ export default function DetailPage({
                             {address ? (
                               <Button
                                 isLoading={isLoadingWaitTX || isLoadingSendTX}
-                                isDisabled={
-                                  chain?.unsupported ||
-                                  !sendTransactionAsync ||
-                                  !started
-                                }
+                                isDisabled={chain?.unsupported || !sendTransactionAsync || !started}
                                 type="submit"
                                 variant="solid"
                                 colorScheme={"green"}
@@ -398,22 +354,12 @@ export default function DetailPage({
                               />
                             )}
                           </Flex>
-                          <FormErrorMessage>
-                            {formikProps.errors.amount}
-                          </FormErrorMessage>
+                          <FormErrorMessage>{formikProps.errors.amount}</FormErrorMessage>
                         </FormControl>
                       </form>
-                      <chakra.p
-                        mt={2}
-                        color={"gray.400"}
-                        fontSize={"sm"}
-                        textAlign="right"
-                      >
+                      <chakra.p mt={2} color={"gray.400"} fontSize={"sm"} textAlign="right">
                         {t("BALANCE")}:{" "}
-                        {balanceData
-                          ? Number(balanceData.formatted).toFixed(2)
-                          : "-"}{" "}
-                        ETH
+                        {balanceData ? Number(balanceData.formatted).toFixed(2) : "-"} ETH
                       </chakra.p>
                     </Box>
                   )}
@@ -425,9 +371,7 @@ export default function DetailPage({
                       totalRaised={totalRaised}
                       allocatedAmount={getBigNumber(auction.allocatedAmount)}
                       distributedTokenSymbol={auction.auctionToken.symbol}
-                      distributedTokenDecimal={Number(
-                        auction.auctionToken.decimals,
-                      )}
+                      distributedTokenDecimal={Number(auction.auctionToken.decimals)}
                       raisedTokenSymbol={raisedTokenSymbol}
                       raisedTokenDecimal={raisedTokenDecimal}
                       isEnding={ended}
@@ -475,17 +419,11 @@ export default function DetailPage({
               <CardBody>
                 <Stack divider={<StackDivider />} spacing="4">
                   <chakra.div textAlign={"center"}>
-                    <WithdrawERC20
-                      auction={auction}
-                      onSuccessConfirm={refetchAuction}
-                    />
+                    <WithdrawERC20 auction={auction} onSuccessConfirm={refetchAuction} />
                   </chakra.div>
 
                   <chakra.div textAlign={"center"}>
-                    <WithdrawRaisedETH
-                      auction={auction}
-                      onSuccessConfirm={refetchAuction}
-                    />
+                    <WithdrawRaisedETH auction={auction} onSuccessConfirm={refetchAuction} />
                   </chakra.div>
                 </Stack>
               </CardBody>

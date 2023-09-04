@@ -28,8 +28,7 @@ export default {
   DISCLAIMERS_TERMS_AND_CONDITIONS: "Disclaimers & Terms and Conditions",
   CONTRIBUTE_AMOUNT: "Contribute",
   CONTRIBUTE: "Contribute",
-  INPUT_THE_AMOUNT_YOU_WISH_TO_CONTRIBUTE:
-    "Input the amount you wish to contribute",
+  INPUT_THE_AMOUNT_YOU_WISH_TO_CONTRIBUTE: "Input the amount you wish to contribute",
   ESTIMATED_AMOUNT_YOU_WILL_RECEIVE: "Estimated amount you will receive",
   AMOUNT_YOU_WILL_RECEIVE: "Amount you will receive",
   YOUR_CONTRIBUTED_AMOUNT: "Your contributed amount",
@@ -43,12 +42,10 @@ export default {
   TOKEN_WITHDRAWALS_WILL_BE_AVAILABLE_IMMEDIATELY_AFTER_THE_END_OF_THE_SALE:
     "Token withdrawals will be available immediately after the end of the auction if the auction could not achieve the minimum threshold that is set in the contract.",
   WITHDRAW_TOKEN: "Withdraw Token",
-  TOTAL_RAISED_BALANCE_IN_SALE_CONTRACT:
-    "Total raised balance in Auction contract",
+  TOTAL_RAISED_BALANCE_IN_SALE_CONTRACT: "Total raised balance in Auction contract",
   AFTER_THE_SALE_CLOSES:
     "After the auction closes, each bidder's token allocation is determined. If the token allocation for some bidders is zero(less than token decimals), a 3-day refund window will start, and bidders with a zero allocation can initiate a refund request. After the window closes, you can withdraw the total raised (minus the refunds). Please note token allocation to each bidder is calculated by rounding down, and the aggregated amount of fraction tokens (less than token decimals) for each bidder will remain locked in the contract address forever(it cannot be withdrawn).",
-  ONE_PERCENT_FEE_WILL_BE_SUBTRACTED:
-    "1% fee will be subtracted from this amount.",
+  ONE_PERCENT_FEE_WILL_BE_SUBTRACTED: "1% fee will be subtracted from this amount.",
   WITHDRAW_THE_TOTAL_RAISED: "Withdraw the total raised",
   YOUR_SALES: "Your Auctions",
   CREATE_NEW_SALE: "Create new auction",
@@ -56,8 +53,7 @@ export default {
   DEPLOY_CONTRACT: "Deploy Contract",
   INPUT_INFORMATION: "Input Information",
   SELECT_SALE_TEMPLETE: "Select Auction Templete",
-  YOU_CAN_CHOOSE_THE_TYPE_OF_TOKEN_SALE:
-    "You can choose the type of token auction",
+  YOU_CAN_CHOOSE_THE_TYPE_OF_TOKEN_SALE: "You can choose the type of token auction",
   TOKEN_ADDRESS: "Token address",
   INPUT_THE_ADDRESS_OF_THE_TOKEN_YOU_WOULD_LIKE_TO_ALLOCATE_TO_THIS_SALE:
     "Input the address of the token you would like to allocate to this auction",
@@ -76,8 +72,7 @@ export default {
   DEPLOY_SALE_CONTRACT: "Deploy Auction Contract",
   SALE_CONTRACT_ADDRESS: "Auction Contract Address",
   THE_ADDRESS_OF_THE_SALE_CONTRACT: "The address of the auction contract",
-  WAITING_FOR_THE_TRANSACTION_TO_BE_CONFIRMED:
-    "Waiting for the transaction to be confirmed...",
+  WAITING_FOR_THE_TRANSACTION_TO_BE_CONFIRMED: "Waiting for the transaction to be confirmed...",
   TITLE: "Title",
   INPUT_THE_TITLE_OF_THIS_SALE: "Input the title of this auction",
   DFGC_DONATION_EVENT: "e.g. DFGC Donation Event",
@@ -96,11 +91,9 @@ export default {
   SET_THE_MAXIMUM_TOTAL_RAISED:
     "Set the Maximum total raised, which will be solely used as the 100% value for the progress bar and won't be displayed elsewhere. You can change this value at any time, and it does not affect the success or failure of the auction itself. Also, users can buy even after this value is achieved.",
   PROJECT_URL: "Project URL",
-  INPUT_YOUR_PROJECT_URL_IF_YOU_HAVE_IT:
-    "Input your project URL if you have it",
+  INPUT_YOUR_PROJECT_URL_IF_YOU_HAVE_IT: "Input your project URL if you have it",
   PROJECT_LOGO_URL: "Project Logo URL",
-  INPUT_YOUR_PROJECT_LOGO_URL_IF_YOU_HAVE_IT:
-    "Input your project logo URL if you have it",
+  INPUT_YOUR_PROJECT_LOGO_URL_IF_YOU_HAVE_IT: "Input your project logo URL if you have it",
   OTHER_URL: "Other URL",
   INPUT_ANY_URL_IF_YOU_WANT_TO_SHOW_SOMETHING_TO_USERS:
     "Input any URL if you want to show something to users",
@@ -112,8 +105,7 @@ export default {
   TRANSACTION_SENT: "Transaction sent!",
   TRANSACTION_CONFIRMED: "Transaction confirmed!",
   APPROVAL_CONFIRMED: "Approval confirmed!",
-  SALE_INFORMATION_SUCCESSFULLY_SAVED:
-    "Auction information successfully saved!",
+  SALE_INFORMATION_SUCCESSFULLY_SAVED: "Auction information successfully saved!",
   NO_LIVE_SALE: "No live auction",
   NO_SALE: "No auction",
   LOAD_MORE_SALES: "Load more auctions",

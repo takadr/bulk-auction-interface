@@ -35,9 +35,9 @@ export default function MetaDataFormModal({
   const toast = useToast({ position: "top-right", isClosable: true });
   const { colorMode, setColorMode, toggleColorMode } = useColorMode();
   const [step, setStep] = useState<1 | 2>(1);
-  const [contractAddress, setContractAddress] = useState<
-    `0x${string}` | undefined
-  >(existingContractAddress ? existingContractAddress : undefined);
+  const [contractAddress, setContractAddress] = useState<`0x${string}` | undefined>(
+    existingContractAddress ? existingContractAddress : undefined,
+  );
   const { t } = useLocale();
 
   const handleClose = () => {
@@ -68,12 +68,7 @@ export default function MetaDataFormModal({
 
   return (
     <CustomProvider theme={colorMode}>
-      <Modal
-        isOpen={isOpen}
-        onClose={handleClose}
-        closeOnOverlayClick={false}
-        size={"4xl"}
-      >
+      <Modal isOpen={isOpen} onClose={handleClose} closeOnOverlayClick={false} size={"4xl"}>
         <ModalOverlay />
         <ModalContent>
           <ModalHeader>{t("UPDATE_SALE_INFORMATION")}</ModalHeader>

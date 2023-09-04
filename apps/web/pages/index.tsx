@@ -1,15 +1,6 @@
 import { useContext } from "react";
 import Router from "next/router";
-import {
-  Stack,
-  Container,
-  Alert,
-  AlertIcon,
-  Heading,
-  Text,
-  Flex,
-  Button,
-} from "@chakra-ui/react";
+import { Stack, Container, Alert, AlertIcon, Heading, Text, Flex, Button } from "@chakra-ui/react";
 import { CurrentUserContext } from "ui/components/providers/CurrentUserProvider";
 import Layout from "ui/components/layouts/layout";
 import Hero from "ui/components/Hero";
@@ -57,12 +48,7 @@ export default function Web() {
             </>
           ) : (
             activeAuctions.map((auctionProps: AuctionProps) => {
-              return (
-                <AuctionCard
-                  key={auctionProps.id}
-                  auctionProps={auctionProps}
-                />
-              );
+              return <AuctionCard key={auctionProps.id} auctionProps={auctionProps} />;
             })
           )}
           {!isLoadingActiveAuctions && activeAuctions.length === 0 && (

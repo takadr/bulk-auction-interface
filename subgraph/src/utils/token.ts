@@ -11,12 +11,8 @@ export function findOrCreateToken(addressString: string): Token {
       token.name = "Ether";
       token.decimals = BigInt.fromI32(18);
     } else {
-      token.symbol = fetchTokenSymbol(
-        changetype<Address>(Address.fromHexString(addressString)),
-      );
-      token.name = fetchTokenName(
-        changetype<Address>(Address.fromHexString(addressString)),
-      );
+      token.symbol = fetchTokenSymbol(changetype<Address>(Address.fromHexString(addressString)));
+      token.name = fetchTokenName(changetype<Address>(Address.fromHexString(addressString)));
       token.decimals = fetchTokenDecimals(
         changetype<Address>(Address.fromHexString(addressString)),
       );

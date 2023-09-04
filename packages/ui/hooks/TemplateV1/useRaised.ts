@@ -54,14 +54,8 @@ export default function useRaised(
   }
 
   return {
-    raised:
-      data && data[0]
-        ? getBigNumber(BigInt(data[0].result).toString())
-        : Big(0),
-    totalRaised:
-      data && data[1]
-        ? getBigNumber(BigInt(data[1].result).toString())
-        : Big(0),
+    raised: data && data[0] ? getBigNumber(BigInt(data[0].result).toString()) : Big(0),
+    totalRaised: data && data[1] ? getBigNumber(BigInt(data[1].result).toString()) : Big(0),
     isLoading,
     isError,
     refetch,

@@ -41,9 +41,7 @@ export default function AuctionFormModal({
   const toast = useToast({ position: "top-right", isClosable: true });
   const { colorMode, setColorMode, toggleColorMode } = useColorMode();
   const [step, setStep] = useState<1 | 2>(1);
-  const [contractAddress, setContractAddress] = useState<
-    `0x${string}` | undefined
-  >(undefined);
+  const [contractAddress, setContractAddress] = useState<`0x${string}` | undefined>(undefined);
   const { t } = useLocale();
   const [tx, setTx] = useState<string | undefined>(undefined);
   const txRef = useRef(tx);
@@ -81,9 +79,7 @@ export default function AuctionFormModal({
   const { formikProps: metaFormikProps } = useMetaDataForm({
     contractId: contractAddress,
     minRaisedAmount:
-      creatingAuction && creatingAuction.minRaisedAmount
-        ? creatingAuction.minRaisedAmount
-        : 0,
+      creatingAuction && creatingAuction.minRaisedAmount ? creatingAuction.minRaisedAmount : 0,
     onSubmitSuccess: (response) => {
       handleClose();
       onInformationSaved && onInformationSaved();
@@ -108,10 +104,7 @@ export default function AuctionFormModal({
     eventName: "Deployed",
     listener: (logs: any[]) => {
       const { args, transactionHash } = logs[0];
-      if (
-        (transactionHash as string).toLowerCase() ===
-        (txRef.current as string).toLowerCase()
-      ) {
+      if ((transactionHash as string).toLowerCase() === (txRef.current as string).toLowerCase()) {
         unwatch && unwatch();
         setContractAddress(args.deployedAddress as `0x${string}`);
         setTx(undefined);
@@ -159,9 +152,7 @@ export default function AuctionFormModal({
                       title: t("TRANSACTION_SENT"),
                       status: "success",
                       duration: 5000,
-                      render: (props) => (
-                        <TxSentToast txid={result.hash} {...props} />
-                      ),
+                      render: (props) => <TxSentToast txid={result.hash} {...props} />,
                     });
                   }}
                 />

@@ -26,12 +26,8 @@ const dynamoDBItemsToMetaData = (item: any) => {
     projectURL: item.ProjectURL ? item.ProjectURL.S : undefined,
     logoURL: item.LogoURL ? item.LogoURL.S : undefined,
     otherURL: item.OtherURL ? item.OtherURL.S : undefined,
-    targetTotalRaised: item.TargetTotalRaised
-      ? item.TargetTotalRaised.N
-      : undefined,
-    maximumTotalRaised: item.MaximumTotalRaised
-      ? item.MaximumTotalRaised.N
-      : undefined,
+    targetTotalRaised: item.TargetTotalRaised ? item.TargetTotalRaised.N : undefined,
+    maximumTotalRaised: item.MaximumTotalRaised ? item.MaximumTotalRaised.N : undefined,
     templateName: item.TemplateName ? item.TemplateName.S : undefined,
   } as MetaData;
 };
@@ -54,9 +50,7 @@ export async function scanMetaData(
   return output.Items?.map(dynamoDBItemsToMetaData);
 }
 
-export async function fetchMetaData(
-  auctionId: string,
-): Promise<MetaData | undefined> {
+export async function fetchMetaData(auctionId: string): Promise<MetaData | undefined> {
   const command = new GetItemCommand({
     TableName: process.env.AWS_DYNAMO_TABLE_NAME,
     Key: { AuctionId: { S: auctionId } },
@@ -67,9 +61,7 @@ export async function fetchMetaData(
   return dynamoDBItemsToMetaData(item);
 }
 
-export async function batchFetchMetaData(
-  auctionIds: string[],
-): Promise<MetaData[]> {
+export async function batchFetchMetaData(auctionIds: string[]): Promise<MetaData[]> {
   const tableName = process.env.AWS_DYNAMO_TABLE_NAME as string;
   const command = new BatchGetItemCommand({
     RequestItems: {
@@ -82,14 +74,10 @@ export async function batchFetchMetaData(
   });
   const output = await dbClient.send(command);
   if (output.Responses == undefined) return [];
-  return output.Responses[tableName].map((item: any) =>
-    dynamoDBItemsToMetaData(item),
-  );
+  return output.Responses[tableName].map((item: any) => dynamoDBItemsToMetaData(item));
 }
 
-export async function addMetaData(
-  auction: MetaData,
-): Promise<MetaData | undefined> {
+export async function addMetaData(auction: MetaData): Promise<MetaData | undefined> {
   // TODO Take Minimum total raised into account
   // validateMetaData(auction, minRaisedAmount)
   const errors = validateMetaData(auction);
@@ -111,9 +99,7 @@ export async function addMetaData(
       N: auction.targetTotalRaised ? auction.targetTotalRaised.toString() : "0",
     },
     MaximumTotalRaised: {
-      N: auction.maximumTotalRaised
-        ? auction.maximumTotalRaised.toString()
-        : "0",
+      N: auction.maximumTotalRaised ? auction.maximumTotalRaised.toString() : "0",
     },
     TemplateName: { S: TEMPLATE_V1_NAME },
   };
@@ -125,9 +111,7 @@ export async function addMetaData(
   return auction;
 }
 
-export async function updateAuction(
-  auction: MetaData,
-): Promise<MetaData | undefined> {
+export async function updateAuction(auction: MetaData): Promise<MetaData | undefined> {
   const errors = validateMetaData(auction);
   if (Object.keys(errors).length > 0) {
     const errorMessage = Object.entries(errors)
@@ -149,14 +133,10 @@ export async function updateAuction(
       ":LogoURL": { S: auction.logoURL ? auction.logoURL : "" },
       ":OtherURL": { S: auction.otherURL ? auction.otherURL : "" },
       ":TargetTotalRaised": {
-        N: auction.targetTotalRaised
-          ? auction.targetTotalRaised.toString()
-          : "0",
+        N: auction.targetTotalRaised ? auction.targetTotalRaised.toString() : "0",
       },
       ":MaximumTotalRaised": {
-        N: auction.maximumTotalRaised
-          ? auction.maximumTotalRaised.toString()
-          : "0",
+        N: auction.maximumTotalRaised ? auction.maximumTotalRaised.toString() : "0",
       },
       ":TemplateName": { S: TEMPLATE_V1_NAME },
     },

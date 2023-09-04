@@ -26,8 +26,7 @@ export default function ClaimButton({
   // Local state to change the claim button state after claim
   const [claimSucceeded, setClaimSucceeded] = useState<boolean>(false);
   // Local state to show that it is waiting for updateed subgraph data after the claim tx is confirmed
-  const [waitForSubgraphUpdate, setWaitForSubgraphUpdate] =
-    useState<boolean>(false);
+  const [waitForSubgraphUpdate, setWaitForSubgraphUpdate] = useState<boolean>(false);
 
   const {
     prepareFn: claimPrepareFn,
@@ -72,11 +71,7 @@ export default function ClaimButton({
     <Button
       variant={"solid"}
       isDisabled={isClaimed || claimSucceeded || !claimWriteFn.writeAsync}
-      isLoading={
-        claimWriteFn?.isLoading ||
-        claimWaitFn?.isLoading ||
-        waitForSubgraphUpdate
-      }
+      isLoading={claimWriteFn?.isLoading || claimWaitFn?.isLoading || waitForSubgraphUpdate}
       {...buttonProps}
       onClick={async () => {
         await claimWriteFn.writeAsync();

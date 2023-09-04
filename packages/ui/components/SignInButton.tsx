@@ -92,9 +92,7 @@ export default function SignInButton({
               }
             : () => {
                 signIn({
-                  title: buttonProps.title
-                    ? buttonProps.title
-                    : t("SIGN_IN_WITH_ETHEREUM"),
+                  title: buttonProps.title ? buttonProps.title : t("SIGN_IN_WITH_ETHEREUM"),
                   address,
                   chainId: Number(process.env.NEXT_PUBLIC_CHAIN_ID),
                 });
@@ -115,9 +113,7 @@ export default function SignInButton({
             chainId: number;
           }) => {
             await signIn({
-              title: buttonProps.title
-                ? buttonProps.title
-                : t("SIGN_IN_WITH_ETHEREUM"),
+              title: buttonProps.title ? buttonProps.title : t("SIGN_IN_WITH_ETHEREUM"),
               address,
               chainId,
             });

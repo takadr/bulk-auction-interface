@@ -13,21 +13,15 @@ interface SWRMetaDataStore {
 // TODO Send limit as a param
 const LIMIT = 10;
 
-export const useSWRMetaDataList = (
-  config: SWRConfiguration,
-): SWRMetaDataStore => {
+export const useSWRMetaDataList = (config: SWRConfiguration): SWRMetaDataStore => {
   const getKey = (pageIndex: number, previousPageData: MetaData[]) => {
     if (previousPageData && !previousPageData.length) return null;
     const lastEvaluatedKey =
-      previousPageData === null
-        ? 0
-        : previousPageData[previousPageData.length - 1];
+      previousPageData === null ? 0 : previousPageData[previousPageData.length - 1];
     return [lastEvaluatedKey, pageIndex];
   };
 
-  const fetcher = async (
-    lastEvaluatedKey: [MetaData, number],
-  ): Promise<MetaData[]> => {
+  const fetcher = async (lastEvaluatedKey: [MetaData, number]): Promise<MetaData[]> => {
     const url = lastEvaluatedKey[0]
       ? `/api/metadata?lastEvaluatedKeyId=${lastEvaluatedKey[0].id}&lastEvaluatedKeyCreatedAt=${lastEvaluatedKey[0].createdAt}`
       : `/api/metadata`;
@@ -47,9 +41,7 @@ export const useSWRMetaDataList = (
     setSize(size + 1);
   };
 
-  const isLast = metaData
-    ? metaData.filter((list) => list.length < LIMIT).length > 0
-    : false;
+  const isLast = metaData ? metaData.filter((list) => list.length < LIMIT).length > 0 : false;
   const metaDataList = metaData ? metaData.flat() : [];
 
   return {

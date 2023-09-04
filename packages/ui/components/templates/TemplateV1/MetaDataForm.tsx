@@ -38,9 +38,7 @@ export default function MetaDataForm({
       <form onSubmit={formikProps.handleSubmit}>
         <HStack spacing={8} alignItems={"start"}>
           <chakra.div w={"50%"}>
-            <FormControl
-              isInvalid={!!formikProps.errors.id && !!formikProps.touched.id}
-            >
+            <FormControl isInvalid={!!formikProps.errors.id && !!formikProps.touched.id}>
               <FormLabel htmlFor="id" alignItems={"baseline"}>
                 {t("SALE_CONTRACT_ADDRESS")}
                 <Tooltip hasArrow label={t("THE_ADDRESS_OF_THE_SALE_CONTRACT")}>
@@ -70,9 +68,7 @@ export default function MetaDataForm({
 
             <FormControl
               mt={4}
-              isInvalid={
-                !!formikProps.errors.title && !!formikProps.touched.title
-              }
+              isInvalid={!!formikProps.errors.title && !!formikProps.touched.title}
             >
               <FormLabel htmlFor="title" alignItems={"baseline"}>
                 {t("TITLE")}
@@ -94,17 +90,11 @@ export default function MetaDataForm({
 
             <FormControl
               mt={4}
-              isInvalid={
-                !!formikProps.errors.description &&
-                !!formikProps.touched.description
-              }
+              isInvalid={!!formikProps.errors.description && !!formikProps.touched.description}
             >
               <FormLabel alignItems={"baseline"}>
                 {t("DESCRIPTION")}
-                <Tooltip
-                  hasArrow
-                  label={t("INPUT_THE_DESCRIPTION_OF_THIS_SALE")}
-                >
+                <Tooltip hasArrow label={t("INPUT_THE_DESCRIPTION_OF_THIS_SALE")}>
                   <QuestionIcon mb={1} ml={1} />
                 </Tooltip>
               </FormLabel>
@@ -119,16 +109,12 @@ export default function MetaDataForm({
                   placeholder="Explain your event"
                 ></Textarea>
               </Flex>
-              <FormErrorMessage>
-                {formikProps.errors.description}
-              </FormErrorMessage>
+              <FormErrorMessage>{formikProps.errors.description}</FormErrorMessage>
             </FormControl>
 
             <FormControl
               mt={4}
-              isInvalid={
-                !!formikProps.errors.terms && !!formikProps.touched.terms
-              }
+              isInvalid={!!formikProps.errors.terms && !!formikProps.touched.terms}
             >
               <FormLabel alignItems={"baseline"}>
                 {t("DISCLAIMERS_TERMS_AND_CONDITIONS")}
@@ -149,9 +135,7 @@ export default function MetaDataForm({
                 colorScheme={"blue"}
                 size={"xs"}
                 mt={1}
-                onClick={() =>
-                  formikProps.setFieldValue("terms", SAMPLE_DISCLAIMERS)
-                }
+                onClick={() => formikProps.setFieldValue("terms", SAMPLE_DISCLAIMERS)}
               >
                 {t("USE_SAMPLE_DISCLAIMER_TEXT")}
               </Button>
@@ -161,8 +145,7 @@ export default function MetaDataForm({
             <FormControl
               mt={4}
               isInvalid={
-                !!formikProps.errors.targetTotalRaised &&
-                !!formikProps.touched.targetTotalRaised
+                !!formikProps.errors.targetTotalRaised && !!formikProps.touched.targetTotalRaised
               }
             >
               <FormLabel alignItems={"baseline"}>
@@ -184,11 +167,7 @@ export default function MetaDataForm({
                   onChange={(strVal: string, val: number) =>
                     formikProps.setFieldValue(
                       "targetTotalRaised",
-                      strVal && Number(strVal) === val
-                        ? strVal
-                        : isNaN(val)
-                        ? 0
-                        : val,
+                      strVal && Number(strVal) === val ? strVal : isNaN(val) ? 0 : val,
                     )
                   }
                 >
@@ -200,16 +179,13 @@ export default function MetaDataForm({
                 </NumberInput>
                 <chakra.div px={2}>ETH</chakra.div>
               </Flex>
-              <FormErrorMessage>
-                {formikProps.errors.targetTotalRaised}
-              </FormErrorMessage>
+              <FormErrorMessage>{formikProps.errors.targetTotalRaised}</FormErrorMessage>
             </FormControl>
 
             <FormControl
               mt={4}
               isInvalid={
-                !!formikProps.errors.maximumTotalRaised &&
-                !!formikProps.touched.maximumTotalRaised
+                !!formikProps.errors.maximumTotalRaised && !!formikProps.touched.maximumTotalRaised
               }
             >
               <FormLabel alignItems={"baseline"}>
@@ -231,11 +207,7 @@ export default function MetaDataForm({
                   onChange={(strVal: string, val: number) =>
                     formikProps.setFieldValue(
                       "maximumTotalRaised",
-                      strVal && Number(strVal) === val
-                        ? strVal
-                        : isNaN(val)
-                        ? 0
-                        : val,
+                      strVal && Number(strVal) === val ? strVal : isNaN(val) ? 0 : val,
                     )
                   }
                 >
@@ -247,26 +219,18 @@ export default function MetaDataForm({
                 </NumberInput>
                 <chakra.div px={2}>ETH</chakra.div>
               </Flex>
-              <FormErrorMessage>
-                {formikProps.errors.maximumTotalRaised}
-              </FormErrorMessage>
+              <FormErrorMessage>{formikProps.errors.maximumTotalRaised}</FormErrorMessage>
             </FormControl>
           </chakra.div>
 
           <chakra.div w={"50%"}>
             <FormControl
               mt={{ base: 4, md: 0 }}
-              isInvalid={
-                !!formikProps.errors.projectURL &&
-                !!formikProps.touched.projectURL
-              }
+              isInvalid={!!formikProps.errors.projectURL && !!formikProps.touched.projectURL}
             >
               <FormLabel htmlFor="projectURL" alignItems={"baseline"}>
                 {t("PROJECT_URL")}
-                <Tooltip
-                  hasArrow
-                  label={t("INPUT_YOUR_PROJECT_URL_IF_YOU_HAVE_IT")}
-                >
+                <Tooltip hasArrow label={t("INPUT_YOUR_PROJECT_URL_IF_YOU_HAVE_IT")}>
                   <QuestionIcon mb={1} ml={1} />
                 </Tooltip>
               </FormLabel>
@@ -278,23 +242,16 @@ export default function MetaDataForm({
                 value={formikProps.values.projectURL}
                 placeholder="e.g. https://xxx.xyz"
               />
-              <FormErrorMessage>
-                {formikProps.errors.projectURL}
-              </FormErrorMessage>
+              <FormErrorMessage>{formikProps.errors.projectURL}</FormErrorMessage>
             </FormControl>
 
             <FormControl
               mt={4}
-              isInvalid={
-                !!formikProps.errors.logoURL && !!formikProps.touched.logoURL
-              }
+              isInvalid={!!formikProps.errors.logoURL && !!formikProps.touched.logoURL}
             >
               <FormLabel htmlFor="logoURL" alignItems={"baseline"}>
                 {t("PROJECT_LOGO_URL")}
-                <Tooltip
-                  hasArrow
-                  label={t("INPUT_YOUR_PROJECT_LOGO_URL_IF_YOU_HAVE_IT")}
-                >
+                <Tooltip hasArrow label={t("INPUT_YOUR_PROJECT_LOGO_URL_IF_YOU_HAVE_IT")}>
                   <QuestionIcon mb={1} ml={1} />
                 </Tooltip>
               </FormLabel>
@@ -311,18 +268,11 @@ export default function MetaDataForm({
 
             <FormControl
               mt={4}
-              isInvalid={
-                !!formikProps.errors.otherURL && !!formikProps.touched.otherURL
-              }
+              isInvalid={!!formikProps.errors.otherURL && !!formikProps.touched.otherURL}
             >
               <FormLabel htmlFor="otherURL" alignItems={"baseline"}>
                 {t("OTHER_URL")}
-                <Tooltip
-                  hasArrow
-                  label={t(
-                    "INPUT_ANY_URL_IF_YOU_WANT_TO_SHOW_SOMETHING_TO_USERS",
-                  )}
-                >
+                <Tooltip hasArrow label={t("INPUT_ANY_URL_IF_YOU_WANT_TO_SHOW_SOMETHING_TO_USERS")}>
                   <QuestionIcon mb={1} ml={1} />
                 </Tooltip>
               </FormLabel>

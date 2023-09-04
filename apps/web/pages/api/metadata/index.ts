@@ -11,11 +11,7 @@ import {
   Transport,
 } from "viem";
 import { mainnet, goerli, sepolia, localhost, Chain } from "viem/chains";
-import {
-  scanMetaData,
-  addMetaData,
-  updateAuction,
-} from "lib/dynamodb/metaData";
+import { scanMetaData, addMetaData, updateAuction } from "lib/dynamodb/metaData";
 import BaseTemplateABI from "lib/constants/abis/BaseTemplate.json";
 import ironOptions from "lib/constants/ironOptions";
 import { CHAIN_NAMES } from "lib/constants";
@@ -77,24 +73,16 @@ const requireContractOwner = (
 
 const requireAvailableNetwork = (req: NextApiRequest) => {
   if (!req.session.siwe) throw new Error("Sign in required");
-  if (!availableNetwork.includes(req.session.siwe.chainId))
-    throw new Error("Wrong network");
+  if (!availableNetwork.includes(req.session.siwe.chainId)) throw new Error("Wrong network");
 };
 
-const getTokenInfo = async (
-  tokenAddress: `0x${string}`,
-  provider: PublicClient,
-) => {
+const getTokenInfo = async (tokenAddress: `0x${string}`, provider: PublicClient) => {
   const token = getContract({
     address: tokenAddress,
     abi: erc20ABI,
     publicClient: provider,
   });
-  const result = await Promise.all([
-    token.read.name(),
-    token.read.symbol(),
-    token.read.decimals(),
-  ]);
+  const result = await Promise.all([token.read.name(), token.read.symbol(), token.read.decimals()]);
   return {
     tokenName: result[0],
     tokenSymbol: result[1],

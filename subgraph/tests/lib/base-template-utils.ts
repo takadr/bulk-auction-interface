@@ -1,10 +1,6 @@
 import { newMockEvent } from "matchstick-as";
 import { ethereum, Address, Bytes, BigInt } from "@graphprotocol/graph-ts";
-import {
-  Deployed,
-  Raised,
-  Claimed,
-} from "../../generated/templates/BaseTemplate/BaseTemplate";
+import { Deployed, Raised, Claimed } from "../../generated/templates/BaseTemplate/BaseTemplate";
 
 export function createDeployedEvent(
   deployedAddr: Address,
@@ -20,50 +16,29 @@ export function createDeployedEvent(
   deployedEvent.parameters = new Array();
 
   deployedEvent.parameters.push(
-    new ethereum.EventParam(
-      "deployedAddr",
-      ethereum.Value.fromAddress(deployedAddr),
-    ),
+    new ethereum.EventParam("deployedAddr", ethereum.Value.fromAddress(deployedAddr)),
   );
   deployedEvent.parameters.push(
     new ethereum.EventParam("owner", ethereum.Value.fromAddress(owner)),
   );
   deployedEvent.parameters.push(
-    new ethereum.EventParam(
-      "startingAt",
-      ethereum.Value.fromUnsignedBigInt(startingAt),
-    ),
+    new ethereum.EventParam("startingAt", ethereum.Value.fromUnsignedBigInt(startingAt)),
   );
   deployedEvent.parameters.push(
-    new ethereum.EventParam(
-      "closingAt",
-      ethereum.Value.fromUnsignedBigInt(closingAt),
-    ),
+    new ethereum.EventParam("closingAt", ethereum.Value.fromUnsignedBigInt(closingAt)),
   );
   deployedEvent.parameters.push(
-    new ethereum.EventParam(
-      "auctionToken",
-      ethereum.Value.fromAddress(auctionToken),
-    ),
+    new ethereum.EventParam("auctionToken", ethereum.Value.fromAddress(auctionToken)),
   );
   deployedEvent.parameters.push(
-    new ethereum.EventParam(
-      "raisedTokens",
-      ethereum.Value.fromBytes(raisedTokens),
-    ),
+    new ethereum.EventParam("raisedTokens", ethereum.Value.fromBytes(raisedTokens)),
   );
-  deployedEvent.parameters.push(
-    new ethereum.EventParam("args", ethereum.Value.fromBytes(args)),
-  );
+  deployedEvent.parameters.push(new ethereum.EventParam("args", ethereum.Value.fromBytes(args)));
 
   return deployedEvent;
 }
 
-export function createRaisedEvent(
-  account: Address,
-  token: Address,
-  amount: BigInt,
-): Raised {
+export function createRaisedEvent(account: Address, token: Address, amount: BigInt): Raised {
   let receivedEvent = changetype<Raised>(newMockEvent());
 
   receivedEvent.parameters = new Array();
@@ -75,10 +50,7 @@ export function createRaisedEvent(
     new ethereum.EventParam("token", ethereum.Value.fromAddress(token)),
   );
   receivedEvent.parameters.push(
-    new ethereum.EventParam(
-      "amount",
-      ethereum.Value.fromUnsignedBigInt(amount),
-    ),
+    new ethereum.EventParam("amount", ethereum.Value.fromUnsignedBigInt(amount)),
   );
 
   return receivedEvent;
@@ -95,25 +67,16 @@ export function createClaimedEvent(
   claimedEvent.parameters = new Array();
 
   claimedEvent.parameters.push(
-    new ethereum.EventParam(
-      "participant",
-      ethereum.Value.fromAddress(participant),
-    ),
+    new ethereum.EventParam("participant", ethereum.Value.fromAddress(participant)),
   );
   claimedEvent.parameters.push(
     new ethereum.EventParam("recipient", ethereum.Value.fromAddress(recipient)),
   );
   claimedEvent.parameters.push(
-    new ethereum.EventParam(
-      "userShare",
-      ethereum.Value.fromUnsignedBigInt(userShare),
-    ),
+    new ethereum.EventParam("userShare", ethereum.Value.fromUnsignedBigInt(userShare)),
   );
   claimedEvent.parameters.push(
-    new ethereum.EventParam(
-      "allocation",
-      ethereum.Value.fromUnsignedBigInt(allocation),
-    ),
+    new ethereum.EventParam("allocation", ethereum.Value.fromUnsignedBigInt(allocation)),
   );
 
   return claimedEvent;

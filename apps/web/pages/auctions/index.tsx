@@ -47,9 +47,7 @@ export default function AuctionPage() {
       <Container maxW="container.xl" py={16}>
         <Tabs variant="soft-rounded" colorScheme="green">
           <TabList>
-            <Tab fontSize={{ base: "sm", md: "md" }}>
-              {t("LIVE_UPCOMING_SALES")}
-            </Tab>
+            <Tab fontSize={{ base: "sm", md: "md" }}>{t("LIVE_UPCOMING_SALES")}</Tab>
             {/* <Tab fontSize={{base: 'sm', md: 'md'}}>Live Auctions</Tab>
                     <Tab fontSize={{base: 'sm', md: 'md'}}>Upcoming Auctions</Tab> */}
             <Tab fontSize={{ base: "sm", md: "md" }}>{t("ENDED_SALES")}</Tab>
@@ -71,30 +69,19 @@ export default function AuctionPage() {
                   </>
                 ) : (
                   activeAuctions.map((auctionProps: AuctionProps) => {
-                    return (
-                      <AuctionCard
-                        key={auctionProps.id}
-                        auctionProps={auctionProps}
-                      />
-                    );
+                    return <AuctionCard key={auctionProps.id} auctionProps={auctionProps} />;
                   })
                 )}
                 {!isLastActiveAuctions && activeAuctions.length > 0 && (
                   <Button
-                    isLoading={
-                      isLoadingActiveAuctions || isValidatingActiveAuctions
-                    }
+                    isLoading={isLoadingActiveAuctions || isValidatingActiveAuctions}
                     onClick={loadMoreActiveAuctions}
                   >
                     {t("LOAD_MORE_SALES")}
                   </Button>
                 )}
                 {!isLoadingActiveAuctions && activeAuctions.length === 0 && (
-                  <Flex
-                    minH={"25vh"}
-                    justifyContent="center"
-                    alignItems={"center"}
-                  >
+                  <Flex minH={"25vh"} justifyContent="center" alignItems={"center"}>
                     <Text fontSize={"lg"} opacity={".75"} textAlign={"center"}>
                       {t("NO_SALE")}
                     </Text>
@@ -143,30 +130,19 @@ export default function AuctionPage() {
                   </>
                 ) : (
                   closedAuctions.map((auctionProps: AuctionProps) => {
-                    return (
-                      <AuctionCard
-                        key={auctionProps.id}
-                        auctionProps={auctionProps}
-                      />
-                    );
+                    return <AuctionCard key={auctionProps.id} auctionProps={auctionProps} />;
                   })
                 )}
                 {!isLastClosedAuctions && closedAuctions.length > 0 && (
                   <Button
-                    isLoading={
-                      isLoadingClosedAuctions || isValidatingClosedAuctions
-                    }
+                    isLoading={isLoadingClosedAuctions || isValidatingClosedAuctions}
                     onClick={loadMoreClosedAuctions}
                   >
                     {t("LOAD_MORE_SALES")}
                   </Button>
                 )}
                 {!isLoadingClosedAuctions && closedAuctions.length === 0 && (
-                  <Flex
-                    minH={"25vh"}
-                    justifyContent="center"
-                    alignItems={"center"}
-                  >
+                  <Flex minH={"25vh"} justifyContent="center" alignItems={"center"}>
                     <Text fontSize={"lg"} opacity={".75"} textAlign={"center"}>
                       {t("NO_SALE")}
                     </Text>

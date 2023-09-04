@@ -1,11 +1,4 @@
-import {
-  chakra,
-  Heading,
-  Divider,
-  Card,
-  CardBody,
-  Container,
-} from "@chakra-ui/react";
+import { chakra, Heading, Divider, Card, CardBody, Container } from "@chakra-ui/react";
 
 export default function Render404() {
   return (

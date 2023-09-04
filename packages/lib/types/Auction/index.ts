@@ -36,10 +36,7 @@ export class TemplateV1 extends BaseAuction {
   allocatedAmount: string;
   minRaisedAmount: string;
   parseArgs(): { allocatedAmount: string; minRaisedAmount: string } {
-    const params = AbiCoder.defaultAbiCoder().decode(
-      ["uint256", "uint256"],
-      this.args,
-    );
+    const params = AbiCoder.defaultAbiCoder().decode(["uint256", "uint256"], this.args);
     return { allocatedAmount: params[0], minRaisedAmount: params[1] };
   }
   constructor(data: AuctionProps) {
@@ -140,10 +137,7 @@ export type MetaData = {
   createdAt?: number;
 };
 
-export const validateMetaData = (
-  metaData: MetaData,
-  minRaisedAmount?: number,
-) => {
+export const validateMetaData = (metaData: MetaData, minRaisedAmount?: number) => {
   const errors: any = {};
   if (!metaData.id) {
     errors.id = "Contract address is required";
@@ -162,8 +156,7 @@ export const validateMetaData = (
     metaData.maximumTotalRaised &&
     Number(metaData.targetTotalRaised) > Number(metaData.maximumTotalRaised)
   ) {
-    errors.maximumTotalRaised =
-      "Maximum total raised must be bigger than Target total raised";
+    errors.maximumTotalRaised = "Maximum total raised must be bigger than Target total raised";
   }
   if (metaData.projectURL && !URL_REGEX.test(metaData.projectURL)) {
     errors.projectURL = "Invalid URL format";

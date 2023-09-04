@@ -30,11 +30,7 @@ import { DateRangePicker } from "rsuite";
 import { differenceInSeconds, format } from "date-fns";
 import { ethers } from "ethers";
 import { useNetwork } from "wagmi";
-import {
-  getDecimalsForView,
-  getEtherscanLink,
-  tokenAmountFormat,
-} from "lib/utils";
+import { getDecimalsForView, getEtherscanLink, tokenAmountFormat } from "lib/utils";
 import Big, { divide, getBigNumber, multiply } from "lib/utils/bignumber";
 import { AuctionForm } from "lib/types/Auction";
 import { CHAIN_NAMES } from "lib/constants";
@@ -117,17 +113,12 @@ export default function AuctionForm({
   return (
     <div>
       <form ref={containerRef} onSubmit={formikProps.handleSubmit}>
-        <FormControl
-          mt={4}
-          isInvalid={!!formikProps.errors.token && !!formikProps.touched.token}
-        >
+        <FormControl mt={4} isInvalid={!!formikProps.errors.token && !!formikProps.touched.token}>
           <FormLabel htmlFor="token" alignItems={"baseline"}>
             {t("TOKEN_ADDRESS")}
             <Tooltip
               hasArrow
-              label={t(
-                "INPUT_THE_ADDRESS_OF_THE_TOKEN_YOU_WOULD_LIKE_TO_ALLOCATE_TO_THIS_SALE",
-              )}
+              label={t("INPUT_THE_ADDRESS_OF_THE_TOKEN_YOU_WOULD_LIKE_TO_ALLOCATE_TO_THIS_SALE")}
             >
               <QuestionIcon mb={1} ml={1} />
             </Tooltip>
@@ -160,10 +151,8 @@ export default function AuctionForm({
         <FormControl
           mt={4}
           isInvalid={
-            (!!formikProps.errors.startingAt &&
-              !!formikProps.touched.startingAt) ||
-            (!!formikProps.errors.eventDuration &&
-              !!formikProps.touched.eventDuration)
+            (!!formikProps.errors.startingAt && !!formikProps.touched.startingAt) ||
+            (!!formikProps.errors.eventDuration && !!formikProps.touched.eventDuration)
           }
         >
           <FormLabel alignItems={"baseline"}>
@@ -204,35 +193,24 @@ export default function AuctionForm({
             cleanable={false}
             defaultValue={[
               new Date(formikProps.values.startingAt),
-              new Date(
-                formikProps.values.startingAt +
-                  formikProps.values.eventDuration * 1000,
-              ),
+              new Date(formikProps.values.startingAt + formikProps.values.eventDuration * 1000),
             ]}
           />
           <chakra.span fontSize={"sm"} ml={2}>
             ({format(0, "z")})
           </chakra.span>
           <FormErrorMessage>{formikProps.errors.startingAt}</FormErrorMessage>
-          <FormErrorMessage>
-            {formikProps.errors.eventDuration}
-          </FormErrorMessage>
+          <FormErrorMessage>{formikProps.errors.eventDuration}</FormErrorMessage>
         </FormControl>
 
         <FormControl
           mt={4}
-          isInvalid={
-            !!formikProps.errors.allocatedAmount &&
-            !!formikProps.touched.allocatedAmount
-          }
+          isInvalid={!!formikProps.errors.allocatedAmount && !!formikProps.touched.allocatedAmount}
         >
           <Flex justifyContent={"space-between"}>
             <FormLabel alignItems={"baseline"}>
               {t("ALLOCATION_TO_THE_SALE")}
-              <Tooltip
-                hasArrow
-                label={t("INPUT_THE_AMOUNT_OF_TOKENS_TO_BE_ALLOCATED")}
-              >
+              <Tooltip hasArrow label={t("INPUT_THE_AMOUNT_OF_TOKENS_TO_BE_ALLOCATED")}>
                 <QuestionIcon mb={1} ml={1} />
               </Tooltip>
             </FormLabel>
@@ -249,11 +227,7 @@ export default function AuctionForm({
               onChange={(strVal: string, val: number) =>
                 formikProps.setFieldValue(
                   "allocatedAmount",
-                  strVal && Number(strVal) === val
-                    ? strVal
-                    : isNaN(val)
-                    ? 0
-                    : val,
+                  strVal && Number(strVal) === val ? strVal : isNaN(val) ? 0 : val,
                 )
               }
             >
@@ -281,25 +255,18 @@ export default function AuctionForm({
               : "-"}{" "}
             {tokenData?.symbol}
           </chakra.p>
-          <FormErrorMessage>
-            {formikProps.errors.allocatedAmount}
-          </FormErrorMessage>
+          <FormErrorMessage>{formikProps.errors.allocatedAmount}</FormErrorMessage>
         </FormControl>
 
         <FormControl
           mt={4}
-          isInvalid={
-            !!formikProps.errors.minRaisedAmount &&
-            !!formikProps.touched.minRaisedAmount
-          }
+          isInvalid={!!formikProps.errors.minRaisedAmount && !!formikProps.touched.minRaisedAmount}
         >
           <FormLabel alignItems={"baseline"}>
             {t("MINIMUM_TOTAL_RAISED")}
             <Tooltip
               hasArrow
-              label={t(
-                "THE_SALE_WILL_BE_VOID_IF_THE_TOTAL_RAISED_IS_LESS_THAN_THIS_THRESHOLD",
-              )}
+              label={t("THE_SALE_WILL_BE_VOID_IF_THE_TOTAL_RAISED_IS_LESS_THAN_THIS_THRESHOLD")}
             >
               <QuestionIcon mb={1} ml={1} />
             </Tooltip>
@@ -316,11 +283,7 @@ export default function AuctionForm({
               onChange={(strVal: string, val: number) =>
                 formikProps.setFieldValue(
                   "minRaisedAmount",
-                  strVal && Number(strVal) === val
-                    ? strVal
-                    : isNaN(val)
-                    ? 0
-                    : val,
+                  strVal && Number(strVal) === val ? strVal : isNaN(val) ? 0 : val,
                 )
               }
             >
@@ -341,9 +304,7 @@ export default function AuctionForm({
                 formikProps.values.allocatedAmount,
               ).toString()} ETH at Minimum total raised`}
           </chakra.p>
-          <FormErrorMessage>
-            {formikProps.errors.minRaisedAmount}
-          </FormErrorMessage>
+          <FormErrorMessage>{formikProps.errors.minRaisedAmount}</FormErrorMessage>
         </FormControl>
         {approvals.allowance &&
         Big(approvals.allowance.toString()).gte(
@@ -359,11 +320,7 @@ export default function AuctionForm({
               variant="solid"
               colorScheme="green"
               isLoading={writeFn.isLoading}
-              isDisabled={
-                chain?.unsupported ||
-                !writeFn.writeAsync ||
-                !formikProps.isValid
-              }
+              isDisabled={chain?.unsupported || !writeFn.writeAsync || !formikProps.isValid}
               onClick={onOpen}
             >
               {t("DEPLOY_SALE_CONTRACT")}
@@ -386,22 +343,14 @@ export default function AuctionForm({
                     <Stack spacing={4} divider={<Divider />}>
                       <div>
                         <chakra.p>{t("SELECT_SALE_TEMPLETE")}</chakra.p>
-                        <chakra.p
-                          fontWeight={"bold"}
-                          aria-label="Auction Template"
-                        >
-                          {ethers.decodeBytes32String(
-                            debouncedAuction.templateName,
-                          )}
+                        <chakra.p fontWeight={"bold"} aria-label="Auction Template">
+                          {ethers.decodeBytes32String(debouncedAuction.templateName)}
                         </chakra.p>
                       </div>
 
                       <div>
                         <chakra.p>{t("TOKEN_ADDRESS")}</chakra.p>
-                        <chakra.p
-                          fontWeight={"bold"}
-                          aria-label="Token address"
-                        >
+                        <chakra.p fontWeight={"bold"} aria-label="Token address">
                           <Link
                             href={getEtherscanLink(
                               CHAIN_NAMES[process.env.NEXT_PUBLIC_CHAIN_ID!],
@@ -418,19 +367,12 @@ export default function AuctionForm({
 
                       <div>
                         <chakra.p>{t("START_DATE_END_DATE")}</chakra.p>
-                        <chakra.p
-                          fontWeight={"bold"}
-                          aria-label="Start date - End date"
-                        >
+                        <chakra.p fontWeight={"bold"} aria-label="Start date - End date">
                           <>
-                            {format(
-                              debouncedAuction.startingAt,
-                              "yyyy/MM/dd HH:mm:ss",
-                            )}
+                            {format(debouncedAuction.startingAt, "yyyy/MM/dd HH:mm:ss")}
                             {` - `}
                             {format(
-                              debouncedAuction.startingAt +
-                                debouncedAuction.eventDuration * 1000,
+                              debouncedAuction.startingAt + debouncedAuction.eventDuration * 1000,
                               "yyyy/MM/dd HH:mm:ss",
                             )}{" "}
                             {format(new Date(), "(z)")}
@@ -440,16 +382,11 @@ export default function AuctionForm({
 
                       <div>
                         <chakra.p>{t("ALLOCATED_TO_THE_SALE")}</chakra.p>
-                        <chakra.p
-                          fontWeight={"bold"}
-                          aria-label="Allocated to the auction"
-                        >
+                        <chakra.p fontWeight={"bold"} aria-label="Allocated to the auction">
                           {tokenData
                             ? Number(debouncedAuction.allocatedAmount).toFixed(
                                 getDecimalsForView(
-                                  getBigNumber(
-                                    tokenData?.totalSupply.value.toString(),
-                                  ),
+                                  getBigNumber(tokenData?.totalSupply.value.toString()),
                                   tokenData?.decimals,
                                 ),
                               )
@@ -460,12 +397,8 @@ export default function AuctionForm({
 
                       <div>
                         <chakra.p>{t("MINIMUM_TOTAL_RAISED")}</chakra.p>
-                        <chakra.p
-                          fontWeight={"bold"}
-                          aria-label="Minimum total raised"
-                        >
-                          {Number(debouncedAuction.minRaisedAmount).toFixed(2)}{" "}
-                          ETH
+                        <chakra.p fontWeight={"bold"} aria-label="Minimum total raised">
+                          {Number(debouncedAuction.minRaisedAmount).toFixed(2)} ETH
                         </chakra.p>
                       </div>
                     </Stack>
@@ -481,11 +414,7 @@ export default function AuctionForm({
                       variant="solid"
                       colorScheme="green"
                       isLoading={writeFn.isLoading}
-                      isDisabled={
-                        chain?.unsupported ||
-                        !writeFn.writeAsync ||
-                        !formikProps.isValid
-                      }
+                      isDisabled={chain?.unsupported || !writeFn.writeAsync || !formikProps.isValid}
                     >
                       {t("DEPLOY_SALE_CONTRACT")}
                     </Button>
@@ -501,14 +430,8 @@ export default function AuctionForm({
             variant="solid"
             colorScheme="blue"
             onClick={approvals.writeFn.write}
-            isLoading={
-              approvals.writeFn.isLoading || approvals.waitFn.isLoading
-            }
-            isDisabled={
-              chain?.unsupported ||
-              !approvals.writeFn.write ||
-              !formikProps.isValid
-            }
+            isLoading={approvals.writeFn.isLoading || approvals.waitFn.isLoading}
+            isDisabled={chain?.unsupported || !approvals.writeFn.write || !formikProps.isValid}
           >
             {t("APPROVE_TOKEN")}
           </Button>

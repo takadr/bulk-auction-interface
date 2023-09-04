@@ -73,10 +73,7 @@ export default function useAuctionForm({
             debouncedAuction.allocatedAmount,
             tokenData?.decimals ? Big(10).pow(tokenData.decimals) : 1,
           ).toString(),
-          multiply(
-            debouncedAuction.minRaisedAmount,
-            Big(10).pow(18),
-          ).toString(),
+          multiply(debouncedAuction.minRaisedAmount, Big(10).pow(18)).toString(),
         ],
       );
     } catch (e) {
@@ -124,9 +121,7 @@ export default function useAuctionForm({
       balance &&
       tokenData &&
       Big(balance.toString()).lt(
-        Big(formikProps.values.allocatedAmount).mul(
-          Big(10).pow(tokenData.decimals),
-        ),
+        Big(formikProps.values.allocatedAmount).mul(Big(10).pow(tokenData.decimals)),
       )
     ) {
       errors.allocatedAmount = `You need to have enough balance for allocation`;
@@ -134,10 +129,9 @@ export default function useAuctionForm({
 
     if (
       tokenData &&
-      !!multiply(
-        formikProps.values.allocatedAmount,
-        Big(10).pow(tokenData.decimals),
-      ).lt(Big(10).pow(6))
+      !!multiply(formikProps.values.allocatedAmount, Big(10).pow(tokenData.decimals)).lt(
+        Big(10).pow(6),
+      )
     ) {
       errors.allocatedAmount = `The allocation is too small, and some participants may not be
       able to complete their claims. Unclaimed tokens cannot be

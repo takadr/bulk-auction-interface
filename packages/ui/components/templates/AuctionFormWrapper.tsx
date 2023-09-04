@@ -3,10 +3,7 @@ import { FormLabel, Select, Spinner, Tooltip } from "@chakra-ui/react";
 import { QuestionIcon } from "@chakra-ui/icons";
 import { ethers } from "ethers";
 import { Template } from "lib/types/Auction";
-import {
-  COMPATIBLE_TEMPLATES,
-  TEMPLATE_V1_NAME,
-} from "lib/constants/templates";
+import { COMPATIBLE_TEMPLATES, TEMPLATE_V1_NAME } from "lib/constants/templates";
 import { useLocale } from "../../hooks/useLocale";
 import TemplateV1AuctionForm from "./TemplateV1/AuctionForm";
 import useTemplates from "../../hooks/useTemplates";
@@ -21,9 +18,7 @@ export type AuctionFormWrapperParams = {
 
 export default function AuctionFormWrapper(props: AuctionFormWrapperParams) {
   const { data: templateData } = useTemplates();
-  const [templateName, setTemplateName] = useState<string | undefined>(
-    TEMPLATE_V1_NAME,
-  );
+  const [templateName, setTemplateName] = useState<string | undefined>(TEMPLATE_V1_NAME);
   const { t } = useLocale();
   useEffect(() => {
     templateData &&
@@ -57,9 +52,7 @@ export default function AuctionFormWrapper(props: AuctionFormWrapperParams) {
         )}
         {templateData &&
           templateData.templates
-            .filter((template: Template) =>
-              COMPATIBLE_TEMPLATES.includes(template.templateName),
-            )
+            .filter((template: Template) => COMPATIBLE_TEMPLATES.includes(template.templateName))
             .map((template: Template) => (
               <option key={template.id} value={template.templateName}>
                 {ethers.decodeBytes32String(template.templateName)}
@@ -70,9 +63,7 @@ export default function AuctionFormWrapper(props: AuctionFormWrapperParams) {
       {
         // Add conditions below as needed
       }
-      {templateName === TEMPLATE_V1_NAME && (
-        <TemplateV1AuctionForm {...props} />
-      )}
+      {templateName === TEMPLATE_V1_NAME && <TemplateV1AuctionForm {...props} />}
     </>
   );
 }
