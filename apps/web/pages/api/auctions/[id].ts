@@ -15,6 +15,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
           id: id as string,
           address: (address as `0x${string}`).toLowerCase(),
         },
+        fetchPolicy: "network-only",
       });
       res.send(result);
       break;

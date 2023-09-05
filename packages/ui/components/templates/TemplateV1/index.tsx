@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { memo, useState } from "react";
 import {
   Container,
   Heading,
@@ -56,7 +56,7 @@ import { CHAIN_NAMES } from "lib/constants";
 import ConnectButton from "../../connectButton";
 import { DetailPageParams } from "../AuctionDetail";
 
-export default function DetailPage({
+export default memo(function DetailPage({
   auctionProps,
   refetchAuction,
   metaData,
@@ -169,7 +169,7 @@ export default function DetailPage({
         refetchAuction();
         refetchRaised();
         refetchBalance();
-      }, 0);
+      }, 2000);
     },
   });
 
@@ -433,4 +433,4 @@ export default function DetailPage({
       </Container>
     </>
   );
-}
+});

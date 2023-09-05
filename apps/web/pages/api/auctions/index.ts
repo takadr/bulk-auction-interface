@@ -46,6 +46,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
           now: Number(now),
           id: id,
         },
+        fetchPolicy: "network-only",
       });
       res.send(result);
       break;

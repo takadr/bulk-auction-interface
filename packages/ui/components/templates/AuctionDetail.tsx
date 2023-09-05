@@ -14,6 +14,7 @@ import {
   SkeletonCircle,
   SkeletonText,
 } from "@chakra-ui/react";
+import { memo } from "react";
 
 export type DetailPageParams = {
   auctionProps: AuctionProps;
@@ -24,7 +25,7 @@ export type DetailPageParams = {
   contractAddress: `0x${string}`;
 };
 
-export default function AuctionDetail(props: DetailPageParams) {
+export default memo(function AuctionDetail(props: DetailPageParams) {
   // Add detail page components as needed
   switch (props.auctionProps.templateAuctionMap.templateName) {
     case TEMPLATE_V1_NAME:
@@ -32,7 +33,7 @@ export default function AuctionDetail(props: DetailPageParams) {
     default:
       return <Render500 error={new Error("Invalid template")} />;
   }
-}
+});
 
 export function SkeletonAuction() {
   return (
