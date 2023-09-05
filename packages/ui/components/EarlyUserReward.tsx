@@ -1,0 +1,92 @@
+import {
+  Button,
+  useToast,
+  Card,
+  CardBody,
+  Heading,
+  Tooltip,
+  Divider,
+  HStack,
+  chakra,
+  CardFooter,
+  Spinner,
+  Text,
+} from "@chakra-ui/react";
+import { useLocale } from "../hooks/useLocale";
+import { QuestionIcon } from "@chakra-ui/icons";
+import useEarlyUserReward from "../hooks/useEarlyUserReward";
+import { formatEtherInBig } from "lib/utils";
+import TxSentToast from "./TxSentToast";
+
+export default function EarlyUserReward({ address }: { address: `0x${string}` }) {
+  const { readFn, writeFn, waitFn } = useEarlyUserReward({
+    address,
+    onSuccessWrite: (data: any) => {
+      toast({
+        title: "Transaction sent!",
+        status: "success",
+        duration: 5000,
+        render: (props) => <TxSentToast txid={data?.hash} {...props} />,
+      });
+    },
+    onErrorWrite: (e: Error) => {
+      toast({
+        description: e.message,
+        status: "error",
+        duration: 5000,
+      });
+    },
+    onSuccessConfirm: (data: any) => {
+      toast({
+        description: `Transaction confirmed!`,
+        status: "success",
+        duration: 5000,
+      });
+    },
+  });
+  const toast = useToast({ position: "top-right", isClosable: true });
+  const { t } = useLocale();
+
+  return (
+    <Card flex={1}>
+      <CardBody>
+        <Heading fontSize={"2xl"}>
+          {t("EARLY_USER_REWARD")}
+          <Tooltip
+            hasArrow
+            label={<Text whiteSpace={"pre-wrap"}>{t("EARLY_USER_REWARD_HELP")}</Text>}
+          >
+            <QuestionIcon fontSize={"md"} mb={1} ml={1} />
+          </Tooltip>
+        </Heading>
+        <Divider mt={2} mb={4} />
+        <HStack justifyContent={"space-between"}>
+          <chakra.p color={"gray.400"}>{t("CLAIMABLE")}</chakra.p>
+          <chakra.p fontSize={"2xl"}>
+            {readFn.isLoading || typeof readFn.data === "undefined" ? (
+              <Spinner />
+            ) : (
+              formatEtherInBig(readFn.data.toString()).toFixed(3)
+            )}
+            <chakra.span color={"gray.400"} fontSize={"lg"} ml={1}>
+              YMWK
+            </chakra.span>
+          </chakra.p>
+        </HStack>
+      </CardBody>
+      <CardFooter justifyContent={"flex-end"}>
+        <Button
+          isLoading={readFn.isLoading || typeof readFn.data === "undefined"}
+          isDisabled={
+            (typeof readFn.data === "bigint" && readFn.data === 0n) || !writeFn.writeAsync
+          }
+          onClick={() => writeFn.writeAsync!()}
+          variant={"solid"}
+          colorScheme="green"
+        >
+          {t("CLAIM")}
+        </Button>
+      </CardFooter>
+    </Card>
+  );
+}

@@ -48,6 +48,7 @@ export default {
   ONE_PERCENT_FEE_WILL_BE_SUBTRACTED: "1%の手数料が差し引かれます",
   WITHDRAW_THE_TOTAL_RAISED: "ETHを回収する",
   YOUR_SALES: "あなたのオークション",
+  PARTICIPATED_SALES: "参加したオークション",
   CREATE_NEW_SALE: "オークションの作成",
   EDIT: "編集",
   DEPLOY_CONTRACT: "コントラクトのデプロイ",
@@ -118,4 +119,14 @@ export default {
   JOIN_AUCTION: "オークションに参加する",
   MANAGE_AUCTION: "オークションを管理する",
   CREATE_AUCTION: "オークションを作成する",
+  EARLY_USER_REWARD: "初期ユーザリワード",
+  EARLY_USER_REWARD_HELP:
+    "初期ユーザは、YMWKトークンを報酬として受け取る権利が付与されます。\n\n(オークション参加者)\nオークションで購入したトークンの請求時に入札金額に応じて付与されます。\n\n(オークション開催者)\nオークションの終了後、売上を回収する際に売上金額に応じて付与されます。\n\n初期ユーザリワードの予算5000万YMWKがなくなり次第終了となり、予算が尽きている場合は権利を保有していても請求は出来ません。",
+  CLAIMABLE: "クレーム可能額",
+  VE_YMWK_REWARD: "veYMWKリワード",
+  VE_YMWK_REWARD_HELP: "Comming soon...",
+  YMWK_LOCKED: "ロック中のYMWK",
+  LOCKED_UNTIL: "ロック終了日時",
+  REWARDS: "リワード",
+  COMMING_SOON: "Comming soon...",
 };

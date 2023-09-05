@@ -6,6 +6,7 @@ export enum QueryType {
   UPCOMING,
   CLOSED,
   MY_SALE_QUERY,
+  PARTICIPATED_SALE_QUERY,
 }
 
 export const LIST_ACTIVE_AND_UPCOMING_SALE_QUERY = gql`
@@ -172,6 +173,45 @@ export const LIST_CLOSED_SALE_QUERY = gql`
 export const LIST_MY_SALE_QUERY = gql`
   query MyAuctions($id: ID!) {
     auctions(orderBy: startingAt, where: { owner: $id }) {
+      id
+      templateAuctionMap {
+        id
+        templateName
+      }
+      owner
+      startingAt
+      closingAt
+      args
+      auctionToken {
+        id
+        name
+        symbol
+        decimals
+      }
+      raisedTokens {
+        id
+        name
+        symbol
+        decimals
+      }
+      totalRaised {
+        id
+        amount
+        token {
+          id
+          name
+          symbol
+          decimals
+        }
+      }
+      blockNumber
+    }
+  }
+`;
+
+export const LIST_PARTICIPATED_SALE_QUERY = gql`
+  query ParticipatedAuctions($id: ID!) {
+    auctions(orderBy: startingAt, where: { contributions_: { from: $id } }) {
       id
       templateAuctionMap {
         id

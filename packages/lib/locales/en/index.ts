@@ -48,6 +48,7 @@ export default {
   ONE_PERCENT_FEE_WILL_BE_SUBTRACTED: "1% fee will be subtracted from this amount.",
   WITHDRAW_THE_TOTAL_RAISED: "Withdraw the total raised",
   YOUR_SALES: "Your Auctions",
+  PARTICIPATED_SALES: "Participated Auctions",
   CREATE_NEW_SALE: "Create new auction",
   EDIT: "Edit",
   DEPLOY_CONTRACT: "Deploy Contract",
@@ -119,4 +120,14 @@ export default {
   JOIN_AUCTION: "Join Auction",
   MANAGE_AUCTION: "Manage Auctions",
   CREATE_AUCTION: "Create Auction",
+  EARLY_USER_REWARD: "Early user reward",
+  EARLY_USER_REWARD_HELP:
+    "Early users are eligible to receive YMWK tokens as rewards.\n\n(For Auction Participants)\n\nThe tokens are awarded based on the bid amount when claiming the tokens purchased in the auction.\n\n(For Auction Organizers)\n\nThe tokens are awarded based on the sales amount when withdrawing the revenue after the auction ends.\n\nEarly user reward will end once the budget of 50 million YMWK is exhausted. Even if you have the eligibility, you cannot claim if the budget has run out.",
+  CLAIMABLE: "Claimable",
+  VE_YMWK_REWARD: "veYMWK Reward",
+  VE_YMWK_REWARD_HELP: "Comming soon...",
+  YMWK_LOCKED: "YMWK Locked",
+  LOCKED_UNTIL: "Locked until",
+  REWARDS: "Rewards",
+  COMMING_SOON: "Comming soon...",
 };

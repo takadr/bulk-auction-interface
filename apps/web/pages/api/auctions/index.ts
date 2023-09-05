@@ -9,6 +9,7 @@ import {
   LIST_UPCOMING_SALE_QUERY,
   LIST_CLOSED_SALE_QUERY,
   LIST_MY_SALE_QUERY,
+  LIST_PARTICIPATED_SALE_QUERY,
 } from "lib/apollo/query";
 import { QueryType } from "lib/apollo/query";
 
@@ -24,6 +25,8 @@ const getQuery = (queryType: QueryType): DocumentNode => {
       return LIST_CLOSED_SALE_QUERY;
     case QueryType.MY_SALE_QUERY:
       return LIST_MY_SALE_QUERY;
+    case QueryType.PARTICIPATED_SALE_QUERY:
+      return LIST_PARTICIPATED_SALE_QUERY;
     default:
       return LIST_ACTIVE_AND_UPCOMING_SALE_QUERY;
   }

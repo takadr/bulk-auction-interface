@@ -205,7 +205,7 @@ const Header: FC<HeaderProps> = ({ title }) => {
             </Link>
           </HStack>
           <HStack spacing={{ base: 2, md: 4 }}>
-            {isConnected && currentUser && (
+            {isConnected && (
               <Button
                 display={{ base: "none", md: "block" }}
                 variant="ghost"
