@@ -19,6 +19,8 @@ import { formatEtherInBig } from "lib/utils";
 import TxSentToast from "../TxSentToast";
 
 export default function EarlyUserReward({ address }: { address: `0x${string}` }) {
+  const toast = useToast({ position: "top-right", isClosable: true });
+  const { t } = useLocale();
   const { readFn, writeFn, waitFn } = useEarlyUserReward({
     address,
     onSuccessWrite: (data: any) => {
@@ -44,8 +46,6 @@ export default function EarlyUserReward({ address }: { address: `0x${string}` })
       });
     },
   });
-  const toast = useToast({ position: "top-right", isClosable: true });
-  const { t } = useLocale();
 
   return (
     <Card flex={1}>
@@ -76,11 +76,16 @@ export default function EarlyUserReward({ address }: { address: `0x${string}` })
       </CardBody>
       <CardFooter justifyContent={"flex-end"}>
         <Button
-          isLoading={readFn.isLoading || typeof readFn.data === "undefined"}
-          isDisabled={
-            (typeof readFn.data === "bigint" && readFn.data === 0n) || !writeFn.writeAsync
+          isLoading={
+            readFn.isLoading ||
+            typeof readFn.data === "undefined" ||
+            writeFn?.isLoading ||
+            waitFn?.isLoading
           }
-          onClick={() => writeFn.writeAsync!()}
+          isDisabled={(typeof readFn.data === "bigint" && readFn.data === 0n) || !writeFn.write}
+          onClick={() => {
+            writeFn.write!();
+          }}
           variant={"solid"}
           colorScheme="green"
         >

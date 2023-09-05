@@ -390,7 +390,6 @@ export default memo(function DetailPage({
                     isClaimed={auction.claims.length > 0}
                     mutateIsClaimed={refetchAuction}
                     colorScheme={"green"}
-                    isDisabled={chain?.unsupported}
                   />
                 </chakra.div>
               )}

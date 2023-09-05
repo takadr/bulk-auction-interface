@@ -1,10 +1,11 @@
 import { useState } from "react";
+import { useNetwork } from "wagmi";
 import { ButtonProps, Button, useToast } from "@chakra-ui/react";
 import { ApolloQueryResult } from "@apollo/client/core/types";
 import { TemplateV1 } from "lib/types/Auction";
 import { getExpectedAmount } from "lib/utils";
 import Big from "lib/utils/bignumber";
-import useClaim from "../../../hooks/useClaim";
+import useClaim from "../../../hooks/TemplateV1/useClaim";
 import TxSentToast from "../../TxSentToast";
 import { useLocale } from "../../../hooks/useLocale";
 
@@ -27,6 +28,7 @@ export default function ClaimButton({
   const [claimSucceeded, setClaimSucceeded] = useState<boolean>(false);
   // Local state to show that it is waiting for updateed subgraph data after the claim tx is confirmed
   const [waitForSubgraphUpdate, setWaitForSubgraphUpdate] = useState<boolean>(false);
+  const { chain } = useNetwork();
 
   const {
     prepareFn: claimPrepareFn,
@@ -67,15 +69,16 @@ export default function ClaimButton({
   );
   const toast = useToast({ position: "top-right", isClosable: true });
   const { t } = useLocale();
+
   return (
     <Button
       variant={"solid"}
-      isDisabled={isClaimed || claimSucceeded || !claimWriteFn.writeAsync}
+      isDisabled={chain?.unsupported || isClaimed || claimSucceeded || !claimWriteFn.write}
       isLoading={claimWriteFn?.isLoading || claimWaitFn?.isLoading || waitForSubgraphUpdate}
-      {...buttonProps}
-      onClick={async () => {
-        await claimWriteFn.writeAsync();
+      onClick={() => {
+        claimWriteFn.write!();
       }}
+      {...buttonProps}
     >
       {isClaimed || claimSucceeded
         ? t("CLAIMED")
