@@ -12,11 +12,11 @@ import {
   Spinner,
   Text,
 } from "@chakra-ui/react";
-import { useLocale } from "../hooks/useLocale";
+import { useLocale } from "../../hooks/useLocale";
 import { QuestionIcon } from "@chakra-ui/icons";
-import useEarlyUserReward from "../hooks/useEarlyUserReward";
+import useEarlyUserReward from "../../hooks/useEarlyUserReward";
 import { formatEtherInBig } from "lib/utils";
-import TxSentToast from "./TxSentToast";
+import TxSentToast from "../TxSentToast";
 
 export default function EarlyUserReward({ address }: { address: `0x${string}` }) {
   const { readFn, writeFn, waitFn } = useEarlyUserReward({

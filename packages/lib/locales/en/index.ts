@@ -122,7 +122,7 @@ export default {
   CREATE_AUCTION: "Create Auction",
   EARLY_USER_REWARD: "Early user reward",
   EARLY_USER_REWARD_HELP:
-    "Early users are eligible to receive YMWK tokens as rewards.\n\n(For Auction Participants)\n\nThe tokens are awarded based on the bid amount when claiming the tokens purchased in the auction.\n\n(For Auction Organizers)\n\nThe tokens are awarded based on the sales amount when withdrawing the revenue after the auction ends.\n\nEarly user reward will end once the budget of 50 million YMWK is exhausted. Even if you have the eligibility, you cannot claim if the budget has run out.",
+    "Early users are eligible to receive YMWK tokens as rewards.\n\n(For Auction Participants)\nThe tokens are awarded based on the bid amount when claiming the tokens purchased in the auction.\n\n(For Auction Organizers)\nThe tokens are awarded based on the sales amount when withdrawing the revenue after the auction ends.\n\nEarly user reward will end once the budget of 50 million YMWK is exhausted. Even if you have the eligibility, you cannot claim if the budget has run out.",
   CLAIMABLE: "Claimable",
   VE_YMWK_REWARD: "veYMWK Reward",
   VE_YMWK_REWARD_HELP: "Comming soon...",

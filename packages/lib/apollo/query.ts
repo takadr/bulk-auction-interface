@@ -171,8 +171,8 @@ export const LIST_CLOSED_SALE_QUERY = gql`
 `;
 
 export const LIST_MY_SALE_QUERY = gql`
-  query MyAuctions($id: ID!) {
-    auctions(orderBy: startingAt, where: { owner: $id }) {
+  query MyAuctions($skip: Int! = 0, $first: Int! = 50, $id: ID!) {
+    auctions(orderBy: startingAt, skip: $skip, first: $first, where: { owner: $id }) {
       id
       templateAuctionMap {
         id
@@ -210,8 +210,13 @@ export const LIST_MY_SALE_QUERY = gql`
 `;
 
 export const LIST_PARTICIPATED_SALE_QUERY = gql`
-  query ParticipatedAuctions($id: ID!) {
-    auctions(orderBy: startingAt, where: { contributions_: { from: $id } }) {
+  query ParticipatedAuctions($skip: Int! = 0, $first: Int! = 50, $id: ID!) {
+    auctions(
+      orderBy: startingAt
+      skip: $skip
+      first: $first
+      where: { contributions_: { from: $id } }
+    ) {
       id
       templateAuctionMap {
         id

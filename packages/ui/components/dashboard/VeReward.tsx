@@ -10,7 +10,7 @@ import {
   chakra,
   CardFooter,
 } from "@chakra-ui/react";
-import { useLocale } from "../hooks/useLocale";
+import { useLocale } from "../../hooks/useLocale";
 import { QuestionIcon } from "@chakra-ui/icons";
 
 export default function VeReward({}: {}) {

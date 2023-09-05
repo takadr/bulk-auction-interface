@@ -3,6 +3,7 @@ import useSWRInfinite from "swr/infinite";
 import { QueryType } from "lib/apollo/query";
 import { AuctionProps } from "lib/types/Auction";
 import { zeroAddress } from "viem";
+import { useCallback } from "react";
 
 interface SWRAuctionStore {
   auctions: AuctionProps[];
@@ -10,7 +11,6 @@ interface SWRAuctionStore {
   error?: Error;
   isLoading: boolean;
   isValidating: boolean;
-  fetcher: (args: [number, number, `0x${string}`]) => Promise<AuctionProps[]>;
   loadMoreAuctions: () => void;
   mutate: KeyedMutator<AuctionProps[][]>;
 }
@@ -32,30 +32,30 @@ export const useSWRAuctions = (
 ): SWRAuctionStore => {
   const getKey = (pageIndex: number, previousPageData: AuctionProps[]) => {
     if (previousPageData && !previousPageData.length) return null;
-    const skip = previousPageData === null ? 0 : previousPageData.length;
-    return [
-      config.skip ? config.skip : skip,
-      config.first ? config.first : LIMIT,
-      config.id ? config.id : zeroAddress,
-      NOW,
+    const skip = pageIndex * LIMIT;
 
-      `queryType_${queryType.toString()}${config.keySuffix ? `_${config.keySuffix}` : ""}`,
-    ];
-  };
-
-  const fetcher = async (args: [number, number, `0x${string}`]): Promise<AuctionProps[]> => {
     const params = new URLSearchParams({
       queryTypeIndex: queryType.toString(),
-      skip: args[0].toString(),
-      first: args[1].toString(),
-      id: args[2].toString(),
+      skip: (config.skip ? config.skip + skip : skip).toString(),
+      first: (config.first ? config.first : LIMIT).toString(),
+      id: (config.id ? config.id : zeroAddress).toString(),
       now: NOW.toString(),
     }).toString();
 
-    return fetch(`/api/auctions/?${params}`).then(async (stream) => {
-      const result = await stream.json();
-      return result.data.auctions;
-    });
+    return params;
+  };
+
+  const fetcher = async (params: string) => {
+    let auctions: AuctionProps[] = [];
+    try {
+      const result = await fetch(`/api/auctions/?${params}`);
+      if (!result.ok) throw new Error();
+      const json = await result.json();
+      auctions = json.data.auctions;
+    } catch (e) {
+      console.error(e);
+    }
+    return auctions;
   };
 
   const {
@@ -81,7 +81,6 @@ export const useSWRAuctions = (
     error,
     isLoading,
     isValidating,
-    fetcher,
     loadMoreAuctions,
     mutate,
   };
