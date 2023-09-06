@@ -31,7 +31,7 @@ npx env-cmd -f ../../.env npm run test:headless
 
 1. Add template name to packages/lib/constants/templates.ts
 
-2. Create a derectly under packages/ui/components/templates and packages/ui/hooks
+2. Create a directory under packages/ui/components/templates and packages/ui/hooks
 
 3. Add components and hooks as needed
 
