@@ -124,7 +124,7 @@ export default function AuctionCardContent({
               <Flex mt={2} justifyContent={"space-between"} alignItems={"baseline"}>
                 <chakra.span>{t("TOTAL_RAISED")}</chakra.span>{" "}
                 <chakra.span fontSize={"2xl"}>
-                  {etherAmountFormat(auction.totalRaised[0].amount, 2)}{" "}
+                  {etherAmountFormat(auction.totalRaised[0].amount)}{" "}
                   <chakra.span fontSize={"md"}>ETH</chakra.span>
                 </chakra.span>
               </Flex>
@@ -143,7 +143,7 @@ export default function AuctionCardContent({
               <Flex mt={2} justifyContent={"space-between"} alignItems={"baseline"}>
                 <Text fontSize={"sm"}>{t("MINIMUM_TOTAL_RAISED")}</Text>
                 <Text fontSize={"lg"}>
-                  {etherAmountFormat(auction.minRaisedAmount, 2)}{" "}
+                  {etherAmountFormat(auction.minRaisedAmount, 3, false)}{" "}
                   <chakra.span fontSize={"sm"}>ETH</chakra.span>
                 </Text>
               </Flex>
@@ -151,7 +151,7 @@ export default function AuctionCardContent({
                 <Text fontSize={"sm"}>{t("TARGET_TOTAL_RAISED")}</Text>
                 <Text fontSize={"lg"}>
                   {data?.metaData?.targetTotalRaised
-                    ? tokenAmountFormat(data.metaData.targetTotalRaised, 0, 2)
+                    ? etherAmountFormat(data.metaData.targetTotalRaised, 3, false)
                     : "-"}{" "}
                   <chakra.span fontSize={"sm"}>ETH</chakra.span>
                 </Text>
