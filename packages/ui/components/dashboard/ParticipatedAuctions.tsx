@@ -31,13 +31,7 @@ export default function ParticipatedAuctions() {
         </>
       ) : (
         participatedAuctions.map((auctionProps: AuctionProps) => {
-          return (
-            <AuctionCard
-              key={auctionProps.id}
-              auctionProps={auctionProps}
-              editable={auctionProps.owner === address}
-            />
-          );
+          return <AuctionCard key={auctionProps.id} auctionProps={auctionProps} />;
         })
       )}
       {!isLastParticipatedAuction && participatedAuctions.length > 0 && (

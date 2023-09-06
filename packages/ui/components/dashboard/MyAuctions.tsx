@@ -47,13 +47,7 @@ export default function MyAuctions() {
           </>
         ) : (
           myAuctions.map((auctionProps: AuctionProps) => {
-            return (
-              <AuctionCard
-                key={auctionProps.id}
-                auctionProps={auctionProps}
-                editable={auctionProps.owner === address}
-              />
-            );
+            return <AuctionCard key={auctionProps.id} auctionProps={auctionProps} editable />;
           })
         )}
         {!isLastMyAuction && myAuctions.length > 0 && (
