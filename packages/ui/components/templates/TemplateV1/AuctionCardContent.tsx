@@ -72,7 +72,7 @@ export default function AuctionCardContent({
   }, [now]);
 
   return (
-    <Card direction={{ base: "column", sm: "row" }} overflow="hidden">
+    <Card direction={{ base: "column", md: "row" }} overflow="hidden" alignItems={"center"}>
       <Image
         objectFit="cover"
         w={{ base: "100%", sm: "260px" }}

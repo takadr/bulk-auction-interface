@@ -104,14 +104,12 @@ const Header: FC<HeaderProps> = ({ title }) => {
                   </Tag>
                 )}
               </HStack>
-              {isConnected && currentUser && (
-                <MenuItem
-                  display={{ base: "block", md: "none" }}
-                  onClick={() => Router.push("/dashboard")}
-                >
-                  {t("DASHBOARD")}
-                </MenuItem>
-              )}
+              <MenuItem
+                display={{ base: "block", md: "none" }}
+                onClick={() => Router.push("/dashboard")}
+              >
+                {t("DASHBOARD")}
+              </MenuItem>
               <MenuItem
                 display={{ base: "block", md: "none" }}
                 onClick={() => Router.push("/auctions")}
@@ -209,7 +207,7 @@ const Header: FC<HeaderProps> = ({ title }) => {
               <Button
                 display={{ base: "none", md: "block" }}
                 variant="ghost"
-                size={"md"}
+                size={{ base: "xs", md: "sm" }}
                 onClick={() => Router.push("/dashboard")}
               >
                 {t("DASHBOARD")}
@@ -217,11 +215,19 @@ const Header: FC<HeaderProps> = ({ title }) => {
             )}
             <Button
               variant="ghost"
-              display={{ base: isConnected ? "none" : "block", md: "block" }}
+              display={{ base: "none", md: "block" }}
               size={{ base: "xs", md: "sm" }}
               onClick={() => Router.push("/auctions")}
             >
               {t("VIEW_ALL_SALES")}
+            </Button>
+            <Button
+              variant="ghost"
+              display={{ base: isConnected ? "none" : "block", md: "none" }}
+              size={{ base: "xs", md: "sm" }}
+              onClick={() => Router.push("/auctions")}
+            >
+              {t("SALES")}
             </Button>
 
             {!currentUser && !isConnected && (

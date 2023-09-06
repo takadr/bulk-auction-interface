@@ -18,7 +18,7 @@ import SvgCommunityLogoBlack from "./svgs/CommunityLogoBlack";
 const Footer: FC = () => {
   const { t, setLocale, locale } = useLocale();
   return (
-    <Box px={{ base: 0, md: 4 }} top={"0"} zIndex={100} bg={"gray.900"} opacity={0.975}>
+    <Box px={{ base: 0, md: 4 }} pb={4} top={"0"} zIndex={100} bg={"gray.900"} opacity={0.975}>
       <Container maxW="container.2xl" px={{ base: 2, md: 4 }}>
         <Flex py="4" justifyContent="space-between" alignItems="center">
           <chakra.div flex={1}></chakra.div>

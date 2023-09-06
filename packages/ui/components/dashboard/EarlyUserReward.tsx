@@ -50,7 +50,7 @@ export default function EarlyUserReward({ address }: { address: `0x${string}` })
   return (
     <Card flex={1}>
       <CardBody>
-        <Heading fontSize={"2xl"}>
+        <Heading fontSize={"xl"}>
           {t("EARLY_USER_REWARD")}
           <Tooltip
             hasArrow

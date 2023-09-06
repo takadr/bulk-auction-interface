@@ -49,7 +49,11 @@ export default function DashboardPage() {
       <Container maxW="container.xl" py={16}>
         <Heading size={"lg"}>{t("DASHBOARD")}</Heading>
 
-        <Grid templateColumns="repeat(2, 1fr)" gap={4} mt={{ base: 4, md: 8 }}>
+        <Grid
+          templateColumns={{ base: "repeat(1, 1fr)", md: "repeat(2, 1fr)" }}
+          gap={4}
+          mt={{ base: 4, md: 8 }}
+        >
           <EarlyUserReward address={address as `0x${string}`} />
           <VeReward />
         </Grid>

@@ -20,7 +20,7 @@ export default function VeReward({}: {}) {
   return (
     <Card flex={1}>
       <CardBody>
-        <Heading fontSize={"2xl"}>
+        <Heading fontSize={"xl"}>
           {t("VE_YMWK_REWARD")}
           <Tooltip hasArrow label={t("COMMING_SOON")}>
             <QuestionIcon fontSize={"md"} mb={1} ml={1} />

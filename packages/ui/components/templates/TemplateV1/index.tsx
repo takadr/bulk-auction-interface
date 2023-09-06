@@ -191,22 +191,13 @@ export default memo(function DetailPage({
             }
             alt={metaData.title}
           />
-          <Box px={8}>
+          <Box px={{ base: 0, md: 8 }}>
             <Heading>{metaData.title ? metaData.title : "Unnamed Auction"}</Heading>
-            <HStack spacing={4}>
+            <HStack spacing={4} mt={1}>
               <chakra.p fontSize={"sm"}>
                 <Tag mr={1} verticalAlign={"top"} size="sm">
                   Token
                 </Tag>
-                {tokenAmountFormat(
-                  auction.allocatedAmount,
-                  Number(auction.auctionToken.decimals),
-                  getDecimalsForView(
-                    getBigNumber(auction.allocatedAmount),
-                    Number(auction.auctionToken.decimals),
-                  ),
-                )}{" "}
-                {auction.auctionToken.symbol}
                 <Link
                   ml={1}
                   href={getEtherscanLink(
@@ -216,14 +207,22 @@ export default memo(function DetailPage({
                   )}
                   target={"_blank"}
                 >
-                  <ExternalLinkIcon />
+                  {tokenAmountFormat(
+                    auction.allocatedAmount,
+                    Number(auction.auctionToken.decimals),
+                    getDecimalsForView(
+                      getBigNumber(auction.allocatedAmount),
+                      Number(auction.auctionToken.decimals),
+                    ),
+                  )}{" "}
+                  {auction.auctionToken.symbol}
+                  <ExternalLinkIcon ml={1} />
                 </Link>
               </chakra.p>
               <chakra.p fontSize={"sm"}>
                 <Tag mr={1} verticalAlign={"top"} size="sm">
                   Contract
                 </Tag>
-                {`${auction.id?.slice(0, 5)}...${auction.id?.slice(-4)}`}
                 <Link
                   ml={1}
                   href={getEtherscanLink(
@@ -233,7 +232,8 @@ export default memo(function DetailPage({
                   )}
                   target={"_blank"}
                 >
-                  <ExternalLinkIcon />
+                  {`${auction.id}`}
+                  <ExternalLinkIcon ml={1} />
                 </Link>
               </chakra.p>
             </HStack>
@@ -247,7 +247,12 @@ export default memo(function DetailPage({
           {metaData.description}
         </chakra.p>
 
-        <Flex mt={8} gridGap={4} flexDirection={{ base: "column", md: "row" }}>
+        <Flex
+          mt={8}
+          gridGap={4}
+          flexDirection={{ base: "column", md: "row" }}
+          alignItems={"center"}
+        >
           <StatisticsInCircle
             totalRaised={totalRaised}
             allocatedAmount={getBigNumber(auction.allocatedAmount)}
@@ -268,12 +273,14 @@ export default memo(function DetailPage({
             contractAddress={contractAddress}
             started={started}
             w={{ base: "full", md: "50%" }}
+            maxW={{ base: "300px", md: "full" }}
             p={0.5}
           />
           <CalendarInCircle
             unixStartDate={auction.startingAt}
             unixEndDate={auction.closingAt}
             w={{ base: "full", md: "50%" }}
+            maxW={{ base: "300px", md: "full" }}
             p={0.5}
           />
         </Flex>

@@ -31,7 +31,7 @@ export default function AuctionCard({
 
 export const AuctionCardSkeleton = () => {
   return (
-    <Card direction={{ base: "column", sm: "row" }} overflow="hidden">
+    <Card direction={{ base: "column", md: "row" }} overflow="hidden" alignItems={"center"}>
       <Box p={6}>
         <Skeleton
           w={{ base: "100%", sm: "260px" }}
