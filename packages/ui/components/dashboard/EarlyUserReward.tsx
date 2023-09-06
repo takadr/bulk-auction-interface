@@ -74,7 +74,7 @@ export default function EarlyUserReward({ address }: { address: `0x${string}` })
           </chakra.p>
         </HStack>
       </CardBody>
-      <CardFooter justifyContent={"flex-end"}>
+      <CardFooter pt={0} justifyContent={"flex-end"}>
         <Button
           isLoading={
             readFn.isLoading ||

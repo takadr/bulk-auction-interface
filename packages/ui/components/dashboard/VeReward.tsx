@@ -9,6 +9,7 @@ import {
   HStack,
   chakra,
   CardFooter,
+  VStack,
 } from "@chakra-ui/react";
 import { useLocale } from "../../hooks/useLocale";
 import { QuestionIcon } from "@chakra-ui/icons";
@@ -48,17 +49,26 @@ export default function VeReward({}: {}) {
           <chakra.p color={"gray.400"}>{t("LOCKED_UNTIL")}</chakra.p>
           <chakra.p fontSize={"2xl"}>-- / -- / --</chakra.p>
         </HStack>
-        <HStack justifyContent={"space-between"} mt={1}>
+        <Divider variant="dashed" py={2} />
+        <HStack justifyContent={"space-between"} alignItems={"baseline"} mt={1}>
           <chakra.p color={"gray.400"}>{t("REWARDS")}</chakra.p>
-          <chakra.p fontSize={"2xl"}>
-            -
-            <chakra.span color={"gray.400"} fontSize={"lg"} ml={1}>
-              YMWK
-            </chakra.span>
-          </chakra.p>
+          <VStack spacing={0} alignItems={"end"}>
+            <chakra.p fontSize={"2xl"}>
+              -
+              <chakra.span color={"gray.400"} fontSize={"lg"} ml={1}>
+                YMWK
+              </chakra.span>
+            </chakra.p>
+            <chakra.p fontSize={"2xl"}>
+              -
+              <chakra.span color={"gray.400"} fontSize={"lg"} ml={1}>
+                ETH
+              </chakra.span>
+            </chakra.p>
+          </VStack>
         </HStack>
       </CardBody>
-      <CardFooter justifyContent={"flex-end"}>
+      <CardFooter pt={0} justifyContent={"flex-end"}>
         <Button isDisabled variant={"solid"} colorScheme="green">
           {t("COMMING_SOON")}
         </Button>
