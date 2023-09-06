@@ -34,7 +34,6 @@ export default function useMetaDataForm({
   };
 
   const handleSubmit = async (auctionData: MetaData) => {
-    // console.log(Object.assign(auctionData, {id: auctionData.id}))
     try {
       const result = await fetch("/api/metadata", {
         credentials: "same-origin",
