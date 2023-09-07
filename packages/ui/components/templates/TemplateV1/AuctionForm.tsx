@@ -24,8 +24,9 @@ import {
   Stack,
   Divider,
   useToast,
+  Textarea,
 } from "@chakra-ui/react";
-import { ExternalLinkIcon, QuestionIcon } from "@chakra-ui/icons";
+import { ExternalLinkIcon, QuestionIcon, CopyIcon } from "@chakra-ui/icons";
 import { DateRangePicker } from "rsuite";
 import { differenceInSeconds, format } from "date-fns";
 import { ethers } from "ethers";
@@ -68,6 +69,7 @@ export default function AuctionForm({
     debouncedAuction,
     getEncodedArgs,
     getDecodedArgs,
+    getTransactionRawData,
   } = useAuctionForm({
     address: address as `0x${string}`,
     onSubmitSuccess: (result) => {
@@ -109,6 +111,25 @@ export default function AuctionForm({
           });
     },
   });
+
+  const handleCopy = async () => {
+    if (!prepareFn.data)
+      return toast({
+        description: "Something went wrong",
+        status: "error",
+        duration: 5000,
+      });
+    const text = getTransactionRawData(
+      debouncedAuction.templateName,
+      prepareFn.data.request.args[1],
+    );
+    await navigator.clipboard.writeText(`${text}`);
+    toast({
+      description: "Copied!",
+      status: "success",
+      duration: 2000,
+    });
+  };
 
   return (
     <div>
@@ -342,7 +363,7 @@ export default function AuctionForm({
                   <AlertDialogBody>
                     <Stack spacing={4} divider={<Divider />}>
                       <div>
-                        <chakra.p>{t("SELECT_SALE_TEMPLETE")}</chakra.p>
+                        <chakra.p>{t("TEMPLATE")}</chakra.p>
                         <chakra.p fontWeight={"bold"} aria-label="Auction Template">
                           {ethers.decodeBytes32String(debouncedAuction.templateName)}
                         </chakra.p>
@@ -400,6 +421,28 @@ export default function AuctionForm({
                         <chakra.p fontWeight={"bold"} aria-label="Minimum total raised">
                           {Number(debouncedAuction.minRaisedAmount).toFixed(2)} ETH
                         </chakra.p>
+                      </div>
+
+                      <div>
+                        <chakra.p color={"gray.400"} fontSize={"xs"}>
+                          {t("RAW_DATA")}
+                          <Button ml={1} mb={1} onClick={handleCopy} size={"xs"}>
+                            <CopyIcon />
+                          </Button>
+                        </chakra.p>
+                        <Textarea
+                          color={"gray.400"}
+                          isReadOnly
+                          size={"sm"}
+                          variant={"filled"}
+                          rows={3}
+                        >
+                          {prepareFn.data &&
+                            getTransactionRawData(
+                              debouncedAuction.templateName,
+                              prepareFn.data.request.args[1],
+                            )}
+                        </Textarea>
                       </div>
                     </Stack>
                   </AlertDialogBody>

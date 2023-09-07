@@ -61,7 +61,7 @@ export default function WithdrawRaisedETH({ auction, onSuccessConfirm }: Props) 
       <Flex alignItems={"center"} justifyContent={"space-between"}>
         <chakra.p fontSize={"lg"}>
           {typeof balanceData !== "undefined"
-            ? tokenAmountFormat(getBigNumber(balanceData.value.toString()), 18, 2)
+            ? tokenAmountFormat(getBigNumber(balanceData.value.toString()), 18, 3)
             : "-"}{" "}
           ETH
         </chakra.p>

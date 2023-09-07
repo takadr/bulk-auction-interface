@@ -28,7 +28,7 @@ export default function AuctionFormWrapper(props: AuctionFormWrapperParams) {
   return (
     <>
       <FormLabel htmlFor="token" alignItems={"baseline"}>
-        {t("SELECT_SALE_TEMPLETE")}
+        {t("SELECT_SALE_TEMPLATE")}
         <Tooltip hasArrow label={t("YOU_CAN_CHOOSE_THE_TYPE_OF_TOKEN_SALE")}>
           <QuestionIcon mb={1} ml={1} />
         </Tooltip>

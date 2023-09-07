@@ -7,7 +7,7 @@ import {
   useToken,
 } from "wagmi";
 import { isAddress } from "viem";
-import { AbiCoder } from "ethers";
+import { AbiCoder, Interface } from "ethers";
 import { useAtom } from "jotai";
 import { useDebounce } from "use-debounce";
 import { useFormik, FormikProps, FormikValues } from "formik";
@@ -47,6 +47,7 @@ export default function useAuctionForm({
   debouncedAuction: AuctionForm;
   getEncodedArgs: () => string;
   getDecodedArgs: () => any;
+  getTransactionRawData: (templateName: string, args: string) => string;
 } {
   const [waitingTx, setWaitingTx] = useAtom(waitingCreationTxAtom);
   const [creatingAuction, setCreatingAuction] = useAtom(creatingAuctionAtom);
@@ -90,6 +91,11 @@ export default function useAuctionForm({
     } catch (e) {
       return [];
     }
+  };
+
+  const getTransactionRawData = (templateName: string, args: string) => {
+    const iface = new Interface(FactoryABI);
+    return iface.encodeFunctionData("deployAuction", [templateName, args]);
   };
 
   const validate = (values: AuctionForm) => {
@@ -230,5 +236,6 @@ export default function useAuctionForm({
     debouncedAuction,
     getEncodedArgs,
     getDecodedArgs,
+    getTransactionRawData,
   };
 }

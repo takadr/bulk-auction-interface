@@ -53,7 +53,7 @@ export default {
   EDIT: "Edit",
   DEPLOY_CONTRACT: "Deploy Contract",
   INPUT_INFORMATION: "Input Information",
-  SELECT_SALE_TEMPLETE: "Select Auction Templete",
+  SELECT_SALE_TEMPLATE: "Select Auction Template",
   YOU_CAN_CHOOSE_THE_TYPE_OF_TOKEN_SALE: "You can choose the type of token auction",
   TOKEN_ADDRESS: "Token address",
   INPUT_THE_ADDRESS_OF_THE_TOKEN_YOU_WOULD_LIKE_TO_ALLOCATE_TO_THIS_SALE:
@@ -130,4 +130,6 @@ export default {
   LOCKED_UNTIL: "Locked until",
   REWARDS: "Rewards",
   COMMING_SOON: "Comming soon...",
+  RAW_DATA: "Raw data",
+  TEMPLATE: "Template",
 };

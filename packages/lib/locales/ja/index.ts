@@ -53,7 +53,7 @@ export default {
   EDIT: "編集",
   DEPLOY_CONTRACT: "コントラクトのデプロイ",
   INPUT_INFORMATION: "オークション情報の入力",
-  SELECT_SALE_TEMPLETE: "テンプレートを選択",
+  SELECT_SALE_TEMPLATE: "テンプレートを選択",
   YOU_CAN_CHOOSE_THE_TYPE_OF_TOKEN_SALE: "トークンオークションのタイプを選択できます",
   TOKEN_ADDRESS: "トークンアドレス",
   INPUT_THE_ADDRESS_OF_THE_TOKEN_YOU_WOULD_LIKE_TO_ALLOCATE_TO_THIS_SALE:
@@ -129,4 +129,6 @@ export default {
   LOCKED_UNTIL: "ロック終了日時",
   REWARDS: "リワード",
   COMMING_SOON: "Comming soon...",
+  RAW_DATA: "トランザクションデータ",
+  TEMPLATE: "テンプレート",
 };
