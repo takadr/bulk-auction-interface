@@ -276,7 +276,7 @@ export default function AuctionForm({
               : "-"}{" "}
             {tokenData?.symbol}
           </chakra.p>
-          <FormErrorMessage>{formikProps.errors.allocatedAmount}</FormErrorMessage>
+          <FormErrorMessage fontSize={"xs"}>{formikProps.errors.allocatedAmount}</FormErrorMessage>
         </FormControl>
 
         <FormControl

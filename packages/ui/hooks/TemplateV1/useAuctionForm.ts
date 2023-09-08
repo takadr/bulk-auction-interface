@@ -12,6 +12,7 @@ import { useAtom } from "jotai";
 import { useDebounce } from "use-debounce";
 import { useFormik, FormikProps, FormikValues } from "formik";
 import useApprove from "../useApprove";
+import { useLocale } from "../useLocale";
 import { AuctionForm } from "lib/types/Auction";
 import Big, { multiply } from "lib/utils/bignumber";
 import FactoryABI from "lib/constants/abis/Factory.json";
@@ -51,6 +52,7 @@ export default function useAuctionForm({
 } {
   const [waitingTx, setWaitingTx] = useAtom(waitingCreationTxAtom);
   const [creatingAuction, setCreatingAuction] = useAtom(creatingAuctionAtom);
+  const { t } = useLocale();
   const emptyAuction: AuctionForm = {
     templateName: TEMPLATE_V1_NAME,
     token: null,
@@ -139,10 +141,7 @@ export default function useAuctionForm({
         Big(10).pow(6),
       )
     ) {
-      errors.allocatedAmount = `The allocation is too small, and some participants may not be
-      able to complete their claims. Unclaimed tokens cannot be
-      withdrawn by you either. Please consider increasing the
-      allocation amount.`;
+      errors.allocatedAmount = t("TOO_SMALL_ALLOCATION");
     }
 
     return errors;
