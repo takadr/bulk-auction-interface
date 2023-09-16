@@ -34,6 +34,14 @@ module.exports = defineConfig({
     testIsolation: false,
     setupNodeEvents(on, config) {
       setupNodeEvents(on, config)
+      // on('before:browser:launch', (browser, launchOptions) => {
+      //   if (browser.family === 'chromium') {
+      //     console.log('Adding Chrome flag: --disable-dev-shm-usage');
+      //     launchOptions.args.push('--disable-dev-shm-usage');
+      //   }
+      //   return launchOptions;
+      // });
+      return config
     },
     baseUrl: 'http://localhost:3000',
     specPattern: 'tests/e2e/specs/**/*.{js,jsx,ts,tsx}',
@@ -44,13 +52,16 @@ module.exports = defineConfig({
       TEST_TOKEN: process.env.TEST_TOKEN,
       NETWORK_NAME: process.env.NETWORK_NAME,
       SKIP_METAMASK_SETUP: true
-    }
+    },
+    video: false,
+    numTestsKeptInMemory: 0,
   },
   component: {
     setupNodeEvents,
     specPattern: './**/*spec.{js,jsx,ts,tsx}',
     supportFile,
   },
+  experimentalMemoryManagement: true,
 });
 
 function getSynpressPath() {
