@@ -34,14 +34,6 @@ module.exports = defineConfig({
     testIsolation: false,
     setupNodeEvents(on, config) {
       setupNodeEvents(on, config)
-      // on('before:browser:launch', (browser, launchOptions) => {
-      //   if (browser.family === 'chromium') {
-      //     console.log('Adding Chrome flag: --disable-dev-shm-usage');
-      //     launchOptions.args.push('--disable-dev-shm-usage');
-      //   }
-      //   return launchOptions;
-      // });
-      return config
     },
     baseUrl: 'http://localhost:3000',
     specPattern: 'tests/e2e/specs/**/*.{js,jsx,ts,tsx}',

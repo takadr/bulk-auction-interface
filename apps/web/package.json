@@ -8,8 +8,10 @@
     "start": "next start",
     "lint": "next lint",
     "synpress:run": "SKIP_METAMASK_SETUP=true synpress run --configFile ./synpress.config.js",
-    "test": "start-server-and-test 'npm run start' http://localhost:3000 'npm run synpress:run'",
-    "test:headless": "start-server-and-test 'npm run start' http://localhost:3000 'npm run synpress:run --headless'"
+    "test": "start-server-and-test 'pnpm start' http://localhost:3000 'pnpm synpress:run'",
+    "test:headless": "start-server-and-test 'pnpm start' http://localhost:3000 'pnpm synpress:run --headless'",
+    "test:build": "pnpm build && start-server-and-test 'pnpm start' http://localhost:3000 'pnpm synpress:run'",
+    "test:build:headless": "pnpm build && start-server-and-test 'pnpm start' http://localhost:3000 'pnpm synpress:run --headless'"
   },
   "dependencies": {
     "assets": "workspace:*",
@@ -31,6 +33,7 @@
     "env-cmd": "^10.1.0",
     "eslint-config-custom": "workspace:*",
     "ethers": "^6.6.7",
+    "ethers5": "npm:ethers@5",
     "start-server-and-test": "^2.0.0",
     "tsconfig": "workspace:*",
     "typescript": "^5.1.6"
