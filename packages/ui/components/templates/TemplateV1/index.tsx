@@ -51,13 +51,8 @@ import TxSentToast from "../../TxSentToast";
 import WithdrawRaisedETH from "./WithdrawRaisedETH";
 import WithdrawERC20 from "./WithdrawERC20OnSale";
 import { useLocale } from "../../../hooks/useLocale";
-import {
-  getDecimalsForView,
-  getEtherscanLink,
-  tokenAmountFormat,
-  parseEther,
-  getChain,
-} from "lib/utils";
+import { getDecimalsForView, getEtherscanLink, tokenAmountFormat, parseEther } from "lib/utils";
+import { getChain } from "lib/utils/chain";
 import ConnectButton from "../../connectButton";
 import { DetailPageParams } from "../AuctionDetail";
 
