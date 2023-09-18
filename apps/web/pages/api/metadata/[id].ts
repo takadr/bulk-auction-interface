@@ -2,9 +2,8 @@ import { NextApiRequest, NextApiResponse } from "next";
 import { withIronSessionApiRoute } from "iron-session/next";
 import { fetchMetaData } from "lib/dynamodb/metaData";
 import ironOptions from "lib/constants/ironOptions";
-import { CHAIN_IDS } from "lib/constants";
 
-const availableNetwork = Object.values(CHAIN_IDS);
+const availableNetwork = [Number(process.env.NEXT_PUBLIC_CHAIN_ID)];
 
 const requireAvailableNetwork = (chainId: number) => {
   if (!availableNetwork.includes(chainId)) throw new Error("Wrong network");

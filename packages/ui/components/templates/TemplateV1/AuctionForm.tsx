@@ -32,9 +32,9 @@ import { differenceInSeconds, format } from "date-fns";
 import { ethers } from "ethers";
 import { useNetwork } from "wagmi";
 import { getDecimalsForView, getEtherscanLink, tokenAmountFormat } from "lib/utils";
+import { getChain } from "lib/utils/chain";
 import Big, { divide, getBigNumber, multiply } from "lib/utils/bignumber";
 import { AuctionForm } from "lib/types/Auction";
-import { CHAIN_NAMES } from "lib/constants";
 import { useLocale } from "../../../hooks/useLocale";
 import useAuctionForm from "../../../hooks/TemplateV1/useAuctionForm";
 import TxSentToast from "../../TxSentToast";
@@ -374,7 +374,7 @@ export default function AuctionForm({
                         <chakra.p fontWeight={"bold"} aria-label="Token address">
                           <Link
                             href={getEtherscanLink(
-                              CHAIN_NAMES[process.env.NEXT_PUBLIC_CHAIN_ID!],
+                              getChain(Number(process.env.NEXT_PUBLIC_CHAIN_ID)).name.toLowerCase(),
                               debouncedAuction.token as `0x${string}`,
                               "token",
                             )}

@@ -51,8 +51,13 @@ import TxSentToast from "../../TxSentToast";
 import WithdrawRaisedETH from "./WithdrawRaisedETH";
 import WithdrawERC20 from "./WithdrawERC20OnSale";
 import { useLocale } from "../../../hooks/useLocale";
-import { getDecimalsForView, getEtherscanLink, tokenAmountFormat, parseEther } from "lib/utils";
-import { CHAIN_NAMES } from "lib/constants";
+import {
+  getDecimalsForView,
+  getEtherscanLink,
+  tokenAmountFormat,
+  parseEther,
+  getChain,
+} from "lib/utils";
 import ConnectButton from "../../connectButton";
 import { DetailPageParams } from "../AuctionDetail";
 
@@ -201,7 +206,7 @@ export default memo(function DetailPage({
                 <Link
                   ml={1}
                   href={getEtherscanLink(
-                    CHAIN_NAMES[process.env.NEXT_PUBLIC_CHAIN_ID!],
+                    getChain(Number(process.env.NEXT_PUBLIC_CHAIN_ID)).name.toLowerCase(),
                     auction.auctionToken.id as `0x${string}`,
                     "token",
                   )}
@@ -226,7 +231,7 @@ export default memo(function DetailPage({
                 <Link
                   ml={1}
                   href={getEtherscanLink(
-                    CHAIN_NAMES[process.env.NEXT_PUBLIC_CHAIN_ID!],
+                    getChain(Number(process.env.NEXT_PUBLIC_CHAIN_ID)).name.toLowerCase(),
                     auction.id as `0x${string}`,
                     "address",
                   )}

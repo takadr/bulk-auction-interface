@@ -7,7 +7,6 @@ import {
   etherAmountFormat,
   formatEther,
 } from "lib/utils";
-import { CHAIN_NAMES } from "lib/constants";
 import { TriangleUpIcon } from "@chakra-ui/icons";
 import { useLocale } from "../../../hooks/useLocale";
 
@@ -41,8 +40,6 @@ export default function StatisticsInCircle({
   started,
   ...boxProps
 }: Props & BoxProps) {
-  const chain = CHAIN_NAMES[process.env.NEXT_PUBLIC_CHAIN_ID as string];
-
   const [gray600, green400] = useToken("colors", ["gray.600", "green.400"]);
 
   const progressPercent = getTargetPercetage(totalRaised, maximumTotalRaised);

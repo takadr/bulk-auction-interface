@@ -10,35 +10,24 @@ import {
   GetContractReturnType,
   Transport,
 } from "viem";
-import { mainnet, goerli, sepolia, localhost, Chain } from "viem/chains";
+import { Chain } from "viem/chains";
+import { getChain } from "lib/utils/chain";
 import { scanMetaData, addMetaData, updateAuction } from "lib/dynamodb/metaData";
 import BaseTemplateABI from "lib/constants/abis/BaseTemplate.json";
 import ironOptions from "lib/constants/ironOptions";
-import { CHAIN_NAMES } from "lib/constants";
 
-// const availableNetwork = Object.values(CHAIN_IDS);
 const availableNetwork = [Number(process.env.NEXT_PUBLIC_CHAIN_ID)];
 
-const getViemChain = (chainName: string) => {
-  if (chainName === "mainnet") {
-    return mainnet;
-  } else if (chainName === "goerli") {
-    return goerli;
-  } else if (chainName === "sepolia") {
-    return sepolia;
-  } else {
-    return localhost;
-  }
-};
-
 const getViemProvider = (chainId: number) => {
-  const chainName = CHAIN_NAMES[chainId];
+  const chain = getChain(chainId);
+  const chainName = chain.name.toLowerCase();
   // const alchemy = http(`https://eth-${chainName}.g.alchemy.com/v2/${}`)
   const infura = http(
     `https://${chainName}.infura.io/v3/${process.env.NEXT_PUBLIC_INFURA_API_TOKEN}`,
   );
   const client = createPublicClient({
-    chain: getViemChain(chainName),
+    // chain: getViemChain(chainName),
+    chain,
     transport: fallback([infura]),
   });
   return client;
@@ -49,13 +38,13 @@ const requireContractOwner = (
 ): Promise<{
   metaData: any;
   auctionContract: GetContractReturnType<typeof BaseTemplateABI, PublicClient>;
-  provider: PublicClient<Transport, Chain>;
+  provider: PublicClient<Transport, Chain | undefined>;
 }> => {
   return new Promise(async (resolve, reject) => {
     try {
       if (!req.session.siwe) return reject("Unauthorized");
       const metaData = req.body;
-      const provider = getViemProvider(req.session.siwe.chainId);
+      const provider = getViemProvider(req.session.siwe.chainId) as PublicClient;
       const auctionContract = getContract({
         address: metaData.id,
         abi: BaseTemplateABI,
