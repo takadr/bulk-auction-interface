@@ -22,7 +22,29 @@ npx env-cmd -f .env.development.goerli pnpm dev
 
 ```bash
 cd apps/web
+npx env-cmd -f ../../.env.test pnpm test
+```
+
+With headless
+
+```bash
+cd apps/web
 npx env-cmd -f ../../.env.test pnpm test:headless
+```
+
+With build
+
+```bash
+cd apps/web
+npx env-cmd -f ../../.env.test pnpm test:build
+```
+
+Example of .env.test for local chain.
+
+```
+NEXT_PUBLIC_CHAIN_ID='31337'
+NETWORK_NAME="hardhat"
+TEST_PROVIDER_ENDPOINT="http://localhost:8545"
 ```
 
 - Comment out BASIC_AUTH_USER and BASIC_AUTH_PASS in your .env while e2e test

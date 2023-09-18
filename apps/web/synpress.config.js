@@ -43,7 +43,7 @@ module.exports = defineConfig({
       PROVIDER_ENDPOINT: process.env.TEST_PROVIDER_ENDPOINT,
       PRIVATE_KEY: process.env.TEST_PRIVATE_KEY,
       AUCTION_TOKEN: process.env.TEST_TOKEN,
-      NETWORK_NAME: process.env.TEST_NETWORK_NAME,
+      NETWORK_NAME: process.env.NETWORK_NAME,
       SKIP_METAMASK_SETUP: true
     },
     video: false,
