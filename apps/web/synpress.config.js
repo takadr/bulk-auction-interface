@@ -46,7 +46,7 @@ module.exports = defineConfig({
       NETWORK_NAME: process.env.NETWORK_NAME,
       SKIP_METAMASK_SETUP: true
     },
-    video: false,
+    // video: false,
     numTestsKeptInMemory: 0,
   },
   component: {
