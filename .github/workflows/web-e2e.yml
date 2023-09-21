@@ -7,10 +7,34 @@ jobs:
     steps:
       - name: Update packages
         run: |
-          apt update -y && apt install --no-install-recommends -y
-          apt-get install git wget make gcc g++ python3 libgtk2.0-0 libgtk-3-0 libgbm-dev libnotify-dev libgconf-2-4 libnss3 libxss1 libasound2 libxtst6 xauth xvfb -y
-          apt install fonts-liberation libcurl3-gnutls libu2f-udev libvulkan1 xdg-utils -y
-          apt install --reinstall ca-certificates -y
+          apt update -y && apt install -y --no-install-recommends \
+          git \
+          wget \ 
+          make \
+          gcc \
+          g++ \
+          python3 \
+          libgtk2.0-0 \
+          libgtk-3-0 \
+          libgbm-dev \
+          libnotify-dev \
+          libgconf-2-4 \
+          libnss3 \
+          libxss1 \
+          libasound2 \
+          libxtst6 \
+          xauth \
+          xvfb \
+          fluxbox \
+          x11-xserver-utils \
+          pulseaudio \
+          x11vnc \
+          fonts-liberation \
+          libcurl3-gnutlsn \
+          libu2f-udevn \
+          libvulkan1n \
+          xdg-utils \
+          ca-certificates
 
       - name: Setup pnpm
         uses: pnpm/action-setup@v2.2.2
@@ -25,7 +49,7 @@ jobs:
           cd yamawake
           npm ci
 
-      - name: "Create env file for Yamawake"
+      - name: Create env file for Yamawake
         run: |
           touch yamawake/.env
           echo ETHERSCAN_API_KEY=${{ secrets.ETHERSCAN_API_KEY }} >> yamawake/.env
@@ -45,23 +69,13 @@ jobs:
       - name: Install chrome
         run: wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb && dpkg -i google-chrome-stable_current_amd64.deb
 
-      - name: Run xvfb and fluxbox
-        # run: |
-        #   Xvfb :0 -screen 0 1024x768x24 -listen tcp -ac &
-        #   fluxbox &
-        run: |
-          Xvfb :0 -screen 0 1920x1080x32 -listen tcp -ac &
-          fluxbox &
-        env:
-          DISPLAY: :0.0
-
-      - name: "Create env file for Yamawake interface"
+      - name: Create env file for Yamawake interface
         run: |
           touch yamawake-interface/.env
           echo NEXT_PUBLIC_FACTORY_ADDRESS=${{ env.FACTORY_ADDRESS }} >> yamawake-interface/.env
           echo NEXT_PUBLIC_DISTRIBUTOR_ADDRESS=${{ env.DISTRIBUTOR_ADDRESS }} >> yamawake-interface/.env
           echo NEXT_PUBLIC_YMWK_ADDRESS=${{ env.YMWK_ADDRESS }} >> yamawake-interface/.env
-          echo NEXT_PUBLIC_CHAIN_ID=${{ env.CHAIN_ID }} >> yamawake-interface/.env
+          echo NEXT_PUBLIC_CHAIN_ID=${{ env.DEFAULT_CHAIN_ID }} >> yamawake-interface/.env
           echo NETWORK_NAME=${{ env.NETWORK_NAME }} >> yamawake-interface/.env
           echo TEST_TOKEN=${{ env.TEST_TOKEN }} >> yamawake-interface/.env
           echo NEXT_PUBLIC_WALLET_CONNECT_ID=${{ secrets.WALLET_CONNECT_ID }} >> yamawake-interface/.env
@@ -78,10 +92,15 @@ jobs:
 
       - name: Run e2e test
         run: |
+          Xvfb :0 -screen 0 1024x768x24 -listen tcp -ac +extension RANDR &
+          fluxbox &
           cd yamawake
           npx hardhat node --fork ${{ secrets.FORK_URL }} --no-deploy &
           cd ../yamawake-interface/apps/web
           npx env-cmd -f ../../.env pnpm test:build:headless
+        env:
+          DISPLAY: :0.0
+          CI: true
 
       - uses: actions/upload-artifact@v3
         if: failure()
