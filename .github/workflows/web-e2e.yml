@@ -5,11 +5,11 @@ jobs:
   run-synpress:
     runs-on: node:16-buster-slim
     steps:
-      - name: Update packages
+      - name: Update and install packages
         run: |
           apt update -y && apt install -y --no-install-recommends \
           git \
-          wget \ 
+          wget \
           make \
           gcc \
           g++ \
@@ -30,9 +30,9 @@ jobs:
           pulseaudio \
           x11vnc \
           fonts-liberation \
-          libcurl3-gnutlsn \
-          libu2f-udevn \
-          libvulkan1n \
+          libcurl3-gnutls \
+          libu2f-udev \
+          libvulkan1 \
           xdg-utils \
           ca-certificates
 
