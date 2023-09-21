@@ -32,6 +32,7 @@ export default function useEarlyUserReward({
   const writeFn = useContractWrite<typeof DistributorABI, "claim">({
     ...config,
     functionName: "claim",
+    args: [address],
     onSuccess(data) {
       onSuccessWrite && onSuccessWrite(data);
     },
