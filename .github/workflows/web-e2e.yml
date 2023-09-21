@@ -34,6 +34,7 @@ jobs:
           libu2f-udev \
           libvulkan1 \
           xdg-utils \
+          procps \
           ca-certificates
 
       - name: Setup pnpm
@@ -97,7 +98,7 @@ jobs:
           cd yamawake
           npx hardhat node --fork ${{ secrets.FORK_URL }} --no-deploy &
           cd ../yamawake-interface/apps/web
-          npx env-cmd -f ../../.env pnpm test:build:headless
+          npx env-cmd -f ../../.env pnpm test:build
         env:
           DISPLAY: :0.0
           CI: true
