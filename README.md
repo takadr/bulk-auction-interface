@@ -79,3 +79,12 @@ graph deploy --studio SUBGRAPH_NAME
 cd subgraph
 graph test
 ```
+
+### CI
+
+Simulate github workflow locally with nektos/act
+https://github.com/nektos/act
+
+```
+act pull_request -P node:16-buster-slim=node:16-buster-slim --secret-file .env.test.actions.secrets --env-file .env.test.actions --artifact-server-path /PATH/TO/ARTIFACT/ --artifact-server-addr $(ipconfig getifaddr en0)
+```
