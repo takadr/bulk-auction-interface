@@ -7,7 +7,7 @@ jobs:
     steps:
       - name: Update and install packages
         run: |
-          apt update -y && apt install -y --no-install-recommends \
+          sudo apt update -y && sudo apt install -y --no-install-recommends \
           git \
           wget \
           make \
