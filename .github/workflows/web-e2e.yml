@@ -3,11 +3,11 @@ on: [pull_request]
 
 jobs:
   run-synpress:
-    runs-on: node:16-buster-slim
+    runs-on: ubuntu-latest
     steps:
       - name: Update and install packages
         run: |
-          apt update -y && apt install -y --no-install-recommends \
+          sudo apt update -y && sudo apt install -y --no-install-recommends \
           git \
           wget \
           make \
@@ -35,7 +35,15 @@ jobs:
           libvulkan1 \
           xdg-utils \
           procps \
+          curl \
+          gnupg \
+          gnupg2 \
+          gnupg1 \
           ca-certificates
+
+      - uses: actions/setup-node@v3
+        with:
+          node-version: "16"
 
       - name: Setup pnpm
         uses: pnpm/action-setup@v2.2.2
@@ -43,6 +51,15 @@ jobs:
           version: 8.7.6
 
       - run: node -v
+
+      # TODO: Use foundry instead of cloning Yamawake
+      # - name: Foundry
+      #   shell: bash
+      #   run: |
+      #     curl -L https://foundry.paradigm.xyz | bash
+      #     source ~/.bashrc
+      #     export PATH=~/.foundry/bin:$PATH:
+      #     foundryup
 
       - name: Clone Yamawake repository
         run: |
@@ -68,30 +85,41 @@ jobs:
           pnpm i --frozen-lockfile
 
       - name: Install chrome
-        run: wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb && dpkg -i google-chrome-stable_current_amd64.deb
+        run: |
+          sudo sh -c 'echo "deb http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google-chrome.list'
+          sudo wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | sudo apt-key add -
+          sudo apt update && sudo apt install google-chrome-stable
 
       - name: Create env file for Yamawake interface
         run: |
           touch yamawake-interface/.env
-          echo NEXT_PUBLIC_FACTORY_ADDRESS=${{ env.FACTORY_ADDRESS }} >> yamawake-interface/.env
-          echo NEXT_PUBLIC_DISTRIBUTOR_ADDRESS=${{ env.DISTRIBUTOR_ADDRESS }} >> yamawake-interface/.env
-          echo NEXT_PUBLIC_YMWK_ADDRESS=${{ env.YMWK_ADDRESS }} >> yamawake-interface/.env
-          echo NEXT_PUBLIC_CHAIN_ID=${{ env.DEFAULT_CHAIN_ID }} >> yamawake-interface/.env
-          echo NETWORK_NAME=${{ env.NETWORK_NAME }} >> yamawake-interface/.env
-          echo TEST_TOKEN=${{ env.TEST_TOKEN }} >> yamawake-interface/.env
+          echo NEXT_PUBLIC_FACTORY_ADDRESS=${{ vars.FACTORY_ADDRESS }} >> yamawake-interface/.env
+          echo NEXT_PUBLIC_DISTRIBUTOR_ADDRESS=${{ vars.DISTRIBUTOR_ADDRESS }} >> yamawake-interface/.env
+          echo NEXT_PUBLIC_YMWK_ADDRESS=${{ vars.YMWK_ADDRESS }} >> yamawake-interface/.env
+          echo NEXT_PUBLIC_CHAIN_ID=${{ vars.DEFAULT_CHAIN_ID }} >> yamawake-interface/.env
+          echo NETWORK_NAME=${{ vars.NETWORK_NAME }} >> yamawake-interface/.env
+          echo TEST_TOKEN=${{ vars.TEST_TOKEN }} >> yamawake-interface/.env
           echo NEXT_PUBLIC_WALLET_CONNECT_ID=${{ secrets.WALLET_CONNECT_ID }} >> yamawake-interface/.env
           echo NEXT_PUBLIC_INFURA_API_TOKEN=${{ secrets.INFURA_API_TOKEN }} >> yamawake-interface/.env
           echo AWS_ACCESS_KEY_ID=${{ secrets.AWS_ACCESS_KEY_ID }} >> yamawake-interface/.env
           echo AWS_SECRET_ACCESS_KEY=${{ secrets.AWS_SECRET_ACCESS_KEY }} >> yamawake-interface/.env
           echo AWS_REGION=${{ secrets.AWS_REGION }} >> yamawake-interface/.env
           echo AWS_DYNAMO_TABLE_NAME=${{ secrets.AWS_DYNAMO_TABLE_NAME }} >> yamawake-interface/.env
-          echo NEXT_PUBLIC_SUBGRAPH_ENDPOINT=${{ env.SUBGRAPH_ENDPOINT }} >> yamawake-interface/.env
+          echo NEXT_PUBLIC_SUBGRAPH_ENDPOINT=${{ vars.SUBGRAPH_ENDPOINT }} >> yamawake-interface/.env
           echo TEST_PRIVATE_KEY=${{ secrets.PRIVATE_KEY }} >> yamawake-interface/.env
           echo TEST_PROVIDER_ENDPOINT=http://localhost:8545 >> yamawake-interface/.env
           echo IRON_SESSION_PASSWORD=complex_password_at_least_32_characters_long >> yamawake-interface/.env
           echo IRON_SESSION_COOKIE_NAME=test_session >> yamawake-interface/.env
+          cat yamawake-interface/.env
 
+      # TODO: Use foundry instead of cloning Yamawake
       - name: Run e2e test
+        # run: |
+        #   Xvfb :0 -screen 0 1024x768x24 -listen tcp -ac +extension RANDR &
+        #   fluxbox &
+        #   /root/.foundry/bin/anvil --fork-url ${{ secrets.FORK_URL }} &
+        #   cd yamawake-interface/apps/web
+        #   npx env-cmd -f ../../.env pnpm test:build
         run: |
           Xvfb :0 -screen 0 1024x768x24 -listen tcp -ac +extension RANDR &
           fluxbox &
