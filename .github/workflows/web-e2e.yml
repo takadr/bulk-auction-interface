@@ -110,6 +110,7 @@ jobs:
           echo TEST_PROVIDER_ENDPOINT=http://localhost:8545 >> yamawake-interface/.env
           echo IRON_SESSION_PASSWORD=complex_password_at_least_32_characters_long >> yamawake-interface/.env
           echo IRON_SESSION_COOKIE_NAME=test_session >> yamawake-interface/.env
+          cat yamawake-interface/.env
 
       # TODO: Use foundry instead of cloning Yamawake
       - name: Run e2e test
