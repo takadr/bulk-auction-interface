@@ -93,19 +93,19 @@ jobs:
       - name: Create env file for Yamawake interface
         run: |
           touch yamawake-interface/.env
-          echo NEXT_PUBLIC_FACTORY_ADDRESS=${{ env.FACTORY_ADDRESS }} >> yamawake-interface/.env
-          echo NEXT_PUBLIC_DISTRIBUTOR_ADDRESS=${{ env.DISTRIBUTOR_ADDRESS }} >> yamawake-interface/.env
-          echo NEXT_PUBLIC_YMWK_ADDRESS=${{ env.YMWK_ADDRESS }} >> yamawake-interface/.env
-          echo NEXT_PUBLIC_CHAIN_ID=${{ env.DEFAULT_CHAIN_ID }} >> yamawake-interface/.env
-          echo NETWORK_NAME=${{ env.NETWORK_NAME }} >> yamawake-interface/.env
-          echo TEST_TOKEN=${{ env.TEST_TOKEN }} >> yamawake-interface/.env
+          echo NEXT_PUBLIC_FACTORY_ADDRESS=${{ vars.FACTORY_ADDRESS }} >> yamawake-interface/.env
+          echo NEXT_PUBLIC_DISTRIBUTOR_ADDRESS=${{ vars.DISTRIBUTOR_ADDRESS }} >> yamawake-interface/.env
+          echo NEXT_PUBLIC_YMWK_ADDRESS=${{ vars.YMWK_ADDRESS }} >> yamawake-interface/.env
+          echo NEXT_PUBLIC_CHAIN_ID=${{ vars.DEFAULT_CHAIN_ID }} >> yamawake-interface/.env
+          echo NETWORK_NAME=${{ vars.NETWORK_NAME }} >> yamawake-interface/.env
+          echo TEST_TOKEN=${{ vars.TEST_TOKEN }} >> yamawake-interface/.env
           echo NEXT_PUBLIC_WALLET_CONNECT_ID=${{ secrets.WALLET_CONNECT_ID }} >> yamawake-interface/.env
           echo NEXT_PUBLIC_INFURA_API_TOKEN=${{ secrets.INFURA_API_TOKEN }} >> yamawake-interface/.env
           echo AWS_ACCESS_KEY_ID=${{ secrets.AWS_ACCESS_KEY_ID }} >> yamawake-interface/.env
           echo AWS_SECRET_ACCESS_KEY=${{ secrets.AWS_SECRET_ACCESS_KEY }} >> yamawake-interface/.env
           echo AWS_REGION=${{ secrets.AWS_REGION }} >> yamawake-interface/.env
           echo AWS_DYNAMO_TABLE_NAME=${{ secrets.AWS_DYNAMO_TABLE_NAME }} >> yamawake-interface/.env
-          echo NEXT_PUBLIC_SUBGRAPH_ENDPOINT=${{ env.SUBGRAPH_ENDPOINT }} >> yamawake-interface/.env
+          echo NEXT_PUBLIC_SUBGRAPH_ENDPOINT=${{ vars.SUBGRAPH_ENDPOINT }} >> yamawake-interface/.env
           echo TEST_PRIVATE_KEY=${{ secrets.PRIVATE_KEY }} >> yamawake-interface/.env
           echo TEST_PROVIDER_ENDPOINT=http://localhost:8545 >> yamawake-interface/.env
           echo IRON_SESSION_PASSWORD=complex_password_at_least_32_characters_long >> yamawake-interface/.env
