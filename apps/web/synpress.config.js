@@ -40,17 +40,21 @@ module.exports = defineConfig({
     supportFile,
     env: {
       FACTORY_ADDRESS: process.env.NEXT_PUBLIC_FACTORY_ADDRESS,
-      PRIVATE_KEY: process.env.PRIVATE_KEY,
-      TEST_TOKEN: process.env.TEST_TOKEN,
+      PROVIDER_ENDPOINT: process.env.TEST_PROVIDER_ENDPOINT,
+      PRIVATE_KEY: process.env.TEST_PRIVATE_KEY,
+      AUCTION_TOKEN: process.env.TEST_TOKEN,
       NETWORK_NAME: process.env.NETWORK_NAME,
       SKIP_METAMASK_SETUP: true
-    }
+    },
+    // video: false,
+    numTestsKeptInMemory: 0,
   },
   component: {
     setupNodeEvents,
     specPattern: './**/*spec.{js,jsx,ts,tsx}',
     supportFile,
   },
+  experimentalMemoryManagement: true,
 });
 
 function getSynpressPath() {

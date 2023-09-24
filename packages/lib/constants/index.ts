@@ -1,15 +1,3 @@
-export const CHAIN_NAMES: { [key: string]: "mainnet" | "sepolia" | "goerli" } = {
-  "1": "mainnet",
-  "5": "goerli",
-  "11155111": "sepolia",
-};
-
-export const CHAIN_IDS = {
-  mainnet: 1,
-  goerli: 5,
-  sepolia: 11155111,
-};
-
 export const COINGECKO_URL = "https://api.coingecko.com/api/v3/simple/price";
 
 export const ETHER_DECIMALS_FOR_VIEW = 3;

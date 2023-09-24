@@ -38,6 +38,7 @@ yarn-error.log*
 # Cypress
 apps/web/tests/e2e/screenshots/
 apps/web/tests/e2e/videos/
+.act-artifacts
 
 # Subgraph
 subgraph/generated

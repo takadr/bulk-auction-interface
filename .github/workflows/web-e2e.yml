@@ -1,66 +1,143 @@
 name: Web app E2E tests
-on: 
-  push:
-    paths:
-      - 'apps/web/**'
-      - .github/workflows/web-e2e.yml
-  pull_request:
-    paths:
-      - 'apps/web/**'
-      - .github/workflows/web-e2e.yml
+on: [pull_request]
+
 jobs:
   run-synpress:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
-        uses: actions/checkout@v3
+      - name: Update and install packages
+        run: |
+          sudo apt update -y && sudo apt install -y --no-install-recommends \
+          git \
+          wget \
+          make \
+          gcc \
+          g++ \
+          python3 \
+          libgtk2.0-0 \
+          libgtk-3-0 \
+          libgbm-dev \
+          libnotify-dev \
+          libgconf-2-4 \
+          libnss3 \
+          libxss1 \
+          libasound2 \
+          libxtst6 \
+          xauth \
+          xvfb \
+          fluxbox \
+          x11-xserver-utils \
+          pulseaudio \
+          x11vnc \
+          fonts-liberation \
+          libcurl3-gnutls \
+          libu2f-udev \
+          libvulkan1 \
+          xdg-utils \
+          procps \
+          curl \
+          gnupg \
+          gnupg2 \
+          gnupg1 \
+          ca-certificates
+
+      - uses: actions/setup-node@v3
+        with:
+          node-version: "16"
 
       - name: Setup pnpm
-        uses: pnpm/action-setup@v2
+        uses: pnpm/action-setup@v2.2.2
         with:
-          version: 8.3.1
-        
-      - name: Setup Node.js environment
-        uses: actions/setup-node@v3
+          version: 8.7.6
+
+      - run: node -v
+
+      # TODO: Use foundry instead of cloning Yamawake
+      # - name: Foundry
+      #   shell: bash
+      #   run: |
+      #     curl -L https://foundry.paradigm.xyz | bash
+      #     source ~/.bashrc
+      #     export PATH=~/.foundry/bin:$PATH:
+      #     foundryup
+
+      - name: Clone Yamawake repository
+        run: |
+          git clone https://github.com/DeFiGeek-Community/yamawake.git
+          cd yamawake
+          npm ci
+
+      - name: Create env file for Yamawake
+        run: |
+          touch yamawake/.env
+          echo ETHERSCAN_API_KEY=${{ secrets.ETHERSCAN_API_KEY }} >> yamawake/.env
+          echo INFURA_API_TOKEN=${{ secrets.INFURA_API_TOKEN }} >> yamawake/.env
+          echo FOUNDATION_PRIVATE_KEY=${{ secrets.PRIVATE_KEY }} >> yamawake/.env
+
+      - name: Checkout Yamawake interface repository
+        uses: actions/checkout@v3
         with:
-          node-version: 17
-          cache: 'pnpm'
+          path: ./yamawake-interface
 
-      # - name: Install Ubuntu dependencies
-      #   run: |
-      #       sudo apt update -y && sudo apt install --no-install-recommends -y \
-      #       fluxbox \
-      #       libgtk2.0-0 libgtk-3-0 libgbm-dev libnotify-dev libgconf-2-4 libnss3 libxss1 libasound2 libxtst6 xauth xvfb fonts-liberation libu2f-udev libvulkan1 xdg-utils
+      - name: Install Yamawake interface dependencies
+        run: |
+          cd yamawake-interface
+          pnpm i --frozen-lockfile
 
-      # - name: Install chrome
-      #   run: wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb && sudo dpkg -i google-chrome-stable_current_amd64.deb
+      - name: Install chrome
+        run: |
+          sudo sh -c 'echo "deb http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google-chrome.list'
+          sudo wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | sudo apt-key add -
+          sudo apt update && sudo apt install google-chrome-stable
 
-      - name: Install dependencies
-        run: pnpm install
+      - name: Create env file for Yamawake interface
+        run: |
+          touch yamawake-interface/.env
+          echo NEXT_PUBLIC_FACTORY_ADDRESS=${{ vars.FACTORY_ADDRESS }} >> yamawake-interface/.env
+          echo NEXT_PUBLIC_DISTRIBUTOR_ADDRESS=${{ vars.DISTRIBUTOR_ADDRESS }} >> yamawake-interface/.env
+          echo NEXT_PUBLIC_YMWK_ADDRESS=${{ vars.YMWK_ADDRESS }} >> yamawake-interface/.env
+          echo NEXT_PUBLIC_CHAIN_ID=${{ vars.DEFAULT_CHAIN_ID }} >> yamawake-interface/.env
+          echo NETWORK_NAME=${{ vars.NETWORK_NAME }} >> yamawake-interface/.env
+          echo TEST_TOKEN=${{ vars.TEST_TOKEN }} >> yamawake-interface/.env
+          echo NEXT_PUBLIC_WALLET_CONNECT_ID=${{ secrets.WALLET_CONNECT_ID }} >> yamawake-interface/.env
+          echo NEXT_PUBLIC_INFURA_API_TOKEN=${{ secrets.INFURA_API_TOKEN }} >> yamawake-interface/.env
+          echo AWS_ACCESS_KEY_ID=${{ secrets.AWS_ACCESS_KEY_ID }} >> yamawake-interface/.env
+          echo AWS_SECRET_ACCESS_KEY=${{ secrets.AWS_SECRET_ACCESS_KEY }} >> yamawake-interface/.env
+          echo AWS_REGION=${{ secrets.AWS_REGION }} >> yamawake-interface/.env
+          echo AWS_DYNAMO_TABLE_NAME=${{ secrets.AWS_DYNAMO_TABLE_NAME }} >> yamawake-interface/.env
+          echo NEXT_PUBLIC_SUBGRAPH_ENDPOINT=${{ vars.SUBGRAPH_ENDPOINT }} >> yamawake-interface/.env
+          echo TEST_PRIVATE_KEY=${{ secrets.PRIVATE_KEY }} >> yamawake-interface/.env
+          echo TEST_PROVIDER_ENDPOINT=http://localhost:8545 >> yamawake-interface/.env
+          echo IRON_SESSION_PASSWORD=complex_password_at_least_32_characters_long >> yamawake-interface/.env
+          echo IRON_SESSION_COOKIE_NAME=test_session >> yamawake-interface/.env
 
-      # - name: Install cypress
-      #   run: pnpm add cypress -w
-        
-      # - name: Build
-      #   run: pnpm build
+      # TODO: Use foundry instead of cloning Yamawake
+      - name: Run e2e test
+        # run: |
+        #   Xvfb :0 -screen 0 1024x768x24 -listen tcp -ac +extension RANDR &
+        #   fluxbox &
+        #   /root/.foundry/bin/anvil --fork-url ${{ secrets.FORK_URL }} &
+        #   cd yamawake-interface/apps/web
+        #   npx env-cmd -f ../../.env pnpm test:build
+        run: |
+          Xvfb :0 -screen 0 1024x768x24 -listen tcp -ac +extension RANDR &
+          fluxbox &
+          cd yamawake
+          npx hardhat node --fork ${{ secrets.FORK_URL }} --no-deploy &
+          cd ../yamawake-interface/apps/web
+          npx env-cmd -f ../../.env pnpm test:build
+        env:
+          DISPLAY: :0.0
+          CI: true
 
-      - name: Lint
-        run: pnpm lint
+      - uses: actions/upload-artifact@v3
+        if: failure()
+        with:
+          name: cypress videos
+          path: ./yamawake-interface/apps/web/tests/e2e/videos
 
-      # - name: Run xvfb and fluxbox
-      #   run: |
-      #     Xvfb :0 -screen 0 1024x768x24 -listen tcp -ac &
-      #     fluxbox &
-      #   env:
-      #     DISPLAY: :0.0 
-
-      # - name: Run e2e test
-      #   run: cd apps/web && DEBUG=cypress:server:video npx env-cmd -f ../../.env npm run test:headless
-
-      # - name: Save video
-      #   uses: actions/upload-artifact@v3
-      #   if: always()
-      #   with:
-      #     name: Synpress E2E Videos
-      #     path: videos
-      #     if-no-files-found: ignore
+      - uses: actions/upload-artifact@v3
+        if: failure()
+        with:
+          name: cypress screenshots
+          path: ./yamawake-interface/apps/web/tests/e2e/screenshots
