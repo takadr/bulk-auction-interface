@@ -1,42 +1,28 @@
 import { useContext } from "react";
 import Router from "next/router";
-import { useAccount, useNetwork } from "wagmi";
+import { useAccount } from "wagmi";
 import {
-  chakra,
   Spinner,
   Container,
-  Flex,
   Heading,
-  Button,
   Tabs,
   TabList,
   TabPanels,
   Tab,
   TabPanel,
-  Text,
-  Stack,
-  useDisclosure,
+  Grid,
 } from "@chakra-ui/react";
-import { AddIcon } from "@chakra-ui/icons";
-import { useQuery } from "@apollo/client";
-import { Sale } from "lib/types/Sale";
 import Layout from "ui/components/layouts/layout";
-import { LIST_MY_SALE_QUERY } from "lib/apollo/query";
 import { CurrentUserContext } from "ui/components/providers/CurrentUserProvider";
-import SaleFormModal from "ui/components/SaleFormModal";
-import SaleCard, { SaleCardSkeleton } from "ui/components/SaleCard";
+import EarlyUserReward from "ui/components/dashboard/EarlyUserReward";
+import VeReward from "ui/components/dashboard/VeReward";
+import MyAuctions from "ui/components/dashboard/MyAuctions";
+import ParticipatedAuctions from "ui/components/dashboard/ParticipatedAuctions";
 import { useLocale } from "ui/hooks/useLocale";
-import Render404 from "ui/components/errors/404";
-import CustomError from "../_error";
 
 export default function DashboardPage() {
-  const { chain } = useNetwork();
   const { address, isConnected, connector } = useAccount();
-  const { currentUser, mutate } = useContext(CurrentUserContext);
-  const saleFormModalDisclosure = useDisclosure();
-  const { data, loading, error, refetch } = useQuery(LIST_MY_SALE_QUERY, {
-    variables: { id: String(address).toLowerCase() },
-  });
+  const { currentUser } = useContext(CurrentUserContext);
   const { t } = useLocale();
 
   if (typeof currentUser === "undefined") {
@@ -47,58 +33,45 @@ export default function DashboardPage() {
         </Container>
       </Layout>
     );
-  } else if (currentUser === null) {
+  } else if (currentUser === null && typeof address === "undefined") {
     Router.push("/");
-    return <CustomError statusCode={404} />;
+    return (
+      <Layout>
+        <Container maxW="container.lg" py={16} textAlign="center">
+          <Spinner />
+        </Container>
+      </Layout>
+    );
   }
 
   return (
     <Layout>
       <Container maxW="container.xl" py={16}>
         <Heading size={"lg"}>{t("DASHBOARD")}</Heading>
+
+        <Grid
+          templateColumns={{ base: "repeat(1, 1fr)", md: "repeat(2, 1fr)" }}
+          gap={4}
+          mt={{ base: 4, md: 8 }}
+        >
+          <EarlyUserReward address={address as `0x${string}`} />
+          <VeReward />
+        </Grid>
+
         <Tabs mt={{ base: 4, md: 8 }}>
           <TabList>
-            <Tab>{t("YOUR_SALES")}</Tab>
+            {currentUser && <Tab>{t("YOUR_SALES")}</Tab>}
+            <Tab>{t("PARTICIPATED_SALES")}</Tab>
           </TabList>
 
           <TabPanels>
+            {currentUser && (
+              <TabPanel p={{ base: 0, md: 4 }}>
+                <MyAuctions />
+              </TabPanel>
+            )}
             <TabPanel p={{ base: 0, md: 4 }}>
-              <chakra.div mt={4} textAlign={"right"}>
-                <Button onClick={saleFormModalDisclosure.onOpen}>
-                  <AddIcon fontSize={"sm"} mr={2} />
-                  {t("CREATE_NEW_SALE")}
-                </Button>
-              </chakra.div>
-              <SaleFormModal
-                isOpen={saleFormModalDisclosure.isOpen}
-                onClose={saleFormModalDisclosure.onClose}
-                onDeployConfirmed={refetch}
-                onInformationSaved={() => setTimeout(refetch, 1000)}
-              />
-              <Stack mt={4} spacing={8}>
-                {loading || !data ? (
-                  <>
-                    <SaleCardSkeleton />
-                    <SaleCardSkeleton />
-                    <SaleCardSkeleton />
-                  </>
-                ) : (
-                  data.sales.map((sale: Sale) => {
-                    return <SaleCard key={sale.id} sale={sale} editable />;
-                  })
-                )}
-                {!loading && data && data.sales.length === 0 && (
-                  <Flex
-                    minH={"25vh"}
-                    justifyContent="center"
-                    alignItems={"center"}
-                  >
-                    <Text fontSize={"lg"} opacity={".75"} textAlign={"center"}>
-                      {t("NO_SALE")}
-                    </Text>
-                  </Flex>
-                )}
-              </Stack>
+              <ParticipatedAuctions />
             </TabPanel>
           </TabPanels>
         </Tabs>

@@ -14,12 +14,7 @@ const Steps = ({
   currentStep: number;
 } & ChakraProps) => {
   return (
-    <chakra.div
-      w={"full"}
-      display="flex"
-      justifyContent={"space-between"}
-      {...props}
-    >
+    <chakra.div w={"full"} display="flex" justifyContent={"space-between"} {...props}>
       {stepParams.map((param: StepParams) => (
         <Step key={param.number} currentStep={currentStep} {...param} />
       ))}
@@ -56,12 +51,7 @@ const Step = ({
       }}
       _last={{ _after: { display: "none" }, flex: { base: 1, md: "0 0 auto" } }}
     >
-      <chakra.div
-        minW={"8rem"}
-        display={"flex"}
-        flexDirection={"column"}
-        alignItems={"center"}
-      >
+      <chakra.div minW={"8rem"} display={"flex"} flexDirection={"column"} alignItems={"center"}>
         <chakra.div
           display={"flex"}
           justifyContent={"center"}

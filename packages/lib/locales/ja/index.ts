@@ -6,7 +6,7 @@ export default {
   SIGNED_IN_AS: "{{address}}でログイン中",
   SIGN_OUT_AND_DISCONNECT: "ログアウト & 切断",
   DISCONNECT: "切断",
-  APP_NAME: "Bulksale maker(仮)",
+  APP_NAME: "Yamawake",
   AN_INCLUSIVE_AND_TRANSPARENT_TOKEN_LAUNCHPAD:
     "パーミッションレスで公平な販売モデルを提供する、\n包括的で透明性のあるトークンローンチパッド",
   VIEW_ALL_SALES: "すべてのオークションを見る",
@@ -48,13 +48,13 @@ export default {
   ONE_PERCENT_FEE_WILL_BE_SUBTRACTED: "1%の手数料が差し引かれます",
   WITHDRAW_THE_TOTAL_RAISED: "ETHを回収する",
   YOUR_SALES: "あなたのオークション",
+  PARTICIPATED_SALES: "参加したオークション",
   CREATE_NEW_SALE: "オークションの作成",
   EDIT: "編集",
   DEPLOY_CONTRACT: "コントラクトのデプロイ",
   INPUT_INFORMATION: "オークション情報の入力",
-  SELECT_SALE_TEMPLETE: "テンプレートを選択",
-  YOU_CAN_CHOOSE_THE_TYPE_OF_TOKEN_SALE:
-    "トークンオークションのタイプを選択できます",
+  SELECT_SALE_TEMPLATE: "テンプレートを選択",
+  YOU_CAN_CHOOSE_THE_TYPE_OF_TOKEN_SALE: "トークンオークションのタイプを選択できます",
   TOKEN_ADDRESS: "トークンアドレス",
   INPUT_THE_ADDRESS_OF_THE_TOKEN_YOU_WOULD_LIKE_TO_ALLOCATE_TO_THIS_SALE:
     "このオークションで配布するトークンのアドレスを入力してください",
@@ -73,8 +73,7 @@ export default {
   DEPLOY_SALE_CONTRACT: "オークションコントラクトをデプロイ",
   SALE_CONTRACT_ADDRESS: "オークションコントラクトアドレス",
   THE_ADDRESS_OF_THE_SALE_CONTRACT: "オークションコントラクトのアドレス",
-  WAITING_FOR_THE_TRANSACTION_TO_BE_CONFIRMED:
-    "トランザクションの承認を待っています...",
+  WAITING_FOR_THE_TRANSACTION_TO_BE_CONFIRMED: "トランザクションの承認を待っています...",
   TITLE: "タイトル",
   INPUT_THE_TITLE_OF_THIS_SALE: "オークションのタイトルを入力してください",
   DFGC_DONATION_EVENT: "e.g. DFGC Donation Event",
@@ -93,16 +92,13 @@ export default {
   SET_THE_MAXIMUM_TOTAL_RAISED:
     "プログレスバーの100%の値としてのみ使用される「最大合計調達額」を設定してください。この値は他の場所には表示されません。この値はいつでも変更でき、オークション自体の成功や失敗には影響しません。また、この値が達成された後でもユーザーは入札することができます。",
   PROJECT_URL: "プロジェクトURL",
-  INPUT_YOUR_PROJECT_URL_IF_YOU_HAVE_IT:
-    "プロジェクトのURLがあれば入力してください",
+  INPUT_YOUR_PROJECT_URL_IF_YOU_HAVE_IT: "プロジェクトのURLがあれば入力してください",
   PROJECT_LOGO_URL: "プロジェクトのロゴURL",
-  INPUT_YOUR_PROJECT_LOGO_URL_IF_YOU_HAVE_IT:
-    "プロジェクトのロゴURLがあれば入力してください",
+  INPUT_YOUR_PROJECT_LOGO_URL_IF_YOU_HAVE_IT: "プロジェクトのロゴURLがあれば入力してください",
   OTHER_URL: "その他のURL",
   INPUT_ANY_URL_IF_YOU_WANT_TO_SHOW_SOMETHING_TO_USERS:
     "その他、オークションページに表示したいリンクがあれば入力してください。",
-  PLEASE_WAIT_FOR_THE_TRANSACTION_TO_BE_CONFIRMED:
-    "トランザクションが承認されるのをお待ちください",
+  PLEASE_WAIT_FOR_THE_TRANSACTION_TO_BE_CONFIRMED: "トランザクションが承認されるのをお待ちください",
   SAVE_SALE_INFORMATION: "オークション情報を保存",
   SKIP: "スキップする（後で入力できます）",
   UPDATE_SALE_INFORMATION: "オークション情報を更新",
@@ -123,4 +119,18 @@ export default {
   JOIN_AUCTION: "オークションに参加する",
   MANAGE_AUCTION: "オークションを管理する",
   CREATE_AUCTION: "オークションを作成する",
+  EARLY_USER_REWARD: "初期ユーザリワード",
+  EARLY_USER_REWARD_HELP:
+    "初期ユーザは、YMWKトークンを報酬として受け取る権利が付与されます。\n\n(オークション参加者)\nオークションで購入したトークンの請求時に入札金額に応じて付与されます。\n\n(オークション開催者)\nオークションの終了後、売上を回収する際に売上金額に応じて付与されます。\n\n初期ユーザリワードの予算5000万YMWKがなくなり次第終了となり、予算が尽きている場合は権利を保有していても請求は出来ません。",
+  CLAIMABLE: "請求可能額",
+  VE_YMWK_REWARD: "veYMWKリワード",
+  VE_YMWK_REWARD_HELP: "Comming soon...",
+  YMWK_LOCKED: "ロック中のYMWK",
+  LOCKED_UNTIL: "ロック終了日時",
+  REWARDS: "リワード",
+  COMMING_SOON: "Comming soon...",
+  RAW_DATA: "トランザクションデータ",
+  TEMPLATE: "テンプレート",
+  TOO_SMALL_ALLOCATION:
+    "トークンの割当て量が少なすぎるため、一部の参加者はトークンの割当てが0（最小単位より少ない額）になる可能性があります。割当てが0になった参加者は、返金の申請をすることができます。割当て量を増やすことを検討してください。各入札者へのトークン割り当ては、切り捨てで計算され、端数（最小単位より少ない額）の合計額は、永遠にコントラクトにロックされ、引き出しできないことにご注意ください。",
 };

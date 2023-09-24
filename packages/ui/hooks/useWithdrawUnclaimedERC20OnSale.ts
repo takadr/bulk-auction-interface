@@ -4,7 +4,7 @@ import {
   useContractWrite,
   useWaitForTransaction,
 } from "wagmi";
-import Template from "lib/constants/abis/SaleTemplateV1.json";
+import Template from "lib/constants/abis/TemplateV1.json";
 
 export default function useWithdrawUnclaimedERC20OnSale({
   targetAddress,
@@ -37,7 +37,6 @@ export default function useWithdrawUnclaimedERC20OnSale({
   const writeFn = useContractWrite({
     ...prepareFn.config,
     onSuccess(data) {
-      console.log("Withdrew!", data);
       onSuccessWrite && onSuccessWrite(data);
     },
     onError(e: Error) {
@@ -49,7 +48,6 @@ export default function useWithdrawUnclaimedERC20OnSale({
     chainId: chain?.id,
     hash: writeFn.data?.hash,
     onSuccess(data) {
-      console.log("Withdrew!", data);
       onSuccessConfirm && onSuccessConfirm(data);
     },
     onError(e: Error) {

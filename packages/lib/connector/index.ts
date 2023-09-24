@@ -1,5 +1,4 @@
-import { Chain, configureChains, createConfig, mainnet, sepolia } from "wagmi";
-import { goerli } from "wagmi/chains";
+import { Chain, configureChains, createConfig } from "wagmi";
 import { alchemyProvider } from "wagmi/providers/alchemy";
 import { infuraProvider } from "wagmi/providers/infura";
 import { publicProvider } from "wagmi/providers/public";
@@ -8,17 +7,11 @@ import { CoinbaseWalletConnector } from "@wagmi/core/connectors/coinbaseWallet";
 import { InjectedConnector } from "@wagmi/core/connectors/injected";
 import { MetaMaskConnector } from "@wagmi/core/connectors/metaMask";
 import { WalletConnectConnector } from "@wagmi/core/connectors/walletConnect";
+import { getChain } from "../utils/chain";
 
-const getSupportedChain = (): Chain[] => {
-  if (process.env.NEXT_PUBLIC_CHAIN_ID === "1") {
-    return [mainnet];
-  } else if (process.env.NEXT_PUBLIC_CHAIN_ID === "5") {
-    return [goerli];
-  } else if (process.env.NEXT_PUBLIC_CHAIN_ID === "11155111") {
-    return [sepolia];
-  }
-  return [sepolia];
-};
+function getSupportedChain(): Chain[] {
+  return [getChain(Number(process.env.NEXT_PUBLIC_CHAIN_ID))];
+}
 
 const { chains, publicClient, webSocketPublicClient } = configureChains<Chain>(
   getSupportedChain(),
@@ -36,7 +29,7 @@ const config: any = createConfig({
     new CoinbaseWalletConnector({
       chains,
       options: {
-        appName: "DFGC Bulksale Maker",
+        appName: "Yamawake",
       },
     }),
     new WalletConnectConnector({

@@ -21,13 +21,7 @@ import {
 } from "@chakra-ui/react";
 import { ChevronDownIcon } from "@chakra-ui/icons";
 import Router from "next/router";
-import {
-  useAccount,
-  useEnsAvatar,
-  useEnsName,
-  useDisconnect,
-  useNetwork,
-} from "wagmi";
+import { useAccount, useEnsAvatar, useEnsName, useDisconnect, useNetwork } from "wagmi";
 import { useLocale } from "../hooks/useLocale";
 import { CurrentUserContext } from "./providers/CurrentUserProvider";
 import SignInButton from "./SignInButton";
@@ -77,9 +71,7 @@ const Header: FC<HeaderProps> = ({ title }) => {
             </Tag>
             <MenuButton>
               <HStack>
-                {ensName && ensAvatar && (
-                  <Avatar size={"sm"} src={ensAvatar} ml={1} />
-                )}
+                {ensName && ensAvatar && <Avatar size={"sm"} src={ensAvatar} ml={1} />}
                 <VStack
                   display={{ base: "flex", md: "flex" }}
                   alignItems="flex-start"
@@ -104,28 +96,20 @@ const Header: FC<HeaderProps> = ({ title }) => {
               </HStack>
             </MenuButton>
             <MenuList zIndex={101}>
-              <HStack
-                spacing={1}
-                px={2}
-                display={{ base: "block", md: "none" }}
-              >
-                <Tag size={"sm"}>
-                  {chain?.unsupported ? "Unsupported Chain" : chain?.name}
-                </Tag>
+              <HStack spacing={1} px={2} display={{ base: "block", md: "none" }}>
+                <Tag size={"sm"}>{chain?.unsupported ? "Unsupported Chain" : chain?.name}</Tag>
                 {currentUser && (
                   <Tag size={"sm"} ml={1}>
                     Signed in
                   </Tag>
                 )}
               </HStack>
-              {isConnected && currentUser && (
-                <MenuItem
-                  display={{ base: "block", md: "none" }}
-                  onClick={() => Router.push("/dashboard")}
-                >
-                  {t("DASHBOARD")}
-                </MenuItem>
-              )}
+              <MenuItem
+                display={{ base: "block", md: "none" }}
+                onClick={() => Router.push("/dashboard")}
+              >
+                {t("DASHBOARD")}
+              </MenuItem>
               <MenuItem
                 display={{ base: "block", md: "none" }}
                 onClick={() => Router.push("/auctions")}
@@ -154,17 +138,10 @@ const Header: FC<HeaderProps> = ({ title }) => {
                 </MenuItem>
               ) : (
                 <>
-                  <MenuItem onClick={() => disconnect()}>
-                    {t("DISCONNECT")}
-                  </MenuItem>
+                  <MenuItem onClick={() => disconnect()}>{t("DISCONNECT")}</MenuItem>
                   <Flex align="center" px="2" mt="2">
                     <Divider />
-                    <Text
-                      padding="2"
-                      color={"gray.400"}
-                      fontSize={"xs"}
-                      whiteSpace={"nowrap"}
-                    >
+                    <Text padding="2" color={"gray.400"} fontSize={"xs"} whiteSpace={"nowrap"}>
                       {t("MANAGE_AUCTION")}
                     </Text>
                     <Divider />
@@ -210,18 +187,9 @@ const Header: FC<HeaderProps> = ({ title }) => {
       opacity={0.975}
     >
       <Container maxW="container.2xl" px={{ base: 2, md: 4 }}>
-        <Flex
-          as="header"
-          py="4"
-          justifyContent="space-between"
-          alignItems="center"
-        >
+        <Flex as="header" py="4" justifyContent="space-between" alignItems="center">
           <HStack>
-            <Link
-              href="/"
-              textDecoration={"none"}
-              _hover={{ textDecoration: "none" }}
-            >
+            <Link href="/" textDecoration={"none"} _hover={{ textDecoration: "none" }}>
               <Heading as="h1" fontSize="xl">
                 <Text
                   bgGradient="linear(to-l, #7928CA, #FF0080)"
@@ -229,17 +197,17 @@ const Header: FC<HeaderProps> = ({ title }) => {
                   fontSize="xl"
                   fontWeight="extrabold"
                 >
-                  {title ? title : "DFGC Bulksale Maker (仮)"}
+                  {title ? title : "Yamawake"}
                 </Text>
               </Heading>
             </Link>
           </HStack>
           <HStack spacing={{ base: 2, md: 4 }}>
-            {isConnected && currentUser && (
+            {isConnected && (
               <Button
                 display={{ base: "none", md: "block" }}
                 variant="ghost"
-                size={"md"}
+                size={{ base: "xs", md: "sm" }}
                 onClick={() => Router.push("/dashboard")}
               >
                 {t("DASHBOARD")}
@@ -247,11 +215,19 @@ const Header: FC<HeaderProps> = ({ title }) => {
             )}
             <Button
               variant="ghost"
-              display={{ base: isConnected ? "none" : "block", md: "block" }}
+              display={{ base: "none", md: "block" }}
               size={{ base: "xs", md: "sm" }}
               onClick={() => Router.push("/auctions")}
             >
               {t("VIEW_ALL_SALES")}
+            </Button>
+            <Button
+              variant="ghost"
+              display={{ base: isConnected ? "none" : "block", md: "none" }}
+              size={{ base: "xs", md: "sm" }}
+              onClick={() => Router.push("/auctions")}
+            >
+              {t("SALES")}
             </Button>
 
             {!currentUser && !isConnected && (
@@ -268,12 +244,7 @@ const Header: FC<HeaderProps> = ({ title }) => {
                   <MenuList zIndex={101}>
                     <Flex align="center" px="2">
                       <Divider />
-                      <Text
-                        p="2"
-                        color={"gray.400"}
-                        fontSize={"xs"}
-                        whiteSpace={"nowrap"}
-                      >
+                      <Text p="2" color={"gray.400"} fontSize={"xs"} whiteSpace={"nowrap"}>
                         {t("JOIN_AUCTION")}
                       </Text>
                       <Divider />
@@ -288,12 +259,7 @@ const Header: FC<HeaderProps> = ({ title }) => {
                     </chakra.div>
                     <Flex align="center" px="2" mt="2">
                       <Divider />
-                      <Text
-                        padding="2"
-                        color={"gray.400"}
-                        fontSize={"xs"}
-                        whiteSpace={"nowrap"}
-                      >
+                      <Text padding="2" color={"gray.400"} fontSize={"xs"} whiteSpace={"nowrap"}>
                         {t("MANAGE_AUCTION")}
                       </Text>
                       <Divider />

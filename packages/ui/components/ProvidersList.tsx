@@ -1,4 +1,4 @@
-import { useConnect, useDisconnect } from "wagmi";
+import { useConnect, useDisconnect, useSwitchNetwork } from "wagmi";
 import { Button, Stack, Flex, useToast } from "@chakra-ui/react";
 import {
   Modal,
@@ -17,35 +17,29 @@ export default function ProvidersList({
   onClose,
 }: {
   isOpen: boolean;
-  onConnectSuccess?: ({
-    address,
-    chainId,
-  }: {
-    address: `0x${string}`;
-    chainId: number;
-  }) => void;
+  onConnectSuccess?: ({ address, chainId }: { address: `0x${string}`; chainId: number }) => void;
   onClose: () => void;
 }) {
   const toast = useToast({ position: "top-right", isClosable: true });
-  const { connect, connectors, error, isLoading, pendingConnector } =
-    useConnect({
-      onSuccess: (data) => {
-        onConnectSuccess &&
-          onConnectSuccess({
-            address: data.account,
-            chainId: data.chain.id,
-          });
-      },
-      onError: (error: Error) => {
-        disconnect();
-        toast({
-          description: error.message,
-          status: "error",
-          duration: 5000,
+  const { connect, connectors, error, isLoading, pendingConnector } = useConnect({
+    chainId: Number(process.env.NEXT_PUBLIC_CHAIN_ID),
+    onSuccess: async (data) => {
+      onConnectSuccess &&
+        onConnectSuccess({
+          address: data.account,
+          chainId: data.chain.id,
         });
-        // onClose();
-      },
-    });
+    },
+    onError: (error: Error) => {
+      disconnect();
+      toast({
+        description: error.message,
+        status: "error",
+        duration: 5000,
+      });
+      // onClose();
+    },
+  });
   const { disconnect } = useDisconnect();
   const { t } = useLocale();
 
@@ -68,17 +62,11 @@ export default function ProvidersList({
                   connect({ connector });
                 }}
               >
-                <Flex
-                  w={"full"}
-                  alignItems={"center"}
-                  justifyContent={"space-between"}
-                >
+                <Flex w={"full"} alignItems={"center"} justifyContent={"space-between"}>
                   <>
                     {connector.name}
                     {!connector.ready && " (unsupported)"}
-                    {isLoading &&
-                      connector.id === pendingConnector?.id &&
-                      " (connecting)"}
+                    {isLoading && connector.id === pendingConnector?.id && " (connecting)"}
                   </>
                   <ProviderLogo width={"30px"} connectorId={connector.id} />
                 </Flex>

@@ -36,13 +36,9 @@ export default function useApprove({
   const MaxUint256 = 2n ** 256n - 1n;
   const { chain } = useNetwork();
   const [allowance, setAllowance] = useState<bigint>(BigInt(0));
-  const approveArgs: [`0x${string}`, bigint] = [
-    spender,
-    BigInt(MaxUint256.toString()),
-  ];
+  const approveArgs: [`0x${string}`, bigint] = [spender, BigInt(MaxUint256.toString())];
   const allowanceArgs: [`0x${string}`, `0x${string}`] = [owner, spender];
-  const isReady: boolean =
-    !!targetAddress && !!owner && !!spender && !!chain && enabled;
+  const isReady: boolean = !!targetAddress && !!owner && !!spender && !!chain && enabled;
 
   const prepareFn = usePrepareContractWrite({
     chainId: chain?.id,

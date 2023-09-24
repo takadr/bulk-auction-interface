@@ -8,38 +8,26 @@ import {
   getContract,
   PublicClient,
   GetContractReturnType,
-  Abi,
   Transport,
 } from "viem";
-import { mainnet, goerli, sepolia, localhost, Chain } from "viem/chains";
-import { scanMetaData, addMetaData, updateSale } from "lib/dynamodb/metaData";
-import SaleTemplateV1ABI from "lib/constants/abis/SaleTemplateV1.json";
+import { Chain } from "viem/chains";
+import { getChain } from "lib/utils/chain";
+import { scanMetaData, addMetaData, updateAuction } from "lib/dynamodb/metaData";
+import BaseTemplateABI from "lib/constants/abis/BaseTemplate.json";
 import ironOptions from "lib/constants/ironOptions";
-import { CHAIN_IDS, CHAIN_NAMES } from "lib/constants";
 
-// const availableNetwork = Object.values(CHAIN_IDS);
 const availableNetwork = [Number(process.env.NEXT_PUBLIC_CHAIN_ID)];
 
-const getViemChain = (chainName: string) => {
-  if (chainName === "mainnet") {
-    return mainnet;
-  } else if (chainName === "goerli") {
-    return goerli;
-  } else if (chainName === "sepolia") {
-    return sepolia;
-  } else {
-    return localhost;
-  }
-};
-
 const getViemProvider = (chainId: number) => {
-  const chainName = CHAIN_NAMES[chainId];
+  const chain = getChain(chainId);
+  const chainName = chain.name.toLowerCase();
   // const alchemy = http(`https://eth-${chainName}.g.alchemy.com/v2/${}`)
   const infura = http(
     `https://${chainName}.infura.io/v3/${process.env.NEXT_PUBLIC_INFURA_API_TOKEN}`,
   );
   const client = createPublicClient({
-    chain: getViemChain(chainName),
+    // chain: getViemChain(chainName),
+    chain,
     transport: fallback([infura]),
   });
   return client;
@@ -49,23 +37,23 @@ const requireContractOwner = (
   req: NextApiRequest,
 ): Promise<{
   metaData: any;
-  saleContract: GetContractReturnType<typeof SaleTemplateV1ABI, PublicClient>;
-  provider: PublicClient<Transport, Chain>;
+  auctionContract: GetContractReturnType<typeof BaseTemplateABI, PublicClient>;
+  provider: PublicClient<Transport, Chain | undefined>;
 }> => {
   return new Promise(async (resolve, reject) => {
     try {
       if (!req.session.siwe) return reject("Unauthorized");
       const metaData = req.body;
-      const provider = getViemProvider(req.session.siwe.chainId);
-      const saleContract = getContract({
+      const provider = getViemProvider(req.session.siwe.chainId) as PublicClient;
+      const auctionContract = getContract({
         address: metaData.id,
-        abi: SaleTemplateV1ABI,
+        abi: BaseTemplateABI,
         publicClient: provider,
       });
-      const contractOwner = await saleContract.read.owner();
+      const contractOwner = await auctionContract.read.owner();
       if (contractOwner !== req.session.siwe.address)
         reject("You are not the owner of this contract");
-      resolve({ metaData, saleContract, provider });
+      resolve({ metaData, auctionContract, provider });
     } catch (error: any) {
       reject(error.message);
     }
@@ -74,24 +62,16 @@ const requireContractOwner = (
 
 const requireAvailableNetwork = (req: NextApiRequest) => {
   if (!req.session.siwe) throw new Error("Sign in required");
-  if (!availableNetwork.includes(req.session.siwe.chainId))
-    throw new Error("Wrong network");
+  if (!availableNetwork.includes(req.session.siwe.chainId)) throw new Error("Wrong network");
 };
 
-const getTokenInfo = async (
-  tokenAddress: `0x${string}`,
-  provider: PublicClient,
-) => {
+const getTokenInfo = async (tokenAddress: `0x${string}`, provider: PublicClient) => {
   const token = getContract({
     address: tokenAddress,
     abi: erc20ABI,
     publicClient: provider,
   });
-  const result = await Promise.all([
-    token.read.name(),
-    token.read.symbol(),
-    token.read.decimals(),
-  ]);
+  const result = await Promise.all([token.read.name(), token.read.symbol(), token.read.decimals()]);
   return {
     tokenName: result[0],
     tokenSymbol: result[1],
@@ -118,20 +98,8 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     case "POST":
       try {
         requireAvailableNetwork(req);
-        const { metaData, saleContract, provider } = await requireContractOwner(
-          req,
-        );
-        const tokenAddress = await saleContract.read.erc20onsale();
-        const { tokenName, tokenSymbol, tokenDecimal } = await getTokenInfo(
-          tokenAddress as `0x${string}`,
-          provider,
-        );
-        const result = await addMetaData({
-          ...metaData,
-          tokenName,
-          tokenSymbol,
-          tokenDecimal,
-        });
+        const { metaData } = await requireContractOwner(req);
+        const result = await addMetaData(metaData);
         res.json({ result });
       } catch (_error) {
         console.log(_error);
@@ -141,20 +109,8 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     case "PUT":
       try {
         requireAvailableNetwork(req);
-        const { metaData, saleContract, provider } = await requireContractOwner(
-          req,
-        );
-        const tokenAddress = await saleContract.read.erc20onsale();
-        const { tokenName, tokenSymbol, tokenDecimal } = await getTokenInfo(
-          tokenAddress as `0x${string}`,
-          provider,
-        );
-        const result = await updateSale({
-          ...metaData,
-          tokenName,
-          tokenSymbol,
-          tokenDecimal,
-        });
+        const { metaData } = await requireContractOwner(req);
+        const result = await updateAuction(metaData);
         res.json({ result });
       } catch (_error: any) {
         console.log(_error);

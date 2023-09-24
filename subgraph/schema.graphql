@@ -1,36 +1,22 @@
-type Sale @entity {
+type Auction @entity {
   # Contract address
   id: ID!
-  # Sale template name (e.g. BulksaleV1)
-  templateName: Bytes!
+  # TemplateAuctionMap
+  templateAuctionMap: TemplateAuctionMap!
   # Deployer(Owner) address
   owner: String! 
-  # token address
-  token: String!
-  # token name
-  tokenName: String! 
-  # token symbol
-  tokenSymbol: String! 
-  # token decimals
-  tokenDecimals: BigInt! 
-  # base token address
-  baseToken: String!
-  # base token name
-  baseTokenName: String! 
-  # base token symbol
-  baseTokenSymbol: String! 
-  # base token decimals
-  baseTokenDecimals: BigInt! 
-  # Sale start timestamp
+  # Auction token
+  auctionToken: Token!
+  # Raised tokens
+  raisedTokens: [Token!]!
+  # Auction start timestamp
   startingAt: BigInt!
-  # Sale end timestamp
+  # Auction end timestamp
   closingAt: BigInt!
-  # Total amount of distribution for during the sale
-  allocatedAmount: BigInt!
-  # Minimum amount of ETH (in Wei) for the success of the sale
-  minRaisedAmount: BigInt!
-  # The total ETH amount of bidding that the sale raised (in Wei)
-  totalRaised: BigInt!
+  # Total amount of distribution for during the auction
+  args: Bytes!
+  # The total amount of bidding that the auction raised
+  totalRaised: [TotalRaised!]!
   # Received amount and related information
   contributions: [Contribution!]!
   # Claim information
@@ -42,15 +28,41 @@ type Sale @entity {
 type Template @entity {
   # Contract address
   id: ID!
+  # Auction template name (e.g. BulksaleV1)
   templateName: Bytes!
   addedAt: BigInt!
+}
+
+type TemplateAuctionMap @entity {
+  # Auction contract address
+  id: ID!
+  templateName: String!
+}
+
+type Token @entity {
+  # Contract address
+  id: ID!
+  name: String!
+  symbol: String!
+  decimals: BigInt!
+}
+
+type TotalRaised @entity {
+  # {Auction address} + "-" + {Token address}
+  id: ID!
+  amount: BigInt!
+  token: Token!
 }
 
 type Contribution @entity {
   # event.transaction.hash.toHex() + "-" + event.logIndex.toString()
   id: ID!
+  # Auction
+  auction: Auction!
   # Amount received
   amount: BigInt!
+  # Raised token
+  raisedToken: Token!
   # Sender address
   from: String!
   # totalRaised after received
@@ -64,8 +76,12 @@ type Contribution @entity {
 type Claim @entity {
   # event.transaction.hash.toHex() + "-" + event.logIndex.toString()
   id: ID!
+  # Auction
+  auction: Auction!
+  # Claimed token
+  token: Token!
   # Contributor address
-  contributor: String!
+  participant: String!
   # Receipient address
   recipient: String!
   # Total contribution by user

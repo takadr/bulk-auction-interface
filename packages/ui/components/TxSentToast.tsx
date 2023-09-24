@@ -9,8 +9,8 @@ import {
   CloseButton,
   Link,
 } from "@chakra-ui/react";
-import { CHAIN_NAMES } from "lib/constants";
 import { getEtherscanLink } from "lib/utils";
+import { getChain } from "lib/utils/chain";
 
 export interface TxSentToast extends ToastProps {
   txid: `0x${string}`;
@@ -59,7 +59,7 @@ export default function TxSentToast(props: TxSentToast) {
           {description}
           <Link
             href={getEtherscanLink(
-              CHAIN_NAMES[process.env.NEXT_PUBLIC_CHAIN_ID!],
+              getChain(Number(process.env.NEXT_PUBLIC_CHAIN_ID)).name.toLowerCase(),
               txid,
               "tx",
             )}
@@ -70,13 +70,7 @@ export default function TxSentToast(props: TxSentToast) {
         </AlertDescription>
       </chakra.div>
       {isClosable && (
-        <CloseButton
-          size="sm"
-          onClick={onClose}
-          position="absolute"
-          insetEnd={1}
-          top={1}
-        />
+        <CloseButton size="sm" onClick={onClose} position="absolute" insetEnd={1} top={1} />
       )}
     </Alert>
   );

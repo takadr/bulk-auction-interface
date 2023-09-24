@@ -1,12 +1,5 @@
 import { ETHER_DECIMALS_FOR_VIEW } from "../constants";
-import { Sale } from "../types/Sale";
-import Big, {
-  BigNumberValueType,
-  add,
-  divide,
-  multiply,
-  getBigNumber,
-} from "./bignumber";
+import Big, { BigNumberValueType, add, divide, multiply, getBigNumber } from "./bignumber";
 
 export const capitalize = function (str: string) {
   if (typeof str !== "string" || !str) return str;
@@ -45,16 +38,8 @@ export const getTokenPriceAgainstETHWithMinPrice = (
   totalRaised: BigNumberValueType,
   tokenDecimals: number,
 ): Big => {
-  const minTokenPrice = getMinTokenPriceAgainstETH(
-    minRaisedAmount,
-    allocatedAmount,
-    tokenDecimals,
-  );
-  const tokenPrice = getTokenPriceAgainstETH(
-    totalRaised,
-    allocatedAmount,
-    tokenDecimals,
-  );
+  const minTokenPrice = getMinTokenPriceAgainstETH(minRaisedAmount, allocatedAmount, tokenDecimals);
+  const tokenPrice = getTokenPriceAgainstETH(totalRaised, allocatedAmount, tokenDecimals);
   return minTokenPrice.gte(tokenPrice) ? minTokenPrice : tokenPrice;
 };
 // <--
@@ -70,11 +55,7 @@ export const getExpectedAmount = (
   if (totalDonations.lte(Big(0))) {
     return Big(0);
   }
-  return calculateAllocation(
-    donations,
-    totalDonations,
-    getBigNumber(allocatedAmount),
-  );
+  return calculateAllocation(donations, totalDonations, getBigNumber(allocatedAmount));
 };
 
 export const getTargetPercetage = (
@@ -84,10 +65,7 @@ export const getTargetPercetage = (
   if (getBigNumber(maximumTotalRaised).lte(Big(0))) {
     return 0;
   }
-  return Math.min(
-    100,
-    multiply(divide(totalRaised, maximumTotalRaised), 100).toNumber(),
-  );
+  return Math.min(100, multiply(divide(totalRaised, maximumTotalRaised), 100).toNumber());
 };
 
 export const getFiatConversionAmount = (token: number, fiatRate: number) => {
@@ -115,9 +93,7 @@ export const tokenAmountFormat = (
   decimals: number,
   precision: number,
 ): string => {
-  const numerator = Big(10).pow(
-    typeof decimals !== "number" ? parseInt(decimals) : decimals,
-  );
+  const numerator = Big(10).pow(typeof decimals !== "number" ? parseInt(decimals) : decimals);
   return divide(amount, numerator).toFixed(precision);
 };
 
@@ -127,8 +103,8 @@ export const etherAmountFormat = (
   smallValueNotation: boolean = true,
 ): string => {
   const amountInBig = formatEtherInBig(amount);
-  if (smallValueNotation && amountInBig.gt(0) && amountInBig.lt(0.01)) {
-    return "< 0.01";
+  if (smallValueNotation && amountInBig.gt(0) && amountInBig.lt(0.001)) {
+    return "< 0.001";
   } else {
     return formatEtherInBig(amount).toFixed(precision);
   }
@@ -139,9 +115,7 @@ export const getEtherscanLink = (
   hash: string,
   type: "tx" | "token" | "address" | "block",
 ): string => {
-  return `https://${
-    chain === "mainnet" ? "" : `${chain}.`
-  }etherscan.io/${type}/${hash}`;
+  return `https://${chain === "mainnet" ? "" : `${chain}.`}etherscan.io/${type}/${hash}`;
 };
 
 type Countdown = { days: string; hours: string; mins: string; secs: string };
@@ -179,19 +153,12 @@ export const getDomainFromURL = (url: string) => {
   return new URL(url).hostname;
 };
 
-export const ellipsisText = (
-  text: string,
-  maxLength: number,
-  ellipsis = "...",
-): string => {
-  return text.length >= maxLength
-    ? text.slice(0, maxLength - ellipsis.length) + ellipsis
-    : text;
+export const ellipsisText = (text: string, maxLength: number, ellipsis = "..."): string => {
+  return text.length >= maxLength ? text.slice(0, maxLength - ellipsis.length) + ellipsis : text;
 };
 
 export const getDecimalsForView = (amount: Big, decimals: number): number => {
-  const digits = divide(amount, Big(10).pow(Number(decimals))).toString()
-    .length;
+  const digits = divide(amount, Big(10).pow(Number(decimals))).toString().length;
   if (digits >= 8) {
     if (decimals >= 2) {
       return 2;

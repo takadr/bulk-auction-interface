@@ -13,10 +13,7 @@ export const useLocale = () => {
     setLocale(locale);
   };
 
-  const tWithReplaceText = (
-    key: keyof typeof t,
-    vals?: { [key: string]: string },
-  ): string => {
+  const tWithReplaceText = (key: keyof typeof t, vals?: { [key: string]: string }): string => {
     let s: string = t[key];
     if (!s) return key;
     if (vals) {
@@ -29,8 +26,7 @@ export const useLocale = () => {
 
   useEffect(() => {
     const defaultLocale = new Date().getTimezoneOffset() === -540 ? "ja" : "en";
-    const value =
-      (localStorage.getItem("locale") as "ja" | "en") || defaultLocale;
+    const value = (localStorage.getItem("locale") as "ja" | "en") || defaultLocale;
     setLocale(value);
   }, []);
 

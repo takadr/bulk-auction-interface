@@ -1,12 +1,5 @@
 import Router from "next/router";
-import {
-  Button,
-  Flex,
-  Heading,
-  Stack,
-  HStack,
-  useToast,
-} from "@chakra-ui/react";
+import { Button, Flex, Heading, Stack, HStack, useToast } from "@chakra-ui/react";
 import { KeyedMutator } from "swr";
 import { User } from "lib/types";
 import SignInButton from "./SignInButton";
@@ -21,7 +14,7 @@ type HeroProps = {
 };
 
 export default function Hero({
-  title = "Bulksale maker(仮)",
+  title = "Yamawake",
   subtitle = "An inclusive and transparent token launchpad,\n offering a permissionless and fair launch model.",
   currentUser,
   mutate,
@@ -45,11 +38,7 @@ export default function Hero({
       bgPos={"center"}
       {...rest}
     >
-      <Stack
-        spacing={{ base: 4, lg: 8 }}
-        w={{ base: "100%", md: "40%" }}
-        align={"center"}
-      >
+      <Stack spacing={{ base: 4, lg: 8 }} w={{ base: "100%", md: "40%" }} align={"center"}>
         <Heading
           as="h1"
           size={{ base: "lg", md: "xl" }}
