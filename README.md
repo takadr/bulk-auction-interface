@@ -69,15 +69,15 @@ TEST_PROVIDER_ENDPOINT="http://localhost:8545"
 
 ```bash
 cd subgraph
-graph codegen && graph build
-graph deploy --studio SUBGRAPH_NAME
+yarn codegen && yarn build
+yarn deploy --studio SUBGRAPH_NAME
 ```
 
 ### test
 
 ```bash
 cd subgraph
-graph test
+yarn test
 ```
 
 ### CI
