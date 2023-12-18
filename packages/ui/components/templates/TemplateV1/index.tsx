@@ -207,6 +207,7 @@ export default memo(function DetailPage({
                     "token",
                   )}
                   target={"_blank"}
+                  fontSize={{ base: "xs", lg: "sm" }}
                 >
                   {tokenAmountFormat(
                     auction.allocatedAmount,
@@ -233,7 +234,13 @@ export default memo(function DetailPage({
                   )}
                   target={"_blank"}
                 >
-                  {`${auction.id}`}
+                  <chakra.span
+                    display={{ base: "none", lg: "inline" }}
+                  >{`${auction.id}`}</chakra.span>
+                  <chakra.span
+                    fontSize={"xs"}
+                    display={{ base: "inline", lg: "none" }}
+                  >{`${auction.id?.slice(0, 5)}...${auction.id?.slice(-4)}`}</chakra.span>
                   <ExternalLinkIcon ml={1} />
                 </Link>
               </chakra.p>
