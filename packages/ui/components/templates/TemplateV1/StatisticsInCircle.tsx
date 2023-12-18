@@ -50,57 +50,61 @@ export default function StatisticsInCircle({
   return (
     <chakra.div {...boxProps}>
       <chakra.div position={"relative"}>
-        <Tooltip
-          hasArrow
-          label={
-            <chakra.p textAlign={"center"} p={1}>
-              Minimum: {etherAmountFormat(minRaisedAmount)}ETH
-              {totalRaised.gte(minRaisedAmount) && (
-                <>
-                  <br /> {t("ACHIEVED")}
-                </>
-              )}
-            </chakra.p>
-          }
-        >
-          <TriangleUpIcon
-            position={"absolute"}
-            zIndex={100}
-            transform={`rotate(${(minimumPercent * 360) / 100}deg)`}
-            left={`calc(${
-              ((Math.sin((minimumPercent / 100) * (2 * Math.PI)) + 1) * 100) / 2
-            }% - 8px - ${Math.sin((minimumPercent / 100) * (2 * Math.PI)) * 5.1}%)`} // 5.1 is used for adjusting position of arrow. TODO: move it to util
-            bottom={`calc(${
-              ((Math.cos((minimumPercent / 100) * (2 * Math.PI)) + 1) * 100) / 2
-            }% - 8px - ${Math.cos((minimumPercent / 100) * (2 * Math.PI)) * 5.1}%)`}
-          />
-        </Tooltip>
-        <Tooltip
-          hasArrow
-          label={
-            <chakra.p textAlign={"center"} p={1}>
-              {t("TARGET_TOTAL_RAISED")}: {etherAmountFormat(targetTotalRaised)}
-              ETH
-              {totalRaised.gte(targetTotalRaised) && (
-                <>
-                  <br /> {t("ACHIEVED")}
-                </>
-              )}
-            </chakra.p>
-          }
-        >
-          <TriangleUpIcon
-            position={"absolute"}
-            zIndex={100}
-            transform={`rotate(${(targetTotalRaisedPercent * 360) / 100}deg)`}
-            left={`calc(${
-              ((Math.sin((targetTotalRaisedPercent / 100) * (2 * Math.PI)) + 1) * 100) / 2
-            }% - 8px - ${Math.sin((targetTotalRaisedPercent / 100) * (2 * Math.PI)) * 5.1}%)`}
-            bottom={`calc(${
-              ((Math.cos((targetTotalRaisedPercent / 100) * (2 * Math.PI)) + 1) * 100) / 2
-            }% - 8px - ${Math.cos((targetTotalRaisedPercent / 100) * (2 * Math.PI)) * 5.1}%)`}
-          />
-        </Tooltip>
+        {started && (
+          <Tooltip
+            hasArrow
+            label={
+              <chakra.p textAlign={"center"} p={1}>
+                Minimum: {etherAmountFormat(minRaisedAmount)}ETH
+                {totalRaised.gte(minRaisedAmount) && (
+                  <>
+                    <br /> {t("ACHIEVED")}
+                  </>
+                )}
+              </chakra.p>
+            }
+          >
+            <TriangleUpIcon
+              position={"absolute"}
+              zIndex={10}
+              transform={`rotate(${(minimumPercent * 360) / 100}deg)`}
+              left={`calc(${
+                ((Math.sin((minimumPercent / 100) * (2 * Math.PI)) + 1) * 100) / 2
+              }% - 8px - ${Math.sin((minimumPercent / 100) * (2 * Math.PI)) * 5.1}%)`} // 5.1 is used for adjusting position of arrow. TODO: move it to util
+              bottom={`calc(${
+                ((Math.cos((minimumPercent / 100) * (2 * Math.PI)) + 1) * 100) / 2
+              }% - 8px - ${Math.cos((minimumPercent / 100) * (2 * Math.PI)) * 5.1}%)`}
+            />
+          </Tooltip>
+        )}
+        {started && (
+          <Tooltip
+            hasArrow
+            label={
+              <chakra.p textAlign={"center"} p={1}>
+                {t("TARGET_TOTAL_RAISED")}: {etherAmountFormat(targetTotalRaised)}
+                ETH
+                {totalRaised.gte(targetTotalRaised) && (
+                  <>
+                    <br /> {t("ACHIEVED")}
+                  </>
+                )}
+              </chakra.p>
+            }
+          >
+            <TriangleUpIcon
+              position={"absolute"}
+              zIndex={10}
+              transform={`rotate(${(targetTotalRaisedPercent * 360) / 100}deg)`}
+              left={`calc(${
+                ((Math.sin((targetTotalRaisedPercent / 100) * (2 * Math.PI)) + 1) * 100) / 2
+              }% - 8px - ${Math.sin((targetTotalRaisedPercent / 100) * (2 * Math.PI)) * 5.1}%)`}
+              bottom={`calc(${
+                ((Math.cos((targetTotalRaisedPercent / 100) * (2 * Math.PI)) + 1) * 100) / 2
+              }% - 8px - ${Math.cos((targetTotalRaisedPercent / 100) * (2 * Math.PI)) * 5.1}%)`}
+            />
+          </Tooltip>
+        )}
         <Circle
           percent={progressPercent}
           // percent={[getTargetPercetage(totalRaised, maximumTotalRaised) / 3, getTargetPercetage(totalRaised, maximumTotalRaised) / 3, getTargetPercetage(totalRaised, maximumTotalRaised) / 3]}
