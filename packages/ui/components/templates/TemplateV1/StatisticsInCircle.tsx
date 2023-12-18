@@ -143,9 +143,9 @@ export default function StatisticsInCircle({
               // TODO Fiat symbol ($, ¥)
               " $"
             }
-            {started
+            {started && fiatRate > 0
               ? "" + getFiatConversionAmount(Number(formatEther(totalRaised)), fiatRate).toFixed(2)
-              : "????"}
+              : " - "}
           </chakra.span>
           <div>
             {!!targetTotalRaised && (

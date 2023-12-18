@@ -50,7 +50,10 @@ export default function WithdrawERC20({ auction, onSuccessConfirm }: Props) {
       });
       onSuccessConfirm && onSuccessConfirm(data);
     },
-    isReady: typeof balance !== "undefined" && balance !== 0n,
+    isReady:
+      auction.closingAt < new Date().getTime() / 1000 &&
+      typeof balance !== "undefined" &&
+      balance !== 0n,
   });
   const { t } = useLocale();
 

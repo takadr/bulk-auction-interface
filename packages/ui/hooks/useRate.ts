@@ -7,6 +7,9 @@ const useRate = (tokenName: string, fiatSymbol: string): SWRResponse<any, Error>
     fetch(url)
       .then((res) => res.json())
       .then((data) => data[tokenName]);
-  return useSWR<any, Error>(`${url}`, fetcher);
+  return useSWR<any, Error>(`${url}`, fetcher, {
+    dedupingInterval: 30000,
+    errorRetryInterval: 10000,
+  });
 };
 export default useRate;

@@ -70,6 +70,7 @@ export default memo(function DetailPage({
     raised,
     totalRaised,
     isLoading: isLoadingRaisedAmount,
+    isError: isErrorFetchRaised,
     refetch: refetchRaised,
   } = useRaised(auction, address);
   const {
@@ -122,7 +123,7 @@ export default memo(function DetailPage({
   const { config, isError } = usePrepareSendTransaction({
     to: contractAddress,
     value: formikProps.values.amount ? BigInt(parseEther(formikProps.values.amount)) : undefined,
-    enabled: started && !ended,
+    enabled: started && !ended && formikProps.values.amount > 0,
   });
 
   const {

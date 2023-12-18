@@ -46,7 +46,10 @@ export default function WithdrawRaisedETH({ auction, onSuccessConfirm }: Props) 
       });
       onSuccessConfirm && onSuccessConfirm(data);
     },
-    isReady: !!balanceData && balanceData.value !== BigInt(0),
+    isReady:
+      auction.closingAt < new Date().getTime() / 1000 &&
+      !!balanceData &&
+      balanceData.value !== BigInt(0),
   });
   const { t } = useLocale();
 
