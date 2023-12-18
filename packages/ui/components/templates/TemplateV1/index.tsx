@@ -304,10 +304,15 @@ export default memo(function DetailPage({
           </Box>
         )}
 
-        <Flex mt={8} gridGap={4} alignItems={"top"} flexDirection={{ base: "column", md: "row" }}>
+        <Flex
+          mt={8}
+          gridGap={4}
+          alignItems={"stretch"}
+          flexDirection={{ base: "column", md: "row" }}
+        >
           {started && (
-            <Box flex={1}>
-              <Card>
+            <Flex flex={1}>
+              <Card w={"full"}>
                 <CardHeader>
                   <Heading size="md">{t("CONTRIBUTE")}</Heading>
                 </CardHeader>
@@ -394,21 +399,21 @@ export default memo(function DetailPage({
                       isLodingTX={isLoadingWaitTX || isLoadingSendTX}
                     />
                   </Box>
+                  {address && ended && (
+                    <chakra.div textAlign={"right"} mt={4}>
+                      <ClaimButton
+                        auction={auction}
+                        address={address}
+                        myContribution={raised}
+                        isClaimed={auction.claims.length > 0}
+                        mutateIsClaimed={refetchAuction}
+                        colorScheme={"green"}
+                      />
+                    </chakra.div>
+                  )}
                 </CardBody>
               </Card>
-              {address && ended && (
-                <chakra.div textAlign={"right"} mt={2}>
-                  <ClaimButton
-                    auction={auction}
-                    address={address}
-                    myContribution={raised}
-                    isClaimed={auction.claims.length > 0}
-                    mutateIsClaimed={refetchAuction}
-                    colorScheme={"green"}
-                  />
-                </chakra.div>
-              )}
-            </Box>
+            </Flex>
           )}
           {started && (
             <Card flex={1}>
