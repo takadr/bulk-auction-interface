@@ -70,11 +70,9 @@ export default function WithdrawRaisedETH({ auction, onSuccessConfirm }: Props) 
         </chakra.p>
         <Button
           variant={"solid"}
-          isDisabled={
-            !balanceData || balanceData.value === BigInt(0) || !withdrawETHWriteFn.writeAsync
-          }
+          isDisabled={!balanceData || balanceData.value === BigInt(0) || !withdrawETHWriteFn.write}
           isLoading={withdrawETHWriteFn.isLoading || withdrawETHWaitFn.isLoading}
-          onClick={() => withdrawETHWriteFn.writeAsync()}
+          onClick={withdrawETHWriteFn.write}
         >
           {t("WITHDRAW_THE_TOTAL_RAISED")}
         </Button>

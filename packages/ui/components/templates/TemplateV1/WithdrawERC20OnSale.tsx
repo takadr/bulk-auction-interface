@@ -84,9 +84,9 @@ export default function WithdrawERC20({ auction, onSuccessConfirm }: Props) {
         </chakra.p>
         <Button
           variant={"solid"}
-          isDisabled={!balance || balance === 0n || !withdrawERC20WriteFn.writeAsync}
+          isDisabled={!balance || balance === 0n || !withdrawERC20WriteFn.write}
           isLoading={withdrawERC20WriteFn.isLoading || withdrawERC20WaitFn.isLoading}
-          onClick={() => withdrawERC20WriteFn.writeAsync()}
+          onClick={withdrawERC20WriteFn.write}
         >
           {t("WITHDRAW_TOKEN")}
         </Button>
