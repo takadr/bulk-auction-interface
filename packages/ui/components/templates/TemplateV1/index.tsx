@@ -87,7 +87,7 @@ export default memo(function DetailPage({
 
   const [fiatSymbol, setFiatSymbol] = useState<string>("usd");
 
-  const { data: rateDate, mutate: updateRate, error: rateError } = useRate("ethereum", "usd");
+  const { data: rateData, mutate: updateRate, error: rateError } = useRate("ethereum", "usd");
 
   useInterval(() => {
     setStarted(auction.startingAt * 1000 <= new Date().getTime());
@@ -269,7 +269,7 @@ export default memo(function DetailPage({
             raisedTokenDecimal={raisedTokenDecimal}
             tokenSymbol={auction.auctionToken.symbol}
             fiatSymbol={fiatSymbol}
-            fiatRate={rateDate && rateDate.usd ? rateDate.usd : 0}
+            fiatRate={rateData && rateData.usd ? rateData.usd : 0}
             contractAddress={contractAddress}
             started={started}
             w={{ base: "full", md: "50%" }}
