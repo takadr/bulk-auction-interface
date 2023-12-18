@@ -52,7 +52,7 @@ export default function Hero({
         </Heading>
         <Heading
           as="h2"
-          size="md"
+          size={{ base: "sm", md: "md" }}
           color="primary.800"
           opacity="0.8"
           fontWeight="normal"
@@ -62,12 +62,12 @@ export default function Hero({
         >
           {subtitle}
         </Heading>
-        <HStack spacing={4}>
+        <HStack spacing={4} flexDirection={{ base: "column", md: "row" }}>
           {!currentUser && (
             <SignInButton
               text={t("CREATE_AUCTION")}
               id="sign-in-with-ethereum-hero"
-              size={"lg"}
+              size={{ base: "md", md: "lg" }}
               onSuccess={async (args: any) => {
                 mutate && (await mutate());
                 Router.push("/dashboard");
@@ -84,7 +84,7 @@ export default function Hero({
               }}
             />
           )}
-          <Button size={"lg"} onClick={() => Router.push("/auctions")}>
+          <Button size={{ base: "md", md: "lg" }} onClick={() => Router.push("/auctions")}>
             {t("JOIN_AUCTION")}
           </Button>
         </HStack>

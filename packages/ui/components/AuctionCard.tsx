@@ -31,23 +31,29 @@ export default function AuctionCard({
 
 export const AuctionCardSkeleton = () => {
   return (
-    <Card direction={{ base: "column", md: "row" }} overflow="hidden" alignItems={"center"}>
-      <Box p={6}>
+    <Card
+      w={{ base: "100%" }}
+      direction={{ base: "column", md: "row" }}
+      overflow="hidden"
+      alignItems={"stretch"}
+    >
+      <Box>
         <Skeleton
-          w={{ base: "100%", sm: "260px" }}
-          h={{ base: "100%", sm: "260px" }}
-          maxW={{ base: "100%", sm: "260px" }}
+          w={{ base: "100%", md: "260px" }}
+          h={{ base: "100%", md: "260px" }}
+          maxW={{ base: "100%", md: "260px" }}
+          boxShadow={"dark-lg"}
         />
       </Box>
 
       <Stack w={"full"}>
         <CardBody>
           <Flex>
-            <chakra.div flex={10} pr={4}>
+            <chakra.div flex={11} pr={4}>
               <Skeleton h={"20px"} />
               <SkeletonText py="4" />
             </chakra.div>
-            <Stack flex={7} spacing={4}>
+            <Stack flex={8} spacing={4}>
               <Skeleton h={"20px"} borderRadius={"4px"} />
               <Divider />
               <Skeleton h={"20px"} borderRadius={"4px"} />

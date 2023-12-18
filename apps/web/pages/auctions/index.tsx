@@ -7,7 +7,7 @@ import {
   Tab,
   TabPanels,
   TabPanel,
-  Stack,
+  HStack,
   Flex,
   Alert,
   AlertIcon,
@@ -54,7 +54,7 @@ export default function AuctionPage() {
           </TabList>
           <TabPanels mt={4}>
             <TabPanel p={{ base: 0, md: 4 }}>
-              <Stack spacing={8}>
+              <HStack spacing={8} w={"full"} flexWrap={"wrap"}>
                 {activeAuctionsError && (
                   <Alert status={"error"}>
                     <AlertIcon />
@@ -87,11 +87,11 @@ export default function AuctionPage() {
                     </Text>
                   </Flex>
                 )}
-              </Stack>
+              </HStack>
             </TabPanel>
 
             {/* <TabPanel p={{base: 0, md: 4}}>
-                        <Stack spacing={8}>
+                        <HStack spacing={8} w={"full"} flexWrap={"wrap"}>
                             {
                                 upcomingAuctionsError && <Alert status={'error'}><AlertIcon />{upcomingAuctionsError.message}</Alert>
                             }
@@ -111,11 +111,11 @@ export default function AuctionPage() {
                                     <Text fontSize={'lg'} opacity={'.75'} textAlign={'center'}>No auctions</Text>
                                 </Flex>
                             }
-                        </Stack>
+                        </HStack>
                     </TabPanel> */}
 
             <TabPanel p={{ base: 0, md: 4 }}>
-              <Stack spacing={8}>
+              <HStack spacing={8} w={"full"} flexWrap={"wrap"}>
                 {closedAuctionsError && (
                   <Alert status={"error"}>
                     <AlertIcon />
@@ -148,7 +148,7 @@ export default function AuctionPage() {
                     </Text>
                   </Flex>
                 )}
-              </Stack>
+              </HStack>
             </TabPanel>
           </TabPanels>
         </Tabs>

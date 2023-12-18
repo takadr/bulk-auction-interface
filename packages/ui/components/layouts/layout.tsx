@@ -51,7 +51,7 @@ export default function Layout({ title, children }: { title?: string; children: 
     <>
       <Header title={title ? title : "Yamawake"} />
       {chain && chain.unsupported && (
-        <chakra.div px={{ base: 0, md: 8 }}>
+        <chakra.div px={{ base: 0, md: 8 }} mt={1} position={"absolute"} w={"full"} zIndex={"10"}>
           <Alert status="warning" mb={4}>
             <AlertIcon />{" "}
             {t("PLEASE_CONNECT_TO", {

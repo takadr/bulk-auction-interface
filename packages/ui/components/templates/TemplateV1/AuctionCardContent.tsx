@@ -72,139 +72,146 @@ export default function AuctionCardContent({
   }, [now]);
 
   return (
-    <Card direction={{ base: "column", md: "row" }} overflow="hidden" alignItems={"center"}>
+    <Card
+      w={{ base: "100%" }}
+      direction={{ base: "column", md: "row" }}
+      overflow="hidden"
+      alignItems={"stretch"}
+    >
       <Image
         objectFit="cover"
-        w={{ base: "100%", sm: "260px" }}
-        h={{ base: "100%", sm: "260px" }}
-        p={6}
-        maxW={{ base: "100%", sm: "260px" }}
+        w={{ base: "100%", md: "260px" }}
+        h={{ base: "100%", md: "260px" }}
+        maxW={{ base: "100%", md: "260px" }}
+        boxShadow={"dark-lg"}
         src={
           data?.metaData?.logoURL
             ? data?.metaData?.logoURL
-            : "https://dummyimage.com/200x200/718096/fff.png&text=No+Image"
+            : "https://dummyimage.com/400x400/718096/fff.png&text=No+Image"
         }
         alt={data?.metaData?.title}
       />
 
       <Stack w={"full"}>
         <CardBody>
-          <Flex flexDirection={{ base: "column", md: "row" }}>
-            <chakra.div flex={10} pr={4}>
-              <Heading size="lg">
-                <Link _hover={{ opacity: 0.75 }} href={`/auctions/${auction.id}`}>
-                  {data?.metaData?.title ? data?.metaData?.title : t("UNNAMED_SALE")}
-                </Link>
-                {editable && (
-                  <Button size={"sm"} ml={2} onClick={onOpen}>
-                    <EditIcon mr={1} /> {t("EDIT")}
-                  </Button>
-                )}
-              </Heading>
-              <Text py="2">
-                {data?.metaData?.description && ellipsisText(data?.metaData?.description, 200)}
-              </Text>
-            </chakra.div>
-            <chakra.div flex={7}>
-              <Flex justifyContent={"space-between"} alignItems={"baseline"}>
-                <chakra.span>{t("ALLOCATED_TO_THE_SALE")}</chakra.span>
-                <chakra.span fontSize={"2xl"}>
-                  {tokenAmountFormat(
-                    auction.allocatedAmount,
-                    Number(auction.auctionToken.decimals),
-                    getDecimalsForView(
-                      getBigNumber(auction.allocatedAmount),
-                      Number(auction.auctionToken.decimals),
-                    ),
+          <Stack justifyContent={"space-between"} h={"full"}>
+            <Flex flexDirection={{ base: "column", md: "row" }}>
+              <chakra.div flex={11} pr={4}>
+                <Heading size="lg">
+                  <Link _hover={{ opacity: 0.75 }} href={`/auctions/${auction.id}`}>
+                    {data?.metaData?.title ? data?.metaData?.title : t("UNNAMED_SALE")}
+                  </Link>
+                  {editable && (
+                    <Button size={"sm"} ml={2} onClick={onOpen}>
+                      <EditIcon mr={1} /> {t("EDIT")}
+                    </Button>
                   )}
-                  <chakra.span fontSize={"md"}> {auction.auctionToken.symbol}</chakra.span>
-                </chakra.span>
-              </Flex>
-              <Divider />
-              <Flex mt={2} justifyContent={"space-between"} alignItems={"baseline"}>
-                <chakra.span>{t("TOTAL_RAISED")}</chakra.span>{" "}
-                <chakra.span fontSize={"2xl"}>
-                  {etherAmountFormat(auction.totalRaised[0].amount)}{" "}
-                  <chakra.span fontSize={"md"}>ETH</chakra.span>
-                </chakra.span>
-              </Flex>
-              <Progress
-                borderRadius={"4px"}
-                hasStripe
-                value={
-                  data?.metaData?.maximumTotalRaised
-                    ? getTargetPercetage(
-                        auction.totalRaised[0].amount,
-                        parseEtherInBig(data.metaData.maximumTotalRaised),
-                      )
-                    : 0
-                }
-              />
-              <Flex mt={2} justifyContent={"space-between"} alignItems={"baseline"}>
-                <Text fontSize={"sm"}>{t("MINIMUM_TOTAL_RAISED")}</Text>
-                <Text fontSize={"lg"}>
-                  {etherAmountFormat(auction.minRaisedAmount, 3, false)}{" "}
-                  <chakra.span fontSize={"sm"}>ETH</chakra.span>
+                </Heading>
+                <Text py="2">
+                  {data?.metaData?.description && ellipsisText(data?.metaData?.description, 200)}
                 </Text>
-              </Flex>
-              <Flex mt={1} justifyContent={"space-between"} alignItems={"baseline"}>
-                <Text fontSize={"sm"}>{t("TARGET_TOTAL_RAISED")}</Text>
-                <Text fontSize={"lg"}>
-                  {data?.metaData?.targetTotalRaised
-                    ? etherAmountFormat(data.metaData.targetTotalRaised, 3, false)
-                    : "-"}{" "}
-                  <chakra.span fontSize={"sm"}>ETH</chakra.span>
-                </Text>
-              </Flex>
-              {/* <Flex mt={1} justifyContent={'space-between'} alignItems={'baseline'}>
+              </chakra.div>
+              <chakra.div flex={8}>
+                <Flex justifyContent={"space-between"} alignItems={"baseline"}>
+                  <chakra.span>{t("ALLOCATED_TO_THE_SALE")}</chakra.span>
+                  <chakra.span fontSize={"2xl"}>
+                    {tokenAmountFormat(
+                      auction.allocatedAmount,
+                      Number(auction.auctionToken.decimals),
+                      getDecimalsForView(
+                        getBigNumber(auction.allocatedAmount),
+                        Number(auction.auctionToken.decimals),
+                      ),
+                    )}
+                    <chakra.span fontSize={"md"}> {auction.auctionToken.symbol}</chakra.span>
+                  </chakra.span>
+                </Flex>
+                <Divider />
+                <Flex mt={2} justifyContent={"space-between"} alignItems={"baseline"}>
+                  <chakra.span>{t("TOTAL_RAISED")}</chakra.span>{" "}
+                  <chakra.span fontSize={"2xl"}>
+                    {etherAmountFormat(auction.totalRaised[0].amount)}{" "}
+                    <chakra.span fontSize={"md"}>ETH</chakra.span>
+                  </chakra.span>
+                </Flex>
+                <Progress
+                  borderRadius={"4px"}
+                  hasStripe
+                  value={
+                    data?.metaData?.maximumTotalRaised
+                      ? getTargetPercetage(
+                          auction.totalRaised[0].amount,
+                          parseEtherInBig(data.metaData.maximumTotalRaised),
+                        )
+                      : 0
+                  }
+                />
+                <Flex mt={2} justifyContent={"space-between"} alignItems={"baseline"}>
+                  <Text fontSize={"sm"}>{t("MINIMUM_TOTAL_RAISED")}</Text>
+                  <Text fontSize={"lg"}>
+                    {etherAmountFormat(auction.minRaisedAmount, 3, false)}{" "}
+                    <chakra.span fontSize={"sm"}>ETH</chakra.span>
+                  </Text>
+                </Flex>
+                <Flex mt={1} justifyContent={"space-between"} alignItems={"baseline"}>
+                  <Text fontSize={"sm"}>{t("TARGET_TOTAL_RAISED")}</Text>
+                  <Text fontSize={"lg"}>
+                    {data?.metaData?.targetTotalRaised
+                      ? etherAmountFormat(data.metaData.targetTotalRaised, 3, false)
+                      : "-"}{" "}
+                    <chakra.span fontSize={"sm"}>ETH</chakra.span>
+                  </Text>
+                </Flex>
+                {/* <Flex mt={1} justifyContent={'space-between'} alignItems={'baseline'}>
                                 <Text fontSize={'sm'}>Target</Text><Text fontSize={'lg'}>{data?.metaData?.maximumTotalRaised ? tokenAmountFormat(data?.metaData?.maximumTotalRaised, 0, 2) : '-'} <chakra.span fontSize={'sm'}>ETH</chakra.span></Text>
                             </Flex> */}
-            </chakra.div>
-          </Flex>
-          <Flex mt={{ base: 2, md: 0 }} alignItems={"center"}>
-            {stage === "0" && (
-              <>
-                <Tag>
-                  <Box boxSize="1em" bg="gray.500" borderRadius={"100%"} />{" "}
-                  <Text ml={1}>{t("NOT_STARTED")}</Text>
-                </Tag>
-                <Box ml={2}>
-                  <chakra.span fontSize={"sm"}>{t("STARTS_IN")}</chakra.span>{" "}
-                  <chakra.span fontSize={"xl"}>
-                    {t("DAYS_AND_TIME", {
-                      day: countdown.days,
-                      time: `${countdown.hours}:${countdown.mins}:${countdown.secs}`,
-                    })}
-                  </chakra.span>
-                </Box>
-              </>
-            )}
-            {stage === "1" && (
-              <>
-                <Tag>
-                  <Box boxSize="1em" bg="green.300" borderRadius={"100%"} />{" "}
-                  <Text ml={1}>{t("LIVE")}</Text>
-                </Tag>
-                <Box ml={2}>
-                  <chakra.span fontSize={"sm"}>{t("ENDS_IN")}</chakra.span>{" "}
-                  <chakra.span fontSize={"xl"}>
-                    {t("DAYS_AND_TIME", {
-                      day: countdown.days,
-                      time: `${countdown.hours}:${countdown.mins}:${countdown.secs}`,
-                    })}
-                  </chakra.span>
-                </Box>
-              </>
-            )}
-            {stage === "2" && (
-              <>
-                <Tag>
-                  <Box boxSize="1em" bg="red.300" borderRadius={"100%"} />{" "}
-                  <Text ml={1}>{t("ENDED")}</Text>
-                </Tag>
-              </>
-            )}
-          </Flex>
+              </chakra.div>
+            </Flex>
+            <Flex mt={{ base: 2, md: 0 }} alignItems={"center"}>
+              {stage === "0" && (
+                <>
+                  <Tag>
+                    <Box boxSize="1em" bg="gray.500" borderRadius={"100%"} />{" "}
+                    <Text ml={1}>{t("NOT_STARTED")}</Text>
+                  </Tag>
+                  <Box ml={2}>
+                    <chakra.span fontSize={"sm"}>{t("STARTS_IN")}</chakra.span>{" "}
+                    <chakra.span fontSize={"xl"}>
+                      {t("DAYS_AND_TIME", {
+                        day: countdown.days,
+                        time: `${countdown.hours}:${countdown.mins}:${countdown.secs}`,
+                      })}
+                    </chakra.span>
+                  </Box>
+                </>
+              )}
+              {stage === "1" && (
+                <>
+                  <Tag>
+                    <Box boxSize="1em" bg="green.300" borderRadius={"100%"} />{" "}
+                    <Text ml={1}>{t("LIVE")}</Text>
+                  </Tag>
+                  <Box ml={2}>
+                    <chakra.span fontSize={"sm"}>{t("ENDS_IN")}</chakra.span>{" "}
+                    <chakra.span fontSize={"xl"}>
+                      {t("DAYS_AND_TIME", {
+                        day: countdown.days,
+                        time: `${countdown.hours}:${countdown.mins}:${countdown.secs}`,
+                      })}
+                    </chakra.span>
+                  </Box>
+                </>
+              )}
+              {stage === "2" && (
+                <>
+                  <Tag>
+                    <Box boxSize="1em" bg="red.300" borderRadius={"100%"} />{" "}
+                    <Text ml={1}>{t("ENDED")}</Text>
+                  </Tag>
+                </>
+              )}
+            </Flex>
+          </Stack>
         </CardBody>
 
         {/* <CardFooter>
