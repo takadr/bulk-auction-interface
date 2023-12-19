@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
-import { FormLabel, Select, Spinner, Tooltip } from "@chakra-ui/react";
-import { QuestionIcon } from "@chakra-ui/icons";
+import { FormLabel, Select, Spinner, Tooltip, Link } from "@chakra-ui/react";
+import { QuestionIcon, ExternalLinkIcon } from "@chakra-ui/icons";
 import { ethers } from "ethers";
 import { Template } from "lib/types/Auction";
 import { COMPATIBLE_TEMPLATES, TEMPLATE_V1_NAME } from "lib/constants/templates";
@@ -32,6 +32,17 @@ export default function AuctionFormWrapper(props: AuctionFormWrapperParams) {
         <Tooltip hasArrow label={t("YOU_CAN_CHOOSE_THE_TYPE_OF_TOKEN_SALE")}>
           <QuestionIcon mb={1} ml={1} />
         </Tooltip>
+        <Link
+          href="https://docs.yamawake.xyz"
+          target="_blank"
+          float={"right"}
+          ml={4}
+          mt={1}
+          fontSize={"xs"}
+          color={"gray.300"}
+        >
+          {t("TEMPLATE_EXPLANATION")} <ExternalLinkIcon />
+        </Link>
       </FormLabel>
       <Select
         isDisabled={true}
