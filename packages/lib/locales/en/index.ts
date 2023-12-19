@@ -134,4 +134,6 @@ export default {
   TEMPLATE: "Template",
   TOO_SMALL_ALLOCATION:
     "The token allocation amount is too small, and some participants may receive 0 token allocation (less than token decimals). Those who receive 0 allocation can initiate a refund request. Please consider to increase the allocation amount. Please note token allocation to each bidder is calculated by rounding down, and the aggregated amount of fraction tokens (less than token decimals) for each bidder will remain locked in the contract address forever(it cannot be withdrawn). ",
+  TARGET_TOTAL_RAISED_EXPLANATION:
+    "The target amount of this auction. Users can buy even after this value is achieved.",
 };

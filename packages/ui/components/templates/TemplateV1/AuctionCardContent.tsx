@@ -17,8 +17,10 @@ import {
   Button,
   useDisclosure,
   SkeletonText,
+  textDecoration,
+  Tooltip,
 } from "@chakra-ui/react";
-import { EditIcon } from "@chakra-ui/icons";
+import { EditIcon, QuestionIcon } from "@chakra-ui/icons";
 import Big, { divideToNum, getBigNumber } from "lib/utils/bignumber";
 import { AuctionProps, TemplateV1 } from "lib/types/Auction";
 import useSWRMetaData from "../../../hooks/useSWRMetaData";
@@ -71,7 +73,7 @@ export default function AuctionCardContent({
     setStage(currentStage);
   }, [now]);
 
-  return (
+  const card = (
     <Card
       w={{ base: "100%" }}
       direction={{ base: "column", md: "row" }}
@@ -98,9 +100,14 @@ export default function AuctionCardContent({
             <Flex flexDirection={{ base: "column", md: "row" }}>
               <chakra.div flex={11} pr={4}>
                 <Heading size="lg">
-                  <Link _hover={{ opacity: 0.75 }} href={`/auctions/${auction.id}`}>
-                    {data?.metaData?.title ? data?.metaData?.title : t("UNNAMED_SALE")}
-                  </Link>
+                  {editable ? (
+                    <Link _hover={{ opacity: 0.75 }} href={`/auctions/${auction.id}`}>
+                      {data?.metaData?.title ? data?.metaData?.title : t("UNNAMED_SALE")}
+                    </Link>
+                  ) : (
+                    <>{data?.metaData?.title ? data?.metaData?.title : t("UNNAMED_SALE")}</>
+                  )}
+
                   {editable && (
                     <Button size={"sm"} ml={2} onClick={onOpen}>
                       <EditIcon mr={1} /> {t("EDIT")}
@@ -147,14 +154,29 @@ export default function AuctionCardContent({
                   }
                 />
                 <Flex mt={2} justifyContent={"space-between"} alignItems={"baseline"}>
-                  <Text fontSize={"sm"}>{t("MINIMUM_TOTAL_RAISED")}</Text>
+                  <Text fontSize={"sm"}>
+                    {t("MINIMUM_TOTAL_RAISED")}
+                    <Tooltip
+                      hasArrow
+                      label={t(
+                        "THE_SALE_WILL_BE_VOID_IF_THE_TOTAL_RAISED_IS_LESS_THAN_THIS_THRESHOLD",
+                      )}
+                    >
+                      <QuestionIcon mb={1} ml={1} />
+                    </Tooltip>
+                  </Text>
                   <Text fontSize={"lg"}>
                     {etherAmountFormat(auction.minRaisedAmount, 3, false)}{" "}
                     <chakra.span fontSize={"sm"}>ETH</chakra.span>
                   </Text>
                 </Flex>
                 <Flex mt={1} justifyContent={"space-between"} alignItems={"baseline"}>
-                  <Text fontSize={"sm"}>{t("TARGET_TOTAL_RAISED")}</Text>
+                  <Text fontSize={"sm"}>
+                    {t("TARGET_TOTAL_RAISED")}
+                    <Tooltip hasArrow label={t("TARGET_TOTAL_RAISED_EXPLANATION")}>
+                      <QuestionIcon mb={1} ml={1} />
+                    </Tooltip>
+                  </Text>
                   <Text fontSize={"lg"}>
                     {data?.metaData?.targetTotalRaised
                       ? etherAmountFormat(data.metaData.targetTotalRaised, 3, false)
@@ -213,10 +235,6 @@ export default function AuctionCardContent({
             </Flex>
           </Stack>
         </CardBody>
-
-        {/* <CardFooter>
-                    
-                </CardFooter> */}
       </Stack>
       {editable && isOpen && (
         <MetaDataFormModal
@@ -230,6 +248,25 @@ export default function AuctionCardContent({
       )}
     </Card>
   );
+
+  if (editable) {
+    return card;
+  } else {
+    return (
+      <Link
+        href={`/auctions/${auction.id}`}
+        transition={"filter"}
+        transitionDuration={"0.3s"}
+        w={{ base: "100%" }}
+        _hover={{
+          textDecoration: "none",
+          filter: "brightness(115%)",
+        }}
+      >
+        {card}
+      </Link>
+    );
+  }
 }
 
 export const AuctionCardSkeleton = () => {
