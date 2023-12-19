@@ -1,4 +1,4 @@
-import { FC, useState, useContext, useEffect } from "react";
+import { useState, useContext, useEffect } from "react";
 import {
   chakra,
   Tag,
@@ -32,7 +32,7 @@ type HeaderProps = {
   title?: string;
 };
 
-const Header: FC<HeaderProps> = ({ title }) => {
+export default function Header({ title }: HeaderProps) {
   const { chain } = useNetwork();
   const toast = useToast({ position: "top-right", isClosable: true });
   const { currentUser, mutate } = useContext(CurrentUserContext);
@@ -296,6 +296,4 @@ const Header: FC<HeaderProps> = ({ title }) => {
       </Container>
     </Box>
   );
-};
-
-export default Header;
+}

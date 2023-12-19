@@ -1,21 +1,21 @@
-import { FC } from "react";
 import {
   Box,
   Flex,
   Container,
-  Heading,
   HStack,
   Text,
   Link,
-  VStack,
   chakra,
   Select,
+  Image,
+  Tooltip,
 } from "@chakra-ui/react";
 import { AiFillGithub } from "react-icons/ai";
+import gitbook from "assets/images/gitbook.svg";
 import { useLocale } from "../hooks/useLocale";
 import SvgCommunityLogoBlack from "./svgs/CommunityLogoBlack";
 
-const Footer: FC = () => {
+export default function Footer() {
   const { t, setLocale, locale } = useLocale();
   return (
     <Box px={{ base: 0, md: 4 }} pb={4} top={"0"} zIndex={100} bg={"gray.900"} opacity={0.975}>
@@ -23,23 +23,38 @@ const Footer: FC = () => {
         <Flex py="4" justifyContent="space-between" alignItems="center">
           <chakra.div flex={1}></chakra.div>
           <Flex flex={2} py="4" gridGap={4} justifyContent="center" alignItems="center">
-            <Link
-              href="https://defigeek.xyz/"
-              target={"_blank"}
-              fontSize={"3xl"}
-              _hover={{ opacity: 0.8 }}
-            >
-              <SvgCommunityLogoBlack width="2.5rem" height="2.5rem" />
-            </Link>
-            <Link
-              href="https://github.com/DeFiGeek-Community/"
-              target={"_blank"}
-              fontSize={"3xl"}
-              _hover={{ opacity: 0.8 }}
-              padding={"0.3125rem"}
-            >
-              <AiFillGithub />
-            </Link>
+            <Tooltip hasArrow label={<Text whiteSpace={"pre-wrap"}>DeFiGeek Community JAPAN</Text>}>
+              <Link
+                href="https://defigeek.xyz/"
+                target={"_blank"}
+                fontSize={"3xl"}
+                _hover={{ opacity: 0.8 }}
+              >
+                <SvgCommunityLogoBlack width="2.5rem" height="2.5rem" />
+              </Link>
+            </Tooltip>
+            <Tooltip hasArrow label={<Text whiteSpace={"pre-wrap"}>GitHub</Text>}>
+              <Link
+                href="https://github.com/DeFiGeek-Community/"
+                target={"_blank"}
+                fontSize={"3xl"}
+                _hover={{ opacity: 0.8 }}
+                padding={"0.3125rem"}
+              >
+                <AiFillGithub />
+              </Link>
+            </Tooltip>
+            <Tooltip hasArrow label={<Text whiteSpace={"pre-wrap"}>GitBook</Text>}>
+              <Link
+                href="https://docs.yamawake.xyz"
+                target={"_blank"}
+                fontSize={"3xl"}
+                _hover={{ opacity: 0.8 }}
+                padding={"0.3125rem"}
+              >
+                <Image w={"30px"} h={"30px"} src={gitbook.src} />
+              </Link>
+            </Tooltip>
           </Flex>
           <chakra.div flex={1}>
             <Select
@@ -71,6 +86,4 @@ const Footer: FC = () => {
       </Container>
     </Box>
   );
-};
-
-export default Footer;
+}
