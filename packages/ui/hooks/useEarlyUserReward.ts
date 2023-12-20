@@ -39,7 +39,7 @@ export default function useEarlyUserReward({
     ...config,
     functionName: "claim",
     args: [address],
-    enabled: !!address,
+    enabled: !!address && !!readFn.data,
   });
 
   const writeFn = useContractWrite({
