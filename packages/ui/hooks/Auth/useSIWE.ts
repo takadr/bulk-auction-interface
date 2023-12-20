@@ -31,6 +31,7 @@ export function useSIWE(): {
         version: "1",
         chainId,
         nonce: nonce,
+        expirationTime: new Date(new Date().getTime() + 600000).toISOString(), // Requires to verify in 10 min
       });
 
       const signature = await signMessageAsync({
