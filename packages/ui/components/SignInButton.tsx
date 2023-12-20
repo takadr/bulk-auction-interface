@@ -1,80 +1,36 @@
-import { useState } from "react";
-import { useAccount, useNetwork, useSignMessage } from "wagmi";
-import { SiweMessage } from "siwe";
+import { useAccount, useNetwork } from "wagmi";
 import { Button, ButtonProps, useDisclosure } from "@chakra-ui/react";
+import { SignInParams } from "lib/types";
+import { useSIWE } from "../hooks/Auth/useSIWE";
 import { useLocale } from "../hooks/useLocale";
 import ProvidersList from "./ProvidersList";
 
 export default function SignInButton({
-  onSuccess,
-  onError,
+  onSignInSuccess,
+  onSignInError,
   text,
   ...buttonProps
 }: {
-  onSuccess: (args: { address: string }) => void;
-  onError: (args: { error: Error }) => void;
+  onSignInSuccess: () => void;
+  onSignInError: (error: Error) => void;
   text?: string;
 } & ButtonProps) {
-  const [state, setState] = useState<{
-    loading?: boolean;
-  }>({});
   const providersListDisclosure = useDisclosure();
-  const { address, isConnected } = useAccount({
-    onConnect: async ({ address, connector }) => {},
+  const { address: connectedAddress, isConnected } = useAccount({
+    onConnect: async () => {},
   });
+
   const { chain } = useNetwork();
-  const { signMessageAsync } = useSignMessage();
   const { t } = useLocale();
+  const { loading, signIn } = useSIWE();
+  const title = buttonProps.title ? buttonProps.title : t("SIGN_IN_WITH_ETHEREUM");
 
-  const fetchNonce = async () => {
-    const nonceRes = await fetch("/api/nonce");
-    const nonce = await nonceRes.text();
-    return nonce;
-  };
-
-  const signIn = async ({
-    title,
-    address,
-    chainId,
-  }: {
-    title?: string;
-    address?: string;
-    chainId?: number;
-  }) => {
+  const processSignIn = async (params: SignInParams) => {
     try {
-      setState((x) => ({ ...x, loading: true }));
-
-      // Create SIWE message with pre-fetched nonce and sign with wallet
-      const _nonce = await fetchNonce();
-      const message = new SiweMessage({
-        domain: window.location.host,
-        address: address,
-        statement: title,
-        uri: window.location.origin,
-        version: "1",
-        chainId,
-        nonce: _nonce,
-      });
-
-      const signature = await signMessageAsync({
-        message: message.prepareMessage(),
-      });
-
-      // Verify signature
-      const verifyRes = await fetch("/api/verify", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ message, signature }),
-      });
-      if (!verifyRes.ok) throw new Error("Error verifying message");
-
-      setState((x) => ({ ...x, loading: false }));
-      onSuccess({ address: address as `0x${string}` });
-    } catch (error) {
-      setState((x) => ({ ...x, loading: false }));
-      onError({ error: error as Error });
+      await signIn(params);
+      onSignInSuccess && onSignInSuccess();
+    } catch (e) {
+      onSignInError && onSignInError(e as Error);
     }
   };
 
@@ -84,16 +40,16 @@ export default function SignInButton({
         {...buttonProps}
         variant={"solid"}
         colorScheme={"green"}
-        isLoading={state.loading}
+        isLoading={loading}
         onClick={
-          !address || !chain?.id
+          !connectedAddress || !chain?.id
             ? () => {
                 providersListDisclosure.onOpen();
               }
             : () => {
-                signIn({
-                  title: buttonProps.title ? buttonProps.title : t("SIGN_IN_WITH_ETHEREUM"),
-                  address,
+                processSignIn({
+                  title: title,
+                  targetAddress: connectedAddress as `0x${string}`,
                   chainId: Number(process.env.NEXT_PUBLIC_CHAIN_ID),
                 });
               }
@@ -112,9 +68,9 @@ export default function SignInButton({
             address: `0x${string}`;
             chainId: number;
           }) => {
-            await signIn({
-              title: buttonProps.title ? buttonProps.title : t("SIGN_IN_WITH_ETHEREUM"),
-              address,
+            await processSignIn({
+              title: title,
+              targetAddress: address,
               chainId,
             });
             providersListDisclosure.onClose();

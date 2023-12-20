@@ -68,19 +68,16 @@ export default function Hero({
               text={t("CREATE_AUCTION")}
               id="sign-in-with-ethereum-hero"
               size={{ base: "md", md: "lg" }}
-              onSuccess={async (args: any) => {
+              onSignInSuccess={async () => {
                 mutate && (await mutate());
                 Router.push("/dashboard");
               }}
-              onError={(args: any) => {
-                if ("error" in args) {
-                  const error = args.error;
-                  toast({
-                    description: error.message,
-                    status: "error",
-                    duration: 5000,
-                  });
-                }
+              onSignInError={(error: Error) => {
+                toast({
+                  description: error.message,
+                  status: "error",
+                  duration: 5000,
+                });
               }}
             />
           )}

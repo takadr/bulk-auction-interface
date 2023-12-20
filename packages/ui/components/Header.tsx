@@ -151,19 +151,16 @@ export default function Header({ title }: HeaderProps) {
                       id="sign-in-with-ethereum-connection"
                       size={{ base: "xs", md: "sm" }}
                       w="full"
-                      onSuccess={async () => {
+                      onSignInSuccess={async () => {
                         mutate && (await mutate());
                         Router.push("/dashboard");
                       }}
-                      onError={(args) => {
-                        if ("error" in args) {
-                          const error = args.error;
-                          toast({
-                            description: error.message,
-                            status: "error",
-                            duration: 5000,
-                          });
-                        }
+                      onSignInError={(error: Error) => {
+                        toast({
+                          description: error.message,
+                          status: "error",
+                          duration: 5000,
+                        });
                       }}
                       // nonce={nonce}
                     />
@@ -269,19 +266,16 @@ export default function Header({ title }: HeaderProps) {
                         id="sign-in-with-ethereum-header-no-connection"
                         size={{ base: "xs", md: "sm" }}
                         w="full"
-                        onSuccess={async () => {
+                        onSignInSuccess={async () => {
                           mutate && (await mutate());
                           Router.push("/dashboard");
                         }}
-                        onError={(args) => {
-                          if ("error" in args) {
-                            const error = args.error;
-                            toast({
-                              description: error.message,
-                              status: "error",
-                              duration: 5000,
-                            });
-                          }
+                        onSignInError={(error: Error) => {
+                          toast({
+                            description: error.message,
+                            status: "error",
+                            duration: 5000,
+                          });
                         }}
                         // nonce={nonce}
                       />
