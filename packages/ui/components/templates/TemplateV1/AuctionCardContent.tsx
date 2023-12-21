@@ -5,7 +5,6 @@ import {
   Box,
   Divider,
   Skeleton,
-  Tag,
   Heading,
   Card,
   CardBody,
@@ -17,7 +16,6 @@ import {
   Button,
   useDisclosure,
   SkeletonText,
-  textDecoration,
   Tooltip,
 } from "@chakra-ui/react";
 import { EditIcon, QuestionIcon } from "@chakra-ui/icons";
@@ -27,15 +25,14 @@ import useSWRMetaData from "../../../hooks/useSWRMetaData";
 import MetaDataFormModal from "../../MetaDataFormModal";
 import {
   tokenAmountFormat,
-  getCountdown,
   ellipsisText,
   getDecimalsForView,
   getTargetPercetage,
   etherAmountFormat,
   parseEtherInBig,
 } from "lib/utils";
-import { useNow } from "../../../hooks/useNow";
 import { useLocale } from "../../../hooks/useLocale";
+import AuctionCardCountdown from "../../AuctionCardCountdown";
 
 export default function AuctionCardContent({
   auctionProps,
@@ -45,33 +42,9 @@ export default function AuctionCardContent({
   editable?: boolean;
 }) {
   const auction = new TemplateV1(auctionProps);
-  // TODO use enum
-  // 0-> not started, 1 -> started, 2 -> closed
-  const [stage, setStage] = useState<"0" | "1" | "2">("0");
   const { onOpen, isOpen, onClose } = useDisclosure();
   const { t, locale } = useLocale();
   const { data, mutate, error } = useSWRMetaData(auction.id as string);
-  const [countdown, setCountdown] = useState({
-    days: "0",
-    hours: "00",
-    mins: "00",
-    secs: "00",
-  });
-  const [now] = useNow();
-  useEffect(() => {
-    let currentStage = stage;
-    if (now < auction.startingAt) {
-      currentStage = "0";
-      setCountdown(getCountdown(auction.startingAt - now));
-    } else if (now >= auction.startingAt && now < auction.closingAt) {
-      currentStage = "1";
-      setCountdown(getCountdown(auction.closingAt - now));
-    } else if (now >= auction.closingAt) {
-      currentStage = "2";
-    }
-
-    setStage(currentStage);
-  }, [now]);
 
   const card = (
     <Card
@@ -189,50 +162,12 @@ export default function AuctionCardContent({
                             </Flex> */}
               </chakra.div>
             </Flex>
-            <Flex mt={{ base: 2, md: 0 }} alignItems={"center"}>
-              {stage === "0" && (
-                <>
-                  <Tag>
-                    <Box boxSize="1em" bg="gray.500" borderRadius={"100%"} />{" "}
-                    <Text ml={1}>{t("NOT_STARTED")}</Text>
-                  </Tag>
-                  <Box ml={2}>
-                    <chakra.span fontSize={"sm"}>{t("STARTS_IN")}</chakra.span>{" "}
-                    <chakra.span fontSize={"xl"}>
-                      {t("DAYS_AND_TIME", {
-                        day: countdown.days,
-                        time: `${countdown.hours}:${countdown.mins}:${countdown.secs}`,
-                      })}
-                    </chakra.span>
-                  </Box>
-                </>
-              )}
-              {stage === "1" && (
-                <>
-                  <Tag>
-                    <Box boxSize="1em" bg="green.300" borderRadius={"100%"} />{" "}
-                    <Text ml={1}>{t("LIVE")}</Text>
-                  </Tag>
-                  <Box ml={2}>
-                    <chakra.span fontSize={"sm"}>{t("ENDS_IN")}</chakra.span>{" "}
-                    <chakra.span fontSize={"xl"}>
-                      {t("DAYS_AND_TIME", {
-                        day: countdown.days,
-                        time: `${countdown.hours}:${countdown.mins}:${countdown.secs}`,
-                      })}
-                    </chakra.span>
-                  </Box>
-                </>
-              )}
-              {stage === "2" && (
-                <>
-                  <Tag>
-                    <Box boxSize="1em" bg="red.300" borderRadius={"100%"} />{" "}
-                    <Text ml={1}>{t("ENDED")}</Text>
-                  </Tag>
-                </>
-              )}
-            </Flex>
+            <AuctionCardCountdown
+              startingAt={auction.startingAt}
+              closingAt={auction.closingAt}
+              mt={{ base: 2, md: 0 }}
+              alignItems={"center"}
+            />
           </Stack>
         </CardBody>
       </Stack>
