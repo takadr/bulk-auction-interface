@@ -1,5 +1,3 @@
-export const COINGECKO_URL = "https://api.coingecko.com/api/v3/simple/price";
-
 export const ETHER_DECIMALS_FOR_VIEW = 3;
 
 export const URL_REGEX = new RegExp(
