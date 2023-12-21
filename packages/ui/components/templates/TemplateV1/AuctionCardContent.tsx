@@ -115,7 +115,7 @@ export default function AuctionCardContent({
                   )}
                 </Heading>
                 <Text py="2">
-                  {data?.metaData?.description && ellipsisText(data?.metaData?.description, 200)}
+                  {data?.metaData?.description && ellipsisText(data?.metaData?.description, 160)}
                 </Text>
               </chakra.div>
               <chakra.div flex={8}>
