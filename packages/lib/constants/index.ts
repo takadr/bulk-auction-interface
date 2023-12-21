@@ -1,4 +1,4 @@
-export const CHAINLINK_ETH_USD_PRICE_FEED: { [key: string]: { [key: number]: `0x${string}` } } = {
+export const CHAINLINK_PRICE_FEED: { [key: string]: { [key: number]: `0x${string}` } } = {
   "ETH-USD": {
     1: "0x5f4eC3Df9cbd43714FE2740f5E3616155c5b8419",
     5: "0xD4a33860578De61DBAbDc8BFdb98FD742fA7028e",
