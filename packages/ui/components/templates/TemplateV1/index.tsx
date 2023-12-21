@@ -316,7 +316,11 @@ export default memo(function DetailPage({
                 <CardHeader>
                   <Heading size="md">{t("CONTRIBUTE")}</Heading>
                 </CardHeader>
-                <CardBody>
+                <CardBody
+                  display={"flex"}
+                  flexDirection={"column"}
+                  justifyContent={"space-between"}
+                >
                   {started && !ended && (
                     <Box>
                       <form onSubmit={formikProps.handleSubmit}>
