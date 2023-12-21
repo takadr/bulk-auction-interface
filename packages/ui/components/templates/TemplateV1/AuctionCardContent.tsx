@@ -179,7 +179,7 @@ export default function AuctionCardContent({
                   </Text>
                   <Text fontSize={"lg"}>
                     {data?.metaData?.targetTotalRaised
-                      ? etherAmountFormat(data.metaData.targetTotalRaised, 3, false)
+                      ? Number(data?.metaData?.targetTotalRaised).toFixed(3)
                       : "-"}{" "}
                     <chakra.span fontSize={"sm"}>ETH</chakra.span>
                   </Text>
