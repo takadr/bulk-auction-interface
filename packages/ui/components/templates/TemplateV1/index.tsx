@@ -82,13 +82,12 @@ export default memo(function DetailPage({
 
   const raisedTokenSymbol = "ETH";
   const raisedTokenDecimal = 18;
+  const fiatSymbol = "usd";
 
   const [started, setStarted] = useState<boolean>(false);
   const [ended, setEnded] = useState<boolean>(false);
 
-  const [fiatSymbol, setFiatSymbol] = useState<string>("usd");
-
-  const { data: rateData, refetch: updateRate, error: rateError } = useRate();
+  const { data: rateData, refetch: updateRate } = useRate(chain ? chain.id : null);
 
   useInterval(() => {
     setStarted(auction.startingAt * 1000 <= new Date().getTime());
