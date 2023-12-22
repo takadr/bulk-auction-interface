@@ -11,7 +11,7 @@ import {
 } from "@chakra-ui/react";
 import { AuctionProps } from "lib/types/Auction";
 import { TEMPLATE_V1_NAME } from "lib/constants/templates";
-import V1 from "./templates/TemplateV1/AuctionCardContent";
+import V1 from "./TemplateV1/AuctionCardContent";
 
 export default function AuctionCard({
   auctionProps,

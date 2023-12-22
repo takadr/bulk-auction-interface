@@ -1,6 +1,6 @@
 import Head from "next/head";
 import bgImage from "assets/images/background_sky-min.png";
-import { useLocale } from "../hooks/useLocale";
+import { useLocale } from "../../hooks/useLocale";
 
 type MetaTagProps = {
   title?: string;

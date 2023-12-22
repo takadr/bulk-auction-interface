@@ -12,8 +12,8 @@ import {
 } from "@chakra-ui/react";
 import { AiFillGithub } from "react-icons/ai";
 import gitbook from "assets/images/gitbook.svg";
-import { useLocale } from "../hooks/useLocale";
-import SvgCommunityLogoBlack from "./svgs/CommunityLogoBlack";
+import { useLocale } from "../../hooks/useLocale";
+import SvgCommunityLogoBlack from "../svgs/CommunityLogoBlack";
 
 export default function Footer() {
   const { t, setLocale, locale } = useLocale();

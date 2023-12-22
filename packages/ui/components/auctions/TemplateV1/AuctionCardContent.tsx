@@ -22,7 +22,7 @@ import { EditIcon, QuestionIcon } from "@chakra-ui/icons";
 import Big, { divideToNum, getBigNumber } from "lib/utils/bignumber";
 import { AuctionProps, TemplateV1 } from "lib/types/Auction";
 import useSWRMetaData from "../../../hooks/useSWRMetaData";
-import MetaDataFormModal from "../../MetaDataFormModal";
+import MetaDataFormModal from "../MetaDataFormModal";
 import {
   tokenAmountFormat,
   ellipsisText,
@@ -32,7 +32,7 @@ import {
   parseEtherInBig,
 } from "lib/utils";
 import { useLocale } from "../../../hooks/useLocale";
-import AuctionCardCountdown from "../../AuctionCardCountdown";
+import AuctionCardCountdown from "../AuctionCardCountdown";
 
 export default function AuctionCardContent({
   auctionProps,

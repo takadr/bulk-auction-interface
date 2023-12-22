@@ -5,7 +5,7 @@ import useWithdrawRaisedETH from "../../../hooks/useWithdrawRaisedETH";
 import { TemplateV1 } from "lib/types/Auction";
 import { tokenAmountFormat } from "lib/utils";
 import { getBigNumber } from "lib/utils/bignumber";
-import TxSentToast from "../../TxSentToast";
+import TxSentToast from "../../shared/TxSentToast";
 import { useLocale } from "../../../hooks/useLocale";
 
 type Props = {

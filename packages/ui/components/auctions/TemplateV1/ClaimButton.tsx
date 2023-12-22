@@ -6,7 +6,7 @@ import { TemplateV1 } from "lib/types/Auction";
 import { getExpectedAmount } from "lib/utils";
 import Big from "lib/utils/bignumber";
 import useClaim from "../../../hooks/TemplateV1/useClaim";
-import TxSentToast from "../../TxSentToast";
+import TxSentToast from "../../shared/TxSentToast";
 import { useLocale } from "../../../hooks/useLocale";
 
 interface Props {
@@ -83,8 +83,8 @@ export default function ClaimButton({
       {isClaimed || claimSucceeded
         ? t("CLAIMED")
         : expectedAmount.eq(0) && myContribution.gt(0)
-        ? t("CLAIM_REFUND")
-        : t("CLAIM")}
+          ? t("CLAIM_REFUND")
+          : t("CLAIM")}
     </Button>
   );
 }

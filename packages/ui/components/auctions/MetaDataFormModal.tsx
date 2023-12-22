@@ -9,9 +9,9 @@ import {
 } from "@chakra-ui/react";
 import { useToast, useColorMode } from "@chakra-ui/react";
 import { CustomProvider } from "rsuite";
-import MetaDataForm from "./templates/TemplateV1/MetaDataForm";
-import useMetaDataForm from "../hooks/TemplateV1/useMetaDataForm";
-import { useLocale } from "../hooks/useLocale";
+import MetaDataForm from "./TemplateV1/MetaDataForm";
+import useMetaDataForm from "../../hooks/TemplateV1/useMetaDataForm";
+import { useLocale } from "../../hooks/useLocale";
 import { MetaData } from "lib/types/Auction";
 
 export default function MetaDataFormModal({

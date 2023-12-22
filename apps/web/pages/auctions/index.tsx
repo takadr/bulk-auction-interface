@@ -14,11 +14,11 @@ import {
 } from "@chakra-ui/react";
 import { AuctionProps } from "lib/types/Auction";
 import Layout from "ui/components/layouts/layout";
-import AuctionCard, { AuctionCardSkeleton } from "ui/components/AuctionCard";
+import AuctionCard, { AuctionCardSkeleton } from "ui/components/auctions/AuctionCard";
 import { useSWRAuctions } from "ui/hooks/useAuctions";
 import { QueryType } from "lib/apollo/query";
 import { useLocale } from "ui/hooks/useLocale";
-import MetaTags from "ui/components/MetaTags";
+import MetaTags from "ui/components/layouts/MetaTags";
 
 export default function AuctionPage() {
   const {

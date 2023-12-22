@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 import { Box, chakra, BoxProps, Flex, Tag, Text } from "@chakra-ui/react";
 import { getCountdown } from "lib/utils";
-import { useLocale } from "../hooks/useLocale";
-import { useNow } from "../hooks/useNow";
+import { useLocale } from "../../hooks/useLocale";
+import { useNow } from "../../hooks/useNow";
 
 export default function AuctionCardCountdown({
   startingAt,

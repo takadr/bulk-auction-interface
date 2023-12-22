@@ -1,8 +1,8 @@
 import { useAccount, useNetwork } from "wagmi";
 import { Button, ButtonProps, useDisclosure } from "@chakra-ui/react";
 import { SignInParams } from "lib/types";
-import { useSIWE } from "../hooks/Auth/useSIWE";
-import { useLocale } from "../hooks/useLocale";
+import { useSIWE } from "../../hooks/Auth/useSIWE";
+import { useLocale } from "../../hooks/useLocale";
 import ProvidersList from "./ProvidersList";
 
 export default function SignInButton({

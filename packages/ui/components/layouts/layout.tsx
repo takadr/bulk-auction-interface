@@ -5,8 +5,8 @@ import { CurrentUserContext } from "../providers/CurrentUserProvider";
 import { getChain } from "lib/utils/chain";
 import { useIsMounted } from "../../hooks/useIsMounted";
 import { useLocale } from "../../hooks/useLocale";
-import Header from "../Header";
-import Footer from "../Footer";
+import Header from "./Header";
+import Footer from "./Footer";
 
 export default function Layout({ title, children }: { title?: string; children: React.ReactNode }) {
   const isMounted = useIsMounted();

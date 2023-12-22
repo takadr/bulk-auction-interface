@@ -1,6 +1,6 @@
 import { Button, ButtonProps, useDisclosure } from "@chakra-ui/react";
 import ProvidersList from "./ProvidersList";
-import { useLocale } from "../hooks/useLocale";
+import { useLocale } from "../../hooks/useLocale";
 
 export default function ConnectButton(props: ButtonProps) {
   const providersListDisclosure = useDisclosure();

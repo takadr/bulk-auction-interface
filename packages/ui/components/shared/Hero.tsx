@@ -3,7 +3,7 @@ import { Button, Flex, Heading, Stack, HStack, useToast } from "@chakra-ui/react
 import { KeyedMutator } from "swr";
 import { User } from "lib/types";
 import SignInButton from "./SignInButton";
-import { useLocale } from "../hooks/useLocale";
+import { useLocale } from "../../hooks/useLocale";
 import bgImage from "assets/images/background_sky-min.png";
 
 type HeroProps = {

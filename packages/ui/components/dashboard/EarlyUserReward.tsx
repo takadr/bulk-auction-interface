@@ -16,7 +16,7 @@ import { useLocale } from "../../hooks/useLocale";
 import { QuestionIcon } from "@chakra-ui/icons";
 import useEarlyUserReward from "../../hooks/useEarlyUserReward";
 import { formatEtherInBig } from "lib/utils";
-import TxSentToast from "../TxSentToast";
+import TxSentToast from "../shared/TxSentToast";
 
 export default function EarlyUserReward({ address }: { address: `0x${string}` }) {
   const toast = useToast({ position: "top-right", isClosable: true });

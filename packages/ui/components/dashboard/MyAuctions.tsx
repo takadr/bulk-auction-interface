@@ -3,8 +3,8 @@ import { chakra, Flex, Button, Text, HStack, useDisclosure } from "@chakra-ui/re
 import { AddIcon } from "@chakra-ui/icons";
 import { AuctionProps } from "lib/types/Auction";
 import { QueryType } from "lib/apollo/query";
-import AuctionFormModal from "../AuctionFormModal";
-import AuctionCard, { AuctionCardSkeleton } from "../AuctionCard";
+import AuctionFormModal from "../auctions/AuctionFormModal";
+import AuctionCard, { AuctionCardSkeleton } from "../auctions/AuctionCard";
 import { useLocale } from "../../hooks/useLocale";
 import { useSWRAuctions } from "../../hooks/useAuctions";
 

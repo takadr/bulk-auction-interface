@@ -45,15 +45,15 @@ import PriceChart from "./PriceChart";
 import useRaised from "../../../hooks/TemplateV1/useRaised";
 import useRate from "../../../hooks/useRate";
 import { TemplateV1 } from "lib/types/Auction";
-import ExternalLinkTag from "../../ExternalLinkTag";
+import ExternalLinkTag from "../../shared/ExternalLinkTag";
 import ClaimButton from "./ClaimButton";
-import TxSentToast from "../../TxSentToast";
+import TxSentToast from "../../shared/TxSentToast";
 import WithdrawRaisedETH from "./WithdrawRaisedETH";
 import WithdrawERC20 from "./WithdrawERC20OnSale";
 import { useLocale } from "../../../hooks/useLocale";
 import { getDecimalsForView, getEtherscanLink, tokenAmountFormat, parseEther } from "lib/utils";
 import { getChain } from "lib/utils/chain";
-import ConnectButton from "../../connectButton";
+import ConnectButton from "../../shared/connectButton";
 import { DetailPageParams } from "../AuctionDetail";
 
 export default memo(function DetailPage({
