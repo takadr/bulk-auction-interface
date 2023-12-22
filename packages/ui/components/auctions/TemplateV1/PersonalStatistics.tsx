@@ -72,7 +72,7 @@ export default function PersonalStatistics({
               </chakra.span>
             </chakra.div>
           </Flex>
-          {parseFloat(expectedAmount) === 0 ? (
+          {parseFloat(expectedAmount) === 0 && myContribution.gt(0) ? (
             <chakra.p fontSize={"xs"} opacity={".75"} color={"yellow.500"}>
               <WarningIcon />{" "}
               {t("THE_ESTIMATED_TOKEN_AMOUNT_IS_LESS_THAN_THE_PERMITTED_NUMBER_OF_DECIMALS")}

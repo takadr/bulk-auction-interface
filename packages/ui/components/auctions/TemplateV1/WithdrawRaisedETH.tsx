@@ -5,7 +5,7 @@ import useWithdrawRaisedETH from "../../../hooks/useWithdrawRaisedETH";
 import { TemplateV1 } from "lib/types/Auction";
 import { tokenAmountFormat } from "lib/utils";
 import { getBigNumber } from "lib/utils/bignumber";
-import TxSentToast from "../../TxSentToast";
+import TxSentToast from "../../shared/TxSentToast";
 import { useLocale } from "../../../hooks/useLocale";
 
 type Props = {
@@ -46,7 +46,10 @@ export default function WithdrawRaisedETH({ auction, onSuccessConfirm }: Props) 
       });
       onSuccessConfirm && onSuccessConfirm(data);
     },
-    isReady: !!balanceData && balanceData.value !== BigInt(0),
+    isReady:
+      auction.closingAt < new Date().getTime() / 1000 &&
+      !!balanceData &&
+      balanceData.value !== BigInt(0),
   });
   const { t } = useLocale();
 
@@ -67,11 +70,9 @@ export default function WithdrawRaisedETH({ auction, onSuccessConfirm }: Props) 
         </chakra.p>
         <Button
           variant={"solid"}
-          isDisabled={
-            !balanceData || balanceData.value === BigInt(0) || !withdrawETHWriteFn.writeAsync
-          }
+          isDisabled={!balanceData || balanceData.value === BigInt(0) || !withdrawETHWriteFn.write}
           isLoading={withdrawETHWriteFn.isLoading || withdrawETHWaitFn.isLoading}
-          onClick={() => withdrawETHWriteFn.writeAsync()}
+          onClick={withdrawETHWriteFn.write}
         >
           {t("WITHDRAW_THE_TOTAL_RAISED")}
         </Button>

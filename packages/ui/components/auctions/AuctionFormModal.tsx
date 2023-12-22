@@ -14,11 +14,11 @@ import { useAtom } from "jotai";
 import FactoryABI from "lib/constants/abis/Factory.json";
 import { creatingAuctionAtom, waitingCreationTxAtom } from "lib/store";
 import { Steps } from "./Steps";
-import MetaDataForm from "./templates/TemplateV1/MetaDataForm";
-import useMetaDataForm from "../hooks/TemplateV1/useMetaDataForm";
-import { useLocale } from "../hooks/useLocale";
-import TxSentToast from "./TxSentToast";
-import AuctionFormWrapper from "./templates/AuctionFormWrapper";
+import MetaDataForm from "./TemplateV1/MetaDataForm";
+import useMetaDataForm from "../../hooks/TemplateV1/useMetaDataForm";
+import { useLocale } from "../../hooks/useLocale";
+import TxSentToast from "../shared/TxSentToast";
+import AuctionFormWrapper from "./AuctionFormWrapper";
 
 type AuctionFormModalProps = {
   isOpen: boolean;

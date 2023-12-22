@@ -5,7 +5,7 @@ import useWithdrawERC20OnSale from "../../../hooks/useWithdrawERC20OnSale";
 import { TemplateV1 } from "lib/types/Auction";
 import { getDecimalsForView, tokenAmountFormat } from "lib/utils";
 import { getBigNumber } from "lib/utils/bignumber";
-import TxSentToast from "../../TxSentToast";
+import TxSentToast from "../../shared/TxSentToast";
 import { useLocale } from "../../../hooks/useLocale";
 
 type Props = {
@@ -50,7 +50,10 @@ export default function WithdrawERC20({ auction, onSuccessConfirm }: Props) {
       });
       onSuccessConfirm && onSuccessConfirm(data);
     },
-    isReady: typeof balance !== "undefined" && balance !== 0n,
+    isReady:
+      auction.closingAt < new Date().getTime() / 1000 &&
+      typeof balance !== "undefined" &&
+      balance !== 0n,
   });
   const { t } = useLocale();
 
@@ -81,9 +84,9 @@ export default function WithdrawERC20({ auction, onSuccessConfirm }: Props) {
         </chakra.p>
         <Button
           variant={"solid"}
-          isDisabled={!balance || balance === 0n || !withdrawERC20WriteFn.writeAsync}
+          isDisabled={!balance || balance === 0n || !withdrawERC20WriteFn.write}
           isLoading={withdrawERC20WriteFn.isLoading || withdrawERC20WaitFn.isLoading}
-          onClick={() => withdrawERC20WriteFn.writeAsync()}
+          onClick={withdrawERC20WriteFn.write}
         >
           {t("WITHDRAW_TOKEN")}
         </Button>

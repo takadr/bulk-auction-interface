@@ -45,15 +45,15 @@ import PriceChart from "./PriceChart";
 import useRaised from "../../../hooks/TemplateV1/useRaised";
 import useRate from "../../../hooks/useRate";
 import { TemplateV1 } from "lib/types/Auction";
-import ExternalLinkTag from "../../ExternalLinkTag";
+import ExternalLinkTag from "../../shared/ExternalLinkTag";
 import ClaimButton from "./ClaimButton";
-import TxSentToast from "../../TxSentToast";
+import TxSentToast from "../../shared/TxSentToast";
 import WithdrawRaisedETH from "./WithdrawRaisedETH";
 import WithdrawERC20 from "./WithdrawERC20OnSale";
 import { useLocale } from "../../../hooks/useLocale";
 import { getDecimalsForView, getEtherscanLink, tokenAmountFormat, parseEther } from "lib/utils";
 import { getChain } from "lib/utils/chain";
-import ConnectButton from "../../connectButton";
+import ConnectButton from "../../shared/connectButton";
 import { DetailPageParams } from "../AuctionDetail";
 
 export default memo(function DetailPage({
@@ -70,6 +70,7 @@ export default memo(function DetailPage({
     raised,
     totalRaised,
     isLoading: isLoadingRaisedAmount,
+    isError: isErrorFetchRaised,
     refetch: refetchRaised,
   } = useRaised(auction, address);
   const {
@@ -81,13 +82,12 @@ export default memo(function DetailPage({
 
   const raisedTokenSymbol = "ETH";
   const raisedTokenDecimal = 18;
+  const fiatSymbol = "usd";
 
   const [started, setStarted] = useState<boolean>(false);
   const [ended, setEnded] = useState<boolean>(false);
 
-  const [fiatSymbol, setFiatSymbol] = useState<string>("usd");
-
-  const { data: rateDate, mutate: updateRate, error: rateError } = useRate("ethereum", "usd");
+  const { data: rateData, refetch: updateRate } = useRate(chain ? chain.id : null);
 
   useInterval(() => {
     setStarted(auction.startingAt * 1000 <= new Date().getTime());
@@ -122,7 +122,7 @@ export default memo(function DetailPage({
   const { config, isError } = usePrepareSendTransaction({
     to: contractAddress,
     value: formikProps.values.amount ? BigInt(parseEther(formikProps.values.amount)) : undefined,
-    enabled: started && !ended,
+    enabled: started && !ended && formikProps.values.amount > 0,
   });
 
   const {
@@ -206,6 +206,7 @@ export default memo(function DetailPage({
                     "token",
                   )}
                   target={"_blank"}
+                  fontSize={{ base: "xs", lg: "sm" }}
                 >
                   {tokenAmountFormat(
                     auction.allocatedAmount,
@@ -232,7 +233,13 @@ export default memo(function DetailPage({
                   )}
                   target={"_blank"}
                 >
-                  {`${auction.id}`}
+                  <chakra.span
+                    display={{ base: "none", lg: "inline" }}
+                  >{`${auction.id}`}</chakra.span>
+                  <chakra.span
+                    fontSize={"xs"}
+                    display={{ base: "inline", lg: "none" }}
+                  >{`${auction.id?.slice(0, 5)}...${auction.id?.slice(-4)}`}</chakra.span>
                   <ExternalLinkIcon ml={1} />
                 </Link>
               </chakra.p>
@@ -269,7 +276,7 @@ export default memo(function DetailPage({
             raisedTokenDecimal={raisedTokenDecimal}
             tokenSymbol={auction.auctionToken.symbol}
             fiatSymbol={fiatSymbol}
-            fiatRate={rateDate && rateDate.usd ? rateDate.usd : 0}
+            fiatRate={rateData ? rateData : 0}
             contractAddress={contractAddress}
             started={started}
             w={{ base: "full", md: "50%" }}
@@ -296,14 +303,23 @@ export default memo(function DetailPage({
           </Box>
         )}
 
-        <Flex mt={8} gridGap={4} alignItems={"top"} flexDirection={{ base: "column", md: "row" }}>
+        <Flex
+          mt={8}
+          gridGap={4}
+          alignItems={"stretch"}
+          flexDirection={{ base: "column", md: "row" }}
+        >
           {started && (
-            <Box flex={1}>
-              <Card>
+            <Flex flex={1}>
+              <Card w={"full"}>
                 <CardHeader>
                   <Heading size="md">{t("CONTRIBUTE")}</Heading>
                 </CardHeader>
-                <CardBody>
+                <CardBody
+                  display={"flex"}
+                  flexDirection={"column"}
+                  justifyContent={"space-between"}
+                >
                   {started && !ended && (
                     <Box>
                       <form onSubmit={formikProps.handleSubmit}>
@@ -386,21 +402,21 @@ export default memo(function DetailPage({
                       isLodingTX={isLoadingWaitTX || isLoadingSendTX}
                     />
                   </Box>
+                  {address && ended && (
+                    <chakra.div textAlign={"right"} mt={4}>
+                      <ClaimButton
+                        auction={auction}
+                        address={address}
+                        myContribution={raised}
+                        isClaimed={auction.claims.length > 0}
+                        mutateIsClaimed={refetchAuction}
+                        colorScheme={"green"}
+                      />
+                    </chakra.div>
+                  )}
                 </CardBody>
               </Card>
-              {address && ended && (
-                <chakra.div textAlign={"right"} mt={2}>
-                  <ClaimButton
-                    auction={auction}
-                    address={address}
-                    myContribution={raised}
-                    isClaimed={auction.claims.length > 0}
-                    mutateIsClaimed={refetchAuction}
-                    colorScheme={"green"}
-                  />
-                </chakra.div>
-              )}
-            </Box>
+            </Flex>
           )}
           {started && (
             <Card flex={1}>

@@ -3,7 +3,7 @@ import { Button, Flex, Heading, Stack, HStack, useToast } from "@chakra-ui/react
 import { KeyedMutator } from "swr";
 import { User } from "lib/types";
 import SignInButton from "./SignInButton";
-import { useLocale } from "../hooks/useLocale";
+import { useLocale } from "../../hooks/useLocale";
 import bgImage from "assets/images/background_sky-min.png";
 
 type HeroProps = {
@@ -52,7 +52,7 @@ export default function Hero({
         </Heading>
         <Heading
           as="h2"
-          size="md"
+          size={{ base: "sm", md: "md" }}
           color="primary.800"
           opacity="0.8"
           fontWeight="normal"
@@ -62,29 +62,26 @@ export default function Hero({
         >
           {subtitle}
         </Heading>
-        <HStack spacing={4}>
+        <HStack spacing={4} flexDirection={{ base: "column", md: "row" }}>
           {!currentUser && (
             <SignInButton
               text={t("CREATE_AUCTION")}
               id="sign-in-with-ethereum-hero"
-              size={"lg"}
-              onSuccess={async (args: any) => {
+              size={{ base: "md", md: "lg" }}
+              onSignInSuccess={async () => {
                 mutate && (await mutate());
                 Router.push("/dashboard");
               }}
-              onError={(args: any) => {
-                if ("error" in args) {
-                  const error = args.error;
-                  toast({
-                    description: error.message,
-                    status: "error",
-                    duration: 5000,
-                  });
-                }
+              onSignInError={(error: Error) => {
+                toast({
+                  description: error.message,
+                  status: "error",
+                  duration: 5000,
+                });
               }}
             />
           )}
-          <Button size={"lg"} onClick={() => Router.push("/auctions")}>
+          <Button size={{ base: "md", md: "lg" }} onClick={() => Router.push("/auctions")}>
             {t("JOIN_AUCTION")}
           </Button>
         </HStack>

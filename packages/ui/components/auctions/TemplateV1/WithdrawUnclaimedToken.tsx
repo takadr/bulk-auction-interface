@@ -5,7 +5,7 @@ import useWithdrawUnclaimedERC20OnAuction from "../../../hooks/useWithdrawUnclai
 import { TemplateV1 } from "lib/types/Auction";
 import { getDecimalsForView, tokenAmountFormat } from "lib/utils";
 import { getBigNumber } from "lib/utils/bignumber";
-import TxSentToast from "../../TxSentToast";
+import TxSentToast from "../../shared/TxSentToast";
 
 type Props = {
   auction: TemplateV1;

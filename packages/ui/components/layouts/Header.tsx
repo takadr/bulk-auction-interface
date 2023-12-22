@@ -1,4 +1,4 @@
-import { FC, useState, useContext, useEffect } from "react";
+import { useState, useContext, useEffect } from "react";
 import {
   chakra,
   Tag,
@@ -22,17 +22,17 @@ import {
 import { ChevronDownIcon } from "@chakra-ui/icons";
 import Router from "next/router";
 import { useAccount, useEnsAvatar, useEnsName, useDisconnect, useNetwork } from "wagmi";
-import { useLocale } from "../hooks/useLocale";
-import { CurrentUserContext } from "./providers/CurrentUserProvider";
-import SignInButton from "./SignInButton";
-import ProviderLogo from "./ProviderLogo";
-import ConnectButton from "./connectButton";
+import { useLocale } from "../../hooks/useLocale";
+import { CurrentUserContext } from "../providers/CurrentUserProvider";
+import SignInButton from "../shared/SignInButton";
+import ProviderLogo from "../shared/ProviderLogo";
+import ConnectButton from "../shared/connectButton";
 
 type HeaderProps = {
   title?: string;
 };
 
-const Header: FC<HeaderProps> = ({ title }) => {
+export default function Header({ title }: HeaderProps) {
   const { chain } = useNetwork();
   const toast = useToast({ position: "top-right", isClosable: true });
   const { currentUser, mutate } = useContext(CurrentUserContext);
@@ -151,19 +151,16 @@ const Header: FC<HeaderProps> = ({ title }) => {
                       id="sign-in-with-ethereum-connection"
                       size={{ base: "xs", md: "sm" }}
                       w="full"
-                      onSuccess={async () => {
+                      onSignInSuccess={async () => {
                         mutate && (await mutate());
                         Router.push("/dashboard");
                       }}
-                      onError={(args) => {
-                        if ("error" in args) {
-                          const error = args.error;
-                          toast({
-                            description: error.message,
-                            status: "error",
-                            duration: 5000,
-                          });
-                        }
+                      onSignInError={(error: Error) => {
+                        toast({
+                          description: error.message,
+                          status: "error",
+                          duration: 5000,
+                        });
                       }}
                       // nonce={nonce}
                     />
@@ -269,19 +266,16 @@ const Header: FC<HeaderProps> = ({ title }) => {
                         id="sign-in-with-ethereum-header-no-connection"
                         size={{ base: "xs", md: "sm" }}
                         w="full"
-                        onSuccess={async () => {
+                        onSignInSuccess={async () => {
                           mutate && (await mutate());
                           Router.push("/dashboard");
                         }}
-                        onError={(args) => {
-                          if ("error" in args) {
-                            const error = args.error;
-                            toast({
-                              description: error.message,
-                              status: "error",
-                              duration: 5000,
-                            });
-                          }
+                        onSignInError={(error: Error) => {
+                          toast({
+                            description: error.message,
+                            status: "error",
+                            duration: 5000,
+                          });
                         }}
                         // nonce={nonce}
                       />
@@ -296,6 +290,4 @@ const Header: FC<HeaderProps> = ({ title }) => {
       </Container>
     </Box>
   );
-};
-
-export default Header;
+}

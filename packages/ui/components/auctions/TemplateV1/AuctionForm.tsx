@@ -37,7 +37,7 @@ import Big, { divide, getBigNumber, multiply } from "lib/utils/bignumber";
 import { AuctionForm } from "lib/types/Auction";
 import { useLocale } from "../../../hooks/useLocale";
 import useAuctionForm from "../../../hooks/TemplateV1/useAuctionForm";
-import TxSentToast from "../../TxSentToast";
+import TxSentToast from "../../shared/TxSentToast";
 
 export default function AuctionForm({
   address,
