@@ -47,6 +47,10 @@ export default function Layout({ title, children }: { title?: string; children: 
   // https://github.com/wagmi-dev/wagmi/issues/542#issuecomment-1144178142
   if (!isMounted) return null;
 
+  console.log(process.env.NEXT_PUBLIC_CHAIN_ID);
+  console.log(chain);
+  console.log(chain.unsupported);
+
   return (
     <>
       <Header title={title ? title : "Yamawake"} />
