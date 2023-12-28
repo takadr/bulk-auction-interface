@@ -23,7 +23,8 @@
         "AWS_DYNAMO_TABLE_NAME",
         "NODE_ENV",
         "NEXT_PUBLIC_VERCEL_GIT_COMMIT_SHA",
-        "NEXT_PUBLIC_SUBGRAPH_ENDPOINT"
+        "NEXT_PUBLIC_SUBGRAPH_ENDPOINT",
+        "__NEXT_PRIVATE_STANDALONE_CONFIG"
       ]
     },
     "lint": {},
